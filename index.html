@@ -1514,7 +1514,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="section-label">THE HIGHEST LEVEL</p>
       <h2 class="section-heading">Work Directly With Claudio</h2>
       <p class="section-sub">For the serious operator who wants to build a real estate media company that runs without them. This is the room where it happens.</p>
-      <a href="https://www.skool.com/910-academy/about" target="_blank" class="coaching-cta">Apply for Private Coaching</a>
+      <a href="/coaching" class="coaching-cta">Apply for Private Coaching</a>
       <p class="coaching-muted">Limited spots available. Application required.</p>
     </div>
     <div class="reveal">
@@ -1617,10 +1617,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 })();
 
 // ========== EMAIL FORM ==========
-// Posts to a Google Apps Script web app that appends to a Google Sheet.
-// Replace APPS_SCRIPT_URL below with your deployed web app URL.
+// Posts JSON to an n8n webhook.
+const EMAIL_WEBHOOK_URL = 'REPLACE_WITH_N8N_EMAIL_WEBHOOK_URL';
 (function() {
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/REPLACE_ME/exec';
   var form = document.getElementById('emailForm');
   var success = document.getElementById('emailSuccess');
   if (!form) return;
@@ -1628,10 +1627,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     e.preventDefault();
     var email = form.querySelector('input[name="email"]').value.trim();
     if (!email) return;
-    var fd = new FormData();
-    fd.append('email', email);
-    fd.append('source', '910academy-homepage');
-    fetch(APPS_SCRIPT_URL, { method: 'POST', body: fd, mode: 'no-cors' })
+    var payload = {
+      email: email,
+      submitted_at: new Date().toISOString(),
+      source: 'homepage_email_capture'
+    };
+    fetch(EMAIL_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
       .finally(function() {
         success.style.display = 'block';
         form.style.display = 'none';
