@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>910 Academy — The Exact Stack Behind Every Luxury Real Estate Video</title>
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:title" content="910 Academy — Real Estate Videography">
+<meta property="og:description" content="Learn to shoot, edit, and scale a real estate media company from the ground up.">
+<meta property="og:image" content="/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="910 Academy">
+<meta name="twitter:description" content="Step into the new frontier of real estate videography.">
+<meta name="twitter:image" content="/og-image.jpg">
+<meta name="description" content="The tools, plugins, and software behind every luxury real estate video by 910 Academy. No sponsorships. No filler. Just what we actually use.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: #0a0a0a;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  line-height: 1.4em;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ========== TYPOGRAPHY ========== */
+.text-blue { color: #38B6FF; }
+.text-muted { color: #AAAAAA; }
+.text-body { color: #AAAAAA; }
+
+/* ========== AMBIENT PARTICLES ========== */
+.particles {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #38B6FF;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+.particle:nth-child(1)  { left: 5%;  animation-duration: 18s; animation-delay: 0s; }
+.particle:nth-child(2)  { left: 12%; animation-duration: 22s; animation-delay: 2s; }
+.particle:nth-child(3)  { left: 20%; animation-duration: 16s; animation-delay: 4s; }
+.particle:nth-child(4)  { left: 30%; animation-duration: 20s; animation-delay: 1s; }
+.particle:nth-child(5)  { left: 40%; animation-duration: 24s; animation-delay: 3s; }
+.particle:nth-child(6)  { left: 50%; animation-duration: 19s; animation-delay: 5s; }
+.particle:nth-child(7)  { left: 60%; animation-duration: 21s; animation-delay: 0.5s; }
+.particle:nth-child(8)  { left: 70%; animation-duration: 17s; animation-delay: 2.5s; }
+.particle:nth-child(9)  { left: 80%; animation-duration: 23s; animation-delay: 4.5s; }
+.particle:nth-child(10) { left: 88%; animation-duration: 18s; animation-delay: 1.5s; }
+.particle:nth-child(11) { left: 95%; animation-duration: 20s; animation-delay: 3.5s; }
+.particle:nth-child(12) { left: 15%; animation-duration: 25s; animation-delay: 6s; }
+.particle:nth-child(13) { left: 35%; animation-duration: 19s; animation-delay: 7s; }
+.particle:nth-child(14) { left: 55%; animation-duration: 22s; animation-delay: 8s; }
+.particle:nth-child(15) { left: 75%; animation-duration: 17s; animation-delay: 9s; }
+.particle:nth-child(16) { left: 25%; animation-duration: 21s; animation-delay: 10s; }
+.particle:nth-child(17) { left: 45%; animation-duration: 18s; animation-delay: 6.5s; }
+.particle:nth-child(18) { left: 65%; animation-duration: 24s; animation-delay: 7.5s; }
+.particle:nth-child(19) { left: 85%; animation-duration: 16s; animation-delay: 8.5s; }
+.particle:nth-child(20) { left: 10%; animation-duration: 20s; animation-delay: 11s; }
+
+@keyframes particleFloat {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.2; }
+  50%  { opacity: 0.1; }
+  90%  { opacity: 0.15; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ========== STICKY NAV ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav.scrolled {
+  padding: 14px 0;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(56, 182, 255, 0.08);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo img {
+  height: 36px;
+  width: auto;
+  opacity: 0.95;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+.nav-link {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #AAAAAA;
+  transition: color 0.3s ease;
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: #38B6FF;
+  transition: width 0.3s ease;
+}
+.nav-link:hover { color: #FFFFFF; }
+.nav-link:hover::after { width: 100%; }
+.nav-cta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: #38B6FF;
+  padding: 12px 28px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+.nav-cta:hover {
+  background: #5ac4ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(56, 182, 255, 0.3);
+}
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.nav-mobile-toggle span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+/* ========== HERO ========== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(56, 182, 255, 0.03) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(56, 182, 255, 0.015) 0%, transparent 80%);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; max-width: 900px; }
+.hero h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.1em;
+  letter-spacing: -0.05px;
+  margin-bottom: 28px;
+}
+.hero h1 .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: wordReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero h1 .word.highlight {
+  color: #38B6FF;
+}
+@keyframes wordReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-sub {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 400;
+  color: #AAAAAA;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.4em;
+  letter-spacing: 0;
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+}
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
+}
+.scroll-indicator svg {
+  width: 20px; height: 20px;
+  stroke: #38B6FF;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== SECTIONS ========== */
+.section {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 120px 40px;
+}
+.section-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #38B6FF;
+  margin-bottom: 16px;
+}
+.section-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.1em;
+  letter-spacing: -0.05px;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #AAAAAA;
+  max-width: 560px;
+  line-height: 1.4em;
+  letter-spacing: 0;
+  margin-bottom: 48px;
+}
+
+/* ========== FILTER TABS ========== */
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 48px;
+  position: relative;
+}
+.filter-tab {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4em;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  border-radius: 100px;
+  border: none;
+  background: transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.filter-tab:hover {
+  background: rgba(56, 182, 255, 0.1);
+}
+.filter-tab.active {
+  color: #FFFFFF;
+  background: #38B6FF;
+}
+
+/* ========== PRODUCT GRID ========== */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.product-grid.two-col {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+/* ========== PRODUCT CARDS ========== */
+.product-card {
+  background: #111111;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  border-color: #38B6FF;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(56, 182, 255, 0.08);
+}
+.card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.card-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(17,17,17,0.6) 100%);
+}
+.card-badge {
+  position: absolute;
+  top: 16px; left: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #38B6FF;
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(56, 182, 255, 0.15);
+  z-index: 1;
+}
+.card-body {
+  padding: 28px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.333rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+  margin-bottom: 8px;
+}
+.card-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #AAAAAA;
+  line-height: 1.4;
+  margin-bottom: 24px;
+  flex: 1;
+}
+.card-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card-btn-buy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+  background: #38B6FF;
+  padding: 14px 20px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.card-btn-buy:hover {
+  background: #5ac4ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(56, 182, 255, 0.3);
+}
+.card-btn-buy svg {
+  width: 14px; height: 14px;
+  stroke: #FFFFFF;
+  fill: none;
+  flex-shrink: 0;
+}
+.card-btn-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+  background: #1a1a1a;
+  padding: 14px 20px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #2a2a2a;
+}
+.card-btn-copy:hover {
+  background: #222222;
+  border-color: #3a3a3a;
+}
+.card-btn-copy svg {
+  width: 14px; height: 14px;
+  stroke: #FFFFFF;
+  fill: none;
+  flex-shrink: 0;
+}
+.card-btn-copy.copied {
+  background: rgba(56, 182, 255, 0.1);
+  border-color: rgba(56, 182, 255, 0.3);
+  color: #38B6FF;
+}
+.card-btn-copy.copied svg {
+  stroke: #38B6FF;
+}
+
+/* ========== SOFTWARE CARDS ========== */
+.product-grid.two-col .card-body {
+  padding: 32px 30px;
+}
+.product-grid.two-col .card-name {
+  font-size: 1.5rem;
+}
+.product-grid.two-col .card-desc {
+  font-size: 0.95rem;
+}
+
+/* ========== SCHOOL SECTION ========== */
+.school-section {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(56, 182, 255, 0.2);
+  padding: 140px 40px;
+  text-align: center;
+  overflow: hidden;
+}
+.school-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 1px;
+  background: linear-gradient(90deg, transparent, #38B6FF, transparent);
+}
+.school-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+.school-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #38B6FF;
+  margin-bottom: 24px;
+}
+.school-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.1em;
+  letter-spacing: -0.05px;
+  margin-bottom: 48px;
+}
+.school-heading .highlight {
+  color: #38B6FF;
+}
+.school-body p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #AAAAAA;
+  line-height: 1.4em;
+  margin-bottom: 24px;
+}
+.school-body p:last-child { margin-bottom: 0; }
+.school-price {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 300;
+  color: #38B6FF;
+  margin: 48px 0 40px;
+  position: relative;
+}
+.school-price::before,
+.school-price::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40px; height: 1px;
+  background: rgba(56, 182, 255, 0.3);
+}
+.school-price::before { right: calc(100% + 20px); }
+.school-price::after { left: calc(100% + 20px); }
+.school-cta {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: #38B6FF;
+  padding: 18px 52px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+.school-cta:hover {
+  background: #5ac4ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(56, 182, 255, 0.3);
+}
+.school-proof {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666;
+  margin-top: 20px;
+  letter-spacing: 0.02em;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 60px 40px;
+  text-align: center;
+}
+.footer-logo img {
+  height: 28px;
+  margin: 0 auto 28px;
+  opacity: 0.7;
+}
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+.footer-socials a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #777;
+  transition: color 0.3s ease;
+}
+.footer-socials a:hover { color: #38B6FF; }
+.footer-disclaimer {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #555;
+  max-width: 520px;
+  margin: 0 auto 20px;
+  line-height: 1.4em;
+}
+.footer-copy {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #444;
+  letter-spacing: 0.04em;
+}
+
+/* ========== MOBILE NAV OVERLAY ========== */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(10, 10, 10, 0.97);
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.mobile-nav.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+.mobile-nav a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: #38B6FF; }
+.mobile-nav-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  font-size: 28px;
+  color: #FFFFFF;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 24px; }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .section { padding: 80px 24px; }
+  .hero { padding: 100px 24px 60px; }
+  .product-grid { grid-template-columns: 1fr; }
+  .product-grid.two-col { grid-template-columns: 1fr; }
+  .school-section { padding: 100px 24px; }
+  .footer { padding: 48px 24px; }
+  .filter-tabs { gap: 10px; }
+  .filter-tab { padding: 8px 16px; font-size: 0.875rem; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.2rem; }
+  .section-heading { font-size: 1.8rem; }
+  .school-heading { font-size: 1.8rem; }
+  .school-price { font-size: 2.4rem; }
+  .nav-logo img { height: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient Particles -->
+<div class="particles">
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="/Academy.png" alt="910 Academy">
+    </a>
+    <div class="nav-links">
+      <a href="/affiliate-links#gear" class="nav-link">Gear</a>
+      <a href="/affiliate-links#plugins" class="nav-link">Plugins</a>
+      <a href="/affiliate-links#software" class="nav-link">Software</a>
+      <a href="/skool" class="nav-link">Skool</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="/affiliate-links#gear" class="mobile-nav-link">Gear</a>
+  <a href="/affiliate-links#plugins" class="mobile-nav-link">Plugins</a>
+  <a href="/affiliate-links#software" class="mobile-nav-link">Software</a>
+  <a href="/skool" class="mobile-nav-link">Skool</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:#38B6FF;">Join 910 Academy</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 id="heroTitle"></h1>
+    <p class="hero-sub">No sponsorships. No filler. Everything here is what we actually use — on set, in the edit, and in our business.</p>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- Gear Section -->
+<section class="section" id="gear">
+  <div class="reveal">
+    <p class="section-label">ON SET</p>
+    <h2 class="section-heading">The Camera Kit</h2>
+  </div>
+  <div class="reveal" style="transition-delay: 0.1s;">
+    <div class="filter-tabs" id="gearFilters">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="camera">Camera</button>
+      <button class="filter-tab" data-filter="lens">Lens</button>
+      <button class="filter-tab" data-filter="drone">Drone</button>
+      <button class="filter-tab" data-filter="stabilization">Stabilization</button>
+      <button class="filter-tab" data-filter="audio">Audio</button>
+      <button class="filter-tab" data-filter="support">Support</button>
+    </div>
+  </div>
+  <div class="product-grid" id="gearGrid">
+
+    <div class="product-card reveal" data-category="camera">
+      <div class="card-image"><span class="card-badge">Camera</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Sony A7SIII</h3>
+        <p class="card-desc">Our primary body for every luxury shoot</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4rnBxFr" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://amzn.to/4rnBxFr">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="lens" style="transition-delay: 0.08s;">
+      <div class="card-image"><span class="card-badge">Lens</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Laowa 10mm f/2.8</h3>
+        <p class="card-desc">The widest we go for interiors</p>
+        <div class="card-buttons">
+          <a href="https://www.laowalenses.ca/product/laowa-10mm-f-2-8-zero-d-ff/" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://www.laowalenses.ca/product/laowa-10mm-f-2-8-zero-d-ff/">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="lens" style="transition-delay: 0.16s;">
+      <div class="card-image"><span class="card-badge">Lens</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Sony 50mm 1.2 GM</h3>
+        <p class="card-desc">Our go-to for lifestyle and detail shots</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4kFFToR" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://amzn.to/4kFFToR">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="stabilization" style="transition-delay: 0.08s;">
+      <div class="card-image"><span class="card-badge">Stabilization</span></div>
+      <div class="card-body">
+        <h3 class="card-name">DJI RS4 Pro Gimbal</h3>
+        <p class="card-desc">Buttery smooth on every walk</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/3Ocfkvp" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://amzn.to/3Ocfkvp">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="drone" style="transition-delay: 0.16s;">
+      <div class="card-image"><span class="card-badge">Drone</span></div>
+      <div class="card-body">
+        <h3 class="card-name">DJI Mavic 4 Pro</h3>
+        <p class="card-desc">Our aerial workhorse</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4av1nS1" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://amzn.to/4av1nS1">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="audio" style="transition-delay: 0.24s;">
+      <div class="card-image"><span class="card-badge">Audio</span></div>
+      <div class="card-body">
+        <h3 class="card-name">DJI Mic 2</h3>
+        <p class="card-desc">Clean wireless audio on every shoot</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4rF92TX" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://amzn.to/4rF92TX">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="support" style="transition-delay: 0.08s;">
+      <div class="card-image"><span class="card-badge">Support</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Peak Design Pro Lite Tripod</h3>
+        <p class="card-desc">Stable, fast, professional</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4aAHDv0" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://amzn.to/4aAHDv0">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Plugins Section -->
+<section class="section" id="plugins">
+  <div class="reveal">
+    <p class="section-label">IN THE EDIT</p>
+    <h2 class="section-heading">The Plugin Stack</h2>
+    <p class="section-sub">Every plugin we use inside Final Cut Pro — and teach inside the school.</p>
+  </div>
+  <div class="product-grid" id="pluginGrid">
+
+    <div class="product-card reveal">
+      <div class="card-image"><span class="card-badge">Pixel Film Studios</span></div>
+      <div class="card-body">
+        <h3 class="card-name">FCPX Stabilizer 2.0</h3>
+        <p class="card-desc">How we fix shaky footage in seconds</p>
+        <div class="card-buttons">
+          <a href="https://store.pixelfilmstudios.com" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://store.pixelfilmstudios.com">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay: 0.08s;">
+      <div class="card-image"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Smooth Transitions</h3>
+        <p class="card-desc">The transitions in every reel we've ever posted</p>
+        <div class="card-buttons">
+          <a href="https://finalcutplugs.com" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://finalcutplugs.com">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay: 0.16s;">
+      <div class="card-image"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Shake Effects Pack</h3>
+        <p class="card-desc">Adds energy without overdoing it</p>
+        <div class="card-buttons">
+          <a href="https://finalcutplugs.com" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://finalcutplugs.com">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay: 0.24s;">
+      <div class="card-image"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Motion Blur Pro</h3>
+        <p class="card-desc">Makes every cut feel cinematic</p>
+        <div class="card-buttons">
+          <a href="https://finalcutplugs.com" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Buy Now
+          </a>
+          <button class="card-btn-copy" data-link="https://finalcutplugs.com">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Software Section -->
+<section class="section" id="software">
+  <div class="reveal">
+    <p class="section-label">THE STACK</p>
+    <h2 class="section-heading">Software We Run On</h2>
+  </div>
+  <div class="product-grid two-col" id="softwareGrid">
+
+    <div class="product-card reveal">
+      <div class="card-image"><span class="card-badge">Editing</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Final Cut Pro</h3>
+        <p class="card-desc">Our editing suite. Everything we shoot is cut here.</p>
+        <div class="card-buttons">
+          <a href="https://www.apple.com/final-cut-pro/" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Learn More
+          </a>
+          <button class="card-btn-copy" data-link="https://www.apple.com/final-cut-pro/">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay: 0.08s;">
+      <div class="card-image"><span class="card-badge">AI Enhancement</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Topaz Video AI</h3>
+        <p class="card-desc">How we deliver broadcast-quality footage to clients. Every. Single. Time.</p>
+        <div class="card-buttons">
+          <a href="https://www.topazlabs.com/topaz-video-ai" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Learn More
+          </a>
+          <button class="card-btn-copy" data-link="https://www.topazlabs.com/topaz-video-ai">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay: 0.16s;">
+      <div class="card-image"><span class="card-badge">AI Creative</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Higgsfield AI</h3>
+        <p class="card-desc">The AI tool we use for next-level creative edits and client deliverables.</p>
+        <div class="card-buttons">
+          <a href="https://higgsfield.ai" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Learn More
+          </a>
+          <button class="card-btn-copy" data-link="https://higgsfield.ai">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay: 0.24s;">
+      <div class="card-image"><span class="card-badge">Operations</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Monday.com</h3>
+        <p class="card-desc">How we run our entire production operation.</p>
+        <div class="card-buttons">
+          <a href="https://monday.com" target="_blank" class="card-btn-buy">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Learn More
+          </a>
+          <button class="card-btn-copy" data-link="https://monday.com">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- The School / CTA Section -->
+<section class="school-section" id="school">
+  <div class="school-inner reveal">
+    <p class="school-eyebrow">THE REAL INVESTMENT</p>
+    <h2 class="school-heading">EVERYTHING YOU NEED TO GROW IS <span class="highlight">RIGHT HERE</span></h2>
+    <div class="school-body">
+      <p>Every tool on this page is something we use. But the tools are only part of it. Knowing how to use them — at the highest level, on luxury properties, for clients who pay premium rates — that's what separates a videographer from a business.</p>
+      <p>Inside 910 Academy you'll learn to shoot, edit, and scale a real estate media company. The exact angles. The exact edit. The exact sales system. From the people doing it at seven figures.</p>
+      <p>Once you're in, you can earn 20% on every member you refer. The school pays for itself.</p>
+    </div>
+    <div class="school-price">$910</div>
+    <br>
+    <a href="https://www.skool.com/910-academy/about" target="_blank" class="school-cta">Join 910 Academy</a>
+    <p class="school-proof">300+ active members. Real results. No refunds needed.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/Academy.png" alt="910 Academy">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-disclaimer">Some links on this page are affiliate links. Purchases made through them support 910 Academy at no extra cost to you. We only recommend what we actually use.</p>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+</footer>
+
+<script>
+// ========== HERO WORD-BY-WORD ANIMATION ==========
+(function() {
+  var title = "THE EXACT GEAR WE SHOOT WITH";
+  var highlightWords = ['WE'];
+  var words = title.split(' ');
+  var h1 = document.getElementById('heroTitle');
+  words.forEach(function(word, i) {
+    var span = document.createElement('span');
+    span.className = 'word';
+    if (highlightWords.indexOf(word) !== -1) {
+      span.classList.add('highlight');
+    }
+    span.textContent = word;
+    span.style.animationDelay = (0.15 + i * 0.08) + 's';
+    h1.appendChild(span);
+    if (i < words.length - 1) h1.appendChild(document.createTextNode(' '));
+  });
+})();
+
+// ========== STICKY NAV ==========
+(function() {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) {
+      scrolled = s;
+      nav.classList.toggle('scrolled', s);
+    }
+  }, { passive: true });
+})();
+
+// ========== MOBILE NAV ==========
+(function() {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  toggle.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+
+// ========== SCROLL REVEAL ==========
+(function() {
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+})();
+
+// ========== FILTER TABS ==========
+(function() {
+  var tabs = document.querySelectorAll('#gearFilters .filter-tab');
+  var cards = document.querySelectorAll('#gearGrid .product-card');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var filter = tab.getAttribute('data-filter');
+      cards.forEach(function(card) {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+})();
+
+// ========== COPY LINK BUTTONS ==========
+(function() {
+  document.querySelectorAll('.card-btn-copy').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var link = btn.getAttribute('data-link');
+      navigator.clipboard.writeText(link).then(function() {
+        btn.classList.add('copied');
+        var originalText = btn.innerHTML;
+        var svgHTML = btn.querySelector('svg').outerHTML;
+        btn.innerHTML = svgHTML + ' Copied!';
+        setTimeout(function() {
+          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

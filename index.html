@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>910 Academy — Step Into The New Frontier of Real Estate Videography</title>
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:title" content="910 Academy — Real Estate Videography">
+<meta property="og:description" content="Learn to shoot, edit, and scale a real estate media company from the ground up.">
+<meta property="og:image" content="/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="910 Academy">
+<meta name="twitter:description" content="Step into the new frontier of real estate videography.">
+<meta name="twitter:image" content="/og-image.jpg">
+<meta name="description" content="Join 910 Academy and learn to shoot, edit, and scale a real estate media company from the ground up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   DESIGN TOKENS
+   Systematic token architecture for consistency.
+   Based on glassmorphism + modern dark cinema styles.
+   ===================================================== */
+:root {
+  /* Color Tokens */
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --bg-elevated: #0f0f10;
+  --bg-surface: rgba(255, 255, 255, 0.05);
+  --bg-surface-hover: rgba(255, 255, 255, 0.08);
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2);
+  --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --accent-border-badge: rgba(56, 182, 255, 0.15);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+
+  /* Glass Tokens */
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+
+  /* Spacing Scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-pill: 100px;
+
+  /* Easing — Modern Dark Cinema */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ========== BACKGROUND DEPTH ORBS ========== */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  animation: orbPulse 12s ease-in-out infinite alternate;
+}
+.bg-orb-1 {
+  top: -10%; left: -5%;
+  width: 600px; height: 600px;
+  background: rgba(56, 182, 255, 0.02);
+  filter: blur(120px);
+  animation-delay: 0s;
+}
+.bg-orb-2 {
+  top: 30%; right: -10%;
+  width: 800px; height: 800px;
+  background: rgba(56, 182, 255, 0.015);
+  filter: blur(150px);
+  animation-delay: -4s;
+}
+.bg-orb-3 {
+  bottom: -5%; left: -8%;
+  width: 500px; height: 500px;
+  background: rgba(56, 182, 255, 0.01);
+  filter: blur(100px);
+  animation-delay: -8s;
+}
+@keyframes orbPulse {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(10px, -10px); }
+}
+
+/* ========== FLOATING PARTICLES ========== */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 0;
+}
+.particle.up   { animation: dustUp linear infinite; }
+.particle.down { animation: dustDown linear infinite; }
+.particle:nth-child(1)  { width:2px;height:2px; left:3%;  top:85%; animation-duration:8s;  animation-delay:0s; }
+.particle:nth-child(2)  { width:4px;height:4px; left:8%;  top:20%; animation-duration:12s; animation-delay:1s; }
+.particle:nth-child(3)  { width:3px;height:3px; left:12%; top:60%; animation-duration:7s;  animation-delay:0.5s; }
+.particle:nth-child(4)  { width:2px;height:2px; left:18%; top:40%; animation-duration:10s; animation-delay:2s; }
+.particle:nth-child(5)  { width:4px;height:4px; left:22%; top:90%; animation-duration:9s;  animation-delay:0.3s; }
+.particle:nth-child(6)  { width:3px;height:3px; left:28%; top:15%; animation-duration:14s; animation-delay:3s; }
+.particle:nth-child(7)  { width:2px;height:2px; left:33%; top:70%; animation-duration:6s;  animation-delay:1.5s; }
+.particle:nth-child(8)  { width:4px;height:4px; left:38%; top:35%; animation-duration:11s; animation-delay:0.8s; }
+.particle:nth-child(9)  { width:3px;height:3px; left:42%; top:55%; animation-duration:8s;  animation-delay:2.5s; }
+.particle:nth-child(10) { width:2px;height:2px; left:48%; top:80%; animation-duration:13s; animation-delay:0.2s; }
+.particle:nth-child(11) { width:4px;height:4px; left:52%; top:10%; animation-duration:7s;  animation-delay:4s; }
+.particle:nth-child(12) { width:3px;height:3px; left:57%; top:45%; animation-duration:15s; animation-delay:1.2s; }
+.particle:nth-child(13) { width:2px;height:2px; left:62%; top:75%; animation-duration:9s;  animation-delay:3.5s; }
+.particle:nth-child(14) { width:4px;height:4px; left:67%; top:25%; animation-duration:6s;  animation-delay:0.7s; }
+.particle:nth-child(15) { width:3px;height:3px; left:72%; top:95%; animation-duration:10s; animation-delay:2.2s; }
+.particle:nth-child(16) { width:2px;height:2px; left:77%; top:50%; animation-duration:12s; animation-delay:1.8s; }
+.particle:nth-child(17) { width:4px;height:4px; left:82%; top:30%; animation-duration:8s;  animation-delay:0.4s; }
+.particle:nth-child(18) { width:3px;height:3px; left:87%; top:65%; animation-duration:14s; animation-delay:3.2s; }
+.particle:nth-child(19) { width:2px;height:2px; left:92%; top:5%;  animation-duration:7s;  animation-delay:2.8s; }
+.particle:nth-child(20) { width:4px;height:4px; left:96%; top:85%; animation-duration:11s; animation-delay:0.6s; }
+.particle:nth-child(21) { width:3px;height:3px; left:6%;  top:48%; animation-duration:9s;  animation-delay:1.4s; }
+.particle:nth-child(22) { width:2px;height:2px; left:15%; top:72%; animation-duration:13s; animation-delay:4.2s; }
+.particle:nth-child(23) { width:4px;height:4px; left:25%; top:18%; animation-duration:6s;  animation-delay:0.9s; }
+.particle:nth-child(24) { width:3px;height:3px; left:35%; top:92%; animation-duration:10s; animation-delay:2.6s; }
+.particle:nth-child(25) { width:2px;height:2px; left:45%; top:38%; animation-duration:15s; animation-delay:1.1s; }
+.particle:nth-child(26) { width:4px;height:4px; left:55%; top:62%; animation-duration:8s;  animation-delay:3.8s; }
+.particle:nth-child(27) { width:3px;height:3px; left:65%; top:8%;  animation-duration:12s; animation-delay:0.1s; }
+.particle:nth-child(28) { width:2px;height:2px; left:75%; top:55%; animation-duration:7s;  animation-delay:2.4s; }
+.particle:nth-child(29) { width:4px;height:4px; left:85%; top:42%; animation-duration:9s;  animation-delay:1.7s; }
+.particle:nth-child(30) { width:3px;height:3px; left:95%; top:78%; animation-duration:11s; animation-delay:3.3s; }
+
+@keyframes dustUp {
+  0%   { transform: translate(0, 0); opacity: 0.3; }
+  12%  { opacity: 0.9; }
+  25%  { transform: translate(18px, -50px); opacity: 0.4; }
+  37%  { opacity: 0.85; }
+  50%  { transform: translate(-12px, -100px); opacity: 0.3; }
+  62%  { opacity: 0.9; }
+  75%  { transform: translate(22px, -150px); opacity: 0.4; }
+  87%  { opacity: 0.8; }
+  100% { transform: translate(-8px, -200px); opacity: 0.3; }
+}
+@keyframes dustDown {
+  0%   { transform: translate(0, 0); opacity: 0.3; }
+  12%  { opacity: 0.85; }
+  25%  { transform: translate(-15px, 50px); opacity: 0.4; }
+  37%  { opacity: 0.9; }
+  50%  { transform: translate(10px, 100px); opacity: 0.3; }
+  62%  { opacity: 0.8; }
+  75%  { transform: translate(-20px, 150px); opacity: 0.45; }
+  87%  { opacity: 0.9; }
+  100% { transform: translate(8px, 200px); opacity: 0.3; }
+}
+
+/* ========== STICKY NAV — GLASSMORPHISM ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: var(--space-5) 0;
+  transition: all 0.4s var(--ease-out);
+}
+.nav.scrolled {
+  padding: 14px 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo img {
+  height: 36px;
+  width: auto;
+  opacity: 0.95;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+.nav-link {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  transition: color 0.3s var(--ease-smooth);
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--fg);
+  transition: width 0.3s var(--ease-out);
+}
+.nav-link:hover { color: var(--fg); }
+.nav-link:hover::after { width: 100%; }
+.nav-cta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: var(--space-3) var(--space-8);
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.nav-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: var(--space-1);
+}
+.nav-mobile-toggle span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: var(--fg);
+  transition: all 0.3s var(--ease-out);
+}
+
+/* ========== HERO ========== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-32) var(--space-10) var(--space-20);
+  z-index: 2;
+  overflow: hidden;
+  background-image:
+    linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.85)),
+    url('/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.hero-content { position: relative; z-index: 1; max-width: 1100px; }
+.hero h1 {
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin-bottom: var(--space-8);
+  line-height: 1;
+}
+.hero-line {
+  display: block;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: wordReveal 0.7s var(--ease-out) forwards;
+  white-space: nowrap;
+}
+.hero-line-1 {
+  font-size: clamp(1.76rem, 3.08vw, 3.52rem);
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  opacity: 0;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.15em;
+  animation-delay: 0.15s;
+}
+.hero-line-2 {
+  font-size: clamp(3.379rem, 5.808vw, 6.336rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 0.1em;
+  animation-delay: 0.4s;
+}
+.hero-line-3 {
+  font-size: clamp(1.6rem, 2.8vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 auto;
+  animation-delay: 0.65s;
+}
+@keyframes wordReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  margin-top: var(--space-10);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 1s forwards;
+}
+.hero-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 1.8s forwards;
+  cursor: pointer;
+}
+.scroll-indicator svg {
+  width: 20px; height: 20px;
+  stroke: var(--fg-dim);
+  animation: arrowBreathe 2.4s ease-in-out infinite;
+}
+@keyframes arrowBreathe {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(6px) scale(1.15); opacity: 1; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ========== SECTIONS ========== */
+.section {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-20) var(--space-10);
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+.section-heading {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-4);
+}
+.section-sub {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  max-width: 560px;
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-12);
+}
+
+/* ========== CURRICULUM GRID ========== */
+.curriculum-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+.curriculum-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-8);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out);
+}
+.curriculum-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.curriculum-number {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+.curriculum-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--fg);
+}
+
+/* ========== COMMUNITY SECTION ========== */
+.community-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+.community-text .section-sub {
+  margin-bottom: var(--space-8);
+}
+.community-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.community-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+.community-image {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.community-image img {
+  width: 100%;
+  display: block;
+}
+
+/* ========== SCHOOL / CTA — GLASS PANEL ========== */
+.school-section {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-20) var(--space-10);
+  text-align: center;
+}
+.school-glass {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  padding: var(--space-16) var(--space-16);
+}
+.school-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+.school-heading {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 32px;
+}
+.school-heading .highlight { color: var(--fg); }
+.school-body {
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+.school-body p {
+  font-size: 0.893rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: var(--leading-normal);
+  margin-bottom: 0;
+}
+.school-intro {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: var(--leading-normal);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+.school-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  text-align: left;
+  margin-bottom: 40px;
+}
+.school-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+.school-card-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-5);
+}
+.school-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.school-card li {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.5;
+  padding-left: 24px;
+  position: relative;
+}
+.school-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ========== WHO WE ARE ========== */
+.origin-layout {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: var(--space-16);
+  align-items: start;
+}
+.origin-text p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 520px;
+  line-height: 1.8;
+  margin-bottom: var(--space-6);
+}
+.origin-pills {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
+}
+.origin-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 10px 20px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.origin-pill-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fg);
+}
+.origin-pill-sub {
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+}
+.origin-visual {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.1em;
+  animation: originFloat 4s ease-in-out infinite alternate;
+}
+@keyframes originFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* ========== OFFER STACK ========== */
+/* ========== EVENTS CAROUSEL ========== */
+.events-carousel-wrap {
+  position: relative;
+}
+.events-carousel {
+  overflow: hidden;
+}
+.events-track {
+  display: flex;
+  gap: var(--space-6);
+  transition: transform 0.4s ease;
+}
+.events-track .event-card {
+  flex: 0 0 380px;
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.events-track .event-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.3s ease;
+}
+.carousel-arrow:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.carousel-arrow svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--fg);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.carousel-arrow-left { left: -20px; }
+.carousel-arrow-right { right: -20px; }
+
+/* ========== SECTION DIVIDER ========== */
+.section-divider {
+  border: none;
+  height: 1px;
+  width: 80%;
+  margin: 0 auto;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent 100%
+  );
+  position: relative;
+  z-index: 2;
+}
+
+/* ========== SOCIAL PROOF TICKER ========== */
+.social-proof {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  padding: var(--space-6) 0;
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 30s linear infinite;
+}
+.ticker-set {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+.ticker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 48px;
+  white-space: nowrap;
+}
+.ticker-item + .ticker-item {
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ticker-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.2;
+}
+.ticker-label {
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ========== WHO THIS IS FOR ========== */
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+.who-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.who-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.who-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.08);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+.who-card h3 {
+  font-size: 1rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+  line-height: 1.3;
+  margin-bottom: var(--space-3);
+}
+.who-card p {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+/* ========== EVENTS MASONRY ========== */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+.event-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.event-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.event-placeholder {
+  aspect-ratio: 4/3;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.1em;
+}
+.event-label {
+  padding: var(--space-4) var(--space-5);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========== TESTIMONIALS ========== */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 2px solid rgba(56, 182, 255, 0.3);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.testimonial-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.15);
+  border-left-color: rgba(56, 182, 255, 0.5);
+}
+.testimonial-quote-mark {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+.testimonial-text {
+  font-size: 1rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--fg);
+  line-height: 1.6;
+  margin-bottom: var(--space-6);
+}
+.testimonial-author {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========== COACHING SECTION ========== */
+.coaching-section {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.coaching-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-20) var(--space-10);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+.coaching-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.coaching-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+.coaching-muted {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--fg-dim);
+  margin-top: var(--space-4);
+}
+.coaching-visual {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.1em;
+  animation: coachFloat 4s ease-in-out infinite alternate;
+}
+@keyframes coachFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+/* ========== EMAIL SIGNUP ========== */
+.email-section {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--space-20) var(--space-10);
+  text-align: center;
+}
+.email-form {
+  display: flex;
+  gap: var(--space-3);
+  max-width: 500px;
+  margin: 0 auto;
+}
+.email-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 14px 20px;
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.email-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+.email-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.email-submit {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.email-submit:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+.email-success {
+  display: none;
+  color: rgba(56, 182, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: var(--space-4);
+  animation: fadeUp 0.4s ease-out forwards;
+}
+
+/* ========== CONSULTATION SECTION ========== */
+.consult-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+.consult-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.consult-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+.consult-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.consult-benefit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+}
+.consult-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg);
+  flex-shrink: 0;
+}
+.school-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.school-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+.school-proof {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--fg-dim);
+  margin-top: 16px;
+}
+
+/* ========== DISCLAIMER ========== */
+.disclaimer-section {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+}
+.disclaimer-section p {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: var(--leading-normal);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+}
+.footer-logo img {
+  height: 28px;
+  margin: 0 auto var(--space-8);
+  opacity: 0.7;
+}
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+.footer-socials a {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+  transition: color 0.3s var(--ease-smooth);
+}
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--fg-ghost);
+  letter-spacing: 0.04em;
+}
+
+/* ========== MOBILE NAV ========== */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 6, 0.95);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-out);
+}
+.mobile-nav.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+.mobile-nav a {
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: var(--fg);
+  transition: color 0.3s var(--ease-smooth);
+}
+.mobile-nav a:hover { color: var(--accent); }
+.mobile-nav-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  font-size: 28px;
+  color: var(--fg);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
+  .community-layout { grid-template-columns: 1fr; gap: var(--space-10); }
+  .who-grid { grid-template-columns: 1fr 1fr; }
+  .events-grid { grid-template-columns: 1fr 1fr; }
+  .origin-layout { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .coaching-inner { grid-template-columns: 1fr; gap: var(--space-10); }
+  .consult-layout { grid-template-columns: 1fr; gap: var(--space-10); }
+}
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 var(--space-6); }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .section { padding: var(--space-20) var(--space-6); }
+  .hero { padding: 100px var(--space-6) 60px; }
+  .curriculum-grid { grid-template-columns: 1fr; }
+  .community-layout { grid-template-columns: 1fr; }
+  .who-grid { grid-template-columns: 1fr; }
+  .events-grid { grid-template-columns: 1fr; }
+  .origin-layout { grid-template-columns: 1fr; }
+  .events-track .event-card { flex: 0 0 280px; }
+  .carousel-arrow-left { left: 8px; }
+  .carousel-arrow-right { right: 8px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .coaching-inner { padding: var(--space-16) var(--space-6); }
+  .email-section { padding: var(--space-16) var(--space-6); }
+  .email-form { flex-direction: column; }
+  .school-section { padding: 60px var(--space-6); }
+  .school-glass { padding: var(--space-12) var(--space-8); }
+  .school-cards { grid-template-columns: 1fr; }
+  .footer { padding: var(--space-12) var(--space-6); }
+  .disclaimer-section { padding: var(--space-12) var(--space-6); }
+  .ticker-item { padding: 0 28px; }
+}
+@media (max-width: 480px) {
+  .section-heading { font-size: 1.8rem; }
+  .school-heading { font-size: 1.8rem; }
+  .nav-logo img { height: 28px; }
+  .curriculum-number { font-size: 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Depth Orbs -->
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+
+<!-- Floating Particles (30) — alternating up/down drift -->
+<div class="particles">
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="/logo-white.svg" alt="910 Academy">
+    </a>
+    <div class="nav-links">
+      <a href="/affiliate-links#gear" target="_blank" class="nav-link">Gear</a>
+      <a href="/affiliate-links#plugins" target="_blank" class="nav-link">Plugins</a>
+      <a href="/affiliate-links#software" target="_blank" class="nav-link">Software</a>
+      <a href="/skool" class="nav-link">Skool</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="/affiliate-links#gear" target="_blank">Gear</a>
+  <a href="/affiliate-links#plugins" target="_blank">Plugins</a>
+  <a href="/affiliate-links#software" target="_blank">Software</a>
+  <a href="/skool">Skool</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>
+      <div class="hero-line hero-line-1">STEP INTO THE</div>
+      <div class="hero-line hero-line-2"><span style="color:#38B6FF">NEW FRONTIER</span></div>
+      <div class="hero-line hero-line-3">OF REAL ESTATE VIDEOGRAPHY</div>
+    </h1>
+    <div style="display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:var(--space-10);opacity:0;animation:fadeUp 0.8s var(--ease-out) 1s forwards;">
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="hero-cta" style="margin-top:0;opacity:1;animation:none;">Join 910 Academy</a>
+      <a href="https://calendly.com/910academy/booking" target="_blank" style="display:inline-block;padding:16px 32px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.55)';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.35)';this.style.borderColor='rgba(255,255,255,0.2)'">BOOK A CALL</a>
+    </div>
+  </div>
+  <div class="scroll-indicator" id="scrollArrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- Social Proof Ticker -->
+<div class="social-proof">
+  <div class="ticker-track">
+    <div class="ticker-set">
+      <div class="ticker-item"><span class="ticker-number">$2B+</span><span class="ticker-label">In Real Estate Marketed</span></div>
+      <div class="ticker-item"><span class="ticker-number">100M+</span><span class="ticker-label">Views Generated</span></div>
+      <div class="ticker-item"><span class="ticker-number">1,000+</span><span class="ticker-label">Videographers Trained</span></div>
+      <div class="ticker-item"><span class="ticker-number">100K+</span><span class="ticker-label">Followers Across Platforms</span></div>
+      <div class="ticker-item"><span class="ticker-number">Built From</span><span class="ticker-label">A 7-Figure Media Company</span></div>
+    </div>
+    <div class="ticker-set">
+      <div class="ticker-item"><span class="ticker-number">$2B+</span><span class="ticker-label">In Real Estate Marketed</span></div>
+      <div class="ticker-item"><span class="ticker-number">100M+</span><span class="ticker-label">Views Generated</span></div>
+      <div class="ticker-item"><span class="ticker-number">1,000+</span><span class="ticker-label">Videographers Trained</span></div>
+      <div class="ticker-item"><span class="ticker-number">100K+</span><span class="ticker-label">Followers Across Platforms</span></div>
+      <div class="ticker-item"><span class="ticker-number">Built From</span><span class="ticker-label">A 7-Figure Media Company</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Who We Are -->
+<section class="section" id="origin">
+  <div class="reveal-left">
+    <p class="section-label">THE ORIGIN</p>
+    <h2 class="section-heading">Why 910 Academy Exists</h2>
+  </div>
+  <div class="origin-layout">
+    <div class="origin-text reveal">
+      <p>When Claudio Rivera started in real estate media, there was nothing. No blueprint. No community. No one pulling back the curtain on how it actually worked. He had to figure it all out alone.</p>
+      <p>So he did. He built Studio 910 into one of the most recognized real estate media brands in the world — by learning everything the hard way, through real shoots, real clients, and real failures. Once he got there, he made a decision: he was not going to gatekeep any of it.</p>
+      <p>910 Academy exists because Claudio wished it existed when he was starting out. Everything he learned, everything he built, every system that took years to develop — broken down completely and handed to you. No filters. No fluff. Just the full picture.</p>
+      <div class="origin-pills">
+        <div class="origin-pill">
+          <span class="origin-pill-label">Studio 910</span>
+          <span class="origin-pill-sub">The Company Behind It All</span>
+        </div>
+        <div class="origin-pill">
+          <span class="origin-pill-label">Palm Beach, FL</span>
+          <span class="origin-pill-sub">Where It All Started</span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:0.15s;">
+      <div class="origin-visual"><img src="/origin.jpg" alt="910 Academy" style="width:100%;height:100%;object-fit:cover;border-radius:var(--border-radius-lg, 12px);display:block;"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Who This Is For -->
+<section class="section" id="who">
+  <div class="reveal-left">
+    <p class="section-label">IS THIS YOU</p>
+    <h2 class="section-heading">Who 910 Academy Is For</h2>
+  </div>
+  <div class="who-grid">
+    <div class="who-card reveal">
+      <div class="who-number">01</div>
+      <h3>You're Shooting But Not Scaling</h3>
+      <p>You're booking jobs but the revenue isn't growing. You need systems, not just skills.</p>
+    </div>
+    <div class="who-card reveal" style="transition-delay:0.15s;">
+      <div class="who-number">02</div>
+      <h3>You Want Luxury Clients</h3>
+      <p>You're done with $200 listings. You want the properties that make reels go viral.</p>
+    </div>
+    <div class="who-card reveal" style="transition-delay:0.3s;">
+      <div class="who-number">03</div>
+      <h3>You're Ready to Build a Real Business</h3>
+      <p>Not just a reel. A company. With a team, a process, and income that doesn't stop when you do.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Previous Events -->
+<section class="section" id="events">
+  <div class="reveal-left">
+    <p class="section-label">IN THE FIELD</p>
+    <h2 class="section-heading">Where We've Been</h2>
+    <p class="section-sub">Ride-alongs, in-person masterminds, and guest creator takeovers. This is the community in action.</p>
+  </div>
+  <!-- TODO: Replace /event-placeholder.jpg below with 6 distinct event photos -->
+  <div class="events-carousel-wrap reveal">
+    <button class="carousel-arrow carousel-arrow-left" id="eventsLeft" aria-label="Previous">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <div class="events-carousel">
+      <div class="events-track" id="eventsTrack">
+        <div class="event-card">
+          <div class="event-placeholder"><img src="/event-placeholder.jpg" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div class="event-label">Bahamas Shoot  |  2024</div>
+        </div>
+        <div class="event-card">
+          <div class="event-placeholder"><img src="/event-placeholder.jpg" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div class="event-label">Palm Beach Ride-Along  |  2025</div>
+        </div>
+        <div class="event-card">
+          <div class="event-placeholder"><img src="/event-placeholder.jpg" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div class="event-label">Guest Creator Takeover  |  2025</div>
+        </div>
+        <div class="event-card">
+          <div class="event-placeholder"><img src="/event-placeholder.jpg" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div class="event-label">In-Person Mastermind  |  2024</div>
+        </div>
+        <div class="event-card">
+          <div class="event-placeholder"><img src="/event-placeholder.jpg" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div class="event-label">Luxury Property Shoot  |  2025</div>
+        </div>
+        <div class="event-card">
+          <div class="event-placeholder"><img src="/event-placeholder.jpg" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div class="event-label">Community Meetup  |  2025</div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-arrow carousel-arrow-right" id="eventsRight" aria-label="Next">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- REPLACE PLACEHOLDER QUOTES WITH REAL TESTIMONIALS -->
+<!-- Member Wins / Testimonials -->
+<section class="section" id="testimonials">
+  <div class="reveal-left">
+    <p class="section-label">THE RESULTS</p>
+    <h2 class="section-heading">Members Winning</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote-mark">&ldquo;</div>
+      <p class="testimonial-text">[Member testimonial placeholder - replace with real quote from Skool or Instagram DMs]</p>
+      <p class="testimonial-author">- Member Name, City</p>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay:0.1s;">
+      <div class="testimonial-quote-mark">&ldquo;</div>
+      <p class="testimonial-text">[Member testimonial placeholder - replace with real quote from Skool or Instagram DMs]</p>
+      <p class="testimonial-author">- Member Name, City</p>
+    </div>
+    <div class="testimonial-card reveal" style="transition-delay:0.2s;">
+      <div class="testimonial-quote-mark">&ldquo;</div>
+      <p class="testimonial-text">[Member testimonial placeholder - replace with real quote from Skool or Instagram DMs]</p>
+      <p class="testimonial-author">- Member Name, City</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- One-on-One Coaching -->
+<section class="coaching-section">
+  <div class="coaching-inner">
+    <div class="reveal-left">
+      <p class="section-label">THE HIGHEST LEVEL</p>
+      <h2 class="section-heading">Work Directly With Claudio</h2>
+      <p class="section-sub">For the serious operator who wants to build a real estate media company that runs without them. This is the room where it happens.</p>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="coaching-cta">Apply for Private Coaching</a>
+      <p class="coaching-muted">Limited spots available. Application required.</p>
+    </div>
+    <div class="reveal">
+      <div class="coaching-visual"><img src="/coaching.jpg" alt="Work with Claudio" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:var(--border-radius-lg, 12px);display:block;"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CONNECT TO EMAIL PROVIDER (Mailchimp/ConvertKit) -->
+<!-- Email Signup -->
+<div class="email-section" id="email">
+  <div class="reveal">
+    <p class="section-label" style="text-align:center;">STAY IN THE LOOP</p>
+    <h2 class="section-heading" style="text-align:center;margin-bottom:var(--space-4);">Free Tips. Events. Resources.</h2>
+    <p class="section-sub" style="text-align:center;max-width:500px;margin:0 auto var(--space-10);">Join 5,000+ real estate videographers getting our best content delivered straight to their inbox.</p>
+    <form class="email-form" id="emailForm">
+      <input type="email" name="email" class="email-input" placeholder="Your email address" required>
+      <button type="submit" class="email-submit">Subscribe</button>
+    </form>
+    <p class="email-success" id="emailSuccess">You're in. We'll be in touch.</p>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- Book a Consultation -->
+<section class="section" id="consult">
+  <div class="consult-layout">
+    <div class="reveal-left">
+      <p class="section-label">NOT SURE WHERE TO START</p>
+      <h2 class="section-heading">Let's Figure It Out Together</h2>
+      <p class="section-sub">Not sure if 910 Academy is right for you? Book a free 15-minute call. No pressure, no pitch. Just clarity on your next move.</p>
+      <a href="https://calendly.com/910academy/booking" target="_blank" class="consult-cta">Book a Free Call</a>
+    </div>
+    <div class="consult-benefits reveal">
+      <div class="consult-benefit"><span class="consult-bullet"></span>No sales pressure</div>
+      <div class="consult-benefit"><span class="consult-bullet"></span>Personalized to where you are right now</div>
+      <div class="consult-benefit"><span class="consult-bullet"></span>Walk away with a clear next step</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Disclaimer -->
+<div class="disclaimer-section reveal">
+  <p>We do the very best we can to serve at the highest level possible, and we do not believe in or teach anything get rich quick or fast growth. Growing your business and following comes with various challenges. We do not guarantee results of any kind financial or otherwise. Results may vary, all depending on various factors in terms of the amount of work you put in, experience, and state of the market. Due to the nature of this digital product, we do not offer refunds.</p>
+</div>
+
+<hr class="section-divider">
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/logo-white.svg" alt="910 Academy">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+</footer>
+
+<script>
+// ========== STICKY NAV ==========
+(function() {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) {
+      scrolled = s;
+      nav.classList.toggle('scrolled', s);
+    }
+  }, { passive: true });
+})();
+
+// ========== MOBILE NAV ==========
+(function() {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  toggle.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+
+// ========== SCROLL REVEAL (IntersectionObserver) ==========
+(function() {
+  var reveals = document.querySelectorAll('.reveal, .reveal-left');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+})();
+
+// ========== EMAIL FORM ==========
+// Posts to a Google Apps Script web app that appends to a Google Sheet.
+// Replace APPS_SCRIPT_URL below with your deployed web app URL.
+(function() {
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/REPLACE_ME/exec';
+  var form = document.getElementById('emailForm');
+  var success = document.getElementById('emailSuccess');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = form.querySelector('input[name="email"]').value.trim();
+    if (!email) return;
+    var fd = new FormData();
+    fd.append('email', email);
+    fd.append('source', '910academy-homepage');
+    fetch(APPS_SCRIPT_URL, { method: 'POST', body: fd, mode: 'no-cors' })
+      .finally(function() {
+        success.style.display = 'block';
+        form.style.display = 'none';
+      });
+  });
+})();
+
+// ========== EVENTS CAROUSEL ==========
+(function() {
+  var track = document.getElementById('eventsTrack');
+  var left = document.getElementById('eventsLeft');
+  var right = document.getElementById('eventsRight');
+  if (!track || !left || !right) return;
+  var pos = 0;
+  var cardWidth = 380 + 24; // card width + gap
+  function getMax() {
+    var cards = track.children.length;
+    var visible = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+    return Math.max(0, cards - visible);
+  }
+  function update() {
+    track.style.transform = 'translateX(' + (-pos * cardWidth) + 'px)';
+  }
+  left.addEventListener('click', function() {
+    if (pos > 0) { pos--; update(); }
+  });
+  right.addEventListener('click', function() {
+    if (pos < getMax()) { pos++; update(); }
+  });
+  window.addEventListener('resize', function() {
+    if (pos > getMax()) { pos = getMax(); update(); }
+  });
+})();
+
+// ========== SCROLL ARROW CLICK ==========
+(function() {
+  var arrow = document.getElementById('scrollArrow');
+  if (arrow) {
+    arrow.addEventListener('click', function() {
+      var target = document.getElementById('origin') || document.getElementById('who');
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+})();
+</script>
+
+<!-- SAVED: WHAT YOU'LL LEARN SECTION
+<section class="section" id="curriculum">
+  <div class="reveal-left">
+    <p class="section-label">THE CURRICULUM</p>
+    <h2 class="section-heading">What You'll Learn</h2>
+  </div>
+  <div class="curriculum-grid">
+    <div class="curriculum-card reveal">
+      <div class="curriculum-number">01</div>
+      <h3>How to Shoot Real Estate like the Legends</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.1s;">
+      <div class="curriculum-number">02</div>
+      <h3>How to Scale Your Team with Top Tier Talent</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.2s;">
+      <div class="curriculum-number">03</div>
+      <h3>How to Edit With Cutting-Edge Viral Styles Using AI</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.3s;">
+      <div class="curriculum-number">04</div>
+      <h3>How to Break Into Luxury and Shoot the Homes of the 1%</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.4s;">
+      <div class="curriculum-number">05</div>
+      <h3>How to Build Your Personal Brand to Attract Luxury Agents</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.5s;">
+      <div class="curriculum-number">06</div>
+      <h3>910 Sales System: Sales Secrets of a 7-Figure Media Company</h3>
+    </div>
+  </div>
+</section>
+-->
+
+<!-- SAVED: WHO ITS FOR + MEMBERS ACCESS SECTION
+<div class="school-cards">
+  <div class="school-card">
+    <p class="school-card-eyebrow">WHO IT'S FOR</p>
+    <ul>
+      <li>Creators who are serious about taking their work to the next level</li>
+      <li>Real estate media business owners ready to land dream clients</li>
+      <li>Videographers stuck at the same level and ready to break through</li>
+    </ul>
+  </div>
+  <div class="school-card">
+    <p class="school-card-eyebrow">MEMBERS GET ACCESS TO</p>
+    <ul>
+      <li>LIVE Replay Vault: 50+ hours of raw value-packed replays</li>
+      <li>Inner Circle group chat with direct access to Claudio and the 910 team</li>
+      <li>Guest Creator Takeovers: Learn from pros like Four Horsemen, JT Visuals, Known Productions, and Lucid Horizon</li>
+    </ul>
+  </div>
+</div>
+-->
+
+<!-- SAVED: SCHOOL CTA SECTION
+<section class="school-section" id="join">
+  <div class="school-glass reveal">
+    <p class="school-eyebrow">THE REAL INVESTMENT</p>
+    <h2 class="school-heading">EVERYTHING YOU NEED TO GROW IS <span class="highlight">RIGHT HERE</span></h2>
+    <p class="school-intro">Inside 910 Academy, we give you the blueprint to shoot, edit, sell, and scale a real estate media business that stands out.</p>
+    <div class="school-cards">
+      <div class="school-card">
+        <p class="school-card-eyebrow">WHO IT'S FOR</p>
+        <ul>
+          <li>Creators who are serious about taking their work to the next level</li>
+          <li>Real estate media business owners ready to land dream clients</li>
+          <li>Videographers stuck at the same level and ready to break through</li>
+        </ul>
+      </div>
+      <div class="school-card">
+        <p class="school-card-eyebrow">MEMBERS GET ACCESS TO</p>
+        <ul>
+          <li>LIVE Replay Vault: 50+ hours of raw value-packed replays</li>
+          <li>Inner Circle group chat with direct access to Claudio and the 910 team</li>
+          <li>Guest Creator Takeovers: Learn from pros like Four Horsemen, JT Visuals, Known Productions, and Lucid Horizon</li>
+        </ul>
+      </div>
+    </div>
+    <a href="https://www.skool.com/910-academy/about" target="_blank" class="school-cta">Join 910 Academy</a>
+    <p class="school-proof">300+ active members. Real results. No refunds needed.</p>
+  </div>
+</section>
+-->
+
+</body>
+</html>

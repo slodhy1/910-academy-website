@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>910 Academy — The Exact Stack Behind Every Luxury Real Estate Video</title>
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:title" content="910 Academy — Real Estate Videography">
+<meta property="og:description" content="Learn to shoot, edit, and scale a real estate media company from the ground up.">
+<meta property="og:image" content="/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="910 Academy">
+<meta name="twitter:description" content="Step into the new frontier of real estate videography.">
+<meta name="twitter:image" content="/og-image.jpg">
+<meta name="description" content="The tools, plugins, and software behind every luxury real estate video by 910 Academy. No sponsorships. No filler. Just what we actually use.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   DESIGN TOKENS
+   Systematic token architecture for consistency.
+   Based on glassmorphism + modern dark cinema styles.
+   ===================================================== */
+:root {
+  /* Color Tokens */
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --bg-elevated: #0f0f10;
+  --bg-surface: rgba(255, 255, 255, 0.05);
+  --bg-surface-hover: rgba(255, 255, 255, 0.08);
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2);
+  --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --accent-border-badge: rgba(56, 182, 255, 0.15);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+
+  /* Glass Tokens */
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+
+  /* Spacing Scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-pill: 100px;
+
+  /* Easing — Modern Dark Cinema */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ========== BACKGROUND DEPTH ORBS ========== */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  animation: orbPulse 12s ease-in-out infinite alternate;
+}
+.bg-orb-1 {
+  top: -10%; left: -5%;
+  width: 600px; height: 600px;
+  background: rgba(56, 182, 255, 0.02);
+  filter: blur(120px);
+  animation-delay: 0s;
+}
+.bg-orb-2 {
+  top: 30%; right: -10%;
+  width: 800px; height: 800px;
+  background: rgba(56, 182, 255, 0.015);
+  filter: blur(150px);
+  animation-delay: -4s;
+}
+.bg-orb-3 {
+  bottom: -5%; left: -8%;
+  width: 500px; height: 500px;
+  background: rgba(56, 182, 255, 0.01);
+  filter: blur(100px);
+  animation-delay: -8s;
+}
+@keyframes orbPulse {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(10px, -10px); }
+}
+
+/* ========== FLOATING PARTICLES ========== */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 0;
+}
+/* Up-drifting particles */
+.particle.up   { animation: dustUp linear infinite; }
+/* Down-drifting particles */
+.particle.down { animation: dustDown linear infinite; }
+/* 30 particles — bright white, 2-4px, 6-15s */
+.particle:nth-child(1)  { width:2px;height:2px; left:3%;  top:85%; animation-duration:8s;  animation-delay:0s; }
+.particle:nth-child(2)  { width:4px;height:4px; left:8%;  top:20%; animation-duration:12s; animation-delay:1s; }
+.particle:nth-child(3)  { width:3px;height:3px; left:12%; top:60%; animation-duration:7s;  animation-delay:0.5s; }
+.particle:nth-child(4)  { width:2px;height:2px; left:18%; top:40%; animation-duration:10s; animation-delay:2s; }
+.particle:nth-child(5)  { width:4px;height:4px; left:22%; top:90%; animation-duration:9s;  animation-delay:0.3s; }
+.particle:nth-child(6)  { width:3px;height:3px; left:28%; top:15%; animation-duration:14s; animation-delay:3s; }
+.particle:nth-child(7)  { width:2px;height:2px; left:33%; top:70%; animation-duration:6s;  animation-delay:1.5s; }
+.particle:nth-child(8)  { width:4px;height:4px; left:38%; top:35%; animation-duration:11s; animation-delay:0.8s; }
+.particle:nth-child(9)  { width:3px;height:3px; left:42%; top:55%; animation-duration:8s;  animation-delay:2.5s; }
+.particle:nth-child(10) { width:2px;height:2px; left:48%; top:80%; animation-duration:13s; animation-delay:0.2s; }
+.particle:nth-child(11) { width:4px;height:4px; left:52%; top:10%; animation-duration:7s;  animation-delay:4s; }
+.particle:nth-child(12) { width:3px;height:3px; left:57%; top:45%; animation-duration:15s; animation-delay:1.2s; }
+.particle:nth-child(13) { width:2px;height:2px; left:62%; top:75%; animation-duration:9s;  animation-delay:3.5s; }
+.particle:nth-child(14) { width:4px;height:4px; left:67%; top:25%; animation-duration:6s;  animation-delay:0.7s; }
+.particle:nth-child(15) { width:3px;height:3px; left:72%; top:95%; animation-duration:10s; animation-delay:2.2s; }
+.particle:nth-child(16) { width:2px;height:2px; left:77%; top:50%; animation-duration:12s; animation-delay:1.8s; }
+.particle:nth-child(17) { width:4px;height:4px; left:82%; top:30%; animation-duration:8s;  animation-delay:0.4s; }
+.particle:nth-child(18) { width:3px;height:3px; left:87%; top:65%; animation-duration:14s; animation-delay:3.2s; }
+.particle:nth-child(19) { width:2px;height:2px; left:92%; top:5%;  animation-duration:7s;  animation-delay:2.8s; }
+.particle:nth-child(20) { width:4px;height:4px; left:96%; top:85%; animation-duration:11s; animation-delay:0.6s; }
+.particle:nth-child(21) { width:3px;height:3px; left:6%;  top:48%; animation-duration:9s;  animation-delay:1.4s; }
+.particle:nth-child(22) { width:2px;height:2px; left:15%; top:72%; animation-duration:13s; animation-delay:4.2s; }
+.particle:nth-child(23) { width:4px;height:4px; left:25%; top:18%; animation-duration:6s;  animation-delay:0.9s; }
+.particle:nth-child(24) { width:3px;height:3px; left:35%; top:92%; animation-duration:10s; animation-delay:2.6s; }
+.particle:nth-child(25) { width:2px;height:2px; left:45%; top:38%; animation-duration:15s; animation-delay:1.1s; }
+.particle:nth-child(26) { width:4px;height:4px; left:55%; top:62%; animation-duration:8s;  animation-delay:3.8s; }
+.particle:nth-child(27) { width:3px;height:3px; left:65%; top:8%;  animation-duration:12s; animation-delay:0.1s; }
+.particle:nth-child(28) { width:2px;height:2px; left:75%; top:55%; animation-duration:7s;  animation-delay:2.4s; }
+.particle:nth-child(29) { width:4px;height:4px; left:85%; top:42%; animation-duration:9s;  animation-delay:1.7s; }
+.particle:nth-child(30) { width:3px;height:3px; left:95%; top:78%; animation-duration:11s; animation-delay:3.3s; }
+
+@keyframes dustUp {
+  0%   { transform: translate(0, 0); opacity: 0.3; }
+  12%  { opacity: 0.9; }
+  25%  { transform: translate(18px, -50px); opacity: 0.4; }
+  37%  { opacity: 0.85; }
+  50%  { transform: translate(-12px, -100px); opacity: 0.3; }
+  62%  { opacity: 0.9; }
+  75%  { transform: translate(22px, -150px); opacity: 0.4; }
+  87%  { opacity: 0.8; }
+  100% { transform: translate(-8px, -200px); opacity: 0.3; }
+}
+@keyframes dustDown {
+  0%   { transform: translate(0, 0); opacity: 0.3; }
+  12%  { opacity: 0.85; }
+  25%  { transform: translate(-15px, 50px); opacity: 0.4; }
+  37%  { opacity: 0.9; }
+  50%  { transform: translate(10px, 100px); opacity: 0.3; }
+  62%  { opacity: 0.8; }
+  75%  { transform: translate(-20px, 150px); opacity: 0.45; }
+  87%  { opacity: 0.9; }
+  100% { transform: translate(8px, 200px); opacity: 0.3; }
+}
+
+/* ========== STICKY NAV — GLASSMORPHISM ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: var(--space-5) 0;
+  transition: all 0.4s var(--ease-out);
+}
+.nav.scrolled {
+  padding: 14px 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo img {
+  height: 36px;
+  width: auto;
+  opacity: 0.95;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+.nav-link {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  transition: color 0.3s var(--ease-smooth);
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--fg);
+  transition: width 0.3s var(--ease-out);
+}
+.nav-link:hover { color: var(--fg); }
+.nav-link:hover::after { width: 100%; }
+.nav-cta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: var(--space-3) var(--space-8);
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.nav-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+.nav-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: var(--space-1);
+}
+.nav-mobile-toggle span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: var(--fg);
+  transition: all 0.3s var(--ease-out);
+}
+
+/* ========== HERO ========== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-32) var(--space-10) var(--space-20);
+  z-index: 2;
+}
+.hero-content { position: relative; z-index: 1; max-width: 900px; }
+.hero h1 {
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-8);
+}
+.hero h1 .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(24px);
+  animation: wordReveal 0.7s var(--ease-out) forwards;
+}
+.hero h1 .word.highlight { color: var(--accent); }
+@keyframes wordReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-sub {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 400;
+  color: var(--fg-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: var(--leading-normal);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 1.2s forwards;
+}
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 1.8s forwards;
+  cursor: pointer;
+}
+.scroll-indicator svg {
+  width: 20px; height: 20px;
+  stroke: var(--fg-dim);
+  animation: arrowBreathe 2.4s ease-in-out infinite;
+}
+.scroll-indicator-label {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--fg);
+  opacity: 0.4;
+  white-space: nowrap;
+}
+@keyframes arrowBreathe {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(6px) scale(1.15); opacity: 1; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== SCROLL REVEAL (0.6s ease-out) ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ========== SECTIONS ========== */
+.section {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-32) var(--space-10);
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+.section-heading {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-4);
+}
+.section-sub {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  max-width: 560px;
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-12);
+}
+
+/* ========== FILTER TABS — GLASS PILLS ========== */
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+.filter-tab {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: var(--leading-normal);
+  color: var(--fg);
+  padding: var(--space-2) var(--space-5);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+.filter-tab:hover {
+  background: #38B6FF;
+  border-color: #38B6FF;
+  color: #FFFFFF;
+}
+.filter-tab.active {
+  color: #0a0a0a;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
+}
+
+/* ========== PRODUCT GRID ========== */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+.product-grid.two-col {
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-8);
+}
+
+/* ========== PRODUCT CARDS — GLASSMORPHISM ========== */
+.product-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out);
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.card-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(5,5,6,0.4) 100%);
+}
+.card-badge {
+  position: absolute;
+  top: var(--space-4); left: var(--space-4);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+.card-body {
+  padding: var(--space-8) var(--space-6);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card-name {
+  font-size: 1.333rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-2);
+}
+.card-desc {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-6);
+  flex: 1;
+}
+.card-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+/* Primary CTA — monochrome default, blue on hover */
+.card-btn-buy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 14px var(--space-5);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+.card-btn-buy:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+.card-btn-buy svg {
+  width: 14px; height: 14px;
+  stroke: #000000;
+  fill: none;
+  flex-shrink: 0;
+  transition: stroke 0.25s ease;
+}
+.card-btn-buy:hover svg {
+  stroke: #FFFFFF;
+}
+
+/* ========== PRODUCT IMAGES ========== */
+.card-image img {
+  object-fit: contain;
+  width: 100%;
+  height: 220px;
+  padding: 16px;
+  filter: brightness(0.95) contrast(1.05) saturate(0.95);
+  transition: filter 0.4s ease;
+  position: relative;
+  z-index: 1;
+}
+.product-card:hover .card-image img {
+  filter: brightness(1.05) contrast(1.1) saturate(1.05);
+}
+
+/* ========== SOFTWARE CARDS ========== */
+.product-grid.two-col .card-body { padding: var(--space-8) 30px; }
+.product-grid.two-col .card-name { font-size: 1.5rem; }
+.product-grid.two-col .card-desc { font-size: 0.95rem; }
+
+/* ========== SCHOOL / CTA — GLASS PANEL ========== */
+.school-section {
+  position: relative;
+  z-index: 2;
+  padding: 100px var(--space-10);
+  text-align: center;
+}
+.school-glass {
+  max-width: 780px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  padding: var(--space-16) var(--space-16);
+}
+.school-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+.school-heading {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 32px;
+}
+.school-heading .highlight { color: var(--fg); }
+.school-body {
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+.school-body p {
+  font-size: 0.893rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: var(--leading-normal);
+  margin-bottom: 0;
+}
+.school-price {
+  display: inline-block;
+  font-size: 3.2rem;
+  font-weight: 300;
+  color: var(--fg);
+  margin: 0 0 24px;
+  position: relative;
+}
+.school-price::before,
+.school-price::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40px; height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.school-price::before { right: calc(100% + 20px); }
+.school-price::after { left: calc(100% + 20px); }
+.school-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #FFFFFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+.school-cta:hover {
+  background: #38B6FF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+.school-proof {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--fg-dim);
+  margin-top: 16px;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+}
+.footer-logo img {
+  height: 28px;
+  margin: 0 auto var(--space-8);
+  opacity: 0.7;
+}
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+.footer-socials a {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+  transition: color 0.3s var(--ease-smooth);
+}
+.footer-socials a:hover { color: var(--accent); }
+.footer-disclaimer {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--fg-ghost);
+  max-width: 520px;
+  margin: 0 auto var(--space-5);
+  line-height: var(--leading-normal);
+}
+.footer-copy {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--fg-ghost);
+  letter-spacing: 0.04em;
+}
+
+/* ========== MOBILE NAV ========== */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 6, 0.95);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-out);
+}
+.mobile-nav.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+.mobile-nav a {
+  font-size: 1.6rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: var(--fg);
+  transition: color 0.3s var(--ease-smooth);
+}
+.mobile-nav a:hover { color: var(--accent); }
+.mobile-nav-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  font-size: 28px;
+  color: var(--fg);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 var(--space-6); }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .section { padding: var(--space-20) var(--space-6); }
+  .hero { padding: 100px var(--space-6) 60px; }
+  .product-grid { grid-template-columns: 1fr; }
+  .product-grid.two-col { grid-template-columns: 1fr; }
+  .school-section { padding: 60px var(--space-6); }
+  .school-glass { padding: var(--space-12) var(--space-8); }
+  .footer { padding: var(--space-12) var(--space-6); }
+  .filter-tabs { gap: 10px; }
+  .filter-tab { padding: var(--space-2) var(--space-4); font-size: 0.875rem; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.2rem; }
+  .section-heading { font-size: 1.8rem; }
+  .school-heading { font-size: 1.8rem; }
+  .school-price { font-size: 2.4rem; }
+  .nav-logo img { height: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Depth Orbs -->
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+
+<!-- Floating Particles (30) — alternating up/down drift -->
+<div class="particles">
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+  <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
+  <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="/logo-white.svg" alt="910 Academy">
+    </a>
+    <div class="nav-links">
+      <a href="#gear" class="nav-link">Gear</a>
+      <a href="#plugins" class="nav-link">Plugins</a>
+      <a href="#software" class="nav-link">Software</a>
+      <a href="#skool" class="nav-link">Skool</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="#gear">Gear</a>
+  <a href="#plugins">Plugins</a>
+  <a href="#software">Software</a>
+  <a href="#skool">Skool</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 id="heroTitle"></h1>
+    <p class="hero-sub">No sponsorships. No filler. Everything here is what we actually use — on set, in the edit, and in our business.</p>
+  </div>
+  <div class="scroll-indicator" id="scrollArrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+</section>
+
+<!-- Gear Section -->
+<section class="section" id="gear">
+  <div class="reveal-left">
+    <p class="section-label">ON SET</p>
+    <h2 class="section-heading">The Camera Kit</h2>
+  </div>
+  <div class="reveal" style="transition-delay:0.1s;">
+    <div class="filter-tabs" id="gearFilters">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="camera">Camera</button>
+      <button class="filter-tab" data-filter="lens">Lens</button>
+      <button class="filter-tab" data-filter="drone">Drone</button>
+      <button class="filter-tab" data-filter="stabilization">Stabilization</button>
+      <button class="filter-tab" data-filter="audio">Audio</button>
+      <button class="filter-tab" data-filter="support">Support</button>
+    </div>
+  </div>
+  <div class="product-grid" id="gearGrid">
+
+    <div class="product-card reveal" data-category="camera">
+      <div class="card-image"><img src="/Sony-A7S-III.png" alt="Sony A7SIII"><span class="card-badge">Camera</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Sony A7SIII</h3>
+        <p class="card-desc">Our primary body for every luxury shoot</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4rnBxFr" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="lens" style="transition-delay:0.1s;">
+      <div class="card-image"><img src="/Laowa-10mm-Zero-D-FF.png" alt="Laowa 10mm f/2.8"><span class="card-badge">Lens</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Laowa 10mm f/2.8</h3>
+        <p class="card-desc">The widest we go for interiors</p>
+        <div class="card-buttons">
+          <a href="https://www.laowalenses.ca/product/laowa-10mm-f-2-8-zero-d-ff/" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="lens" style="transition-delay:0.2s;">
+      <div class="card-image"><img src="/8194kDIG8HL.png" alt="Sony 50mm 1.2 GM"><span class="card-badge">Lens</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Sony 50mm 1.2 GM</h3>
+        <p class="card-desc">Our go-to for lifestyle and detail shots</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4kFFToR" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="stabilization" style="transition-delay:0.1s;">
+      <div class="card-image"><span class="card-badge">Stabilization</span></div>
+      <div class="card-body">
+        <h3 class="card-name">DJI RS4 Pro Gimbal</h3>
+        <p class="card-desc">Buttery smooth on every walk</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/3Ocfkvp" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="drone" style="transition-delay:0.2s;">
+      <div class="card-image"><span class="card-badge">Drone</span></div>
+      <div class="card-body">
+        <h3 class="card-name">DJI Mavic 4 Pro</h3>
+        <p class="card-desc">Our aerial workhorse</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4av1nS1" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="audio" style="transition-delay:0.3s;">
+      <div class="card-image"><span class="card-badge">Audio</span></div>
+      <div class="card-body">
+        <h3 class="card-name">DJI Mic 2</h3>
+        <p class="card-desc">Clean wireless audio on every shoot</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4rF92TX" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" data-category="support" style="transition-delay:0.1s;">
+      <div class="card-image"><span class="card-badge">Support</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Peak Design Pro Lite Tripod</h3>
+        <p class="card-desc">Stable, fast, professional</p>
+        <div class="card-buttons">
+          <a href="https://amzn.to/4aAHDv0" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Plugins Section -->
+<section class="section" id="plugins">
+  <div class="reveal-left">
+    <p class="section-label">IN THE EDIT</p>
+    <h2 class="section-heading">The Plugin Stack</h2>
+    <p class="section-sub">Every plugin we use inside Final Cut Pro — and teach inside Skool.</p>
+  </div>
+  <div class="product-grid" id="pluginGrid">
+
+    <div class="product-card reveal">
+      <div class="card-image"><span class="card-badge">Pixel Film Studios</span></div>
+      <div class="card-body">
+        <h3 class="card-name">FCPX Stabilizer 2.0</h3>
+        <p class="card-desc">How we fix shaky footage in seconds</p>
+        <div class="card-buttons">
+          <a href="https://store.pixelfilmstudios.com" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.1s;">
+      <div class="card-image"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Smooth Transitions</h3>
+        <p class="card-desc">The transitions in every reel we've ever posted</p>
+        <div class="card-buttons">
+          <a href="https://finalcutplugs.com" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.2s;">
+      <div class="card-image"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Shake Effects Pack</h3>
+        <p class="card-desc">Adds energy without overdoing it</p>
+        <div class="card-buttons">
+          <a href="https://finalcutplugs.com" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.3s;">
+      <div class="card-image"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Motion Blur Pro</h3>
+        <p class="card-desc">Makes every cut feel cinematic</p>
+        <div class="card-buttons">
+          <a href="https://finalcutplugs.com" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Software Section -->
+<section class="section" id="software">
+  <div class="reveal-left">
+    <p class="section-label">THE STACK</p>
+    <h2 class="section-heading">Software We Run On</h2>
+  </div>
+  <div class="product-grid two-col" id="softwareGrid">
+
+    <div class="product-card reveal">
+      <div class="card-image"><span class="card-badge">Editing</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Final Cut Pro</h3>
+        <p class="card-desc">Our editing suite. Everything we shoot is cut here.</p>
+        <div class="card-buttons">
+          <a href="https://www.apple.com/final-cut-pro/" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.1s;">
+      <div class="card-image"><span class="card-badge">AI Enhancement</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Topaz Video AI</h3>
+        <p class="card-desc">How we deliver broadcast-quality footage to clients. Every. Single. Time.</p>
+        <div class="card-buttons">
+          <a href="https://www.topazlabs.com/topaz-video-ai" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.2s;">
+      <div class="card-image"><span class="card-badge">AI Creative</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Higgsfield AI</h3>
+        <p class="card-desc">The AI tool we use for next-level creative edits and client deliverables.</p>
+        <div class="card-buttons">
+          <a href="https://higgsfield.ai" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.3s;">
+      <div class="card-image"><span class="card-badge">Operations</span></div>
+      <div class="card-body">
+        <h3 class="card-name">Monday.com</h3>
+        <p class="card-desc">How we run our entire production operation.</p>
+        <div class="card-buttons">
+          <a href="https://monday.com" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Learn More</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Skool / CTA Section -->
+<section class="school-section" id="skool">
+  <div class="school-glass reveal">
+    <p class="school-eyebrow">THE REAL INVESTMENT</p>
+    <h2 class="school-heading">EVERYTHING YOU NEED TO GROW IS <span class="highlight">RIGHT HERE</span></h2>
+    <div class="school-body">
+      <p>Every tool on this page is part of our real workflow. Inside 910 Academy you learn to shoot, edit, and scale a real estate media company the exact way we do it at seven figures. Once you are in, you earn 20% on every member you refer. Skool pays for itself.</p>
+    </div>
+    <a href="https://www.skool.com/910-academy/about" target="_blank" class="school-cta">Join 910 Academy</a>
+    <p class="school-proof">300+ active members. Real results. No refunds needed.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/Academy.png" alt="910 Academy">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-disclaimer">Some links on this page are affiliate links. Purchases made through them support 910 Academy at no extra cost to you. We only recommend what we actually use.</p>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+</footer>
+
+<script>
+// ========== HERO WORD-BY-WORD ANIMATION ==========
+(function() {
+  var title = "THE EXACT GEAR WE SHOOT WITH";
+  var highlightWords = ['WE'];
+  var words = title.split(' ');
+  var h1 = document.getElementById('heroTitle');
+  words.forEach(function(word, i) {
+    var span = document.createElement('span');
+    span.className = 'word';
+    if (highlightWords.indexOf(word) !== -1) span.classList.add('highlight');
+    span.textContent = word;
+    span.style.animationDelay = (0.15 + i * 0.08) + 's';
+    h1.appendChild(span);
+    if (i < words.length - 1) h1.appendChild(document.createTextNode(' '));
+  });
+})();
+
+// ========== STICKY NAV ==========
+(function() {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) {
+      scrolled = s;
+      nav.classList.toggle('scrolled', s);
+    }
+  }, { passive: true });
+})();
+
+// ========== MOBILE NAV ==========
+(function() {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  toggle.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+
+// ========== SCROLL REVEAL (IntersectionObserver) ==========
+(function() {
+  var reveals = document.querySelectorAll('.reveal, .reveal-left');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+})();
+
+// ========== FILTER TABS ==========
+(function() {
+  var tabs = document.querySelectorAll('#gearFilters .filter-tab');
+  var cards = document.querySelectorAll('#gearGrid .product-card');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var filter = tab.getAttribute('data-filter');
+      cards.forEach(function(card) {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+})();
+
+
+// ========== SCROLL ARROW CLICK ==========
+(function() {
+  var arrow = document.getElementById('scrollArrow');
+  if (arrow) {
+    arrow.addEventListener('click', function() {
+      var gear = document.getElementById('gear');
+      if (gear) gear.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+})();
+</script>
+</body>
+</html>
