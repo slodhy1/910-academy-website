@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Free Strategy Call — 910 Academy</title>
+<meta name="description" content="Not sure where to start? Book a free 15-minute strategy call with 910 Academy. No pressure, no pitch — just clarity on your next move.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --accent: #38B6FF;
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --glass-blur-heavy: blur(30px);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+  --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-32: 128px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* Background Orbs */
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
+.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.02); filter: blur(120px); animation-delay: 0s; }
+.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
+.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56, 182, 255, 0.01); filter: blur(100px); animation-delay: -8s; }
+@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
+
+/* Nav */
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%;
+  z-index: 1000; padding: var(--space-5) 0;
+  transition: all 0.4s var(--ease-out);
+}
+.nav.scrolled {
+  padding: 14px 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 var(--space-10);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo img { height: 36px; width: auto; opacity: 0.95; }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-link {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--fg-muted);
+  transition: color 0.3s var(--ease-smooth); position: relative;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--fg);
+  transition: width 0.3s var(--ease-out);
+}
+.nav-link:hover { color: var(--fg); }
+.nav-link:hover::after { width: 100%; }
+.nav-cta {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #000; background: #FFF;
+  padding: var(--space-3) var(--space-8); border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.nav-cta:hover { background: #38B6FF; color: #FFF; transform: translateY(-1px); }
+.nav-mobile-toggle {
+  display: none; flex-direction: column; gap: 5px; padding: var(--space-1);
+}
+.nav-mobile-toggle span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--fg); transition: all 0.3s var(--ease-out);
+}
+
+/* Book section */
+.book-section {
+  position: relative; z-index: 2;
+  max-width: 900px; margin: 0 auto;
+  padding: 160px var(--space-10) var(--space-20);
+  text-align: center;
+  flex: 1;
+  width: 100%;
+}
+.book-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--fg-muted);
+  margin-bottom: var(--space-6);
+}
+.book-heading {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-6);
+}
+.book-sub {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--fg-muted);
+  max-width: 560px;
+  margin: 0 auto var(--space-12);
+  line-height: var(--leading-normal);
+}
+.calendly-inline-widget { border-radius: 16px; overflow: hidden; }
+
+/* Footer */
+.footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+}
+.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
+.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
+.footer-socials a {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--fg-dim); transition: color 0.3s var(--ease-smooth);
+}
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 0.75rem; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+
+/* Mobile Nav */
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(5, 5, 6, 0.95);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  z-index: 999; flex-direction: column;
+  align-items: center; justify-content: center; gap: 36px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s var(--ease-out);
+}
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav a {
+  font-size: 1.6rem; font-weight: 300; text-transform: uppercase;
+  color: var(--fg); transition: color 0.3s var(--ease-smooth);
+}
+.mobile-nav a:hover { color: var(--accent); }
+.mobile-nav-close {
+  position: absolute; top: 24px; right: 32px;
+  font-size: 28px; color: var(--fg);
+}
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 var(--space-6); }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .book-section { padding: 120px var(--space-6) var(--space-16); }
+  .footer { padding: var(--space-12) var(--space-6); }
+}
+@media (max-width: 480px) {
+  .book-heading { font-size: 1.8rem; }
+  .nav-logo img { height: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/logo-white.svg" alt="910 Academy">
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/affiliate-links" class="nav-link">Affiliate Links</a>
+      <a href="/products" class="nav-link">Products</a>
+      <a href="/skool" class="nav-link">Skool</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="/">Home</a>
+  <a href="/affiliate-links">Affiliate Links</a>
+  <a href="/products">Products</a>
+  <a href="/skool">Skool</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
+</div>
+
+<!-- Book Section -->
+<section class="book-section">
+  <p class="book-eyebrow">FREE STRATEGY CALL</p>
+  <h1 class="book-heading">Book a Free Strategy Call</h1>
+  <p class="book-sub">Not sure where to start? Let's figure it out together. 15 minutes, no pressure.</p>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <div class="calendly-inline-widget" data-url="https://calendly.com/910academy/booking?background_color=0a0a0a&text_color=ffffff&primary_color=ffffff" style="min-width:320px;height:700px;"></div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+</footer>
+
+<script>
+(function() {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) { scrolled = s; nav.classList.toggle('scrolled', s); }
+  }, { passive: true });
+})();
+(function() {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  toggle.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+</script>
+</body>
+</html>
