@@ -1159,6 +1159,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .curriculum-number { font-size: 2.5rem; }
 }
 </style>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
 
@@ -1190,9 +1191,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
     </a>
     <div class="nav-links">
-      <a href="/affiliate-links#gear" class="nav-link">Gear</a>
-      <a href="/affiliate-links#plugins" class="nav-link">Plugins</a>
-      <a href="/affiliate-links#software" class="nav-link">Software</a>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/affiliate-links" class="nav-link">Affiliate Links</a>
       <a href="/products" class="nav-link">Products</a>
       <a href="/skool" class="nav-link">Skool</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
@@ -1206,9 +1206,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
-  <a href="/affiliate-links#gear">Gear</a>
-  <a href="/affiliate-links#plugins">Plugins</a>
-  <a href="/affiliate-links#software">Software</a>
+  <a href="/">Home</a>
+  <a href="/affiliate-links">Affiliate Links</a>
   <a href="/products">Products</a>
   <a href="/skool">Skool</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
@@ -1279,8 +1278,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="section-sub">Once you become an official member, you will gain access to our Inner Circle Group Chat, where you can network with 200+ real estate media professionals from all over the world.</p>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="community-cta">Join 910 Academy</a>
     </div>
-    <div class="community-image reveal">
-      <img src="/910-Academy-Hero-1-1024x575.webp" alt="910 Academy Inner Circle" width="1024" height="575" loading="lazy" decoding="async">
+    <div class="community-image reveal" style="display:flex;justify-content:center;align-items:center;">
+      <img src="/910-Academy-Hero-1-1024x575.webp" alt="910 Academy Inner Circle" width="1024" height="575" loading="lazy" decoding="async" style="width:100%;max-width:600px;height:auto;object-fit:contain;">
     </div>
   </div>
 </section>
@@ -1350,18 +1349,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- Book a Call -->
 <section class="section" id="consult">
-  <div class="consult-layout">
-    <div class="reveal-left">
-      <p class="section-label">NOT SURE YET</p>
-      <h2 class="section-heading">Let's Talk</h2>
-      <p class="section-sub">Not sure if 910 Academy is right for you? Book a free 15-minute call. No pressure. Just clarity on your next move.</p>
-      <a href="https://calendly.com/910academy/booking" target="_blank" class="consult-cta">Book a Free Call</a>
-    </div>
-    <div class="consult-benefits reveal">
-      <div class="consult-benefit"><span class="consult-bullet"></span>No sales pressure</div>
-      <div class="consult-benefit"><span class="consult-bullet"></span>Personalized to where you are right now</div>
-      <div class="consult-benefit"><span class="consult-bullet"></span>Walk away with a clear next step</div>
-    </div>
+  <div class="reveal-left">
+    <p class="section-label">NOT SURE YET</p>
+    <h2 class="section-heading">Let's Talk</h2>
+    <p class="section-sub">Not sure if 910 Academy is right for you? Book a free 15-minute call. No pressure. Just clarity on your next move.</p>
+  </div>
+  <div class="reveal" style="margin-top:32px;">
+    <div class="calendly-inline-widget" data-url="https://calendly.com/910academy/booking?background_color=0a0a0a&text_color=ffffff&primary_color=ffffff" style="min-width:320px;height:700px;"></div>
   </div>
 </section>
 

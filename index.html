@@ -1279,6 +1279,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .curriculum-number { font-size: 2.5rem; }
 }
 </style>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </head>
 <body>
 
@@ -1310,9 +1311,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
     </a>
     <div class="nav-links">
-      <a href="/affiliate-links#gear" class="nav-link">Gear</a>
-      <a href="/affiliate-links#plugins" class="nav-link">Plugins</a>
-      <a href="/affiliate-links#software" class="nav-link">Software</a>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/affiliate-links" class="nav-link">Affiliate Links</a>
       <a href="/products" class="nav-link">Products</a>
       <a href="/skool" class="nav-link">Skool</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
@@ -1326,9 +1326,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
-  <a href="/affiliate-links#gear">Gear</a>
-  <a href="/affiliate-links#plugins">Plugins</a>
-  <a href="/affiliate-links#software">Software</a>
+  <a href="/">Home</a>
+  <a href="/affiliate-links">Affiliate Links</a>
   <a href="/products">Products</a>
   <a href="/skool">Skool</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
@@ -1344,7 +1343,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </h1>
     <div style="display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:var(--space-10);opacity:0;animation:fadeUp 0.8s var(--ease-out) 1s forwards;">
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="hero-cta" style="margin-top:0;opacity:1;animation:none;">Join 910 Academy</a>
-      <a href="https://calendly.com/910academy/booking" target="_blank" style="display:inline-block;padding:16px 32px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.55)';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.35)';this.style.borderColor='rgba(255,255,255,0.2)'">BOOK A CALL</a>
+      <a href="#consult" style="display:inline-block;padding:16px 32px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.55)';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.35)';this.style.borderColor='rgba(255,255,255,0.2)'">BOOK A CALL</a>
     </div>
   </div>
   <div class="scroll-indicator" id="scrollArrow">
@@ -1546,18 +1545,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- Book a Consultation -->
 <section class="section" id="consult">
-  <div class="consult-layout">
-    <div class="reveal-left">
-      <p class="section-label">NOT SURE WHERE TO START</p>
-      <h2 class="section-heading">Let's Figure It Out Together</h2>
-      <p class="section-sub">Not sure if 910 Academy is right for you? Book a free 15-minute call. No pressure, no pitch. Just clarity on your next move.</p>
-      <a href="https://calendly.com/910academy/booking" target="_blank" class="consult-cta">Book a Free Call</a>
-    </div>
-    <div class="consult-benefits reveal">
-      <div class="consult-benefit"><span class="consult-bullet"></span>No sales pressure</div>
-      <div class="consult-benefit"><span class="consult-bullet"></span>Personalized to where you are right now</div>
-      <div class="consult-benefit"><span class="consult-bullet"></span>Walk away with a clear next step</div>
-    </div>
+  <div class="reveal-left">
+    <p class="section-label">NOT SURE WHERE TO START</p>
+    <h2 class="section-heading">Let's Figure It Out Together</h2>
+    <p class="section-sub">Not sure if 910 Academy is right for you? Book a free 15-minute call. No pressure, no pitch. Just clarity on your next move.</p>
+  </div>
+  <div class="reveal" style="margin-top:32px;">
+    <div class="calendly-inline-widget" data-url="https://calendly.com/910academy/booking?background_color=0a0a0a&text_color=ffffff&primary_color=ffffff" style="min-width:320px;height:700px;"></div>
   </div>
 </section>
 
