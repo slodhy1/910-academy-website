@@ -845,8 +845,28 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .who-card:hover {
   transform: translateY(-6px);
   background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent);
 }
+#origin.section { padding-top: var(--space-16); padding-bottom: var(--space-16); }
+#origin .origin-text p { margin-bottom: var(--space-4); }
+.ftc-disclaimer {
+  max-width: 820px;
+  margin: var(--space-6) auto 0;
+  padding: 0 var(--space-6);
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  font-weight: 300;
+}
+.consult-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+.consult-flex > div:first-child { flex: 1 1 520px; }
 .who-number {
   font-size: 3rem;
   font-weight: 700;
@@ -1311,7 +1331,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </a>
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a>
-      <a href="/affiliate-links" class="nav-link">Affiliate Links</a>
+      <a href="/affiliate-links" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
       <a href="/skool" class="nav-link">Skool</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
@@ -1326,7 +1346,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
   <a href="/">Home</a>
-  <a href="/affiliate-links">Affiliate Links</a>
+  <a href="/affiliate-links">Our Gear</a>
   <a href="/products">Products</a>
   <a href="/skool">Skool</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
@@ -1378,13 +1398,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <section class="section" id="origin">
   <div class="reveal-left">
     <p class="section-label">THE ORIGIN</p>
-    <h2 class="section-heading">Why 910 Academy Exists</h2>
+    <h2 class="section-heading">What is 910 Academy</h2>
   </div>
   <div class="origin-layout">
     <div class="origin-text reveal">
-      <p>When Claudio Rivera started in real estate media, there was nothing. No blueprint. No community. No one pulling back the curtain on how it actually worked. He had to figure it all out alone.</p>
-      <p>So he did. He built Studio 910 into one of the most recognized real estate media brands in the world — by learning everything the hard way, through real shoots, real clients, and real failures. Once he got there, he made a decision: he was not going to gatekeep any of it.</p>
-      <p>910 Academy exists because Claudio wished it existed when he was starting out. Everything he learned, everything he built, every system that took years to develop — broken down completely and handed to you. No filters. No fluff. Just the full picture.</p>
+      <p>910 Academy is an online community and training platform built specifically for real estate videographers. It's where Claudio Rivera breaks down everything he used to build Studio 910 into a 7-figure media company — no gatekeeping, no fluff.</p>
+      <p>Members get full access to our courses, an active community of working videographers, and direct access to Claudio himself inside Skool.</p>
       <div class="origin-pills">
         <div class="origin-pill">
           <span class="origin-pill-label">Studio 910</span>
@@ -1408,7 +1427,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <section class="section" id="who">
   <div class="reveal-left">
     <p class="section-label">IS THIS YOU</p>
-    <h2 class="section-heading">Who 910 Academy Is For</h2>
+    <h2 class="section-heading">910 Academy is for you if...</h2>
   </div>
   <div class="who-grid">
     <div class="who-card reveal">
@@ -1435,8 +1454,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <section class="section" id="events">
   <div class="reveal-left">
     <p class="section-label">IN THE FIELD</p>
-    <h2 class="section-heading">Where We've Been</h2>
-    <p class="section-sub">Ride-alongs, in-person masterminds, and guest creator takeovers. This is the community in action.</p>
+    <h2 class="section-heading">We've Served Videographers Like You All Over the World</h2>
+    <p class="section-sub">Here's some behind-the-scenes from our in-person trainings.</p>
   </div>
   <!-- TODO: Replace /event-placeholder.webp below with 6 distinct event photos -->
   <div class="events-carousel-wrap reveal">
@@ -1503,6 +1522,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="testimonial-author">- Member Name, City</p>
     </div>
   </div>
+  <p class="ftc-disclaimer">Results featured are not typical. Individual results vary based on effort, experience, and market conditions. Testimonials reflect the experiences of specific individuals and are not guarantees of future performance.</p>
 </section>
 
 <hr class="section-divider">
@@ -1514,13 +1534,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="section-label">THE HIGHEST LEVEL</p>
       <h2 class="section-heading">Work Directly With Claudio</h2>
       <p class="section-sub">For the serious operator who wants to build a real estate media company that runs without them. This is the room where it happens.</p>
-      <a href="/coaching" class="coaching-cta">Apply for Private Coaching</a>
+      <a href="/waitlist" class="coaching-cta">Currently Unavailable — Join Waitlist</a>
       <p class="coaching-muted">Limited spots available. Application required.</p>
     </div>
     <div class="reveal">
       <div class="coaching-visual"><img src="/coaching.webp" alt="Work with Claudio" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:var(--border-radius-lg, 12px);display:block;" width="1200" height="800" loading="lazy" decoding="async"></div>
     </div>
   </div>
+  <p class="ftc-disclaimer">Results featured are not typical. Individual results vary based on effort, experience, and market conditions. Testimonials reflect the experiences of specific individuals and are not guarantees of future performance.</p>
 </section>
 
 <hr class="section-divider">
@@ -1544,13 +1565,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- Book a Consultation -->
 <section class="section" id="consult">
-  <div class="reveal-left">
-    <p class="section-label">NOT SURE WHERE TO START</p>
-    <h2 class="section-heading">Let's Figure It Out Together</h2>
-    <p class="section-sub">Not sure if 910 Academy is right for you? Book a free 15-minute call. No pressure, no pitch. Just clarity on your next move.</p>
-  </div>
-  <div class="reveal" style="margin-top:32px;text-align:center;">
-    <a href="/book" class="school-cta">Book a Call</a>
+  <div class="consult-flex">
+    <div class="reveal-left">
+      <p class="section-label">FOR SERIOUS VIDEOGRAPHERS ONLY</p>
+      <h2 class="section-heading">Let's See If 910 Academy Is Right For You</h2>
+      <p class="section-sub">This call is for real estate videographers and media business owners who are committed to growing but need structured guidance on their next step. If you're just browsing or not sure what you want yet, explore our free content on Instagram and YouTube first. If you know you're ready to level up, book your 15-minute strategy call.</p>
+    </div>
+    <div class="reveal">
+      <a href="/book" class="school-cta">Book a Strategy Call</a>
+    </div>
   </div>
 </section>
 

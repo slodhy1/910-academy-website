@@ -92,12 +92,39 @@ create table public.email_subscribers (
 
 ---
 
+## Workflow 3 — Mentorship Waitlist
+
+**Trigger:** Webhook (POST, JSON body from `waitlist.html`)
+
+**Nodes:**
+1. Webhook — Method POST, path `/mentorship-waitlist`, response mode `onReceived`.
+2. Supabase — Insert into `mentorship_waitlist` with mapped fields.
+3. Send Email (SMTP / Gmail) — Notification to `academy@studio910pb.com` with all submitted fields.
+
+**Supabase schema:**
+
+```sql
+create table mentorship_waitlist (
+  id uuid default gen_random_uuid() primary key,
+  created_at timestamptz default now(),
+  full_name text not null,
+  email text not null,
+  instagram text,
+  revenue_level text,
+  focus_area text,
+  status text default 'waitlisted'
+);
+```
+
+---
+
 ## Deployment checklist
 
-- [ ] Create both Supabase tables.
-- [ ] Build both n8n workflows and activate them.
+- [ ] Create all Supabase tables.
+- [ ] Build all n8n workflows and activate them.
 - [ ] Copy the production webhook URLs from n8n.
 - [ ] Replace `REPLACE_WITH_N8N_WEBHOOK_URL` in `coaching.html`.
 - [ ] Replace `REPLACE_WITH_N8N_EMAIL_WEBHOOK_URL` in `index.html`.
+- [ ] Replace `REPLACE_WITH_N8N_WAITLIST_WEBHOOK_URL` in `waitlist.html`.
 - [ ] Redeploy the site.
 - [ ] Submit a test application and a test email to confirm end-to-end delivery.
