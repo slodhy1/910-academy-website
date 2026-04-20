@@ -462,13 +462,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== PRODUCT GRID ========== */
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-6);
 }
+.product-grid > .product-card {
+  width: calc((100% - var(--space-6) * 2) / 3);
+  min-width: 0;
+}
 .product-grid.two-col {
-  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-8);
+}
+.product-grid.two-col > .product-card {
+  width: calc((100% - var(--space-8)) / 2);
 }
 
 /* ========== PRODUCT CARDS — GLASSMORPHISM ========== */
@@ -770,7 +777,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-grid > .product-card { width: calc((100% - var(--space-6)) / 2); }
 }
 @media (max-width: 768px) {
   .nav-inner { padding: 0 var(--space-6); }
@@ -778,8 +785,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav-mobile-toggle { display: flex; }
   .section { padding: var(--space-20) var(--space-6); }
   .hero { padding: 100px var(--space-6) 60px; }
-  .product-grid { grid-template-columns: 1fr; }
-  .product-grid.two-col { grid-template-columns: 1fr; }
+  .product-grid > .product-card,
+  .product-grid.two-col > .product-card { width: 100%; }
   .school-section { padding: 60px var(--space-6); }
   .school-glass { padding: var(--space-12) var(--space-8); }
   .footer { padding: var(--space-12) var(--space-6); }
