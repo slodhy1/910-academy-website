@@ -1298,6 +1298,488 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav-logo img { height: 28px; }
   .curriculum-number { font-size: 2.5rem; }
 }
+
+/* ========== HERO CTA BAND ========== */
+.hero-cta-band {
+  padding: var(--space-16) var(--space-10) var(--space-20);
+  display: flex;
+  justify-content: center;
+}
+.hero-cta-inner {
+  display: flex;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.cta-btn {
+  display: inline-block;
+  padding: 18px 36px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: all 0.25s var(--ease-smooth);
+  white-space: nowrap;
+}
+.cta-btn-primary {
+  background: var(--accent);
+  color: #000;
+  border: 1px solid var(--accent);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+.cta-btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(56, 182, 255, 0.35);
+}
+.cta-btn-secondary {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--fg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.cta-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+@media (max-width: 640px) {
+  .hero-cta-inner { flex-direction: column; width: 100%; }
+  .hero-cta-inner .cta-btn { width: 100%; text-align: center; }
+  .hero-cta-band { padding: var(--space-12) var(--space-6); }
+}
+
+/* ========== COURSE GRID (What's Inside) ========== */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+}
+.course-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: transform 0.3s var(--ease-smooth);
+  cursor: default;
+}
+.course-card:hover {
+  transform: translateY(-4px);
+}
+.course-card:hover .course-box {
+  box-shadow: 0 20px 60px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.08);
+  border-color: var(--accent-border);
+}
+.course-box {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(56, 182, 255, 0.12) 0%, transparent 55%),
+    linear-gradient(145deg, #141418 0%, #0a0a0c 60%, #050507 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  overflow: hidden;
+  transition: all 0.35s var(--ease-smooth);
+}
+.course-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+.course-box-title {
+  position: relative;
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  text-align: center;
+  line-height: 1.25;
+  text-transform: uppercase;
+  z-index: 1;
+}
+.course-card-title {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.3;
+  margin-top: var(--space-2);
+}
+.course-card-desc {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+@media (max-width: 1024px) {
+  .course-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+}
+@media (max-width: 640px) {
+  .course-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+}
+
+/* ========== CURRICULUM ACCORDION ========== */
+.accordion {
+  margin-top: var(--space-12);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.accordion-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth);
+}
+.accordion-item.open {
+  border-color: var(--accent-border-subtle);
+  background: var(--accent-subtle);
+}
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6) var(--space-8);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  text-transform: uppercase;
+  transition: color 0.2s var(--ease-smooth);
+}
+.accordion-header:hover {
+  color: var(--accent);
+}
+.accordion-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--fg-muted);
+  transition: transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
+  flex-shrink: 0;
+}
+.accordion-item.open .accordion-icon {
+  transform: rotate(45deg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s var(--ease-smooth);
+}
+.accordion-body-inner {
+  padding: 0 var(--space-8) var(--space-6);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-6);
+}
+.accordion-item.open .accordion-body-inner {
+  margin-top: 0;
+}
+.accordion-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0;
+}
+.accordion-list li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.accordion-list li::before {
+  content: attr(data-num);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  min-width: 32px;
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .accordion-header { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
+  .accordion-body-inner { padding: var(--space-5) var(--space-5); }
+}
+
+/* ========== BONUS PERKS ========== */
+.perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+.perk-card {
+  padding: var(--space-10) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s var(--ease-smooth);
+}
+.perk-card:hover {
+  border-color: var(--accent-border-subtle);
+  background: var(--accent-subtle);
+  transform: translateY(-3px);
+}
+.perk-icon {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border-subtle);
+  margin-bottom: var(--space-5);
+  color: var(--accent);
+  transition: all 0.3s var(--ease-smooth);
+}
+.perk-card:hover .perk-icon {
+  background: var(--accent-muted);
+  border-color: var(--accent-border);
+}
+.perk-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.perk-title {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: var(--space-2);
+  line-height: 1.3;
+}
+.perk-desc {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.55;
+}
+@media (max-width: 1024px) {
+  .perks-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .perks-grid { grid-template-columns: 1fr; }
+  .perk-card { padding: var(--space-8) var(--space-6); }
+}
+
+/* ========== REAL RESULTS / VIDEO STACK ========== */
+.video-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  margin-top: var(--space-12);
+  align-items: center;
+}
+.video-wrap {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #000;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(56, 182, 255, 0.04);
+}
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--fg);
+  line-height: 1.25;
+  margin-top: var(--space-3);
+}
+.video-desc {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  max-width: 700px;
+}
+@media (max-width: 640px) {
+  .video-stack { gap: var(--space-12); }
+  .video-title { font-size: 1.2rem; }
+}
+
+/* ========== VALUE STACK / PRICING ========== */
+.value-stack {
+  max-width: 760px;
+  margin: var(--space-12) auto 0;
+  padding: var(--space-12) var(--space-10);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 182, 255, 0.06) 0%, transparent 45%),
+    linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.value-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+  font-family: var(--font);
+}
+.value-row:last-of-type {
+  border-bottom: none;
+}
+.value-check {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.value-name {
+  color: var(--fg);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.4;
+  flex-shrink: 1;
+}
+.value-leader {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  min-width: 20px;
+}
+.value-price {
+  color: var(--fg-dim);
+  font-size: 0.9rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.value-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--space-6) 0 var(--space-4);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-4);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+}
+.value-total-row s {
+  color: var(--fg-dim);
+  text-decoration-thickness: 1px;
+}
+.value-final {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--accent-border-subtle);
+  text-align: center;
+}
+.value-final-label {
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-3);
+}
+.value-final-price {
+  font-family: var(--font);
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+}
+.value-final-sub {
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.value-cta {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  margin: var(--space-10) auto 0;
+  padding: 20px 36px;
+  background: var(--accent);
+  color: #000;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 10px 35px var(--accent-glow);
+  transition: all 0.25s var(--ease-smooth);
+}
+.value-cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 50px rgba(56, 182, 255, 0.4);
+}
+@media (max-width: 640px) {
+  .value-stack { padding: var(--space-8) var(--space-5); }
+  .value-final-price { font-size: 3rem; }
+  .value-row { flex-wrap: wrap; }
+  .value-leader { display: none; }
+  .value-name { flex: 1 1 auto; }
+}
 </style>
 </head>
 <body>
@@ -1331,6 +1813,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </a>
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
       <a href="/affiliate-links" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
       <a href="/skool" class="nav-link">Skool</a>
@@ -1346,6 +1829,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
   <a href="/">Home</a>
+  <a href="/about">About</a>
   <a href="/affiliate-links">Our Gear</a>
   <a href="/products">Products</a>
   <a href="/skool">Skool</a>
@@ -1369,6 +1853,376 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
+  </div>
+</section>
+
+<!-- Hero CTA Band -->
+<section class="hero-cta-band reveal">
+  <div class="hero-cta-inner">
+    <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-primary">Join 910 Academy</a>
+    <a href="/book" class="cta-btn cta-btn-secondary">Book a Free Call</a>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- What's Inside 910 Academy -->
+<section class="section" id="whats-inside">
+  <div class="reveal-left">
+    <p class="section-label">THE COLLECTION</p>
+    <h2 class="section-heading">WHAT'S INSIDE 910 ACADEMY</h2>
+    <p class="section-sub">Everything you need to build a 7-figure real estate media business.</p>
+  </div>
+  <!-- TODO: Replace .course-box gradient placeholders with designer assets (actual course-box artwork) -->
+  <div class="course-grid">
+    <div class="course-card reveal">
+      <div class="course-box"><span class="course-box-title">AI Editing</span></div>
+      <h3 class="course-card-title">AI Editing</h3>
+      <p class="course-card-desc">Create Viral Hooks with AI</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.05s;">
+      <div class="course-box"><span class="course-box-title">Shooting Training</span></div>
+      <h3 class="course-card-title">Shooting Training</h3>
+      <p class="course-card-desc">Learn to Shoot Like a Pro</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.1s;">
+      <div class="course-box"><span class="course-box-title">910 Sales System</span></div>
+      <h3 class="course-card-title">910 Sales System</h3>
+      <p class="course-card-desc">Sales Masterclass</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.15s;">
+      <div class="course-box"><span class="course-box-title">Four Horsemen Takeover</span></div>
+      <h3 class="course-card-title">Four Horsemen Takeover</h3>
+      <p class="course-card-desc">How to Brand, Edit, and Scale</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.2s;">
+      <div class="course-box"><span class="course-box-title">The JT Visuals Takeover</span></div>
+      <h3 class="course-card-title">The JT Visuals Takeover</h3>
+      <p class="course-card-desc">Shooting, Editing, Sound Design and More</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.25s;">
+      <div class="course-box"><span class="course-box-title">The Lucid Horizon Takeover</span></div>
+      <h3 class="course-card-title">The Lucid Horizon Takeover</h3>
+      <p class="course-card-desc">Never Seen Before L.U.C.I.D. Method</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.3s;">
+      <div class="course-box"><span class="course-box-title">The Known Productions Takeover</span></div>
+      <h3 class="course-card-title">The Known Productions Takeover</h3>
+      <p class="course-card-desc">How to Hack Attention and Go Viral</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.35s;">
+      <div class="course-box"><span class="course-box-title">LIVE Replay Vault</span></div>
+      <h3 class="course-card-title">LIVE Replay Vault</h3>
+      <p class="course-card-desc">Live Academy Replays</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.4s;">
+      <div class="course-box"><span class="course-box-title">910 Admin Assistant</span></div>
+      <h3 class="course-card-title">910 Admin Assistant</h3>
+      <p class="course-card-desc">Designed for Admin Intelligence</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.45s;">
+      <div class="course-box"><span class="course-box-title">Viral Editing Masterclass (2025)</span></div>
+      <h3 class="course-card-title">Viral Editing Masterclass (2025)</h3>
+      <p class="course-card-desc">Learn How to Edit Videos in 2025</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.5s;">
+      <div class="course-box"><span class="course-box-title">Viral Editing Masterclass (2024)</span></div>
+      <h3 class="course-card-title">Viral Editing Masterclass (2024)</h3>
+      <p class="course-card-desc">3-Part Editing Masterclass</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- The Full Curriculum -->
+<section class="section" id="curriculum">
+  <div class="reveal-left">
+    <p class="section-label">DEEP DIVE</p>
+    <h2 class="section-heading">THE FULL CURRICULUM</h2>
+    <p class="section-sub">50+ courses across every skill you need.</p>
+  </div>
+  <!-- TODO: Populate with real curriculum items from Claudio -->
+  <div class="accordion" id="curriculumAccordion">
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Shooting</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li data-num="1.1">Placeholder — Camera Fundamentals</li>
+            <li data-num="1.2">Placeholder — Lens Selection for Real Estate</li>
+            <li data-num="1.3">Placeholder — Exposure Triangle Deep Dive</li>
+            <li data-num="1.4">Placeholder — Stabilization Techniques</li>
+            <li data-num="1.5">Placeholder — Drone Cinematography</li>
+            <li data-num="1.6">Placeholder — Lighting Interiors</li>
+            <li data-num="1.7">Placeholder — Capturing Luxury Properties</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Editing</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li data-num="2.1">Placeholder — Final Cut Pro Setup</li>
+            <li data-num="2.2">Placeholder — Editing Luxury Walkthroughs</li>
+            <li data-num="2.3">Placeholder — Sound Design &amp; Music</li>
+            <li data-num="2.4">Placeholder — Color Grading Workflow</li>
+            <li data-num="2.5">Placeholder — Viral Reels &amp; Hooks</li>
+            <li data-num="2.6">Placeholder — Export Settings for Every Platform</li>
+            <li data-num="2.7">Placeholder — Plugin Masterclass</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Business &amp; Sales</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li data-num="3.1">Placeholder — Pricing Your Services</li>
+            <li data-num="3.2">Placeholder — The 910 Sales Framework</li>
+            <li data-num="3.3">Placeholder — Handling Objections</li>
+            <li data-num="3.4">Placeholder — Cold Outreach Scripts</li>
+            <li data-num="3.5">Placeholder — Closing Luxury Agents</li>
+            <li data-num="3.6">Placeholder — Building Recurring Revenue</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Takeovers</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li data-num="4.1">Placeholder — Four Horsemen Takeover</li>
+            <li data-num="4.2">Placeholder — JT Visuals Takeover</li>
+            <li data-num="4.3">Placeholder — Lucid Horizon L.U.C.I.D. Method</li>
+            <li data-num="4.4">Placeholder — Known Productions Attention Hacks</li>
+            <li data-num="4.5">Placeholder — Guest Instructor Vault</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Live Replays</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li data-num="5.1">Placeholder — Q&amp;A Replay January</li>
+            <li data-num="5.2">Placeholder — Q&amp;A Replay February</li>
+            <li data-num="5.3">Placeholder — Live Coaching Session 01</li>
+            <li data-num="5.4">Placeholder — Live Coaching Session 02</li>
+            <li data-num="5.5">Placeholder — Workflow Review Live</li>
+            <li data-num="5.6">Placeholder — Student Breakdown Live</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Bonus Content</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li data-num="6.1">Placeholder — LUTs &amp; Presets Pack</li>
+            <li data-num="6.2">Placeholder — Sound Effects Library</li>
+            <li data-num="6.3">Placeholder — Contract Templates</li>
+            <li data-num="6.4">Placeholder — Pricing Calculators</li>
+            <li data-num="6.5">Placeholder — Studio 910 BTS Vault</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Bonus Perks / Everything You Get -->
+<section class="section" id="perks">
+  <div class="reveal-left">
+    <p class="section-label">THE EXTRAS</p>
+    <h2 class="section-heading">EVERYTHING YOU GET</h2>
+    <p class="section-sub">Membership includes more than just training.</p>
+  </div>
+  <div class="perks-grid">
+    <div class="perk-card reveal">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.3 5.4A17 17 0 0 0 15.2 4l-.2.4a15.7 15.7 0 0 1 4.7 1.5 16.4 16.4 0 0 0-6.2-1.9 18 18 0 0 0-3 0 16.4 16.4 0 0 0-6.2 1.9A15.7 15.7 0 0 1 9 4.4L8.8 4a17 17 0 0 0-4.1 1.4C2.1 9.4 1.3 13.2 1.6 17a17 17 0 0 0 5.2 2.6l1-1.4a11 11 0 0 1-1.7-.8c.1 0 .3-.1.4-.2a12.2 12.2 0 0 0 10.7 0c.1.1.3.2.5.2a11 11 0 0 1-1.7.8l1 1.4A17 17 0 0 0 22.4 17c.4-4.4-.7-8.2-3.1-11.6Z"/><ellipse cx="9" cy="13" rx="1.6" ry="1.8"/><ellipse cx="15" cy="13" rx="1.6" ry="1.8"/></svg>
+      </div>
+      <h3 class="perk-title">Private Discord Community</h3>
+      <p class="perk-desc">Network with 200+ real estate media professionals worldwide.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.05s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </div>
+      <h3 class="perk-title">Private Instagram Group Chat</h3>
+      <p class="perk-desc">Direct access to Claudio and the inner circle.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.1s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+      </div>
+      <h3 class="perk-title">Case Studies</h3>
+      <p class="perk-desc">Real student breakdowns with revenue numbers and strategies.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.15s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <h3 class="perk-title">Free Resources</h3>
+      <p class="perk-desc">Sound effects, LUTs, presets, and premium assets.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.2s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 12a4 4 0 1 1-4-4 11 11 0 0 1 4 4 4 4 0 1 0-4 4 11 11 0 0 1 4-4Z"/></svg>
+      </div>
+      <h3 class="perk-title">Future Content Access</h3>
+      <p class="perk-desc">Every new course and update included forever.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.25s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a0 0 0 0 1 0 0v2a4 4 0 0 1-4 4M7 5H4a0 0 0 0 0 0 0v2a4 4 0 0 0 4 4"/></svg>
+      </div>
+      <h3 class="perk-title">Weekly $250 Video Contest</h3>
+      <p class="perk-desc">Regular contests to sharpen your skills and win cash.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Real Results / Video Testimonials -->
+<section class="section" id="results">
+  <div class="reveal-left">
+    <p class="section-label">PROOF</p>
+    <h2 class="section-heading">REAL STUDENTS. REAL RESULTS.</h2>
+    <p class="section-sub">Watch the full breakdown of how our students built their real estate media businesses.</p>
+  </div>
+  <div class="video-stack">
+    <div class="video-wrap reveal">
+      <!-- TODO: Replace with actual YouTube embed URL once confirmed (Mikolai video) -->
+      <div class="video-embed">
+        <iframe src="https://www.youtube-nocookie.com/embed/REPLACE_WITH_MIKOLAI_VIDEO_ID" title="This Student Makes $10,000/Month Filming Real Estate" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <h3 class="video-title">This Student Makes $10,000/Month Filming Real Estate</h3>
+      <p class="video-desc">Mikolai was a beginner videographer just 6 months ago. Watch how he built a $10K/month business using the 910 Academy system.</p>
+    </div>
+    <div class="video-wrap reveal">
+      <!-- TODO: Replace with actual YouTube embed URL (Sedona/Justin video) -->
+      <div class="video-embed">
+        <iframe src="https://www.youtube-nocookie.com/embed/REPLACE_WITH_JUSTIN_VIDEO_ID" title="How This 20-Year-Old Makes $20K/Month Filming Real Estate" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <h3 class="video-title">How This 20-Year-Old Makes $20K/Month Filming Real Estate</h3>
+      <p class="video-desc">Six months ago Justin was making $18/hour. Today he's making $20K/month filming luxury real estate. This is exactly how he did it.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Value Stack + Pricing -->
+<section class="section" id="pricing">
+  <div class="reveal-left">
+    <p class="section-label">THE OFFER</p>
+    <h2 class="section-heading">EVERYTHING YOU GET FOR ONE PAYMENT</h2>
+    <p class="section-sub">Lifetime access. One price. No subscriptions.</p>
+  </div>
+  <div class="value-stack reveal">
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Lifetime Access to All 25+ Workshops</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$1,997</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">800+ Training Videos (100+ Hours)</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$997</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Private Discord Community</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$297</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Private Instagram Inner Circle</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$497</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Case Studies &amp; Student Breakdowns</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$497</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Free Sound Effects, LUTs &amp; Resources</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$297</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Access to All Future Content</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$497</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Weekly $250 Video Contest Entry</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$297</span>
+    </div>
+    <div class="value-row">
+      <span class="value-check">✓</span>
+      <span class="value-name">Live Q&amp;A Coaching Replays</span>
+      <span class="value-leader"></span>
+      <span class="value-price">$121</span>
+    </div>
+
+    <div class="value-total-row">
+      <span>Total Value:</span>
+      <span><s>$5,497</s></span>
+    </div>
+
+    <div class="value-final">
+      <p class="value-final-label">Your Investment Today</p>
+      <p class="value-final-price">$910</p>
+      <p class="value-final-sub">Annual membership. One upfront payment. Lifetime content access.</p>
+    </div>
+
+    <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="value-cta">Join 910 Academy</a>
   </div>
 </section>
 
@@ -1622,6 +2476,28 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
   mobileNav.querySelectorAll('a').forEach(function(a) {
     a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+
+// ========== CURRICULUM ACCORDION ==========
+(function() {
+  var headers = document.querySelectorAll('#curriculumAccordion .accordion-header');
+  headers.forEach(function(h) {
+    h.addEventListener('click', function() {
+      var item = h.parentElement;
+      var body = h.nextElementSibling;
+      var isOpen = item.classList.toggle('open');
+      if (isOpen) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+      } else {
+        body.style.maxHeight = '0';
+      }
+    });
+  });
+  window.addEventListener('resize', function() {
+    document.querySelectorAll('#curriculumAccordion .accordion-item.open .accordion-body').forEach(function(b) {
+      b.style.maxHeight = b.scrollHeight + 'px';
+    });
   });
 })();
 
