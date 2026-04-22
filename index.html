@@ -1356,8 +1356,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== COURSE GRID (What's Inside) ========== */
 .course-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-8);
   margin-top: var(--space-12);
 }
@@ -1367,6 +1368,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   gap: var(--space-4);
   transition: transform 0.3s var(--ease-smooth);
   cursor: default;
+  width: calc((100% - var(--space-8) * 2) / 3);
+  min-width: 0;
 }
 .course-card:hover {
   transform: translateY(-4px);
@@ -1377,7 +1380,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .course-box {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1460 / 752;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background:
@@ -1386,7 +1389,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-6);
+  padding: var(--space-5);
   overflow: hidden;
   transition: all 0.35s var(--ease-smooth);
 }
@@ -1425,10 +1428,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   line-height: 1.5;
 }
 @media (max-width: 1024px) {
-  .course-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+  .course-grid { gap: var(--space-6); }
+  .course-card { width: calc((100% - var(--space-6)) / 2); }
 }
 @media (max-width: 640px) {
-  .course-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+  .course-grid { gap: var(--space-8); }
+  .course-card { width: 100%; }
 }
 
 /* ========== CURRICULUM ACCORDION ========== */
@@ -1780,6 +1785,62 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .value-leader { display: none; }
   .value-name { flex: 1 1 auto; }
 }
+
+/* ========== AUDIENCE GRID (Who It's For — restyled) ========== */
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+.audience-card {
+  padding: var(--space-10) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s var(--ease-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.audience-card:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-subtle);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px var(--accent-glow);
+}
+.audience-number {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.audience-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+  line-height: 1.3;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  margin-top: var(--space-2);
+}
+.audience-desc {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 0.92rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+}
+@media (max-width: 1024px) {
+  .audience-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .audience-grid { grid-template-columns: 1fr; }
+  .audience-card { padding: var(--space-8) var(--space-6); }
+}
 </style>
 </head>
 <body>
@@ -1845,8 +1906,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <div class="hero-line hero-line-3">OF REAL ESTATE VIDEOGRAPHY</div>
     </h1>
     <div style="display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:var(--space-10);opacity:0;animation:fadeUp 0.8s var(--ease-out) 1s forwards;">
-      <a href="https://www.skool.com/910-academy/about" target="_blank" class="hero-cta" style="margin-top:0;opacity:1;animation:none;">Join 910 Academy</a>
-      <a href="#consult" style="display:inline-block;padding:16px 32px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.55)';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.35)';this.style.borderColor='rgba(255,255,255,0.2)'">BOOK A CALL</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="hero-cta" style="margin-top:0;opacity:1;animation:none;">Join 910 Academy</a>
+      <a href="/book" style="display:inline-block;padding:16px 32px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;border-radius:8px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:all 0.25s ease;cursor:pointer;" onmouseover="this.style.background='rgba(0,0,0,0.55)';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(0,0,0,0.35)';this.style.borderColor='rgba(255,255,255,0.2)'">Book a Free Call</a>
     </div>
   </div>
   <div class="scroll-indicator" id="scrollArrow">
@@ -1855,16 +1916,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </svg>
   </div>
 </section>
-
-<!-- Hero CTA Band -->
-<section class="hero-cta-band reveal">
-  <div class="hero-cta-inner">
-    <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-primary">Join 910 Academy</a>
-    <a href="/book" class="cta-btn cta-btn-secondary">Book a Free Call</a>
-  </div>
-</section>
-
-<hr class="section-divider">
 
 <!-- What's Inside 910 Academy -->
 <section class="section" id="whats-inside">
@@ -1929,6 +1980,33 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <div class="course-box"><span class="course-box-title">Viral Editing Masterclass (2024)</span></div>
       <h3 class="course-card-title">Viral Editing Masterclass (2024)</h3>
       <p class="course-card-desc">3-Part Editing Masterclass</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 910 Academy is for you if... -->
+<section class="section" id="who">
+  <div class="reveal-left">
+    <p class="section-label">IS THIS YOU</p>
+    <h2 class="section-heading">910 ACADEMY IS FOR YOU IF...</h2>
+  </div>
+  <div class="audience-grid">
+    <div class="audience-card reveal">
+      <div class="audience-number">01</div>
+      <h3 class="audience-title">You're Shooting But Not Scaling</h3>
+      <p class="audience-desc">You're booking jobs but the revenue isn't growing. You need systems, not just skills.</p>
+    </div>
+    <div class="audience-card reveal" style="transition-delay:0.1s;">
+      <div class="audience-number">02</div>
+      <h3 class="audience-title">You Want Luxury Clients</h3>
+      <p class="audience-desc">You're done with $200 listings. You want the properties that make reels go viral.</p>
+    </div>
+    <div class="audience-card reveal" style="transition-delay:0.2s;">
+      <div class="audience-number">03</div>
+      <h3 class="audience-title">You're Ready to Build a Real Business</h3>
+      <p class="audience-desc">Not just a reel. A company. With a team, a process, and income that doesn't stop when you do.</p>
     </div>
   </div>
 </section>
@@ -2152,8 +2230,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <section class="section" id="pricing">
   <div class="reveal-left">
     <p class="section-label">THE OFFER</p>
-    <h2 class="section-heading">EVERYTHING YOU GET FOR ONE PAYMENT</h2>
-    <p class="section-sub">Lifetime access. One price. No subscriptions.</p>
+    <h2 class="section-heading">JOIN THE NEW FRONTIER</h2>
+    <p class="section-sub">One payment. Annual access. Every tool, resource, and system we use to build real estate media businesses.</p>
   </div>
   <div class="value-stack reveal">
     <div class="value-row">
@@ -2164,9 +2242,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </div>
     <div class="value-row">
       <span class="value-check">✓</span>
-      <span class="value-name">800+ Training Videos (100+ Hours)</span>
+      <span class="value-name">100+ Training Videos (75+ Hours)</span>
       <span class="value-leader"></span>
-      <span class="value-price">$997</span>
+      <span class="value-price">$797</span>
     </div>
     <div class="value-row">
       <span class="value-check">✓</span>
@@ -2213,170 +2291,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
     <div class="value-total-row">
       <span>Total Value:</span>
-      <span><s>$5,497</s></span>
+      <span><s>$5,297</s></span>
     </div>
 
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
       <p class="value-final-price">$910</p>
-      <p class="value-final-sub">Annual membership. One upfront payment. Lifetime content access.</p>
+      <p class="value-final-sub">Annual membership. One upfront payment. Access to every current and future resource inside 910 Academy.</p>
     </div>
 
     <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="value-cta">Join 910 Academy</a>
   </div>
-</section>
-
-<!-- Social Proof Ticker -->
-<div class="social-proof">
-  <div class="ticker-track">
-    <div class="ticker-set">
-      <div class="ticker-item"><span class="ticker-number">$2B+</span><span class="ticker-label">In Real Estate Marketed</span></div>
-      <div class="ticker-item"><span class="ticker-number">100M+</span><span class="ticker-label">Views Generated</span></div>
-      <div class="ticker-item"><span class="ticker-number">1,000+</span><span class="ticker-label">Videographers Trained</span></div>
-      <div class="ticker-item"><span class="ticker-number">100K+</span><span class="ticker-label">Followers Across Platforms</span></div>
-      <div class="ticker-item"><span class="ticker-number">Built From</span><span class="ticker-label">A 7-Figure Media Company</span></div>
-    </div>
-    <div class="ticker-set">
-      <div class="ticker-item"><span class="ticker-number">$2B+</span><span class="ticker-label">In Real Estate Marketed</span></div>
-      <div class="ticker-item"><span class="ticker-number">100M+</span><span class="ticker-label">Views Generated</span></div>
-      <div class="ticker-item"><span class="ticker-number">1,000+</span><span class="ticker-label">Videographers Trained</span></div>
-      <div class="ticker-item"><span class="ticker-number">100K+</span><span class="ticker-label">Followers Across Platforms</span></div>
-      <div class="ticker-item"><span class="ticker-number">Built From</span><span class="ticker-label">A 7-Figure Media Company</span></div>
-    </div>
-  </div>
-</div>
-
-<hr class="section-divider">
-
-<!-- Who We Are -->
-<section class="section" id="origin">
-  <div class="reveal-left">
-    <p class="section-label">THE ORIGIN</p>
-    <h2 class="section-heading">What is 910 Academy</h2>
-  </div>
-  <div class="origin-layout">
-    <div class="origin-text reveal">
-      <p>910 Academy is an online community and training platform built specifically for real estate videographers. It's where Claudio Rivera breaks down everything he used to build Studio 910 into a 7-figure media company — no gatekeeping, no fluff.</p>
-      <p>Members get full access to our courses, an active community of working videographers, and direct access to Claudio himself inside Skool.</p>
-      <div class="origin-pills">
-        <div class="origin-pill">
-          <span class="origin-pill-label">Studio 910</span>
-          <span class="origin-pill-sub">The Company Behind It All</span>
-        </div>
-        <div class="origin-pill">
-          <span class="origin-pill-label">Palm Beach, FL</span>
-          <span class="origin-pill-sub">Where It All Started</span>
-        </div>
-      </div>
-    </div>
-    <div class="reveal" style="transition-delay:0.15s;">
-      <div class="origin-visual"><img src="/public/images/origin.webp" alt="910 Academy" style="width:100%;height:100%;object-fit:cover;border-radius:var(--border-radius-lg, 12px);display:block;" width="1200" height="800" loading="lazy" decoding="async"></div>
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider">
-
-<!-- Who This Is For -->
-<section class="section" id="who">
-  <div class="reveal-left">
-    <p class="section-label">IS THIS YOU</p>
-    <h2 class="section-heading">910 Academy is for you if...</h2>
-  </div>
-  <div class="who-grid">
-    <div class="who-card reveal">
-      <div class="who-number">01</div>
-      <h3>You're Shooting But Not Scaling</h3>
-      <p>You're booking jobs but the revenue isn't growing. You need systems, not just skills.</p>
-    </div>
-    <div class="who-card reveal" style="transition-delay:0.15s;">
-      <div class="who-number">02</div>
-      <h3>You Want Luxury Clients</h3>
-      <p>You're done with $200 listings. You want the properties that make reels go viral.</p>
-    </div>
-    <div class="who-card reveal" style="transition-delay:0.3s;">
-      <div class="who-number">03</div>
-      <h3>You're Ready to Build a Real Business</h3>
-      <p>Not just a reel. A company. With a team, a process, and income that doesn't stop when you do.</p>
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider">
-
-<!-- Previous Events -->
-<section class="section" id="events">
-  <div class="reveal-left">
-    <p class="section-label">IN THE FIELD</p>
-    <h2 class="section-heading">We've Served Videographers Like You All Over the World</h2>
-    <p class="section-sub">Here's some behind-the-scenes from our in-person trainings.</p>
-  </div>
-  <!-- TODO: Replace /public/images/event-placeholder.webp below with 6 distinct event photos -->
-  <div class="events-carousel-wrap reveal">
-    <button class="carousel-arrow carousel-arrow-left" id="eventsLeft" aria-label="Previous">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-    </button>
-    <div class="events-carousel">
-      <div class="events-track" id="eventsTrack">
-        <div class="event-card">
-          <div class="event-placeholder"><img src="/public/images/event-placeholder.webp" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;" width="900" height="600" loading="lazy" decoding="async"></div>
-          <div class="event-label">Bahamas Shoot  |  2024</div>
-        </div>
-        <div class="event-card">
-          <div class="event-placeholder"><img src="/public/images/event-placeholder.webp" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;" width="900" height="600" loading="lazy" decoding="async"></div>
-          <div class="event-label">Palm Beach Ride-Along  |  2025</div>
-        </div>
-        <div class="event-card">
-          <div class="event-placeholder"><img src="/public/images/event-placeholder.webp" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;" width="900" height="600" loading="lazy" decoding="async"></div>
-          <div class="event-label">Guest Creator Takeover  |  2025</div>
-        </div>
-        <div class="event-card">
-          <div class="event-placeholder"><img src="/public/images/event-placeholder.webp" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;" width="900" height="600" loading="lazy" decoding="async"></div>
-          <div class="event-label">In-Person Mastermind  |  2024</div>
-        </div>
-        <div class="event-card">
-          <div class="event-placeholder"><img src="/public/images/event-placeholder.webp" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;" width="900" height="600" loading="lazy" decoding="async"></div>
-          <div class="event-label">Luxury Property Shoot  |  2025</div>
-        </div>
-        <div class="event-card">
-          <div class="event-placeholder"><img src="/public/images/event-placeholder.webp" alt="Event" style="width:100%;height:100%;object-fit:cover;display:block;" width="900" height="600" loading="lazy" decoding="async"></div>
-          <div class="event-label">Community Meetup  |  2025</div>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-arrow carousel-arrow-right" id="eventsRight" aria-label="Next">
-      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </button>
-  </div>
-</section>
-
-<hr class="section-divider">
-
-<!-- REPLACE PLACEHOLDER QUOTES WITH REAL TESTIMONIALS -->
-<!-- Member Wins / Testimonials -->
-<section class="section" id="testimonials">
-  <div class="reveal-left">
-    <p class="section-label">THE RESULTS</p>
-    <h2 class="section-heading">Members Winning</h2>
-  </div>
-  <div class="testimonials-grid">
-    <div class="testimonial-card reveal">
-      <div class="testimonial-quote-mark">&ldquo;</div>
-      <p class="testimonial-text">[Member testimonial placeholder - replace with real quote from Skool or Instagram DMs]</p>
-      <p class="testimonial-author">- Member Name, City</p>
-    </div>
-    <div class="testimonial-card reveal" style="transition-delay:0.1s;">
-      <div class="testimonial-quote-mark">&ldquo;</div>
-      <p class="testimonial-text">[Member testimonial placeholder - replace with real quote from Skool or Instagram DMs]</p>
-      <p class="testimonial-author">- Member Name, City</p>
-    </div>
-    <div class="testimonial-card reveal" style="transition-delay:0.2s;">
-      <div class="testimonial-quote-mark">&ldquo;</div>
-      <p class="testimonial-text">[Member testimonial placeholder - replace with real quote from Skool or Instagram DMs]</p>
-      <p class="testimonial-author">- Member Name, City</p>
-    </div>
-  </div>
-  <p class="ftc-disclaimer">Results featured are not typical. Individual results vary based on effort, experience, and market conditions. Testimonials reflect the experiences of specific individuals and are not guarantees of future performance.</p>
 </section>
 
 <hr class="section-divider">
@@ -2414,22 +2339,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <p class="email-success" id="emailSuccess">You're in. We'll be in touch.</p>
   </div>
 </div>
-
-<hr class="section-divider">
-
-<!-- Book a Consultation -->
-<section class="section" id="consult">
-  <div class="consult-flex">
-    <div class="reveal-left">
-      <p class="section-label">FOR SERIOUS VIDEOGRAPHERS ONLY</p>
-      <h2 class="section-heading">Let's See If 910 Academy Is Right For You</h2>
-      <p class="section-sub">This call is for real estate videographers and media business owners who are committed to growing but need structured guidance on their next step. If you're just browsing or not sure what you want yet, explore our free content on Instagram and YouTube first. If you know you're ready to level up, book your 15-minute strategy call.</p>
-    </div>
-    <div class="reveal">
-      <a href="/book" class="school-cta">Book a Strategy Call</a>
-    </div>
-  </div>
-</section>
 
 <hr class="section-divider">
 

@@ -171,6 +171,79 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 100%;
 }
 .about-section + .about-section { padding-top: 0; }
+
+.about-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+.about-split-text { min-width: 0; }
+.about-split-image {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+}
+.about-split-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (max-width: 900px) {
+  .about-split { grid-template-columns: 1fr; gap: var(--space-10); }
+  .about-split-image { aspect-ratio: 16 / 10; order: -1; }
+}
+
+.qualify-box {
+  margin-top: var(--space-8);
+  padding: var(--space-10);
+  border: 1px solid var(--accent-border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--accent-subtle);
+}
+.qualify-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: var(--space-3);
+}
+.qualify-heading {
+  font-family: var(--font);
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  color: var(--fg);
+  line-height: 1.2;
+  margin-bottom: var(--space-4);
+  letter-spacing: var(--tracking-tight);
+}
+.qualify-body {
+  font-size: 0.95rem;
+  color: var(--fg-muted);
+  line-height: 1.7;
+  margin-bottom: var(--space-6);
+}
+.qualify-cta {
+  display: inline-block;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--fg);
+  border-radius: 8px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.25s var(--ease-smooth);
+}
+.qualify-cta:hover {
+  background: var(--fg);
+  color: #000;
+}
+@media (max-width: 640px) {
+  .qualify-box { padding: var(--space-8) var(--space-6); }
+}
 .about-section-label {
   font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
   text-transform: uppercase; color: var(--accent);
@@ -319,20 +392,28 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <p class="about-sub">The training platform built by the team behind Studio 910 — a real estate media company built from the ground up into a seven-figure business.</p>
 </section>
 
-<!-- What is 910 Academy -->
+<!-- What is 910 Academy (split layout) -->
 <section class="about-section">
-  <p class="about-section-label">THE ORIGIN</p>
-  <h2 class="about-section-heading">What is 910 Academy</h2>
-  <p class="about-body">910 Academy is an online community and training platform built specifically for real estate videographers. It's where Claudio Rivera breaks down everything he used to build Studio 910 into a 7-figure media company — no gatekeeping, no fluff.</p>
-  <p class="about-body">Members get full access to our courses, an active community of working videographers, and direct access to Claudio himself inside Skool.</p>
-  <div class="about-pills">
-    <div class="about-pill">
-      <span class="about-pill-label">Studio 910</span>
-      <span class="about-pill-sub">The Company Behind It All</span>
+  <div class="about-split">
+    <div class="about-split-text">
+      <p class="about-section-label">THE ORIGIN</p>
+      <h2 class="about-section-heading">What is 910 Academy</h2>
+      <p class="about-body">910 Academy is an online community and training platform built specifically for real estate videographers. It's where Claudio Rivera breaks down everything he used to build Studio 910 into a 7-figure media company — no gatekeeping, no fluff.</p>
+      <p class="about-body">Members get full access to our courses, an active community of working videographers, and direct access to Claudio himself inside Skool.</p>
+      <div class="about-pills">
+        <div class="about-pill">
+          <span class="about-pill-label">Studio 910</span>
+          <span class="about-pill-sub">The Company Behind It All</span>
+        </div>
+        <div class="about-pill">
+          <span class="about-pill-label">Palm Beach, FL</span>
+          <span class="about-pill-sub">Where It All Started</span>
+        </div>
+      </div>
     </div>
-    <div class="about-pill">
-      <span class="about-pill-label">Palm Beach, FL</span>
-      <span class="about-pill-sub">Where It All Started</span>
+    <!-- TODO: Swap origin.webp with a designer-selected About hero photo when available -->
+    <div class="about-split-image">
+      <img src="/public/images/origin.webp" alt="910 Academy" width="1200" height="1500" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
@@ -377,6 +458,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <h2 class="about-section-heading">Why We Built This</h2>
   <p class="about-body">Most real estate videography content online is either fluff, theory, or surface-level. We built 910 Academy because videographers deserve the full operating system — shooting, editing, sales, pricing, team-building — taught by people doing it every single day.</p>
   <p class="about-body"><strong>No gatekeeping. No guru tactics. No "secrets" we discovered on Instagram yesterday.</strong> Just the same system we use to book luxury listings and run a seven-figure media company.</p>
+</section>
+
+<!-- Qualifying Call-Out -->
+<section class="about-section">
+  <div class="qualify-box">
+    <p class="qualify-label">FOR SERIOUS VIDEOGRAPHERS ONLY</p>
+    <h2 class="qualify-heading">Let's See If 910 Academy Is Right For You</h2>
+    <p class="qualify-body">This call is for real estate videographers and media business owners who are committed to growing but need structured guidance on their next step. If you're just browsing or not sure what you want yet, explore our free content on Instagram and YouTube first. If you know you're ready to level up, book your 15-minute strategy call.</p>
+    <a href="/book" class="qualify-cta">Book a Strategy Call</a>
+  </div>
 </section>
 
 <!-- CTA -->
