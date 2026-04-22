@@ -1399,6 +1399,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%);
   pointer-events: none;
+  z-index: 1;
+}
+.course-box img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
 }
 .course-box-title {
   position: relative;
@@ -1924,58 +1934,58 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <h2 class="section-heading">WHAT'S INSIDE 910 ACADEMY</h2>
     <p class="section-sub">Everything you need to build a 7-figure real estate media business.</p>
   </div>
-  <!-- TODO: Replace .course-box gradient placeholders with designer assets (actual course-box artwork) -->
   <div class="course-grid">
     <div class="course-card reveal">
-      <div class="course-box"><span class="course-box-title">AI Editing</span></div>
+      <div class="course-box"><img src="/public/whats-inside/ai-editing.webp" alt="AI Editing" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">AI Editing</h3>
       <p class="course-card-desc">Create Viral Hooks with AI</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.05s;">
-      <div class="course-box"><span class="course-box-title">Shooting Training</span></div>
+      <div class="course-box"><img src="/public/whats-inside/shooting-training.webp" alt="Shooting Training" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">Shooting Training</h3>
       <p class="course-card-desc">Learn to Shoot Like a Pro</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.1s;">
-      <div class="course-box"><span class="course-box-title">910 Sales System</span></div>
+      <div class="course-box"><img src="/public/whats-inside/910-sales-system.webp" alt="910 Sales System" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">910 Sales System</h3>
       <p class="course-card-desc">Sales Masterclass</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.15s;">
-      <div class="course-box"><span class="course-box-title">Four Horsemen Takeover</span></div>
+      <div class="course-box"><img src="/public/whats-inside/four-horsemen-takeover.webp" alt="Four Horsemen Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">Four Horsemen Takeover</h3>
       <p class="course-card-desc">How to Brand, Edit, and Scale</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.2s;">
-      <div class="course-box"><span class="course-box-title">The JT Visuals Takeover</span></div>
+      <div class="course-box"><img src="/public/whats-inside/jt-visuals-takeover.webp" alt="The JT Visuals Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">The JT Visuals Takeover</h3>
       <p class="course-card-desc">Shooting, Editing, Sound Design and More</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.25s;">
-      <div class="course-box"><span class="course-box-title">The Lucid Horizon Takeover</span></div>
+      <div class="course-box"><img src="/public/whats-inside/lucid-horizon-takeover.webp" alt="The Lucid Horizon Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">The Lucid Horizon Takeover</h3>
       <p class="course-card-desc">Never Seen Before L.U.C.I.D. Method</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.3s;">
-      <div class="course-box"><span class="course-box-title">The Known Productions Takeover</span></div>
+      <div class="course-box"><img src="/public/whats-inside/known-productions-takeover.webp" alt="The Known Productions Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">The Known Productions Takeover</h3>
       <p class="course-card-desc">How to Hack Attention and Go Viral</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.35s;">
-      <div class="course-box"><span class="course-box-title">LIVE Replay Vault</span></div>
+      <div class="course-box"><img src="/public/whats-inside/live-replay-vault.webp" alt="LIVE Replay Vault" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">LIVE Replay Vault</h3>
       <p class="course-card-desc">Live Academy Replays</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.4s;">
-      <div class="course-box"><span class="course-box-title">910 Admin Assistant</span></div>
+      <div class="course-box"><img src="/public/whats-inside/910-admin-assistant.webp" alt="910 Admin Assistant" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">910 Admin Assistant</h3>
       <p class="course-card-desc">Designed for Admin Intelligence</p>
     </div>
     <div class="course-card reveal" style="transition-delay:0.45s;">
-      <div class="course-box"><span class="course-box-title">Viral Editing Masterclass (2025)</span></div>
+      <div class="course-box"><img src="/public/whats-inside/viral-editing-masterclass-2025.webp" alt="Viral Editing Masterclass (2025)" width="1460" height="752" loading="lazy" decoding="async"></div>
       <h3 class="course-card-title">Viral Editing Masterclass (2025)</h3>
       <p class="course-card-desc">Learn How to Edit Videos in 2025</p>
     </div>
+    <!-- TODO: Awaiting 2024 masterclass image asset -->
     <div class="course-card reveal" style="transition-delay:0.5s;">
       <div class="course-box"><span class="course-box-title">Viral Editing Masterclass (2024)</span></div>
       <h3 class="course-card-title">Viral Editing Masterclass (2024)</h3>
