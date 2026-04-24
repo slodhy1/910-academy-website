@@ -1851,6 +1851,146 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .audience-grid { grid-template-columns: 1fr; }
   .audience-card { padding: var(--space-8) var(--space-6); }
 }
+
+/* ========== MOBILE OPTIMIZATION PASS (universal) ========== */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, video, iframe { max-width: 100%; height: auto; }
+
+@media (max-width: 768px) {
+  /* Hero responsive typography */
+  .hero { padding: 100px 20px 60px !important; min-height: auto; }
+  .hero-content { max-width: 100% !important; padding: 0 !important; }
+  .hero h1 { font-size: clamp(1.75rem, 7.5vw, 2.8rem); line-height: 1.15; }
+  .hero-line-1 { font-size: clamp(1rem, 4.2vw, 1.5rem) !important; line-height: 1.15 !important; }
+  .hero-line-2 { font-size: clamp(1.75rem, 9vw, 2.75rem) !important; line-height: 1.1 !important; }
+  .hero-line-3 { font-size: clamp(1rem, 4.2vw, 1.4rem) !important; line-height: 1.15 !important; }
+
+  /* Hero CTA row → stacked full width */
+  .hero-content > div[style*="display:flex"],
+  .hero-content > div[style*="display: flex"] {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    margin-top: 32px !important;
+    padding: 0 !important;
+  }
+  .hero-content > div[style*="display:flex"] > a,
+  .hero-content > div[style*="display: flex"] > a {
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    padding: 16px 24px !important;
+    min-height: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Global tap targets */
+  .hero-cta, .cta-btn, .school-cta, .coaching-cta, .value-cta,
+  .about-cta-btn, .qualify-cta, .card-btn-buy, .email-submit,
+  .nav-cta { min-height: 44px; }
+
+  /* Nav edges */
+  .nav-inner { padding: 0 16px !important; }
+
+  /* Section padding — cut ~half */
+  section.section, .section { padding: 60px 20px !important; }
+  .about-hero, .about-section, .about-cta-band, .book-section, .email-section,
+  .coaching-inner, .school-section, .footer, .disclaimer-section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .coaching-inner { padding: 60px 20px !important; }
+  .email-section { padding: 60px 20px !important; }
+  .disclaimer-section { padding: 48px 20px !important; }
+
+  /* Section heading scaling */
+  .section-heading, .school-heading, .book-heading,
+  .about-heading, .about-section-heading, .qualify-heading {
+    font-size: clamp(1.5rem, 6vw, 2.3rem) !important;
+    line-height: 1.2 !important;
+  }
+  .section-label { font-size: 0.7rem !important; letter-spacing: 0.2em !important; }
+  .section-sub { font-size: 0.95rem !important; }
+
+  /* Body text minimum */
+  body { font-size: 16px; }
+  p { font-size: 1rem; }
+
+  /* All known grids → single column */
+  .course-grid { flex-direction: column !important; align-items: stretch !important; gap: 32px !important; }
+  .course-card { width: 100% !important; }
+  .perks-grid, .audience-grid, .who-grid, .testimonials-grid,
+  .school-cards, .about-team-grid, .events-grid, .community-layout,
+  .curriculum-grid, .origin-layout, .about-split {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .coaching-inner { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .consult-flex { flex-direction: column !important; align-items: stretch !important; gap: 24px !important; }
+
+  /* Product-grid cards (flex) */
+  .product-grid > .product-card { width: 100% !important; }
+
+  /* Video embeds */
+  .video-embed { width: 100% !important; }
+  .video-stack { gap: 48px !important; }
+  .video-wrap { padding: 0 !important; }
+
+  /* Value stack — wrap long rows */
+  .value-stack { padding: 32px 20px !important; }
+  .value-row { flex-wrap: wrap !important; gap: 6px 10px !important; align-items: flex-start !important; }
+  .value-leader { display: none !important; }
+  .value-name { flex: 1 1 100% !important; min-width: 0 !important; order: 2; }
+  .value-check { order: 1; }
+  .value-price { flex: 0 0 auto !important; order: 3; font-weight: 700; margin-left: 30px; }
+  .value-final-price { font-size: 3rem !important; }
+
+  /* Footer stacking */
+  .footer { text-align: center; padding: 48px 20px !important; }
+  .footer-socials { flex-wrap: wrap !important; justify-content: center !important; gap: 16px !important; }
+  .footer-logo { margin-bottom: 16px !important; }
+
+  /* Forms full width, 16px to prevent iOS zoom */
+  input[type="email"], input[type="text"], input[type="tel"],
+  .email-input, select, textarea {
+    width: 100% !important;
+    font-size: 16px !important;
+    box-sizing: border-box !important;
+  }
+  .email-form { flex-direction: column !important; gap: 12px !important; }
+  .email-submit { width: 100% !important; }
+
+  /* Calendly embed (book.html) */
+  .calendly-inline-widget { min-width: 0 !important; width: 100% !important; height: 1000px !important; }
+
+  /* About split image order on mobile */
+  .about-split-image { aspect-ratio: 16 / 10 !important; order: -1; }
+
+  /* Ticker items smaller on mobile */
+  .ticker-item { padding: 0 24px !important; }
+  .ticker-number { font-size: 1.4rem !important; }
+
+  /* Hero badge / small elements */
+  .hero-cta { padding: 14px 24px !important; font-size: 12px !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-line-2 { font-size: clamp(1.5rem, 10vw, 2.2rem) !important; }
+  .hero-line-1 { font-size: clamp(0.9rem, 4.5vw, 1.2rem) !important; }
+  .hero-line-3 { font-size: clamp(0.9rem, 4.5vw, 1.2rem) !important; }
+  section.section, .section { padding: 48px 16px !important; }
+  .about-hero { padding: 120px 16px 40px !important; }
+  .section-heading, .school-heading { font-size: 1.5rem !important; }
+  .value-final-price { font-size: 2.4rem !important; }
+  .nav-inner { padding: 0 12px !important; }
+  .value-stack { padding: 28px 16px !important; }
+  .hero-cta { padding: 12px 20px !important; }
+}
+
 </style>
 </head>
 <body>
