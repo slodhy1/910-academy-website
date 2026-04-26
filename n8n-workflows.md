@@ -35,9 +35,16 @@ This document describes the n8n workflows that power the 910 Academy website for
 
 ---
 
-## Workflow 2: Email List Capture
+## Workflow 2: Email List Capture (910 Colors LUT opt-in)
 
 **Trigger source:** `index.html` homepage email form (`EMAIL_WEBHOOK_URL`)
+
+> **TODO (Shayan):** the homepage email capture is now positioned as a free LUT opt-in.
+> The n8n workflow should:
+> 1. Insert email into Supabase `email_subscribers` table (with `source: "homepage_lut_optin"`).
+> 2. Send an automated email to the submitter with the 910 Colors LUT download link.
+>    - **Subject:** `Your 910 Colors LUT is ready`
+>    - **Body:** short message containing the download link (link to be added by Shayan).
 
 ### Nodes
 1. **Webhook (POST)** — receives JSON:
@@ -45,14 +52,19 @@ This document describes the n8n workflows that power the 910 Academy website for
    {
      "email": "string",
      "submitted_at": "ISO-8601 timestamp",
-     "source": "homepage_email_capture"
+     "source": "homepage_lut_optin"
    }
    ```
    - Response mode: `Respond immediately`.
 2. **Supabase — Insert Row**
    - Table: `email_subscribers`
-   - Map `email` and `source`. The `unique` constraint on `email` will reject duplicates — configure the node to ignore conflicts (upsert or on-conflict-do-nothing).
-3. **(Future) Email Marketing Tool**
+   - Map `email` and `source`. The `unique` constraint on `email` will reject duplicates, configure the node to ignore conflicts (upsert or on-conflict-do-nothing).
+3. **Send LUT Email (SMTP / Gmail node)**
+   - To: `{{ $json.email }}`
+   - From: `academy@studio910pb.com`
+   - Subject: `Your 910 Colors LUT is ready`
+   - Body: short HTML message with the download link to the 910 Colors LUT. **TODO:** Shayan to provide the hosted LUT URL (Google Drive / Dropbox / Supabase Storage / etc.).
+4. **(Future) Email Marketing Tool**
    - Push the subscriber to ConvertKit / Mailchimp / Beehiiv via their native n8n node.
 
 ---

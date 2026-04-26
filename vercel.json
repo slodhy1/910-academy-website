@@ -2,6 +2,10 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/affiliate-links", "destination": "/gear", "permanent": true },
+    { "source": "/skool", "destination": "/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)\\.(jpg|jpeg|png|webp|avif|svg|ico|woff2)",

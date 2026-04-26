@@ -1351,6 +1351,57 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .disclaimer-section { padding: var(--space-12) var(--space-6); }
   .ticker-item { padding: 0 28px; }
 }
+
+/* ========== COMMUNITY (Meet Your Allies) ========== */
+.community-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+.community-text .section-sub {
+  margin-bottom: var(--space-8);
+}
+.community-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000;
+  background: #FFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.community-cta:hover {
+  background: var(--accent);
+  color: #FFF;
+  transform: translateY(-2px);
+}
+.community-image {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.community-image img {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+@media (max-width: 1024px) {
+  .community-layout { grid-template-columns: 1fr; gap: var(--space-10); }
+}
+
 @media (max-width: 480px) {
   .section-heading { font-size: 1.8rem; }
   .school-heading { font-size: 1.8rem; }
@@ -2091,9 +2142,8 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a>
       <a href="/about" class="nav-link">About</a>
-      <a href="/affiliate-links" class="nav-link">Our Gear</a>
+      <a href="/gear" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
-      <a href="/skool" class="nav-link">Skool</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
@@ -2107,9 +2157,8 @@ img, video, iframe { max-width: 100%; height: auto; }
   <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
   <a href="/">Home</a>
   <a href="/about">About</a>
-  <a href="/affiliate-links">Our Gear</a>
+  <a href="/gear">Our Gear</a>
   <a href="/products">Products</a>
-  <a href="/skool">Skool</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
@@ -2443,6 +2492,40 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <hr class="section-divider">
 
+<!-- Meet Your Allies / Community -->
+<section class="section" id="community">
+  <div class="community-layout">
+    <div class="community-text reveal-left">
+      <p class="section-label">THE COMMUNITY</p>
+      <h2 class="section-heading">Meet Your Allies</h2>
+      <p class="section-sub">Once you become an official member, you will gain access to our Inner Circle Group Chat, where you can network with 200+ real estate media professionals from all over the world.</p>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="community-cta">Join 910 Academy</a>
+    </div>
+    <div class="community-image reveal">
+      <img src="/public/images/910-Academy-Hero-1-1024x575.webp" alt="910 Academy Inner Circle" width="1024" height="575" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Meet Your Allies / Community -->
+<section class="section" id="community">
+  <div class="community-layout">
+    <div class="community-text reveal-left">
+      <p class="section-label">THE COMMUNITY</p>
+      <h2 class="section-heading">Meet Your Allies</h2>
+      <p class="section-sub">Once you become an official member, you will gain access to our Inner Circle Group Chat, where you can network with 200+ real estate media professionals from all over the world.</p>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="community-cta">Join 910 Academy</a>
+    </div>
+    <div class="community-image reveal">
+      <img src="/public/images/910-Academy-Hero-1-1024x575.webp" alt="910 Academy Inner Circle" width="1024" height="575" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
 <!-- Value Stack + Pricing -->
 <section class="section" id="pricing">
   <div class="reveal-left">
@@ -2547,13 +2630,13 @@ img, video, iframe { max-width: 100%; height: auto; }
 <div class="email-section" id="email">
   <div class="reveal">
     <p class="section-label" style="text-align:center;">STAY IN THE LOOP</p>
-    <h2 class="section-heading" style="text-align:center;margin-bottom:var(--space-4);">Free Tips. Events. Resources.</h2>
-    <p class="section-sub" style="text-align:center;max-width:500px;margin:0 auto var(--space-10);">Join 5,000+ real estate videographers getting our best content delivered straight to their inbox.</p>
+    <h2 class="section-heading" style="text-align:center;margin-bottom:var(--space-4);">GRAB OUR 910 COLORS LUT FOR FREE</h2>
+    <p class="section-sub" style="text-align:center;max-width:560px;margin:0 auto var(--space-10);">Sign up with your email below and we'll send you the link to the LUT we use in all our viral and high-performing videos. Compatible with all cameras and editing workflows.</p>
     <form class="email-form" id="emailForm">
       <input type="email" name="email" class="email-input" placeholder="Your email address" required>
-      <button type="submit" class="email-submit">Subscribe</button>
+      <button type="submit" class="email-submit">Get the LUT</button>
     </form>
-    <p class="email-success" id="emailSuccess">You're in. We'll be in touch.</p>
+    <p class="email-success" id="emailSuccess">Check your email for the LUT download link.</p>
   </div>
 </div>
 
@@ -2702,7 +2785,7 @@ const EMAIL_WEBHOOK_URL = 'REPLACE_WITH_N8N_EMAIL_WEBHOOK_URL';
     var payload = {
       email: email,
       submitted_at: new Date().toISOString(),
-      source: 'homepage_email_capture'
+      source: 'homepage_lut_optin'
     };
     fetch(EMAIL_WEBHOOK_URL, {
       method: 'POST',
