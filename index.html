@@ -308,7 +308,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   align-items: center;
   justify-content: center;
   opacity: 1;
-  transition: opacity 0.8s ease-out;
+  transition: opacity 0.6s ease-out;
   will-change: opacity;
 }
 .intro-overlay.fade {
@@ -330,7 +330,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .intro-overlay.fading .intro-logo {
   opacity: 0;
   transform: translateY(0) scale(1);
-  transition: opacity 0.5s ease-out;
+  transition: opacity 0.4s ease-out;
 }
 @media (max-width: 768px) {
   .intro-logo { width: 55px; }
@@ -2615,15 +2615,15 @@ img, video, iframe { max-width: 100%; height: auto; }
     : Promise.resolve();
 
   Promise.all([minHold, videoReady]).then(function() {
-    // Logo fades out first (0.5s), overlay fades out (0.8s) starting shortly after
+    // Sequential dismiss: logo fades (0.4s) → 0.1s pause → overlay fades (0.6s)
     overlay.classList.add('fading');
     setTimeout(function() {
       overlay.classList.add('fade');
       setTimeout(function() {
         overlay.classList.add('done');
         document.body.style.overflow = '';
-      }, 850);
-    }, 250);
+      }, 650);
+    }, 500);
   });
 })();
 
