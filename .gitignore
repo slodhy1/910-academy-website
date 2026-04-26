@@ -6,3 +6,4 @@ node_modules
 *.MP4
 *.mov
 *.MOV
+!public/hero-bg.mp4
