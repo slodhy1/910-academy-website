@@ -2,6 +2,12 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/products", "destination": "/maintenance.html" },
+    { "source": "/products/:slug", "destination": "/maintenance.html" },
+    { "source": "/account", "destination": "/maintenance.html" },
+    { "source": "/account/:path*", "destination": "/maintenance.html" }
+  ],
   "redirects": [
     { "source": "/affiliate-links", "destination": "/gear", "permanent": true },
     { "source": "/skool", "destination": "/", "permanent": true }
