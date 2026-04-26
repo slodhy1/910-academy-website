@@ -298,6 +298,43 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: all 0.3s var(--ease-out);
 }
 
+/* ========== CINEMATIC INTRO OVERLAY ========== */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+.intro-overlay.lift {
+  transform: translateY(-100%);
+}
+.intro-overlay.done {
+  display: none;
+}
+.intro-logo {
+  width: 110px;
+  height: auto;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  animation: introLogoIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+@keyframes introLogoIn {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.intro-overlay.fading .intro-logo {
+  opacity: 0;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.3s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay { display: none !important; }
+}
+
 /* ========== HERO ========== */
 .hero {
   position: relative;
@@ -2015,6 +2052,11 @@ img, video, iframe { max-width: 100%; height: auto; }
 </head>
 <body>
 
+<!-- Cinematic Intro Overlay (homepage only) -->
+<div class="intro-overlay" id="introOverlay" aria-hidden="true">
+  <img class="intro-logo" src="/public/logo-white.svg" alt="910 Academy" width="110" height="110">
+</div>
+
 <!-- Background Depth Orbs -->
 <div class="bg-orbs">
   <div class="bg-orb bg-orb-1"></div>
@@ -2534,6 +2576,52 @@ img, video, iframe { max-width: 100%; height: auto; }
 </footer>
 
 <script>
+// ========== CINEMATIC INTRO ==========
+(function() {
+  var overlay = document.getElementById('introOverlay');
+  if (!overlay) return;
+
+  // Skip if reduced-motion or already seen this session
+  try {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      overlay.classList.add('done');
+      return;
+    }
+    if (sessionStorage.getItem('intro_seen')) {
+      overlay.classList.add('done');
+      return;
+    }
+    sessionStorage.setItem('intro_seen', 'true');
+  } catch (e) {
+    overlay.classList.add('done');
+    return;
+  }
+
+  // Lock scroll while intro plays
+  document.body.style.overflow = 'hidden';
+
+  var minHold = new Promise(function(r) { setTimeout(r, 2200); });
+  var video = document.querySelector('.hero-bg-video');
+  var videoReady = video
+    ? new Promise(function(r) {
+        if (video.readyState >= 3) return r();
+        video.addEventListener('canplay', r, { once: true });
+        setTimeout(r, 4000); // fail-safe cap so we never hang
+      })
+    : Promise.resolve();
+
+  Promise.all([minHold, videoReady]).then(function() {
+    overlay.classList.add('fading');
+    setTimeout(function() {
+      overlay.classList.add('lift');
+      setTimeout(function() {
+        overlay.classList.add('done');
+        document.body.style.overflow = '';
+      }, 850);
+    }, 300);
+  });
+})();
+
 // ========== STICKY NAV ==========
 (function() {
   var nav = document.getElementById('nav');
