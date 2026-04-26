@@ -307,17 +307,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-  will-change: transform;
+  opacity: 1;
+  transition: opacity 0.8s ease-out;
+  will-change: opacity;
 }
-.intro-overlay.lift {
-  transform: translateY(-100%);
+.intro-overlay.fade {
+  opacity: 0;
 }
 .intro-overlay.done {
   display: none;
 }
 .intro-logo {
-  width: 110px;
+  width: 70px;
   height: auto;
   opacity: 0;
   transform: translateY(8px) scale(0.96);
@@ -329,7 +330,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .intro-overlay.fading .intro-logo {
   opacity: 0;
   transform: translateY(0) scale(1);
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.5s ease-out;
+}
+@media (max-width: 768px) {
+  .intro-logo { width: 55px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .intro-overlay { display: none !important; }
@@ -2054,7 +2058,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <!-- Cinematic Intro Overlay (homepage only) -->
 <div class="intro-overlay" id="introOverlay" aria-hidden="true">
-  <img class="intro-logo" src="/public/logo-white.svg" alt="910 Academy" width="110" height="110">
+  <img class="intro-logo" src="/public/logo-white.svg" alt="910 Academy" width="70" height="70">
 </div>
 
 <!-- Background Depth Orbs -->
@@ -2611,14 +2615,15 @@ img, video, iframe { max-width: 100%; height: auto; }
     : Promise.resolve();
 
   Promise.all([minHold, videoReady]).then(function() {
+    // Logo fades out first (0.5s), overlay fades out (0.8s) starting shortly after
     overlay.classList.add('fading');
     setTimeout(function() {
-      overlay.classList.add('lift');
+      overlay.classList.add('fade');
       setTimeout(function() {
         overlay.classList.add('done');
         document.body.style.overflow = '';
       }, 850);
-    }, 300);
+    }, 250);
   });
 })();
 
