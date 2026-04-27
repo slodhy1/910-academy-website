@@ -5,6 +5,8 @@ node_modules
 out
 .env*.local
 *.tsbuildinfo
+supabase/.temp/
+supabase/.branches/
 
 *.mp4
 *.MP4
