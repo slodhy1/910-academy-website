@@ -343,7 +343,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .btn-block { display: block; width: 100%; }
 
 
-/* Choose your path (three pricing cards) */
+/* Choose your path (two pricing cards) */
 .path-section {
   position: relative; z-index: 2;
   max-width: 1200px;
@@ -353,9 +353,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .path-header { text-align: center; margin-bottom: clamp(40px, 6vh, 60px); }
 .path-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-6);
   align-items: stretch;
+  max-width: 800px;
+  margin: 0 auto;
 }
 .path-card {
   display: flex;
@@ -371,12 +373,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .path-card:hover {
   border-color: rgba(255, 255, 255, 0.18);
   transform: translateY(-3px);
-}
-.path-card.path-card-featured {
-  border-color: rgba(56, 182, 255, 0.25);
-  background:
-    radial-gradient(circle at 100% 0%, rgba(56, 182, 255, 0.08) 0%, transparent 45%),
-    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
 }
 .path-card-eyebrow {
   font-size: 11px;
@@ -418,12 +414,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: var(--space-6);
 }
 .path-card .btn { width: 100%; }
-.path-card-double {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.path-card-double .btn { font-size: 12px; padding: 14px 24px; min-height: 48px; }
 @media (max-width: 1024px) {
   .path-grid { grid-template-columns: 1fr; gap: var(--space-5); }
 }
@@ -829,12 +819,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </div>
 </section>
 
-<!-- CHOOSE YOUR PATH (3 cards) -->
+<!-- CHOOSE YOUR PATH (2 cards) -->
 <section class="path-section" id="choose-your-path">
   <div class="path-header">
     <p class="section-label">PRICING</p>
     <h2 class="section-heading">Choose your path</h2>
-    <p class="section-sub" style="margin: 0 auto;">Buy each part individually, or grab both.</p>
+    <p class="section-sub" style="margin: 0 auto;">Two parts. Buy whichever you need.</p>
   </div>
   <div class="path-grid">
 
@@ -850,22 +840,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <div class="path-card">
       <p class="path-card-eyebrow">PART 2</p>
       <h3 class="path-card-title">The Editing Replay</h3>
-      <p class="path-card-desc">The editing room. Transitions, sound design, color, and the post-production system the Four Horsemen use to ship work that lands at the top of the feed every time.</p>
+      <p class="path-card-desc">The editing room. Transitions, sound design, color, and the post-production system Four Horsemen use to ship work that lands at the top of the feed every time.</p>
       <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
       <p class="path-card-price-sub">ONE-TIME · LIFETIME ACCESS</p>
       <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
-    </div>
-
-    <div class="path-card path-card-featured">
-      <p class="path-card-eyebrow">BOTH PARTS</p>
-      <h3 class="path-card-title">The Complete Workshop</h3>
-      <p class="path-card-desc">Everything in Part 1 + Part 2. The complete business and editing system. Buy each side separately below; combined, the full operation.</p>
-      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>182</p>
-      <p class="path-card-price-sub">PURCHASED AS TWO SEPARATE PARTS</p>
-      <div class="path-card-double">
-        <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1: $91</a>
-        <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Get Part 2: $91</a>
-      </div>
     </div>
 
   </div>
@@ -939,8 +917,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <p class="section-label">THE INSTRUCTORS</p>
   <h2 class="section-heading">Who are the Four Horsemen?</h2>
   <div class="split-text">
-    <p>The Four Horsemen are a collective of four operators who have built and scaled real estate media businesses to the top of the industry. Each brings a distinct lane, sales, brand, editing, and operations, and together they've packaged it into a two-part workshop.</p>
-    <p><strong>Part 1 covers the business they built.</strong> Part 2 covers the editing room that ships their work. Buy whichever lane you need, or both.</p>
+    <p>Four Horsemen Media was founded by two creators, ages 18 and 23, already operating at a level most people don't reach for years. They're known for sharp creative direction and disciplined execution, and they break down how storytelling, strategy, and structure come together to create real estate media that actually performs.</p>
+    <p><strong>Part 1 covers the business they built.</strong> Part 2 covers the editing room that ships their work. Buy whichever lane you need.</p>
   </div>
 </section>
 
@@ -963,15 +941,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <h3 class="path-card-title">The Editing</h3>
       <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
       <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
-    </div>
-    <div class="path-card path-card-featured">
-      <p class="path-card-eyebrow">BOTH</p>
-      <h3 class="path-card-title">The Complete Workshop</h3>
-      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>182</p>
-      <div class="path-card-double">
-        <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Part 1: $91</a>
-        <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Part 2: $91</a>
-      </div>
     </div>
   </div>
 </section>
