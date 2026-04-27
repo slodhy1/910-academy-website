@@ -175,7 +175,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: clamp(140px, 16vh, 200px) var(--space-10) clamp(56px, 7vh, 88px);
+  padding: 130px var(--space-10) 64px;
   z-index: 2;
   background: var(--bg-base);
 }
@@ -186,18 +186,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.1s forwards;
 }
 .hero-title {
   font-family: var(--font);
-  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  font-size: clamp(1.8rem, 4.2vw, 3.5rem);
   font-weight: 300;
   text-transform: uppercase;
-  line-height: 1.05;
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: 20px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  margin-bottom: 16px;
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
 }
@@ -220,7 +221,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-trailer {
   width: 100%;
   max-width: 880px;
-  margin-top: 48px;
+  margin-top: 40px;
 }
 .hero-trailer-frame {
   position: relative;
@@ -242,7 +243,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* Hero CTA + scroll indicator block (inside hero) */
 .hero-cta {
-  margin-top: 40px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -257,7 +258,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-top: 48px;
+  margin-top: 36px;
   cursor: pointer;
   opacity: 0.55;
   transition: opacity 0.3s var(--ease-smooth);
@@ -587,11 +588,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .hero {
     padding: 100px 24px 56px;
   }
+  .hero-title {
+    white-space: normal;
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+    letter-spacing: 0;
+  }
   .hero-trailer { margin-top: 32px; max-width: 100%; }
-  .hero-cta { margin-top: 32px; }
+  .hero-cta { margin-top: 28px; }
   .hero-cta .btn-primary { width: 86%; max-width: 360px; min-width: 0; }
   .section { padding: var(--space-16) 20px; }
-  .scroll-indicator { margin-top: 36px; }
+  .scroll-indicator { margin-top: 28px; }
   .pricing-card { padding: var(--space-10) var(--space-6); }
   .faq-q { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
   .faq-a { padding: var(--space-4) var(--space-5) var(--space-5); }
