@@ -168,7 +168,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: var(--space-10);
 }
 
-/* HERO (compact VSL frame) */
+/* HERO (balanced VSL frame, room above eyebrow) */
 .hero {
   position: relative;
   min-height: 0;
@@ -177,39 +177,39 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 96px var(--space-10) var(--space-5);
+  padding: 160px var(--space-10) var(--space-6);
   overflow: hidden;
   z-index: 2;
   background: var(--bg-base);
 }
-.hero-content { max-width: 920px; margin: 0 auto; }
+.hero-content { max-width: 1040px; margin: 0 auto; }
 .hero-eyebrow {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-5);
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.1s forwards;
 }
 .hero-title {
   font-family: var(--font);
-  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  font-size: clamp(2rem, 7vw, 4.8rem);
   font-weight: 300;
   text-transform: uppercase;
   line-height: 1.05;
   letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-5);
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
 }
 .hero-sub {
-  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
   font-weight: 400;
   color: var(--fg-muted);
-  line-height: 1.5;
-  max-width: 640px;
+  line-height: 1.55;
+  max-width: 680px;
   margin: 0 auto;
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.3s forwards;
@@ -219,22 +219,67 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Primary CTAs (post-trailer block) */
+/* Primary CTA + scroll indicator (post-trailer block) */
 .cta-block {
   position: relative; z-index: 2;
   max-width: 1100px;
   margin: 0 auto;
-  padding: var(--space-5) var(--space-10) var(--space-10);
+  padding: var(--space-6) var(--space-10) var(--space-10);
   text-align: center;
-}
-.cta-block-row {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
   align-items: center;
 }
-@media (min-width: 640px) {
-  .cta-block-row { flex-direction: row; justify-content: center; gap: var(--space-5); }
+.cta-block .btn-primary {
+  min-width: 280px;
+}
+
+/* Scroll indicator (style C, sequential chevrons) */
+.scroll-indicator {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--space-12);
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.3s var(--ease-smooth);
+  background: none;
+  border: 0;
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--font);
+}
+.scroll-indicator:hover { opacity: 1; }
+.scroll-indicator-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.scroll-indicator-chevs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.scroll-indicator-chevs svg {
+  width: 18px;
+  height: 10px;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes chevronFade {
+  0%, 100% { opacity: 0.2; transform: translateY(-2px); }
+  50%      { opacity: 0.85; transform: translateY(0); }
+}
+.scroll-indicator .chev:nth-child(1) { animation: chevronFade 2s ease-in-out infinite; }
+.scroll-indicator .chev:nth-child(2) { animation: chevronFade 2s ease-in-out infinite 0.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator .chev { animation: none; opacity: 0.5; }
 }
 
 /* Buttons */
@@ -287,7 +332,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .trailer-frame {
   position: relative;
   width: 100%;
-  max-width: 880px;
+  max-width: 800px;
   margin: 0 auto;
   aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
@@ -546,15 +591,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav-inner { padding: 0 16px; }
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
-  .hero { min-height: auto; padding: 100px 20px var(--space-5); }
+  .hero { min-height: auto; padding: 140px 20px var(--space-6); }
   .section { padding: var(--space-16) 20px; }
   .cta-block { padding: var(--space-6) 20px var(--space-12); }
+  .cta-block .btn-primary { width: 86%; max-width: 360px; min-width: 0; }
+  .scroll-indicator { margin-top: var(--space-10); }
   .pricing-card { padding: var(--space-10) var(--space-6); }
   .faq-q { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
   .faq-a { padding: var(--space-4) var(--space-5) var(--space-5); }
   .footer { padding: var(--space-12) var(--space-6); }
   .footer-socials { flex-wrap: wrap; gap: 16px; }
-  .cta-block-row .btn { width: 100%; max-width: 340px; }
 }
 @media (max-width: 480px) {
   .hero-title { font-size: clamp(1.8rem, 9vw, 2.4rem); }
@@ -614,12 +660,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </div>
 </section>
 
-<!-- PRIMARY CTAs (post-trailer) -->
+<!-- PRIMARY CTA + SCROLL INDICATOR (post-trailer) -->
 <div class="cta-block">
-  <div class="cta-block-row">
-    <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $91</a>
-    <a href="#whats-inside" class="btn btn-ghost">Scroll to see what's inside</a>
-  </div>
+  <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $91</a>
+  <a href="#whats-inside" class="scroll-indicator" aria-label="Scroll to see what's inside">
+    <span class="scroll-indicator-label">What's inside</span>
+    <span class="scroll-indicator-chevs" aria-hidden="true">
+      <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
+      <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
+    </span>
+  </a>
 </div>
 
 <!-- WHAT'S INSIDE -->
