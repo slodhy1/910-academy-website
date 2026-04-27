@@ -168,48 +168,50 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: var(--space-10);
 }
 
-/* HERO (balanced VSL frame, room above eyebrow) */
+/* HERO (self-contained, fits within one viewport) */
 .hero {
   position: relative;
-  min-height: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  max-height: 100svh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  padding: 160px var(--space-10) var(--space-6);
-  overflow: hidden;
+  padding: 100px var(--space-10) var(--space-6);
   z-index: 2;
   background: var(--bg-base);
 }
-.hero-content { max-width: 1040px; margin: 0 auto; }
+.hero-text { max-width: 920px; margin: 0 auto; flex-shrink: 0; }
 .hero-eyebrow {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-4);
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.1s forwards;
 }
 .hero-title {
   font-family: var(--font);
-  font-size: clamp(2rem, 7vw, 4.8rem);
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
   font-weight: 300;
   text-transform: uppercase;
-  line-height: 1.05;
+  line-height: 1.08;
   letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-3);
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
 }
 .hero-sub {
-  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
   font-weight: 400;
   color: var(--fg-muted);
-  line-height: 1.55;
-  max-width: 680px;
+  line-height: 1.5;
+  max-width: 600px;
   margin: 0 auto;
   opacity: 0;
   animation: fadeUp 0.7s var(--ease-out) 0.3s forwards;
@@ -219,18 +221,41 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Primary CTA + scroll indicator (post-trailer block) */
-.cta-block {
-  position: relative; z-index: 2;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: var(--space-6) var(--space-10) var(--space-10);
-  text-align: center;
+/* Trailer inside hero */
+.hero-trailer {
+  width: 100%;
+  max-width: 760px;
+  margin-top: var(--space-8);
+  flex-shrink: 1;
+  min-height: 0;
+}
+.hero-trailer-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #000;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+.hero-trailer-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Hero CTA + scroll indicator block (inside hero) */
+.hero-cta {
+  margin-top: var(--space-6);
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
 }
-.cta-block .btn-primary {
+.hero-cta .btn-primary {
   min-width: 280px;
 }
 
@@ -239,8 +264,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-top: var(--space-12);
+  gap: 8px;
+  margin-top: var(--space-6);
   cursor: pointer;
   opacity: 0.55;
   transition: opacity 0.3s var(--ease-smooth);
@@ -324,30 +349,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .btn-block { display: block; width: 100%; }
 
-/* Trailer */
-.trailer {
-  padding-top: var(--space-3) !important;
-  padding-bottom: 0 !important;
-}
-.trailer-frame {
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: #000;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-}
-.trailer-frame iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
 
 /* What's Inside (bullets) */
 .bullets {
@@ -591,11 +592,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav-inner { padding: 0 16px; }
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
-  .hero { min-height: auto; padding: 140px 20px var(--space-6); }
+  .hero {
+    min-height: auto;
+    max-height: none;
+    padding: 90px 20px var(--space-10);
+  }
+  .hero-trailer { margin-top: var(--space-6); max-width: 100%; }
+  .hero-cta { margin-top: var(--space-6); }
+  .hero-cta .btn-primary { width: 86%; max-width: 360px; min-width: 0; }
   .section { padding: var(--space-16) 20px; }
-  .cta-block { padding: var(--space-6) 20px var(--space-12); }
-  .cta-block .btn-primary { width: 86%; max-width: 360px; min-width: 0; }
-  .scroll-indicator { margin-top: var(--space-10); }
+  .scroll-indicator { margin-top: var(--space-6); }
   .pricing-card { padding: var(--space-10) var(--space-6); }
   .faq-q { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
   .faq-a { padding: var(--space-4) var(--space-5) var(--space-5); }
@@ -644,33 +650,29 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
-<!-- HERO (compact VSL frame) -->
-<section class="hero">
-  <div class="hero-content">
+<!-- HERO (self-contained: title + trailer + CTA + scroll indicator all within one viewport) -->
+<section class="hero" id="trailer">
+  <div class="hero-text">
     <p class="hero-eyebrow">910 Academy × Lucid Horizon</p>
     <h1 class="hero-title">The Lucid Method Workshop</h1>
     <p class="hero-sub">How Frank built one of the Hamptons' most viral real estate brands in under a year, and the exact systems he used to do it.</p>
   </div>
-</section>
-
-<!-- TRAILER (immediately under the hero) -->
-<section class="section trailer" id="trailer">
-  <div class="trailer-frame">
-    <iframe src="https://player.vimeo.com/video/1090852657" title="The Lucid Method Workshop, trailer" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  <div class="hero-trailer">
+    <div class="hero-trailer-frame">
+      <iframe src="https://player.vimeo.com/video/1090852657" title="The Lucid Method Workshop, trailer" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $91</a>
+    <a href="#whats-inside" class="scroll-indicator" aria-label="Scroll to see what's inside">
+      <span class="scroll-indicator-label">What's inside</span>
+      <span class="scroll-indicator-chevs" aria-hidden="true">
+        <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
+        <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
+      </span>
+    </a>
   </div>
 </section>
-
-<!-- PRIMARY CTA + SCROLL INDICATOR (post-trailer) -->
-<div class="cta-block">
-  <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $91</a>
-  <a href="#whats-inside" class="scroll-indicator" aria-label="Scroll to see what's inside">
-    <span class="scroll-indicator-label">What's inside</span>
-    <span class="scroll-indicator-chevs" aria-hidden="true">
-      <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
-      <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
-    </span>
-  </a>
-</div>
 
 <!-- WHAT'S INSIDE -->
 <section class="section" id="whats-inside">
