@@ -7,3 +7,4 @@ node_modules
 *.mov
 *.MOV
 !public/hero-bg.mp4
+!public/lucid-horizon-reels/*.mp4
