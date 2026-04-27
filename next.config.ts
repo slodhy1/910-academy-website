@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
       { source: "/products/lucid-horizon-workshop", destination: "/products/lucid-horizon-workshop.html" },
       { source: "/products/known-productions-workshop", destination: "/products/known-productions-workshop.html" },
       { source: "/products/jt-visuals-workshop", destination: "/products/jt-visuals-workshop.html" },
+      { source: "/products/instagram-masterclass", destination: "/products/instagram-masterclass.html" },
     ];
   },
 };
