@@ -2,7 +2,7 @@
 insert into public.products (
   slug, title, short_description, long_description,
   price_cents, vimeo_id, vimeo_hash,
-  thumbnail_url, stripe_payment_link, status
+  thumbnail_url, stripe_payment_link, stripe_payment_link_id, status
 ) values (
   'lucid-horizon-workshop',
   'The Lucid Method Workshop',
@@ -13,6 +13,7 @@ insert into public.products (
   'a95a1435cb',
   '/whats-inside/lucid-horizon-takeover.webp',
   'https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I',
+  'plink_1RRO7iBgZ35gA9jqKBDBaODl',
   'active'
 ) on conflict (slug) do update set
   title = excluded.title,
@@ -23,4 +24,5 @@ insert into public.products (
   vimeo_hash = excluded.vimeo_hash,
   thumbnail_url = excluded.thumbnail_url,
   stripe_payment_link = excluded.stripe_payment_link,
+  stripe_payment_link_id = excluded.stripe_payment_link_id,
   status = excluded.status;

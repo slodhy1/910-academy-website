@@ -35,24 +35,34 @@ export async function POST(req: Request) {
 
   const supabase = createAdminClient();
 
-  // Resolve product slug. First try metadata (Checkout Session route).
-  // Fall back to looking up by payment_link id for the legacy buy.stripe.com flow.
-  let productSlug: string | null = (session.metadata?.product_slug as string | null) || null;
+  // Resolve product slug. First try metadata (used by Checkout Session route).
+  // Then try session.payment_link directly against stripe_payment_link_id —
+  // Stripe sends the payment-link ID (e.g. `plink_…`) on payment-link checkouts.
+  let productSlug: string | undefined = session.metadata?.product_slug;
+
   if (!productSlug && session.payment_link) {
     const linkId =
       typeof session.payment_link === "string" ? session.payment_link : session.payment_link.id;
-    const { data: products } = await supabase
+    console.log(`Webhook: matching payment_link ${linkId}`);
+    const { data: p, error } = await supabase
       .from("products")
-      .select("slug, stripe_payment_link");
-    const match = (products || []).find((p) =>
-      typeof p.stripe_payment_link === "string" && p.stripe_payment_link.includes(linkId)
-    );
-    productSlug = match?.slug || null;
+      .select("slug")
+      .eq("stripe_payment_link_id", linkId)
+      .maybeSingle();
+
+    if (error) console.error("Product lookup error:", error);
+    if (p) productSlug = p.slug;
   }
+
   if (!productSlug) {
-    console.warn("[stripe-webhook] could not resolve product for session", session.id);
-    return NextResponse.json({ ok: true });
+    console.error(
+      `Webhook: no product matched for session ${session.id}, payment_link=${session.payment_link}, metadata=`,
+      session.metadata
+    );
+    return NextResponse.json({ ok: true, warning: "no product matched" });
   }
+
+  console.log(`Webhook: granting access for ${productSlug} to ${email}`);
 
   const { data: product } = await supabase
     .from("products")
