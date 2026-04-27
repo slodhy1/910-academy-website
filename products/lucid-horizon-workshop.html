@@ -68,12 +68,12 @@ a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
-/* Background Orbs */
+/* Background Orbs (very subtle white glow only) */
 .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
-.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.025); filter: blur(120px); animation-delay: 0s; }
-.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.018); filter: blur(150px); animation-delay: -4s; }
-.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56, 182, 255, 0.012); filter: blur(100px); animation-delay: -8s; }
+.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(255, 255, 255, 0.012); filter: blur(120px); animation-delay: 0s; }
+.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(255, 255, 255, 0.008); filter: blur(150px); animation-delay: -4s; }
+.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(255, 255, 255, 0.006); filter: blur(100px); animation-delay: -8s; }
 @keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
 
 /* Nav */
@@ -168,29 +168,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: var(--space-10);
 }
 
-/* HERO */
+/* HERO (compact VSL frame) */
 .hero {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 160px var(--space-10) var(--space-16);
+  padding: 140px var(--space-10) var(--space-10);
   overflow: hidden;
   z-index: 2;
-}
-.hero::before {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(56, 182, 255, 0.10) 0%, transparent 45%),
-    radial-gradient(circle at 80% 70%, rgba(56, 182, 255, 0.06) 0%, transparent 55%),
-    linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
-  z-index: -1;
+  background: var(--bg-base);
 }
 .hero-content { max-width: 920px; margin: 0 auto; }
 .hero-eyebrow {
@@ -199,42 +189,52 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
   opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 0.1s forwards;
+  animation: fadeUp 0.7s var(--ease-out) 0.1s forwards;
 }
 .hero-title {
   font-family: var(--font);
-  font-size: clamp(2rem, 6.5vw, 4.5rem);
+  font-size: clamp(1.8rem, 5vw, 3.4rem);
   font-weight: 300;
   text-transform: uppercase;
   line-height: 1.05;
   letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
   opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 0.25s forwards;
+  animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
 }
 .hero-sub {
-  font-size: clamp(1rem, 1.7vw, 1.2rem);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
   font-weight: 400;
   color: var(--fg-muted);
   line-height: 1.55;
-  max-width: 720px;
-  margin: 0 auto var(--space-10);
+  max-width: 680px;
+  margin: 0 auto;
   opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 0.4s forwards;
+  animation: fadeUp 0.7s var(--ease-out) 0.3s forwards;
 }
-.hero-ctas {
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Primary CTAs (post-trailer block) */
+.cta-block {
+  position: relative; z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-10) var(--space-16);
+  text-align: center;
+}
+.cta-block-row {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   align-items: center;
-  opacity: 0;
-  animation: fadeUp 0.8s var(--ease-out) 0.6s forwards;
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+@media (min-width: 640px) {
+  .cta-block-row { flex-direction: row; justify-content: center; gap: var(--space-5); }
 }
 
 /* Buttons */
@@ -268,34 +268,33 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   box-shadow: 0 12px 40px var(--accent-glow);
 }
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
   color: var(--fg);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.55);
   transform: translateY(-2px);
 }
 .btn-block { display: block; width: 100%; }
 
 /* Trailer */
 .trailer {
-  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
+  padding-top: 0 !important;
+  padding-bottom: var(--space-8) !important;
 }
 .trailer-frame {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border);
   background: #000;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(56, 182, 255, 0.04);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
 }
 .trailer-frame iframe {
   position: absolute;
@@ -328,12 +327,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .bullets li::before {
   content: "";
   flex-shrink: 0;
-  margin-top: 9px;
-  width: 8px;
-  height: 8px;
+  margin-top: 11px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-subtle);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 /* About / split blocks */
@@ -351,7 +349,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .tools {
   background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-md);
   padding: var(--space-8);
   display: flex;
@@ -363,7 +361,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--fg-muted);
   margin-bottom: var(--space-2);
 }
 .tool-row {
@@ -389,11 +387,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   max-width: 620px;
   margin: 0 auto;
   padding: var(--space-12) var(--space-10);
-  border: 1px solid var(--accent-border-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
-  background:
-    radial-gradient(circle at 100% 0%, rgba(56, 182, 255, 0.08) 0%, transparent 45%),
-    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   text-align: center;
@@ -446,21 +442,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .pricing-includes li:last-child { border-bottom: none; }
 .pricing-includes li::before {
   content: "✓";
-  color: var(--accent);
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 700;
   flex-shrink: 0;
   width: 18px;
-}
-.pricing-note {
-  margin-top: var(--space-6);
-  padding: var(--space-4) var(--space-5);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: rgba(255,255,255,0.02);
-  font-size: 0.85rem;
-  color: var(--fg-muted);
-  line-height: 1.55;
-  text-align: left;
 }
 
 /* FAQ accordion */
@@ -479,8 +464,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: border-color 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth);
 }
 .faq-item.open {
-  border-color: var(--accent-border-subtle);
-  background: var(--accent-subtle);
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
 }
 .faq-q {
   display: flex;
@@ -511,7 +496,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: transform 0.3s var(--ease-smooth), border-color 0.3s, color 0.3s;
   flex-shrink: 0;
 }
-.faq-item.open .faq-icon { transform: rotate(45deg); border-color: var(--accent); color: var(--accent); }
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  border-color: rgba(56, 182, 255, 0.4);
+  color: var(--accent);
+}
 .faq-a-wrap { max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease-smooth); }
 .faq-a {
   padding: 0 var(--space-8) var(--space-6);
@@ -557,14 +546,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav-inner { padding: 0 16px; }
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
-  .hero { padding: 120px 20px var(--space-12); }
+  .hero { min-height: auto; padding: 110px 20px var(--space-8); }
   .section { padding: var(--space-16) 20px; }
+  .cta-block { padding: var(--space-8) 20px var(--space-12); }
   .pricing-card { padding: var(--space-10) var(--space-6); }
   .faq-q { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
   .faq-a { padding: var(--space-4) var(--space-5) var(--space-5); }
   .footer { padding: var(--space-12) var(--space-6); }
   .footer-socials { flex-wrap: wrap; gap: 16px; }
-  .hero-ctas .btn { width: 100%; max-width: 340px; }
+  .cta-block-row .btn { width: 100%; max-width: 340px; }
 }
 @media (max-width: 480px) {
   .hero-title { font-size: clamp(1.8rem, 9vw, 2.4rem); }
@@ -608,30 +598,32 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
-<!-- HERO -->
+<!-- HERO (compact VSL frame) -->
 <section class="hero">
   <div class="hero-content">
     <p class="hero-eyebrow">910 Academy × Lucid Horizon</p>
     <h1 class="hero-title">The Lucid Method Workshop</h1>
     <p class="hero-sub">How Frank built one of the Hamptons' most viral real estate brands in under a year, and the exact systems he used to do it.</p>
-    <div class="hero-ctas">
-      <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access, $91</a>
-      <a href="#trailer" class="btn btn-ghost">Watch the trailer</a>
-    </div>
   </div>
 </section>
 
-<!-- TRAILER -->
+<!-- TRAILER (immediately under the hero) -->
 <section class="section trailer" id="trailer">
-  <p class="section-label">PREVIEW</p>
-  <h2 class="section-heading">Watch the trailer</h2>
   <div class="trailer-frame">
     <iframe src="https://player.vimeo.com/video/1090852657" title="The Lucid Method Workshop, trailer" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
   </div>
 </section>
 
+<!-- PRIMARY CTAs (post-trailer) -->
+<div class="cta-block">
+  <div class="cta-block-row">
+    <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access, $91</a>
+    <a href="#whats-inside" class="btn btn-ghost">See what's inside</a>
+  </div>
+</div>
+
 <!-- WHAT'S INSIDE -->
-<section class="section">
+<section class="section" id="whats-inside">
   <p class="section-label">WHAT'S INSIDE</p>
   <h2 class="section-heading">What's inside the replay</h2>
   <p class="section-sub">1.5 hours of tactical breakdowns from one of the Hamptons' fastest-rising shooters.</p>
@@ -688,7 +680,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <li>All resources, plugin links, and downloadable references</li>
     </ul>
     <a href="https://buy.stripe.com/3cI00i61g52K0dz2ur5Rm0I" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">Get Instant Access, $91</a>
-    <p class="pricing-note">After purchase, our team will manually grant you access while the new member portal launches in the coming days. You'll receive an email within 24 hours with your login details.</p>
   </div>
 </section>
 
