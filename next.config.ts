@@ -25,8 +25,10 @@ const nextConfig: NextConfig = {
         source: `/${p}`,
         destination: `/${p}.html`,
       })),
-      // product page (the only allowed product slug for now)
+      // allowed product pages (others are gated by vercel.json maintenance rewrite in prod)
       { source: "/products/lucid-horizon-workshop", destination: "/products/lucid-horizon-workshop.html" },
+      { source: "/products/known-productions-workshop", destination: "/products/known-productions-workshop.html" },
+      { source: "/products/jt-visuals-workshop", destination: "/products/jt-visuals-workshop.html" },
     ];
   },
 };
