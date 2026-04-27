@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Four Horsemen Workshop, 910 Academy × Four Horsemen Media</title>
+<meta name="description" content="The Four Horsemen of real estate media break down the full business + editing playbook in two parts. Part 1, the business of scaling. Part 2, the editing room. $91 each, lifetime access.">
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="product">
+<meta property="og:title" content="Four Horsemen Workshop, 910 Academy × Four Horsemen Media">
+<meta property="og:description" content="Two-part workshop. Part 1 covers the business of scaling a real estate media company. Part 2 covers the editing room, transitions, and the exact post-production system.">
+<meta property="og:image" content="/images/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --bg-elevated: #0f0f10;
+  --bg-surface: rgba(255, 255, 255, 0.05);
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2);
+  --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+  --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* Background Orbs (very subtle white glow only) */
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
+.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(255, 255, 255, 0.012); filter: blur(120px); animation-delay: 0s; }
+.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(255, 255, 255, 0.008); filter: blur(150px); animation-delay: -4s; }
+.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(255, 255, 255, 0.006); filter: blur(100px); animation-delay: -8s; }
+@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
+
+/* Nav */
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%;
+  z-index: 1000; padding: var(--space-5) 0;
+  transition: all 0.4s var(--ease-out);
+}
+.nav.scrolled {
+  padding: 14px 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 var(--space-10);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo img { height: 36px; width: auto; opacity: 0.95; }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-link {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--fg-muted);
+  transition: color 0.3s var(--ease-smooth); position: relative;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--fg);
+  transition: width 0.3s var(--ease-out);
+}
+.nav-link:hover { color: var(--fg); }
+.nav-link:hover::after { width: 100%; }
+.nav-cta {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #000; background: #FFF;
+  padding: var(--space-3) var(--space-8); border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.nav-cta:hover { background: var(--accent); color: #FFF; transform: translateY(-1px); }
+.nav-mobile-toggle { display: none; flex-direction: column; gap: 5px; padding: var(--space-1); }
+.nav-mobile-toggle span { display: block; width: 22px; height: 1.5px; background: var(--fg); transition: all 0.3s var(--ease-out); }
+
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(5, 5, 6, 0.95);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  z-index: 999; flex-direction: column;
+  align-items: center; justify-content: center; gap: 36px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s var(--ease-out);
+}
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav a { font-size: 1.6rem; font-weight: 300; text-transform: uppercase; color: var(--fg); transition: color 0.3s var(--ease-smooth); }
+.mobile-nav a:hover { color: var(--accent); }
+.mobile-nav-close { position: absolute; top: 24px; right: 32px; font-size: 28px; color: var(--fg); }
+
+/* Section primitives */
+.section {
+  position: relative; z-index: 2;
+  max-width: 1100px; margin: 0 auto;
+  padding: var(--space-24) var(--space-10);
+  width: 100%;
+}
+.section-narrow {
+  max-width: 820px;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-5);
+}
+.section-heading {
+  font-family: var(--font);
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-5);
+}
+.section-sub {
+  font-size: 1rem;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  max-width: 680px;
+  margin-bottom: var(--space-10);
+}
+
+/* HERO (natural sizing, balanced and generous) */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 130px var(--space-10) 64px;
+  z-index: 2;
+  background: var(--bg-base);
+}
+.hero-text { max-width: 1040px; margin: 0 auto; }
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.7s var(--ease-out) 0.1s forwards;
+}
+.hero-title {
+  font-family: var(--font);
+  font-size: clamp(1.8rem, 4.2vw, 3.5rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
+}
+.hero-sub {
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  max-width: 720px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: fadeUp 0.7s var(--ease-out) 0.3s forwards;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Trailer inside hero */
+.hero-trailer {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 32px;
+}
+.hero-trailer-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #000;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+.hero-trailer-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Hero CTA + scroll indicator block (inside hero) */
+.hero-cta {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero-cta .btn-primary {
+  min-width: 280px;
+}
+
+/* Scroll indicator (style C, sequential chevrons) */
+.scroll-indicator {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.3s var(--ease-smooth);
+  background: none;
+  border: 0;
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--font);
+}
+.scroll-indicator:hover { opacity: 1; }
+.scroll-indicator-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.scroll-indicator-chevs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.scroll-indicator-chevs svg {
+  width: 16px;
+  height: 9px;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes chevronFade {
+  0%, 100% { opacity: 0.2; transform: translateY(-2px); }
+  50%      { opacity: 0.85; transform: translateY(0); }
+}
+.scroll-indicator .chev:nth-child(1) { animation: chevronFade 2s ease-in-out infinite; }
+.scroll-indicator .chev:nth-child(2) { animation: chevronFade 2s ease-in-out infinite 0.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator .chev { animation: none; opacity: 0.5; }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 18px 36px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: all 0.25s var(--ease-smooth);
+  white-space: nowrap;
+  text-align: center;
+}
+.btn-primary {
+  background: #FFF;
+  color: #000;
+  border: 1px solid #FFF;
+  box-shadow: 0 8px 30px rgba(255,255,255,0.08);
+}
+.btn-primary:hover {
+  background: var(--accent);
+  color: #FFF;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px var(--accent-glow);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-2px);
+}
+.btn-block { display: block; width: 100%; }
+
+
+/* Choose your path (three pricing cards) */
+.path-section {
+  position: relative; z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(60px, 10vh, 120px) clamp(20px, 5vw, 60px);
+}
+.path-header { text-align: center; margin-bottom: clamp(40px, 6vh, 60px); }
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  align-items: stretch;
+}
+.path-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-10) var(--space-8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+}
+.path-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px);
+}
+.path-card.path-card-featured {
+  border-color: rgba(56, 182, 255, 0.25);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 182, 255, 0.08) 0%, transparent 45%),
+    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+}
+.path-card-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-3);
+}
+.path-card-title {
+  font-family: var(--font);
+  font-size: 1.3rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-4);
+  color: var(--fg);
+}
+.path-card-desc {
+  font-size: 0.95rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  margin-bottom: var(--space-6);
+  flex: 1;
+}
+.path-card-price {
+  font-family: var(--font);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-2);
+}
+.path-card-price-sub {
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-6);
+}
+.path-card .btn { width: 100%; }
+.path-card-double {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.path-card-double .btn { font-size: 12px; padding: 14px 24px; min-height: 48px; }
+@media (max-width: 1024px) {
+  .path-grid { grid-template-columns: 1fr; gap: var(--space-5); }
+}
+
+/* Visual proof (reel grid) */
+.visual-proof {
+  position: relative;
+  z-index: 2;
+  padding: clamp(60px, 10vh, 120px) clamp(20px, 5vw, 60px);
+}
+.visual-proof-inner { max-width: 1200px; margin: 0 auto; }
+.visual-proof-header {
+  text-align: center;
+  margin-bottom: clamp(40px, 6vh, 60px);
+}
+.visual-proof-header .section-label { color: var(--accent); }
+.visual-proof-header .section-heading { margin-bottom: var(--space-4); }
+.visual-proof-header .section-sub { margin: 0 auto; }
+.reel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.reel-tile {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: #111;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+.reel-tile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+.reel-tile video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.reel-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-5);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-smooth);
+}
+.reel-tile:hover .reel-overlay { opacity: 1; }
+.reel-label {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .reel-grid { grid-template-columns: repeat(2, 1fr); }
+  .reel-tile:nth-child(3) {
+    grid-column: 1 / 3;
+    max-width: 50%;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .reel-grid { grid-template-columns: 1fr; max-width: 360px; }
+}
+
+/* What's Inside (bullets) */
+.bullets {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5) var(--space-10);
+  margin-top: var(--space-8);
+}
+.bullets li {
+  display: flex;
+  gap: var(--space-4);
+  font-size: 1.05rem;
+  color: var(--fg);
+  line-height: 1.5;
+  align-items: flex-start;
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border);
+}
+.bullets li:nth-child(1), .bullets li:nth-child(2) { border-top: none; padding-top: 0; }
+.bullets li::before {
+  content: "";
+  flex-shrink: 0;
+  margin-top: 11px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* About / split blocks */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: start;
+}
+.split-text p { color: var(--fg-muted); line-height: 1.7; margin-bottom: var(--space-4); font-size: 1rem; }
+.split-text p:last-child { margin-bottom: 0; }
+.split-text strong { color: var(--fg); font-weight: 700; }
+.split-text a { color: var(--accent); border-bottom: 1px solid rgba(56,182,255,0.3); transition: border-color 0.25s; }
+.split-text a:hover { border-color: var(--accent); }
+
+.tools {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.tools-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-2);
+}
+.tool-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+.tool-row:last-child { border-bottom: none; }
+.tool-name { font-weight: 700; color: var(--fg); }
+.tool-meta { color: var(--fg-dim); font-size: 0.9rem; margin-left: auto; }
+.tools-note {
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+  margin-top: var(--space-3);
+}
+
+/* Pricing card */
+.pricing-section { padding-top: var(--space-12); padding-bottom: var(--space-12); }
+.pricing-card {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  text-align: center;
+}
+.pricing-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-3);
+}
+.pricing-headline {
+  font-family: var(--font);
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-6);
+}
+.pricing-price {
+  font-family: var(--font);
+  font-size: clamp(3.2rem, 8vw, 4.8rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-2);
+}
+.pricing-price .pricing-currency { font-size: 0.6em; vertical-align: super; opacity: 0.7; margin-right: 4px; }
+.pricing-price .pricing-once { font-size: 0.3em; font-weight: 400; opacity: 0.6; margin-left: 8px; letter-spacing: 0.15em; text-transform: uppercase; vertical-align: middle; }
+.pricing-includes {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-8) 0;
+  text-align: left;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pricing-includes li {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) 0;
+  font-size: 0.95rem;
+  color: var(--fg);
+  line-height: 1.5;
+  border-bottom: 1px dashed rgba(255,255,255,0.06);
+}
+.pricing-includes li:last-child { border-bottom: none; }
+.pricing-includes li::before {
+  content: "✓";
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 18px;
+}
+
+/* FAQ accordion */
+.faq {
+  max-width: 820px;
+  margin: var(--space-8) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.02);
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth);
+}
+.faq-item.open {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+}
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6) var(--space-8);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--fg);
+  text-align: left;
+  transition: color 0.2s var(--ease-smooth);
+}
+.faq-q:hover { color: var(--accent); }
+.faq-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--fg-muted);
+  transition: transform 0.3s var(--ease-smooth), border-color 0.3s, color 0.3s;
+  flex-shrink: 0;
+}
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  border-color: rgba(56, 182, 255, 0.4);
+  color: var(--accent);
+}
+.faq-a-wrap { max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease-smooth); }
+.faq-a {
+  padding: 0 var(--space-8) var(--space-6);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-5);
+  color: var(--fg-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+.faq-a a { color: var(--accent); border-bottom: 1px solid rgba(56,182,255,0.3); }
+
+/* Footer */
+.footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+  margin-top: auto;
+}
+.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
+.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
+.footer-socials a { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--fg-dim); transition: color 0.3s var(--ease-smooth); }
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 0.75rem; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.ftc-disclaimer {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 var(--space-6) var(--space-8);
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  font-weight: 300;
+}
+
+/* Mobile */
+@media (max-width: 1024px) {
+  .bullets { grid-template-columns: 1fr; gap: var(--space-3); }
+  .bullets li:nth-child(2) { border-top: 1px solid var(--border); padding-top: var(--space-3); }
+  .split { grid-template-columns: 1fr; gap: var(--space-8); }
+}
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .hero {
+    padding: 100px 24px 56px;
+  }
+  .hero-title {
+    white-space: normal;
+    font-size: clamp(1.6rem, 7vw, 2.5rem);
+    letter-spacing: 0;
+  }
+  .hero-trailer { margin-top: 32px; max-width: 100%; }
+  .hero-cta { margin-top: 28px; }
+  .hero-cta .btn-primary { width: 86%; max-width: 360px; min-width: 0; }
+  .section { padding: var(--space-16) 20px; }
+  .scroll-indicator { margin-top: 28px; }
+  .pricing-card { padding: var(--space-10) var(--space-6); }
+  .faq-q { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
+  .faq-a { padding: var(--space-4) var(--space-5) var(--space-5); }
+  .footer { padding: var(--space-12) var(--space-6); }
+  .footer-socials { flex-wrap: wrap; gap: 16px; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: clamp(1.8rem, 9vw, 2.4rem); }
+  .pricing-price { font-size: 2.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/gear" class="nav-link">Our Gear</a>
+      <a href="/maintenance" class="nav-link">Products</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+  <a href="/gear">Our Gear</a>
+  <a href="/maintenance">Products</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
+</div>
+
+<!-- HERO (compact, trailer + scroll indicator) -->
+<section class="hero" id="trailer">
+  <div class="hero-text">
+    <p class="hero-eyebrow">910 Academy × Four Horsemen</p>
+    <h1 class="hero-title">The Four Horsemen Workshop</h1>
+    <p class="hero-sub">Two parts, one playbook. The business of scaling a real estate media company, and the editing room that powers it. Buy each part separately, or grab both.</p>
+  </div>
+  <div class="hero-trailer">
+    <div class="hero-trailer-frame">
+      <iframe src="https://player.vimeo.com/video/1165865703?badge=0&autopause=0&player_id=0&app_id=58479" title="Four Horsemen Workshop, trailer" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <a href="#choose-your-path" class="btn btn-primary">Choose Your Path</a>
+    <a href="#choose-your-path" class="scroll-indicator" aria-label="Scroll to choose your path">
+      <span class="scroll-indicator-label">Choose your path</span>
+      <span class="scroll-indicator-chevs" aria-hidden="true">
+        <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
+        <svg class="chev" viewBox="0 0 18 10"><polyline points="1 1 9 9 17 1"></polyline></svg>
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- CHOOSE YOUR PATH (3 cards) -->
+<section class="path-section" id="choose-your-path">
+  <div class="path-header">
+    <p class="section-label">PRICING</p>
+    <h2 class="section-heading">Choose your path</h2>
+    <p class="section-sub" style="margin: 0 auto;">Buy each part individually, or grab both.</p>
+  </div>
+  <div class="path-grid">
+
+    <div class="path-card">
+      <p class="path-card-eyebrow">PART 1</p>
+      <h3 class="path-card-title">The Business of Real Estate Media</h3>
+      <p class="path-card-desc">The full business playbook: pricing, sales scripts, scaling beyond yourself, and the systems behind a seven-figure media company. For operators who want a real business, not a side hustle.</p>
+      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
+      <p class="path-card-price-sub">ONE-TIME · LIFETIME ACCESS</p>
+      <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1</a>
+    </div>
+
+    <div class="path-card">
+      <p class="path-card-eyebrow">PART 2</p>
+      <h3 class="path-card-title">The Editing Replay</h3>
+      <p class="path-card-desc">The editing room. Transitions, sound design, color, and the post-production system the Four Horsemen use to ship work that lands at the top of the feed every time.</p>
+      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
+      <p class="path-card-price-sub">ONE-TIME · LIFETIME ACCESS</p>
+      <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
+    </div>
+
+    <div class="path-card path-card-featured">
+      <p class="path-card-eyebrow">BOTH PARTS</p>
+      <h3 class="path-card-title">The Complete Workshop</h3>
+      <p class="path-card-desc">Everything in Part 1 + Part 2. The complete business and editing system. Buy each side separately below; combined, the full operation.</p>
+      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>182</p>
+      <p class="path-card-price-sub">PURCHASED AS TWO SEPARATE PARTS</p>
+      <div class="path-card-double">
+        <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1: $91</a>
+        <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Get Part 2: $91</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VISUAL PROOF (Four Horsemen reels) -->
+<section class="visual-proof">
+  <div class="visual-proof-inner">
+    <div class="visual-proof-header">
+      <p class="section-label">PROOF OF THE WORK</p>
+      <h2 class="section-heading">Some of the Four Horsemen's best work</h2>
+      <p class="section-sub">The exact style, systems, and post-production you'll learn inside the workshop.</p>
+    </div>
+    <div class="reel-grid">
+      <a href="https://www.instagram.com/p/DUA7JPgEdVS/" target="_blank" rel="noopener noreferrer" class="reel-tile" aria-label="View Four Horsemen reel on Instagram">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="/four-horsemen-reels/reel-1.mp4" type="video/mp4">
+        </video>
+        <div class="reel-overlay"><span class="reel-label">View on Instagram →</span></div>
+      </a>
+      <a href="https://www.instagram.com/p/DVI7bj1kS-X/" target="_blank" rel="noopener noreferrer" class="reel-tile" aria-label="View Four Horsemen reel on Instagram">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="/four-horsemen-reels/reel-2.mp4" type="video/mp4">
+        </video>
+        <div class="reel-overlay"><span class="reel-label">View on Instagram →</span></div>
+      </a>
+      <a href="https://www.instagram.com/p/DU--wPnEUn0/" target="_blank" rel="noopener noreferrer" class="reel-tile" aria-label="View Four Horsemen reel on Instagram">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="/four-horsemen-reels/reel-3.mp4" type="video/mp4">
+        </video>
+        <div class="reel-overlay"><span class="reel-label">View on Instagram →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- INSIDE PART 1 -->
+<section class="section" id="whats-inside">
+  <p class="section-label">PART 1 · THE BUSINESS</p>
+  <h2 class="section-heading">Inside Part 1</h2>
+  <p class="section-sub">The business playbook behind a seven-figure real estate media company.</p>
+  <ul class="bullets">
+    <li>How to brand, edit, and scale a real estate media business</li>
+    <li>Pricing, sales scripts, and how to charge what your work is worth</li>
+    <li>Building a team and scaling past your own calendar</li>
+    <li>Client acquisition systems that compound month over month</li>
+    <li>Operating cadence: weekly, monthly, and quarterly rhythms</li>
+    <li>The numbers behind a profitable media company</li>
+    <li>Mistakes to avoid in your first 12 months</li>
+  </ul>
+</section>
+
+<!-- INSIDE PART 2 -->
+<section class="section">
+  <p class="section-label">PART 2 · THE EDITING</p>
+  <h2 class="section-heading">Inside Part 2</h2>
+  <p class="section-sub">The post-production system that powers the Four Horsemen's feed.</p>
+  <ul class="bullets">
+    <li>Full editing replay walkthrough, timeline to export</li>
+    <li>The transition stack, including the seven that hit hardest</li>
+    <li>Sound design system: SFX selection, layering, and ducking</li>
+    <li>Color and grade workflow that keeps work consistent</li>
+    <li>Music selection and pacing that elevates every visual</li>
+    <li>Plugin and effect references with download links</li>
+    <li>Project setup, export presets, and platform-ready masters</li>
+  </ul>
+</section>
+
+<!-- WHO ARE THE FOUR HORSEMEN -->
+<section class="section section-narrow">
+  <p class="section-label">THE INSTRUCTORS</p>
+  <h2 class="section-heading">Who are the Four Horsemen?</h2>
+  <div class="split-text">
+    <p>The Four Horsemen are a collective of four operators who have built and scaled real estate media businesses to the top of the industry. Each brings a distinct lane, sales, brand, editing, and operations, and together they've packaged it into a two-part workshop.</p>
+    <p><strong>Part 1 covers the business they built.</strong> Part 2 covers the editing room that ships their work. Buy whichever lane you need, or both.</p>
+  </div>
+</section>
+
+<!-- FINAL CTA (compact mirror of choose-your-path) -->
+<section class="path-section">
+  <div class="path-header">
+    <p class="section-label">GET STARTED</p>
+    <h2 class="section-heading">Pick your part</h2>
+    <p class="section-sub" style="margin: 0 auto;">Each part is $91 with lifetime access via your 910 Academy account.</p>
+  </div>
+  <div class="path-grid">
+    <div class="path-card">
+      <p class="path-card-eyebrow">PART 1</p>
+      <h3 class="path-card-title">The Business</h3>
+      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
+      <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1</a>
+    </div>
+    <div class="path-card">
+      <p class="path-card-eyebrow">PART 2</p>
+      <h3 class="path-card-title">The Editing</h3>
+      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
+      <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
+    </div>
+    <div class="path-card path-card-featured">
+      <p class="path-card-eyebrow">BOTH</p>
+      <h3 class="path-card-title">The Complete Workshop</h3>
+      <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>182</p>
+      <div class="path-card-double">
+        <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Part 1: $91</a>
+        <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Part 2: $91</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-narrow">
+  <p class="section-label">FAQ</p>
+  <h2 class="section-heading">Common questions</h2>
+  <div class="faq" id="faq">
+    <div class="faq-item">
+      <div class="faq-q">Do I have to buy both parts?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrap"><div class="faq-a">No. Each part is sold separately at $91. Buy the part that fits where you are right now, or pick up the second one later.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I buy them separately?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrap"><div class="faq-a">Yes, that's the default. Each part has its own checkout link above. Want both? Run both checkouts.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Will I get access automatically?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrap"><div class="faq-a">Yes. Once you purchase, you'll receive your 910 Academy account login by email. Each part you've purchased shows up in your dashboard.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What's your refund policy?<span class="faq-icon">+</span></div>
+      <div class="faq-a-wrap"><div class="faq-a">Due to the digital nature of the product, all sales are final.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FTC -->
+<p class="ftc-disclaimer">Results featured are not typical. Individual results vary based on effort, experience, and market conditions. Testimonials reflect the experiences of specific individuals and are not guarantees of future performance.</p>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank" rel="noopener noreferrer">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+</footer>
+
+<script>
+// Sticky nav scroll state
+(function() {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) { scrolled = s; nav.classList.toggle('scrolled', s); }
+  }, { passive: true });
+})();
+
+// Mobile nav
+(function() {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  toggle.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+
+// FAQ accordion
+(function() {
+  document.querySelectorAll('#faq .faq-q').forEach(function(q) {
+    q.addEventListener('click', function() {
+      var item = q.parentElement;
+      var wrap = q.nextElementSibling;
+      var isOpen = item.classList.toggle('open');
+      if (isOpen) {
+        wrap.style.maxHeight = wrap.scrollHeight + 'px';
+      } else {
+        wrap.style.maxHeight = '0';
+      }
+    });
+  });
+  window.addEventListener('resize', function() {
+    document.querySelectorAll('#faq .faq-item.open .faq-a-wrap').forEach(function(w) {
+      w.style.maxHeight = w.scrollHeight + 'px';
+    });
+  });
+})();
+</script>
+</body>
+</html>
