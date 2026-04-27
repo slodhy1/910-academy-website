@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>910 Academy, Apply for 1:1 Mentorship</title>
-<meta name="description" content="Apply to work directly with Claudio Rivera, one-on-one. Personalized, hands-on coaching for real estate media business owners.">
+<title>910 Academy, Workshops, Systems & Digital Products</title>
+<meta name="description" content="Workshops, sales systems, and AI tools built by people actively shooting and scaling in the luxury real estate space. No theory. No fluff. Just what actually works.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -68,54 +68,6 @@
   --leading-normal: 1.4em;
   --tracking-tight: -0.05px;
 }
-
-/* ========== COACHING FORM ========== */
-.coaching-form { display:flex; flex-direction:column; gap: var(--space-6); }
-.coaching-form .field { display:flex; flex-direction:column; gap: var(--space-2); }
-.coaching-form label {
-  font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--fg-muted);
-}
-.coaching-form .req { color: var(--accent); margin-left: 4px; }
-.coaching-form input,
-.coaching-form select,
-.coaching-form textarea {
-  width: 100%;
-  font-family: var(--font);
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--fg);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 14px 16px;
-  transition: border-color 0.25s ease, background 0.25s ease;
-  outline: none;
-  resize: vertical;
-}
-.coaching-form input::placeholder,
-.coaching-form textarea::placeholder { color: var(--fg-dim); }
-.coaching-form input:focus,
-.coaching-form select:focus,
-.coaching-form textarea:focus {
-  border-color: var(--accent-border);
-  background: rgba(255,255,255,0.06);
-}
-.coaching-form select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--fg-muted) 50%), linear-gradient(135deg, var(--fg-muted) 50%, transparent 50%); background-position: calc(100% - 20px) center, calc(100% - 14px) center; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
-.coaching-form select option { background: #0a0a0a; color: var(--fg); }
-.form-submit {
-  margin-top: var(--space-4);
-  font-family: var(--font);
-  font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #000; background: #FFF;
-  padding: 16px 24px; border-radius: 10px;
-  transition: all 0.25s ease;
-}
-.form-submit:hover:not(:disabled) { background: var(--accent); color: #FFF; transform: translateY(-1px); }
-.form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-.form-msg { font-size: 0.9rem; color: var(--fg-muted); min-height: 1.2em; margin-top: var(--space-2); }
-.form-msg.success { color: var(--accent); }
-.form-msg.error { color: #ff6b6b; }
 
 /* ========== RESET & BASE ========== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -968,13 +920,13 @@ img, video, iframe { max-width: 100%; height: auto; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <img src="/public/logo-white.svg" alt="910 Academy">
+      <img src="/logo-white.svg" alt="910 Academy">
     </a>
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a>
       <a href="/about" class="nav-link">About</a>
       <a href="/gear" class="nav-link">Our Gear</a>
-      <a href="/maintenance" class="nav-link">Products</a>
+      <a href="/products" class="nav-link">Products</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
@@ -989,82 +941,37 @@ img, video, iframe { max-width: 100%; height: auto; }
   <a href="/">Home</a>
   <a href="/about">About</a>
   <a href="/gear">Our Gear</a>
-  <a href="/maintenance">Products</a>
+  <a href="/products">Products</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
 <!-- Hero -->
 <section class="hero">
   <div class="hero-content">
-    <p class="hero-eyebrow">1:1 MENTORSHIP</p>
-    <h1 id="heroTitle">APPLY FOR<br><span class="word highlight" style="animation:none;opacity:1;">1:1 MENTORSHIP</span></h1>
-    <p class="hero-sub">Work directly with Claudio Rivera, one-on-one. Limited spots available.</p>
+    <p class="hero-eyebrow">THE STORE</p>
+    <h1 id="heroTitle"></h1>
+    <p class="hero-sub">Created by people actively shooting and scaling in the luxury real estate space. No theory. No fluff. Just what actually works.</p>
+  </div>
+  <div class="scroll-indicator" id="scrollArrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
   </div>
 </section>
 
-<!-- Coaching Application Form -->
-<section class="section" style="max-width:780px;">
-  <div class="reveal-left">
-    <p class="section-label">ONE-ON-ONE WITH CLAUDIO</p>
-    <h2 class="section-heading">HANDS-ON COACHING</h2>
-  </div>
-  <p class="reveal" style="color:var(--fg-muted);font-size:0.95rem;line-height:1.7;margin-bottom:var(--space-10);max-width:640px;">This isn't a course, it's personalized, hands-on coaching tailored to where you are and where you want to go. We review every application and only take on clients we know we can help. If accepted, we'll schedule a call to discuss your goals and see if it's the right fit.</p>
-
-  <form id="coachingForm" class="coaching-form reveal" novalidate>
-    <div class="field">
-      <label for="full_name">Full Name<span class="req">*</span></label>
-      <input id="full_name" name="full_name" type="text" required>
-    </div>
-    <div class="field">
-      <label for="email">Email<span class="req">*</span></label>
-      <input id="email" name="email" type="email" required>
-    </div>
-    <div class="field">
-      <label for="instagram">Instagram Handle</label>
-      <input id="instagram" name="instagram" type="text" placeholder="@yourhandle">
-    </div>
-    <div class="field">
-      <label for="revenue_level">Where are you at with your real estate media business?<span class="req">*</span></label>
-      <select id="revenue_level" name="revenue_level" required>
-        <option value="" disabled selected>Select one…</option>
-        <option>Just getting started, $0/month</option>
-        <option>$1K–$5K/month</option>
-        <option>$5K–$15K/month</option>
-        <option>$15K–$50K/month</option>
-        <option>$50K–$100K/month</option>
-        <option>$100K+/month</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="biggest_challenge">What's your biggest challenge right now?<span class="req">*</span></label>
-      <textarea id="biggest_challenge" name="biggest_challenge" rows="4" required></textarea>
-    </div>
-    <div class="field">
-      <label for="ninety_day_goal">What do you want to achieve in the next 90 days?<span class="req">*</span></label>
-      <textarea id="ninety_day_goal" name="ninety_day_goal" rows="4" required></textarea>
-    </div>
-    <div class="field">
-      <label for="referral_source">How did you hear about 910 Academy?</label>
-      <input id="referral_source" name="referral_source" type="text">
-    </div>
-    <button type="submit" class="form-submit" id="formSubmit">Submit Application</button>
-    <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
-  </form>
-</section>
-
-<!-- Unused Products Section (removed) -->
-<section class="section" style="display:none;" aria-hidden="true">
+<!-- Products Section -->
 <section class="section" id="products">
   <div class="reveal-left">
     <p class="section-label">DIGITAL PRODUCTS</p>
     <h2 class="section-heading">THE FULL COLLECTION</h2>
+    <p class="section-sub" style="margin-bottom: var(--space-8);">The following trainings are all available inside Skool as part of your membership, but you can purchase à la carte here.</p>
   </div>
   <div class="product-grid" id="productGrid">
 
     <div class="product-card reveal">
       <div class="card-image">
-        <img src="/public/images/DSC00038-Edit-2-1024x684.webp" alt="3D Made Easy">
-        <span class="card-price">$91</span>
+        <img src="/images/DSC00038-Edit-2-1024x684.webp" alt="3D Made Easy">
+        <span class="card-price">$199</span>
       </div>
       <div class="card-body">
         <h3 class="card-name">3D Made Easy</h3>
@@ -1075,7 +982,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
     <div class="product-card reveal" style="transition-delay:0.1s;">
       <div class="card-image">
-        <img src="/public/images/thumbnails-skool-3.webp" alt="910 Admin Assistant">
+        <img src="/images/thumbnails-skool-3.webp" alt="910 Admin Assistant">
         <span class="card-price">$299</span>
       </div>
       <div class="card-body">
@@ -1087,8 +994,8 @@ img, video, iframe { max-width: 100%; height: auto; }
 
     <div class="product-card reveal" style="transition-delay:0.2s;">
       <div class="card-image">
-        <img src="/public/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="910 Sales System">
-        <span class="card-price">$91</span>
+        <img src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="910 Sales System">
+        <span class="card-price">$299</span>
       </div>
       <div class="card-body">
         <h3 class="card-name">910 Sales System</h3>
@@ -1099,7 +1006,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
     <div class="product-card reveal" style="transition-delay:0.1s;">
       <div class="card-image">
-        <img src="/public/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="JT Visuals Workshop">
+        <img src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="JT Visuals Workshop">
         <span class="card-price">$91</span>
       </div>
       <div class="card-body">
@@ -1111,7 +1018,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
     <div class="product-card reveal" style="transition-delay:0.2s;">
       <div class="card-image">
-        <img src="/public/images/knownthumbnail-2.webp" alt="Known Productions Workshop">
+        <img src="/images/knownthumbnail-2.webp" alt="Known Productions Workshop">
         <span class="card-price">$91</span>
       </div>
       <div class="card-body">
@@ -1123,7 +1030,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
     <div class="product-card reveal" style="transition-delay:0.3s;">
       <div class="card-image">
-        <img src="/public/images/thumbnail_logos.webp" alt="Lucid Horizon Workshop">
+        <img src="/images/thumbnail_logos.webp" alt="Lucid Horizon Workshop">
         <span class="card-price">$91</span>
       </div>
       <div class="card-body">
@@ -1136,8 +1043,8 @@ img, video, iframe { max-width: 100%; height: auto; }
   </div>
 </section>
 
-<!-- FAQ Section (hidden) -->
-<section class="faq-section" style="display:none;" aria-hidden="true">
+<!-- FAQ Section -->
+<section class="faq-section">
   <div class="reveal-left">
     <p class="section-label">BEFORE YOU BUY</p>
     <h2 class="section-heading">FREQUENTLY ASKED QUESTIONS</h2>
@@ -1180,8 +1087,8 @@ img, video, iframe { max-width: 100%; height: auto; }
   </div>
 </section>
 
-<!-- Bottom CTA Section (hidden) -->
-<section class="school-section" style="display:none;" aria-hidden="true">
+<!-- Bottom CTA Section -->
+<section class="school-section">
   <div class="school-glass reveal">
     <p class="school-eyebrow">READY TO GO DEEPER</p>
     <h2 class="school-heading">JOIN 910 ACADEMY</h2>
@@ -1194,11 +1101,12 @@ img, video, iframe { max-width: 100%; height: auto; }
 </section>
 
 <!-- Disclaimer -->
+<p class="disclaimer">All products are digital and available immediately after purchase. Prices are in USD. Due to the nature of digital products, all sales are final. Results vary based on effort, experience, and market conditions.</p>
 
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-logo">
-    <img src="/public/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
   </div>
   <div class="footer-socials">
     <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
@@ -1209,49 +1117,26 @@ img, video, iframe { max-width: 100%; height: auto; }
 </footer>
 
 <script>
-// ========== COACHING APPLICATION FORM ==========
-const WEBHOOK_URL = 'REPLACE_WITH_N8N_WEBHOOK_URL';
+// ========== HERO WORD-BY-WORD ANIMATION ==========
 (function() {
-  var form = document.getElementById('coachingForm');
-  if (!form) return;
-  var msg = document.getElementById('formMsg');
-  var btn = document.getElementById('formSubmit');
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    msg.className = 'form-msg';
-    msg.textContent = '';
-    if (!form.checkValidity()) { form.reportValidity(); return; }
-    btn.disabled = true;
-    var originalText = btn.textContent;
-    btn.textContent = 'Submitting…';
-    var payload = {
-      full_name: form.full_name.value.trim(),
-      email: form.email.value.trim(),
-      instagram: form.instagram.value.trim(),
-      revenue_level: form.revenue_level.value,
-      biggest_challenge: form.biggest_challenge.value.trim(),
-      ninety_day_goal: form.ninety_day_goal.value.trim(),
-      referral_source: form.referral_source.value.trim(),
-      submitted_at: new Date().toISOString()
-    };
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    .then(function(res) {
-      if (!res.ok) throw new Error('Request failed');
-      form.reset();
-      msg.className = 'form-msg success';
-      msg.textContent = "Application received. If you're a good fit, we'll be in touch within 48 hours to schedule a call.";
-    })
-    .catch(function() {
-      msg.className = 'form-msg error';
-      msg.textContent = 'Something went wrong. Please email academy@studio910pb.com directly.';
-    })
-    .finally(function() {
-      btn.disabled = false;
-      btn.textContent = originalText;
+  var lines = [
+    { text: 'WORKSHOPS. SYSTEMS.', highlight: false },
+    { text: 'BUILT TO WIN.', highlight: true }
+  ];
+  var h1 = document.getElementById('heroTitle');
+  var wordIndex = 0;
+  lines.forEach(function(line, lineIdx) {
+    if (lineIdx > 0) h1.appendChild(document.createElement('br'));
+    var words = line.text.split(' ');
+    words.forEach(function(word, i) {
+      var span = document.createElement('span');
+      span.className = 'word';
+      if (line.highlight) span.classList.add('highlight');
+      span.textContent = word;
+      span.style.animationDelay = (0.15 + wordIndex * 0.08) + 's';
+      h1.appendChild(span);
+      if (i < words.length - 1) h1.appendChild(document.createTextNode(' '));
+      wordIndex++;
     });
   });
 })();

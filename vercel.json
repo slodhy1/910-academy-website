@@ -1,13 +1,11 @@
 {
-  "outputDirectory": ".",
+  "framework": "nextjs",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
     { "source": "/products/lucid-horizon-workshop", "destination": "/products/lucid-horizon-workshop.html" },
     { "source": "/products", "destination": "/maintenance" },
-    { "source": "/products/:slug", "destination": "/maintenance" },
-    { "source": "/account", "destination": "/maintenance" },
-    { "source": "/account/:path*", "destination": "/maintenance" }
+    { "source": "/products/:slug", "destination": "/maintenance" }
   ],
   "redirects": [
     { "source": "/affiliate-links", "destination": "/gear", "permanent": true },

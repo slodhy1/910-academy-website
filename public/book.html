@@ -3,15 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About 910 Academy, Real Estate Videography Built From a 7-Figure Company</title>
-<meta name="description" content="910 Academy is the online training platform behind Studio 910, a real estate media company built from the ground up into a 7-figure business.">
-<link rel="icon" href="/public/logo-white.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/public/logo-white.svg">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="910 Academy">
-<meta property="og:title" content="About 910 Academy">
-<meta property="og:description" content="The story behind the academy, the team, and the mission.">
-<meta property="og:image" content="/public/images/og-image.jpg">
+<title>Book a Free Strategy Call, 910 Academy</title>
+<meta name="description" content="Not sure where to start? Book a free 15-minute strategy call with 910 Academy. No pressure, no pitch, just clarity on your next move.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -20,20 +13,15 @@
   --bg-deep: #050506;
   --bg-base: #0a0a0a;
   --accent: #38B6FF;
-  --accent-glow: rgba(56, 182, 255, 0.15);
-  --accent-subtle: rgba(56, 182, 255, 0.04);
-  --accent-border-subtle: rgba(56, 182, 255, 0.12);
   --fg: #FFFFFF;
   --fg-muted: rgba(255, 255, 255, 0.7);
   --fg-dim: rgba(255, 255, 255, 0.4);
   --fg-ghost: rgba(255, 255, 255, 0.2);
   --border: rgba(255, 255, 255, 0.08);
   --glass-blur-heavy: blur(30px);
-  --radius-md: 16px;
-  --radius-lg: 20px;
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
   --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
-  --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
+  --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-32: 128px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --font: 'Montserrat', sans-serif;
@@ -113,6 +101,54 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: var(--fg); transition: all 0.3s var(--ease-out);
 }
 
+/* Book section */
+.book-section {
+  position: relative; z-index: 2;
+  max-width: 900px; margin: 0 auto;
+  padding: 160px var(--space-10) var(--space-20);
+  text-align: center;
+  flex: 1;
+  width: 100%;
+}
+.book-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--fg-muted);
+  margin-bottom: var(--space-6);
+}
+.book-heading {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-6);
+}
+.book-sub {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--fg-muted);
+  max-width: 560px;
+  margin: 0 auto var(--space-12);
+  line-height: var(--leading-normal);
+}
+.calendly-inline-widget { border-radius: 16px; overflow: hidden; }
+
+/* Footer */
+.footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+}
+.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
+.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
+.footer-socials a {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--fg-dim); transition: color 0.3s var(--ease-smooth);
+}
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 0.75rem; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+
 /* Mobile Nav */
 .mobile-nav {
   display: none; position: fixed; inset: 0;
@@ -135,213 +171,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 28px; color: var(--fg);
 }
 
-/* About content */
-.about-hero {
-  position: relative; z-index: 2;
-  max-width: 900px; margin: 0 auto;
-  padding: 160px var(--space-10) var(--space-12);
-  text-align: center;
-  width: 100%;
-}
-.about-eyebrow {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.25em;
-  text-transform: uppercase; color: var(--fg-muted);
-  margin-bottom: var(--space-5);
-}
-.about-heading {
-  font-size: clamp(2rem, 4.5vw, 3.6rem);
-  font-weight: 300;
-  text-transform: uppercase;
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-5);
-}
-.about-heading span { color: var(--accent); font-weight: 700; }
-.about-sub {
-  font-size: 1.05rem; font-weight: 400;
-  color: var(--fg-muted);
-  max-width: 620px; margin: 0 auto;
-  line-height: 1.55;
-}
-
-.about-section {
-  position: relative; z-index: 2;
-  max-width: 900px; margin: 0 auto;
-  padding: var(--space-20) var(--space-10);
-  width: 100%;
-}
-.about-section + .about-section { padding-top: 0; }
-
-.about-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-16);
-  align-items: center;
-}
-.about-split-text { min-width: 0; }
-.about-split-image {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-}
-.about-split-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-@media (max-width: 900px) {
-  .about-split { grid-template-columns: 1fr; gap: var(--space-10); }
-  .about-split-image { aspect-ratio: 16 / 10; order: -1; }
-}
-
-.qualify-box {
-  margin-top: var(--space-8);
-  padding: var(--space-10);
-  border: 1px solid var(--accent-border-subtle);
-  border-radius: var(--radius-lg);
-  background: var(--accent-subtle);
-}
-.qualify-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--accent);
-  margin-bottom: var(--space-3);
-}
-.qualify-heading {
-  font-family: var(--font);
-  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-  font-weight: 300;
-  text-transform: uppercase;
-  color: var(--fg);
-  line-height: 1.2;
-  margin-bottom: var(--space-4);
-  letter-spacing: var(--tracking-tight);
-}
-.qualify-body {
-  font-size: 0.95rem;
-  color: var(--fg-muted);
-  line-height: 1.7;
-  margin-bottom: var(--space-6);
-}
-.qualify-cta {
-  display: inline-block;
-  padding: 14px 28px;
-  background: transparent;
-  color: var(--fg);
-  border: 1px solid var(--fg);
-  border-radius: 8px;
-  font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: all 0.25s var(--ease-smooth);
-}
-.qualify-cta:hover {
-  background: var(--fg);
-  color: #000;
-}
-@media (max-width: 640px) {
-  .qualify-box { padding: var(--space-8) var(--space-6); }
-}
-.about-section-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--accent);
-  margin-bottom: var(--space-4);
-}
-.about-section-heading {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 300;
-  text-transform: uppercase;
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-8);
-}
-.about-body {
-  font-size: 1rem; font-weight: 400;
-  color: var(--fg-muted);
-  line-height: 1.7;
-  margin-bottom: var(--space-5);
-}
-.about-body strong { color: var(--fg); font-weight: 700; }
-
-.about-pills {
-  display: flex; flex-wrap: wrap; gap: var(--space-4);
-  margin-top: var(--space-8);
-}
-.about-pill {
-  display: inline-flex; flex-direction: column; gap: 2px;
-  padding: var(--space-4) var(--space-6);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: rgba(255,255,255,0.02);
-}
-.about-pill-label { font-size: 0.9rem; font-weight: 700; color: var(--fg); letter-spacing: 0.02em; }
-.about-pill-sub { font-size: 0.75rem; color: var(--fg-dim); letter-spacing: 0.05em; text-transform: uppercase; }
-
-.about-team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-6);
-  margin-top: var(--space-10);
-}
-.team-card {
-  padding: var(--space-8);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: rgba(255,255,255,0.02);
-}
-.team-name { font-size: 1.05rem; font-weight: 700; color: var(--fg); margin-bottom: var(--space-1); }
-.team-role { font-size: 0.8rem; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: var(--space-4); }
-.team-bio { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.55; }
-
-.about-cta-band {
-  position: relative; z-index: 2;
-  text-align: center;
-  padding: var(--space-20) var(--space-10) var(--space-24);
-}
-.about-cta-btn {
-  display: inline-block;
-  padding: 18px 36px;
-  background: var(--accent);
-  color: #000;
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase;
-  box-shadow: 0 8px 30px var(--accent-glow);
-  transition: all 0.25s var(--ease-smooth);
-}
-.about-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 45px rgba(56, 182, 255, 0.4); }
-
-/* Footer */
-.footer {
-  position: relative; z-index: 2;
-  border-top: 1px solid var(--border);
-  padding: var(--space-16) var(--space-10);
-  text-align: center;
-  margin-top: auto;
-}
-.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
-.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
-.footer-socials a {
-  font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
-  color: var(--fg-dim); transition: color 0.3s var(--ease-smooth);
-}
-.footer-socials a:hover { color: var(--accent); }
-.footer-copy { font-size: 0.75rem; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
-
 @media (max-width: 768px) {
   .nav-inner { padding: 0 var(--space-6); }
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
-  .about-hero { padding: 120px var(--space-6) var(--space-8); }
-  .about-section { padding: var(--space-12) var(--space-6); }
-  .about-cta-band { padding: var(--space-12) var(--space-6) var(--space-16); }
+  .book-section { padding: 120px var(--space-6) var(--space-16); }
   .footer { padding: var(--space-12) var(--space-6); }
 }
 @media (max-width: 480px) {
-  .about-heading { font-size: 1.9rem; }
+  .book-heading { font-size: 1.8rem; }
   .nav-logo img { height: 28px; }
 }
 
@@ -500,14 +338,14 @@ img, video, iframe { max-width: 100%; height: auto; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <img src="/public/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+      <img src="/logo-white.svg" alt="910 Academy">
     </a>
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a>
       <a href="/about" class="nav-link">About</a>
       <a href="/gear" class="nav-link">Our Gear</a>
       <a href="/maintenance" class="nav-link">Products</a>
-      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -522,103 +360,22 @@ img, video, iframe { max-width: 100%; height: auto; }
   <a href="/about">About</a>
   <a href="/gear">Our Gear</a>
   <a href="/maintenance">Products</a>
-  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
-<!-- About Hero -->
-<section class="about-hero">
-  <p class="about-eyebrow">THE STORY</p>
-  <h1 class="about-heading">ABOUT <span>910 ACADEMY</span></h1>
-  <p class="about-sub">The training platform built by the team behind Studio 910, a real estate media company built from the ground up into a seven-figure business.</p>
+<!-- Book Section -->
+<section class="book-section">
+  <p class="book-eyebrow">FREE STRATEGY CALL</p>
+  <h1 class="book-heading">Book a Free Strategy Call</h1>
+  <p class="book-sub">Not sure where to start? Let's figure it out together. 15 minutes, no pressure.</p>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <div class="calendly-inline-widget" data-url="https://calendly.com/910academy/booking?background_color=0a0a0a&text_color=ffffff&primary_color=ffffff" style="min-width:320px;height:700px;"></div>
 </section>
-
-<!-- What is 910 Academy (split layout) -->
-<section class="about-section">
-  <div class="about-split">
-    <div class="about-split-text">
-      <p class="about-section-label">THE ORIGIN</p>
-      <h2 class="about-section-heading">What is 910 Academy</h2>
-      <p class="about-body">910 Academy is an online community and training platform built specifically for real estate videographers. It's where Claudio Rivera breaks down everything he used to build Studio 910 into a 7-figure media company, no gatekeeping, no fluff.</p>
-      <p class="about-body">Members get full access to our courses, an active community of working videographers, and direct access to Claudio himself inside Skool.</p>
-      <div class="about-pills">
-        <div class="about-pill">
-          <span class="about-pill-label">Studio 910</span>
-          <span class="about-pill-sub">The Company Behind It All</span>
-        </div>
-        <div class="about-pill">
-          <span class="about-pill-label">Palm Beach, FL</span>
-          <span class="about-pill-sub">Where It All Started</span>
-        </div>
-      </div>
-    </div>
-    <!-- TODO: Swap origin.webp with a designer-selected About hero photo when available -->
-    <div class="about-split-image">
-      <img src="/public/images/origin.webp" alt="910 Academy" width="1200" height="1500" loading="lazy" decoding="async">
-    </div>
-  </div>
-</section>
-
-<!-- Founder Story -->
-<section class="about-section">
-  <p class="about-section-label">FOUNDER</p>
-  <h2 class="about-section-heading">Meet Claudio Rivera</h2>
-  <!-- TODO: Expand with Claudio's founder story, early career, how Studio 910 started, the pivot to teaching -->
-  <p class="about-body">Claudio Rivera is the founder of Studio 910 and 910 Academy. He started as a videographer with a camera and a vision, and built one of the most recognized real estate media brands in luxury property marketing.</p>
-  <p class="about-body">After years of refining the systems that turned Studio 910 into a 7-figure company, Claudio launched 910 Academy to train the next generation of real estate videographers, sharing the exact playbook, workflows, and business strategy used every day at Studio 910.</p>
-</section>
-
-<!-- Team -->
-<section class="about-section">
-  <p class="about-section-label">THE TEAM</p>
-  <h2 class="about-section-heading">The People Behind It</h2>
-  <!-- TODO: Populate with real team bios and headshots -->
-  <p class="about-body">910 Academy is built and maintained by the operators who run Studio 910 day-to-day. Each instructor is an active professional, not a talking head. When you learn inside the Academy, you're learning from the people currently executing the work.</p>
-  <div class="about-team-grid">
-    <div class="team-card">
-      <div class="team-name">Claudio Rivera</div>
-      <div class="team-role">Founder &amp; Lead Instructor</div>
-      <p class="team-bio">Placeholder: Founder of Studio 910. Seven-figure operator teaching the full system end-to-end.</p>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Studio 910 Team</div>
-      <div class="team-role">Operators</div>
-      <p class="team-bio">Placeholder: Editors, shooters, and producers who run the day-to-day client work at Studio 910.</p>
-    </div>
-    <div class="team-card">
-      <div class="team-name">Guest Instructors</div>
-      <div class="team-role">Takeover Creators</div>
-      <p class="team-bio">Placeholder: Four Horsemen, JT Visuals, Lucid Horizon, Known Productions, and more.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Mission -->
-<section class="about-section">
-  <p class="about-section-label">THE MISSION</p>
-  <h2 class="about-section-heading">Why We Built This</h2>
-  <p class="about-body">Most real estate videography content online is either fluff, theory, or surface-level. We built 910 Academy because videographers deserve the full operating system, shooting, editing, sales, pricing, team-building, taught by people doing it every single day.</p>
-  <p class="about-body"><strong>No gatekeeping. No guru tactics. No "secrets" we discovered on Instagram yesterday.</strong> Just the same system we use to book luxury listings and run a seven-figure media company.</p>
-</section>
-
-<!-- Qualifying Call-Out -->
-<section class="about-section">
-  <div class="qualify-box">
-    <p class="qualify-label">FOR SERIOUS VIDEOGRAPHERS ONLY</p>
-    <h2 class="qualify-heading">Let's See If 910 Academy Is Right For You</h2>
-    <p class="qualify-body">This call is for real estate videographers and media business owners who are committed to growing but need structured guidance on their next step. If you're just browsing or not sure what you want yet, explore our free content on Instagram and YouTube first. If you know you're ready to level up, book your 15-minute strategy call.</p>
-    <a href="/book" class="qualify-cta">Book a Strategy Call</a>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="about-cta-band">
-  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="about-cta-btn">Join 910 Academy</a>
-</div>
 
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-logo">
-    <img src="/public/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
   </div>
   <div class="footer-socials">
     <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>

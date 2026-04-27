@@ -1,6 +1,10 @@
 .vercel
 .DS_Store
 node_modules
+.next
+out
+.env*.local
+*.tsbuildinfo
 
 *.mp4
 *.MP4

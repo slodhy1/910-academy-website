@@ -3,32 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>910 Academy, The Exact Stack Behind Every Luxury Real Estate Video</title>
-<link rel="icon" href="/public/logo-white.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/public/logo-white.svg">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="910 Academy">
-<meta property="og:title" content="910 Academy, Real Estate Videography">
-<meta property="og:description" content="Learn to shoot, edit, and scale a real estate media company from the ground up.">
-<meta property="og:image" content="/public/images/og-image.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="910 Academy">
-<meta name="twitter:description" content="Step into the new frontier of real estate videography.">
-<meta name="twitter:image" content="/public/images/og-image.jpg">
-<meta name="description" content="The tools, plugins, and software behind every luxury real estate video by 910 Academy. No sponsorships. No filler. Just what we actually use.">
+<title>910 Academy, 1:1 Mentorship Waitlist</title>
+<meta name="description" content="Join the waitlist for 1:1 mentorship with Claudio Rivera. We'll reach out when spots open.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 /* =====================================================
    DESIGN TOKENS
-   Systematic token architecture for consistency.
-   Based on glassmorphism + modern dark cinema styles.
    ===================================================== */
 :root {
-  /* Color Tokens */
   --bg-deep: #050506;
   --bg-base: #0a0a0a;
   --bg-elevated: #0f0f10;
@@ -49,7 +33,6 @@
   --border: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.12);
 
-  /* Glass Tokens */
   --glass-blur: blur(20px);
   --glass-blur-heavy: blur(30px);
   --glass-saturate: saturate(180%);
@@ -57,7 +40,6 @@
   --glass-bg-hover: rgba(255, 255, 255, 0.08);
   --glass-border: 1px solid rgba(255, 255, 255, 0.08);
 
-  /* Spacing Scale (4px base) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -72,23 +54,68 @@
   --space-24: 96px;
   --space-32: 128px;
 
-  /* Radius */
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 20px;
   --radius-xl: 24px;
   --radius-pill: 100px;
 
-  /* Easing, Modern Dark Cinema */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Typography */
   --font: 'Montserrat', sans-serif;
   --leading-tight: 1.1em;
   --leading-normal: 1.4em;
   --tracking-tight: -0.05px;
 }
+
+/* ========== COACHING FORM ========== */
+.coaching-form { display:flex; flex-direction:column; gap: var(--space-6); }
+.coaching-form .field { display:flex; flex-direction:column; gap: var(--space-2); }
+.coaching-form label {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.coaching-form .req { color: var(--accent); margin-left: 4px; }
+.coaching-form input,
+.coaching-form select,
+.coaching-form textarea {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--fg);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+  outline: none;
+  resize: vertical;
+}
+.coaching-form input::placeholder,
+.coaching-form textarea::placeholder { color: var(--fg-dim); }
+.coaching-form input:focus,
+.coaching-form select:focus,
+.coaching-form textarea:focus {
+  border-color: var(--accent-border);
+  background: rgba(255,255,255,0.06);
+}
+.coaching-form select { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--fg-muted) 50%), linear-gradient(135deg, var(--fg-muted) 50%, transparent 50%); background-position: calc(100% - 20px) center, calc(100% - 14px) center; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
+.coaching-form select option { background: #0a0a0a; color: var(--fg); }
+.form-submit {
+  margin-top: var(--space-4);
+  font-family: var(--font);
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #000; background: #FFF;
+  padding: 16px 24px; border-radius: 10px;
+  transition: all 0.25s ease;
+}
+.form-submit:hover:not(:disabled) { background: var(--accent); color: #FFF; transform: translateY(-1px); }
+.form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.form-msg { font-size: 0.9rem; color: var(--fg-muted); min-height: 1.2em; margin-top: var(--space-2); }
+.form-msg.success { color: var(--accent); }
+.form-msg.error { color: #ff6b6b; }
 
 /* ========== RESET & BASE ========== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -158,11 +185,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: rgba(255, 255, 255, 0.18);
   opacity: 0;
 }
-/* Up-drifting particles */
 .particle.up   { animation: dustUp linear infinite; }
-/* Down-drifting particles */
 .particle.down { animation: dustDown linear infinite; }
-/* 30 particles, bright white, 2-4px, 6-15s */
 .particle:nth-child(1)  { width:2px;height:2px; left:3%;  top:85%; animation-duration:8s;  animation-delay:0s; }
 .particle:nth-child(2)  { width:4px;height:4px; left:8%;  top:20%; animation-duration:12s; animation-delay:1s; }
 .particle:nth-child(3)  { width:3px;height:3px; left:12%; top:60%; animation-duration:7s;  animation-delay:0.5s; }
@@ -315,8 +339,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   z-index: 2;
 }
 .hero-content { position: relative; z-index: 1; max-width: 900px; }
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-6);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 0.1s forwards;
+}
 .hero h1 {
-  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-size: clamp(2rem, 4vw, 5rem);
   font-weight: 300;
   text-transform: uppercase;
   line-height: var(--leading-tight);
@@ -334,10 +368,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   to { opacity: 1; transform: translateY(0); }
 }
 .hero-sub {
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  font-weight: 400;
-  color: var(--fg-muted);
-  max-width: 600px;
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 560px;
   margin: 0 auto;
   line-height: var(--leading-normal);
   opacity: 0;
@@ -380,7 +414,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ========== SCROLL REVEAL (0.6s ease-out) ========== */
+/* ========== SCROLL REVEAL ========== */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -422,62 +456,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   text-transform: uppercase;
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-4);
-}
-.section-sub {
-  font-size: 1.05rem;
-  font-weight: 400;
-  color: var(--fg-muted);
-  max-width: 560px;
-  line-height: var(--leading-normal);
   margin-bottom: var(--space-12);
-}
-
-/* ========== FILTER TABS, GLASS PILLS ========== */
-.filter-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  margin-bottom: var(--space-12);
-}
-.filter-tab {
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: var(--leading-normal);
-  color: var(--fg);
-  padding: var(--space-2) var(--space-5);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.3s ease;
-}
-.filter-tab:hover {
-  background: #38B6FF;
-  border-color: #38B6FF;
-  color: #FFFFFF;
-}
-.filter-tab.active {
-  color: #0a0a0a;
-  background: #FFFFFF;
-  border: 1px solid #FFFFFF;
 }
 
 /* ========== PRODUCT GRID ========== */
 .product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-6);
-}
-.product-grid > .product-card {
-  width: calc((100% - var(--space-6) * 2) / 3);
-  min-width: 0;
-}
-.product-grid.two-col {
-  gap: var(--space-8);
-}
-.product-grid.two-col > .product-card {
-  width: calc((100% - var(--space-8)) / 2);
 }
 
 /* ========== PRODUCT CARDS, GLASSMORPHISM ========== */
@@ -500,10 +486,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .card-image {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  aspect-ratio: 16 / 9;
   position: relative;
   overflow: hidden;
+}
+.card-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  filter: brightness(0.95) contrast(1.05) saturate(0.95);
+  transition: filter 0.4s ease;
+}
+.product-card:hover .card-image img {
+  filter: brightness(1.05) contrast(1.1) saturate(1.05);
 }
 .card-image::after {
   content: '';
@@ -511,21 +506,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   inset: 0;
   background: linear-gradient(180deg, transparent 60%, rgba(5,5,6,0.4) 100%);
 }
-.card-badge {
+.card-price {
   position: absolute;
-  top: var(--space-4); left: var(--space-4);
-  font-size: 10px;
+  top: 0; right: 0;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 6px 12px;
+  border-radius: 0 0 0 8px;
   z-index: 1;
+  font-family: var(--font);
 }
 .card-body {
   padding: var(--space-8) var(--space-6);
@@ -534,25 +525,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-direction: column;
 }
 .card-name {
-  font-size: 1.333rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   line-height: 1.2;
   margin-bottom: var(--space-2);
 }
 .card-desc {
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--fg-muted);
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
   line-height: var(--leading-normal);
   margin-bottom: var(--space-6);
   flex: 1;
 }
-.card-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-/* Primary CTA, monochrome default, blue on hover */
 .card-btn-buy {
   display: flex;
   align-items: center;
@@ -575,38 +560,57 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: #FFFFFF;
   transform: translateY(-1px);
 }
-.card-btn-buy svg {
-  width: 14px; height: 14px;
-  stroke: #000000;
-  fill: none;
-  flex-shrink: 0;
-  transition: stroke 0.25s ease;
-}
-.card-btn-buy:hover svg {
-  stroke: #FFFFFF;
-}
 
-/* ========== PRODUCT IMAGES ========== */
-.card-image img {
-  object-fit: contain;
-  width: 100%;
-  height: 220px;
-  padding: 16px;
-  filter: brightness(0.95) contrast(1.05) saturate(0.95);
-  transition: filter 0.4s ease;
+/* ========== FAQ ACCORDION ========== */
+.faq-section {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: var(--space-32) var(--space-10);
 }
-.product-card:hover .card-image img {
-  filter: brightness(1.05) contrast(1.1) saturate(1.05);
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6) 0;
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--fg);
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+}
+.faq-arrow {
+  width: 20px;
+  height: 20px;
+  stroke: var(--fg-muted);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-out);
+}
+.faq-item.open .faq-arrow {
+  transform: rotate(180deg);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--ease-out);
+}
+.faq-answer-inner {
+  padding: 0 0 var(--space-6) 0;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
 }
 
-/* ========== SOFTWARE CARDS ========== */
-.product-grid.two-col .card-body { padding: var(--space-8) 30px; }
-.product-grid.two-col .card-name { font-size: 1.5rem; }
-.product-grid.two-col .card-desc { font-size: 0.95rem; }
-
-/* ========== SCHOOL / CTA, GLASS PANEL ========== */
+/* ========== CTA, GLASS PANEL ========== */
 .school-section {
   position: relative;
   z-index: 2;
@@ -639,7 +643,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: var(--tracking-tight);
   margin-bottom: 32px;
 }
-.school-heading .highlight { color: var(--fg); }
 .school-body {
   max-width: 480px;
   margin: 0 auto 32px;
@@ -651,24 +654,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   line-height: var(--leading-normal);
   margin-bottom: 0;
 }
-.school-price {
-  display: inline-block;
-  font-size: 3.2rem;
-  font-weight: 300;
-  color: var(--fg);
-  margin: 0 0 24px;
-  position: relative;
-}
-.school-price::before,
-.school-price::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 40px; height: 1px;
-  background: rgba(255, 255, 255, 0.2);
-}
-.school-price::before { right: calc(100% + 20px); }
-.school-price::after { left: calc(100% + 20px); }
 .school-cta {
   display: inline-block;
   font-size: 13px;
@@ -680,7 +665,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border: none;
   padding: 18px 48px;
   border-radius: 8px;
-  font-weight: 700;
   transition: all 0.25s ease;
 }
 .school-cta:hover {
@@ -693,6 +677,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-weight: 400;
   color: var(--fg-dim);
   margin-top: 16px;
+}
+
+/* ========== DISCLAIMER ========== */
+.disclaimer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 var(--space-10) var(--space-12);
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.25);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.5;
 }
 
 /* ========== FOOTER ========== */
@@ -779,27 +777,24 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
-  .product-grid > .product-card { width: calc((100% - var(--space-6)) / 2); }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   .nav-inner { padding: 0 var(--space-6); }
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
   .section { padding: var(--space-20) var(--space-6); }
+  .faq-section { padding: var(--space-20) var(--space-6); }
   .hero { padding: 100px var(--space-6) 60px; }
-  .product-grid > .product-card,
-  .product-grid.two-col > .product-card { width: 100%; }
+  .product-grid { grid-template-columns: 1fr; }
   .school-section { padding: 60px var(--space-6); }
   .school-glass { padding: var(--space-12) var(--space-8); }
   .footer { padding: var(--space-12) var(--space-6); }
-  .filter-tabs { gap: 10px; }
-  .filter-tab { padding: var(--space-2) var(--space-4); font-size: 0.875rem; }
 }
 @media (max-width: 480px) {
-  .hero h1 { font-size: 2.2rem; }
+  .hero h1 { font-size: 2rem; }
   .section-heading { font-size: 1.8rem; }
   .school-heading { font-size: 1.8rem; }
-  .school-price { font-size: 2.4rem; }
   .nav-logo img { height: 28px; }
 }
 
@@ -955,7 +950,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   <div class="bg-orb bg-orb-3"></div>
 </div>
 
-<!-- Floating Particles (30), alternating up/down drift -->
+<!-- Floating Particles (30) -->
 <div class="particles">
   <div class="particle up"></div><div class="particle down"></div><div class="particle up"></div>
   <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
@@ -973,7 +968,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <img src="/public/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+      <img src="/logo-white.svg" alt="910 Academy">
     </a>
     <div class="nav-links">
       <a href="/" class="nav-link">Home</a>
@@ -1001,199 +996,202 @@ img, video, iframe { max-width: 100%; height: auto; }
 <!-- Hero -->
 <section class="hero">
   <div class="hero-content">
-    <h1 id="heroTitle"></h1>
-  </div>
-  <div class="scroll-indicator" id="scrollArrow">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
+    <p class="hero-eyebrow">1:1 MENTORSHIP</p>
+    <h1 id="heroTitle">JOIN THE<br><span class="word highlight" style="animation:none;opacity:1;">WAITLIST</span></h1>
+    <p class="hero-sub">We're not currently accepting new mentorship clients. Join the waitlist to be first in line when spots open.</p>
   </div>
 </section>
 
-<!-- Gear Section -->
-<section class="section" id="gear">
+<!-- Waitlist Form -->
+<section class="section" style="max-width:780px;">
   <div class="reveal-left">
-    <p class="section-label">ON SET</p>
-    <h2 class="section-heading">The Camera Kit</h2>
+    <p class="section-label">GET ON THE LIST</p>
+    <h2 class="section-heading">1:1 MENTORSHIP WAITLIST</h2>
   </div>
-  <div class="reveal" style="transition-delay:0.1s;">
-    <div class="filter-tabs" id="gearFilters">
-      <button class="filter-tab active" data-filter="all">All</button>
-      <button class="filter-tab" data-filter="camera">Camera</button>
-      <button class="filter-tab" data-filter="lens">Lens</button>
-      <button class="filter-tab" data-filter="drone">Drone</button>
-      <button class="filter-tab" data-filter="stabilization">Stabilization</button>
-      <button class="filter-tab" data-filter="audio">Audio</button>
-      <button class="filter-tab" data-filter="support">Support</button>
-    </div>
-  </div>
-  <div class="product-grid" id="gearGrid">
+  <p class="reveal" style="color:var(--fg-muted);font-size:0.95rem;line-height:1.7;margin-bottom:var(--space-10);max-width:640px;">Drop your info below and tell us what you'd want to focus on. When new spots open, waitlist members get first access.</p>
 
-    <div class="product-card reveal" data-category="camera">
-      <div class="card-image"><img src="/public/images/Sony-A7S-III.webp" alt="Sony A7SIII" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Camera</span></div>
-      <div class="card-body">
-        <h3 class="card-name">Sony A7SIII</h3>
-        <p class="card-desc">Our primary body for every luxury shoot</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4rnBxFr" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
+  <form id="waitlistForm" class="coaching-form reveal" novalidate>
+    <div class="field">
+      <label for="full_name">Full Name<span class="req">*</span></label>
+      <input id="full_name" name="full_name" type="text" required>
     </div>
-
-    <div class="product-card reveal" data-category="lens" style="transition-delay:0.1s;">
-      <div class="card-image"><img src="/public/images/Laowa-10mm-Zero-D-FF.webp" alt="Laowa 10mm f/2.8" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Lens</span></div>
-      <div class="card-body">
-        <h3 class="card-name">Laowa 10mm f/2.8</h3>
-        <p class="card-desc">The widest we go for interiors</p>
-        <div class="card-buttons">
-          <a href="https://www.laowalenses.ca/product/laowa-10mm-f-2-8-zero-d-ff/" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
+    <div class="field">
+      <label for="email">Email<span class="req">*</span></label>
+      <input id="email" name="email" type="email" required>
     </div>
-
-    <div class="product-card reveal" data-category="lens" style="transition-delay:0.2s;">
-      <div class="card-image"><img src="/public/images/8194kDIG8HL.webp" alt="Sony 50mm 1.2 GM" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Lens</span></div>
-      <div class="card-body">
-        <h3 class="card-name">Sony 50mm 1.2 GM</h3>
-        <p class="card-desc">Our go-to for lifestyle and detail shots</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4kFFToR" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
+    <div class="field">
+      <label for="instagram">Instagram Handle</label>
+      <input id="instagram" name="instagram" type="text" placeholder="@yourhandle">
     </div>
-
-    <div class="product-card reveal" data-category="stabilization" style="transition-delay:0.1s;">
-      <div class="card-image"><img src="/public/products/dji-rs4-pro.webp" alt="DJI RS4 Pro Gimbal" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Stabilization</span></div>
-      <div class="card-body">
-        <h3 class="card-name">DJI RS4 Pro Gimbal</h3>
-        <p class="card-desc">Buttery smooth on every walk</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/3Ocfkvp" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
+    <div class="field">
+      <label for="revenue_level">Where are you at with your real estate media business?</label>
+      <select id="revenue_level" name="revenue_level">
+        <option value="" disabled selected>Select one…</option>
+        <option>Just getting started, $0/month</option>
+        <option>$1K–$5K/month</option>
+        <option>$5K–$15K/month</option>
+        <option>$15K–$50K/month</option>
+        <option>$50K–$100K/month</option>
+        <option>$100K+/month</option>
+      </select>
     </div>
-
-    <div class="product-card reveal" data-category="drone" style="transition-delay:0.2s;">
-      <div class="card-image"><img src="/public/products/dji-mavic-4-pro.webp" alt="DJI Mavic 4 Pro" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Drone</span></div>
-      <div class="card-body">
-        <h3 class="card-name">DJI Mavic 4 Pro</h3>
-        <p class="card-desc">Our aerial workhorse</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4av1nS1" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
+    <div class="field">
+      <label for="focus_area">What would you want to focus on in 1:1 mentorship?<span class="req">*</span></label>
+      <textarea id="focus_area" name="focus_area" rows="5" required></textarea>
     </div>
-
-    <div class="product-card reveal" data-category="audio" style="transition-delay:0.3s;">
-      <div class="card-image"><img src="/public/products/dji-mic-2.webp" alt="DJI Mic 2" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Audio</span></div>
-      <div class="card-body">
-        <h3 class="card-name">DJI Mic 2</h3>
-        <p class="card-desc">Clean wireless audio on every shoot</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4rF92TX" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="product-card reveal" data-category="support" style="transition-delay:0.1s;">
-      <div class="card-image"><img src="/public/products/peak-design-pro-lite.webp" alt="Peak Design Pro Lite Tripod" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Support</span></div>
-      <div class="card-body">
-        <h3 class="card-name">Peak Design Pro Lite Tripod</h3>
-        <p class="card-desc">Stable, fast, professional</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4aAHDv0" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
-      </div>
-    </div>
-
-  </div>
+    <button type="submit" class="form-submit" id="formSubmit">Join Waitlist</button>
+    <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+  </form>
+  <p class="ftc-disclaimer" style="max-width:640px;margin:32px 0 0;padding:0;font-size:12px;line-height:1.6;color:rgba(255,255,255,0.4);font-weight:300;">Results featured are not typical. Individual results vary based on effort, experience, and market conditions. Testimonials reflect the experiences of specific individuals and are not guarantees of future performance.</p>
 </section>
 
-<!-- Plugins Section -->
-<section class="section" id="plugins">
+<!-- Unused Products Section (removed) -->
+<section class="section" style="display:none;" aria-hidden="true">
+<section class="section" id="products">
   <div class="reveal-left">
-    <p class="section-label">IN THE EDIT</p>
-    <h2 class="section-heading">The Plugin Stack</h2>
-    <p class="section-sub">Every plugin we use inside Final Cut Pro, and teach inside Skool.</p>
+    <p class="section-label">DIGITAL PRODUCTS</p>
+    <h2 class="section-heading">THE FULL COLLECTION</h2>
   </div>
-  <div class="product-grid" id="pluginGrid">
+  <div class="product-grid" id="productGrid">
 
     <div class="product-card reveal">
-      <div class="card-image"><img src="/public/products/smooth-transitions.webp" alt="Smooth Transitions" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-image">
+        <img src="/images/DSC00038-Edit-2-1024x684.webp" alt="3D Made Easy">
+        <span class="card-price">$91</span>
+      </div>
       <div class="card-body">
-        <h3 class="card-name">Smooth Transitions</h3>
-        <p class="card-desc">The transitions in every reel we've ever posted</p>
-        <div class="card-buttons">
-          <a href="https://www.finalcutplugs.com/p/l9oz/?a=910academy" target="_blank" rel="noopener noreferrer" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
+        <h3 class="card-name">3D Made Easy</h3>
+        <p class="card-desc">Add 3D tours to your business and start winning higher-margin jobs this week.</p>
+        <a href="https://910academy.com/3d-made-easy-live/" target="_blank" class="card-btn-buy">Buy Now</a>
       </div>
     </div>
 
     <div class="product-card reveal" style="transition-delay:0.1s;">
-      <div class="card-image"><img src="/public/products/motion-blur-pro.webp" alt="Motion Blur Pro" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-image">
+        <img src="/images/thumbnails-skool-3.webp" alt="910 Admin Assistant">
+        <span class="card-price">$299</span>
+      </div>
       <div class="card-body">
-        <h3 class="card-name">Motion Blur Pro</h3>
-        <p class="card-desc">Makes every cut feel cinematic</p>
-        <div class="card-buttons">
-          <a href="https://www.finalcutplugs.com/p/motion-blur-pro-final-cut-pro/?a=910academy" target="_blank" rel="noopener noreferrer" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
+        <h3 class="card-name">910 Admin Assistant</h3>
+        <p class="card-desc">A done-for-you AI admin system built specifically for real estate media companies.</p>
+        <a href="https://910academy.com/910-admin-assistant-purchase/" target="_blank" class="card-btn-buy">Buy Now</a>
       </div>
     </div>
 
     <div class="product-card reveal" style="transition-delay:0.2s;">
-      <div class="card-image"><img src="/public/products/shake-effects.webp" alt="Shake Effects" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Ryan Nangle</span></div>
+      <div class="card-image">
+        <img src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="910 Sales System">
+        <span class="card-price">$91</span>
+      </div>
       <div class="card-body">
-        <h3 class="card-name">Shake Effects</h3>
-        <p class="card-desc">Adds energy without overdoing it</p>
-        <div class="card-buttons">
-          <a href="https://www.finalcutplugs.com/p/n9ulhj/?a=910academy" target="_blank" rel="noopener noreferrer" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
+        <h3 class="card-name">910 Sales System</h3>
+        <p class="card-desc">The exact sales system we used to scale to seven figures. Scripts, objection handling, closing.</p>
+        <a href="https://910academy.com/910-sales/" target="_blank" class="card-btn-buy">Buy Now</a>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.1s;">
+      <div class="card-image">
+        <img src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="JT Visuals Workshop">
+        <span class="card-price">$91</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">JT Visuals Workshop</h3>
+        <p class="card-desc">A raw breakdown of how JT Visuals shoots, edits, and delivers at the highest level.</p>
+        <a href="https://910academy.com/jtv-x-910/" target="_blank" class="card-btn-buy">Buy Now</a>
+      </div>
+    </div>
+
+    <div class="product-card reveal" style="transition-delay:0.2s;">
+      <div class="card-image">
+        <img src="/images/knownthumbnail-2.webp" alt="Known Productions Workshop">
+        <span class="card-price">$91</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">Known Productions Workshop</h3>
+        <p class="card-desc">Workflow, creative direction, and client experience from one of the best in the space.</p>
+        <a href="https://910academy.com/known-productions-910-academy-replay/" target="_blank" class="card-btn-buy">Buy Now</a>
       </div>
     </div>
 
     <div class="product-card reveal" style="transition-delay:0.3s;">
-      <div class="card-image"><img src="/public/products/smooth-zoom.webp" alt="Smooth Zoom 2.0 Transitions" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Ryan Nangle</span></div>
-      <div class="card-body">
-        <h3 class="card-name">Smooth Zoom 2.0 Transitions</h3>
-        <p class="card-desc">Cinematic zoom transitions for Final Cut Pro</p>
-        <div class="card-buttons">
-          <a href="https://www.finalcutplugs.com/p/ibgd/?a=910academy" target="_blank" rel="noopener noreferrer" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
+      <div class="card-image">
+        <img src="/images/thumbnail_logos.webp" alt="Lucid Horizon Workshop">
+        <span class="card-price">$91</span>
       </div>
-    </div>
-
-    <div class="product-card reveal" style="transition-delay:0.4s;">
-      <div class="card-image"><img src="/public/products/fcpx-stabilizer-2.0.webp" alt="FCPX Stabilizer 2.0" width="800" height="600" loading="lazy" decoding="async"><span class="card-badge">Pixel Film Studios</span></div>
       <div class="card-body">
-        <h3 class="card-name">FCPX Stabilizer 2.0</h3>
-        <p class="card-desc">Professional stabilization for Final Cut Pro</p>
-        <div class="card-buttons">
-          <a href="https://pixelfilmstudios.com/plugins/fcpx-stabilizer/" target="_blank" rel="noopener noreferrer" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
-        </div>
+        <h3 class="card-name">Lucid Horizon Workshop</h3>
+        <p class="card-desc">The creative and business decisions that set Lucid Horizon apart in a crowded market.</p>
+        <a href="https://910academy.com/lucid-horizon-910-academy-replay/" target="_blank" class="card-btn-buy">Buy Now</a>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- Skool / CTA Section -->
-<section class="school-section" id="skool">
+<!-- FAQ Section (hidden) -->
+<section class="faq-section" style="display:none;" aria-hidden="true">
+  <div class="reveal-left">
+    <p class="section-label">BEFORE YOU BUY</p>
+    <h2 class="section-heading">FREQUENTLY ASKED QUESTIONS</h2>
+  </div>
+
+  <div class="faq-item reveal">
+    <button class="faq-question">
+      Are these beginner-friendly?
+      <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Yes. Most products are built to work whether you are just starting out or already shooting and ready to scale. Each one meets you where you are.</div>
+    </div>
+  </div>
+
+  <div class="faq-item reveal" style="transition-delay:0.1s;">
+    <button class="faq-question">
+      Do I get lifetime access?
+      <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Yes. Every purchase is yours to keep forever. Download it, rewatch it, reference it whenever you need it.</div>
+    </div>
+  </div>
+
+  <div class="faq-item reveal" style="transition-delay:0.2s;">
+    <button class="faq-question">
+      Are there refunds?
+      <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Due to the digital nature of these products, all sales are final. If you have questions before buying, reach out directly, we would rather you make the right decision than the wrong purchase.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom CTA Section (hidden) -->
+<section class="school-section" style="display:none;" aria-hidden="true">
   <div class="school-glass reveal">
-    <p class="school-eyebrow">THE REAL INVESTMENT</p>
-    <h2 class="school-heading">EVERYTHING YOU NEED TO GROW IS <span class="highlight">RIGHT HERE</span></h2>
+    <p class="school-eyebrow">READY TO GO DEEPER</p>
+    <h2 class="school-heading">JOIN 910 ACADEMY</h2>
     <div class="school-body">
-      <p>Every tool on this page is part of our real workflow. Inside 910 Academy you learn to shoot, edit, and scale a real estate media company the exact way we do it at seven figures. Once you are in, you earn <strong>20% recurring commission for as long as your referral remains an active member</strong>. Skool pays for itself.</p>
-      <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:16px;line-height:1.6;">Affiliates must follow our Affiliate Marketing Guidelines when promoting 910 Academy. 910 Academy reserves the right to terminate affiliate partnerships that violate these guidelines. <a href="/affiliate-guidelines" style="color:var(--accent);text-decoration:underline;">View our Affiliate Marketing Guidelines</a>.</p>
+      <p>Everything here is a piece of what lives inside 910 Academy. The full community, the complete curriculum, and direct access to Claudio and the team, all in one place.</p>
     </div>
-    <a href="https://www.skool.com/910-academy/about" target="_blank" class="school-cta">Join 910 Academy</a>
-    <p class="school-proof">300+ active members. Real results. No refunds.</p>
+    <a href="https://www.skool.com/910-academy/about" target="_blank" class="school-cta">Join The Academy</a>
+    <p class="school-proof">Already a member? Your Skool dashboard has everything.</p>
   </div>
 </section>
+
+<!-- Disclaimer -->
 
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-logo">
-    <img src="/public/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
   </div>
   <div class="footer-socials">
     <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
@@ -1204,20 +1202,48 @@ img, video, iframe { max-width: 100%; height: auto; }
 </footer>
 
 <script>
-// ========== HERO WORD-BY-WORD ANIMATION ==========
+// ========== WAITLIST FORM ==========
+const WAITLIST_WEBHOOK_URL = 'REPLACE_WITH_N8N_WAITLIST_WEBHOOK_URL';
 (function() {
-  var title = "THE EXACT GEAR WE SHOOT WITH";
-  var highlightWords = ['WE'];
-  var words = title.split(' ');
-  var h1 = document.getElementById('heroTitle');
-  words.forEach(function(word, i) {
-    var span = document.createElement('span');
-    span.className = 'word';
-    if (highlightWords.indexOf(word) !== -1) span.classList.add('highlight');
-    span.textContent = word;
-    span.style.animationDelay = (0.15 + i * 0.08) + 's';
-    h1.appendChild(span);
-    if (i < words.length - 1) h1.appendChild(document.createTextNode(' '));
+  var form = document.getElementById('waitlistForm');
+  if (!form) return;
+  var msg = document.getElementById('formMsg');
+  var btn = document.getElementById('formSubmit');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    msg.className = 'form-msg';
+    msg.textContent = '';
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    btn.disabled = true;
+    var originalText = btn.textContent;
+    btn.textContent = 'Submitting…';
+    var payload = {
+      full_name: form.full_name.value.trim(),
+      email: form.email.value.trim(),
+      instagram: form.instagram.value.trim(),
+      revenue_level: form.revenue_level.value,
+      focus_area: form.focus_area.value.trim(),
+      submitted_at: new Date().toISOString()
+    };
+    fetch(WAITLIST_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Request failed');
+      form.reset();
+      msg.className = 'form-msg success';
+      msg.textContent = "You're on the list. We'll reach out when spots open.";
+    })
+    .catch(function() {
+      msg.className = 'form-msg error';
+      msg.textContent = 'Something went wrong. Please email academy@studio910pb.com directly.';
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    });
   });
 })();
 
@@ -1260,34 +1286,33 @@ img, video, iframe { max-width: 100%; height: auto; }
   reveals.forEach(function(el) { observer.observe(el); });
 })();
 
-// ========== FILTER TABS ==========
+// ========== FAQ ACCORDION ==========
 (function() {
-  var tabs = document.querySelectorAll('#gearFilters .filter-tab');
-  var cards = document.querySelectorAll('#gearGrid .product-card');
-  tabs.forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      tabs.forEach(function(t) { t.classList.remove('active'); });
-      tab.classList.add('active');
-      var filter = tab.getAttribute('data-filter');
-      cards.forEach(function(card) {
-        if (filter === 'all' || card.getAttribute('data-category') === filter) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
+  var items = document.querySelectorAll('.faq-item');
+  items.forEach(function(item) {
+    var question = item.querySelector('.faq-question');
+    var answer = item.querySelector('.faq-answer');
+    question.addEventListener('click', function() {
+      var isOpen = item.classList.contains('open');
+      items.forEach(function(i) {
+        i.classList.remove('open');
+        i.querySelector('.faq-answer').style.maxHeight = null;
       });
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
     });
   });
 })();
-
 
 // ========== SCROLL ARROW CLICK ==========
 (function() {
   var arrow = document.getElementById('scrollArrow');
   if (arrow) {
     arrow.addEventListener('click', function() {
-      var gear = document.getElementById('gear');
-      if (gear) gear.scrollIntoView({ behavior: 'smooth' });
+      var products = document.getElementById('products');
+      if (products) products.scrollIntoView({ behavior: 'smooth' });
     });
   }
 })();
