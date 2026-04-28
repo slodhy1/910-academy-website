@@ -12,12 +12,12 @@ insert into public.products (
   '3D Made Easy',
   'The 910 system for adding viral 3D text and snap captions to real estate reels.',
   'Step-by-step workshop walking through the exact plugin stack, presets, and workflow Studio 910 uses to add the engagement-driving 3D text and white caption look to every real estate reel they ship.',
-  19900,
+  9100,
   '1059797444',
   'c7004cd446',
   '/og-images/3d-made-easy.jpg',
-  null,
-  null,
+  'https://buy.stripe.com/eVa7v2cBTdns1oYfZz',
+  'plink_1QuNQOBgZ35gA9jqgLLlOTu4',
   'active',
   'video'
 )
@@ -48,8 +48,8 @@ insert into public.products (
   '1064864940',
   'e337e0c27e',
   '/og-images/910-sales-system.jpg',
-  null,
-  null,
+  'https://buy.stripe.com/dRm14m61gcvc4tP8SP5Rm1l',
+  'plink_1Sxr6pBgZ35gA9jqaJcQNLTa',
   'active',
   'video'
 )
