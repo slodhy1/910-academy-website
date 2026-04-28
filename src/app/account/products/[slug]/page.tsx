@@ -9,6 +9,10 @@ import {
   type ProductVideo,
 } from "@/components/account/MultiVideoViewer";
 import { PdfViewer } from "@/components/account/PdfViewer";
+import {
+  ResourcesPanel,
+  type ResourceRow,
+} from "@/components/account/ResourcesPanel";
 import { AboutDisclosure } from "@/components/account/AboutDisclosure";
 
 export const dynamic = "force-dynamic";
@@ -92,6 +96,27 @@ export default async function ProductViewerPage({
     bonusPdfSignedUrl = await getSignedResourceUrl(product.resource_path);
   }
 
+  const { data: resourcesData } = await supabase
+    .from("product_resources")
+    .select(
+      "id, resource_type, title, description, url, storage_path, code_value, display_order"
+    )
+    .eq("product_id", product.id)
+    .order("display_order", { ascending: true });
+  const resources = (resourcesData as ResourceRow[] | null) ?? [];
+
+  const downloadPaths = resources
+    .filter((r) => r.resource_type === "download" && r.storage_path)
+    .map((r) => r.storage_path as string);
+  const signedUrlEntries = await Promise.all(
+    downloadPaths.map(
+      async (p) => [p, (await getSignedResourceUrl(p)) ?? ""] as const
+    )
+  );
+  const signedUrls: Record<string, string> = Object.fromEntries(
+    signedUrlEntries.filter(([, url]) => url)
+  );
+
   const typeLabel = TYPE_LABELS[resourceType] ?? "Workshop";
 
   return (
@@ -125,6 +150,8 @@ export default async function ProductViewerPage({
             support if this persists.
           </div>
         )}
+
+        <ResourcesPanel resources={resources} signedUrls={signedUrls} />
 
         {slug === "910-sales-system" && (
           <section className="bonus">
