@@ -70,7 +70,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56, 182, 255, 0.01); filter: blur(100px); animation-delay: -8s; }
 @keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
 
-/* Nav (matches site) */
+/* Nav */
 .nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: var(--space-5) 0; transition: all 0.4s var(--ease-out); }
 .nav.scrolled { padding: 14px 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy); border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
 .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-10); display: flex; align-items: center; justify-content: space-between; }
@@ -92,7 +92,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .mobile-nav-close { position: absolute; top: 24px; right: 32px; font-size: 28px; color: var(--fg); }
 
 /* Page */
-.page { position: relative; z-index: 2; flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 140px var(--space-10) var(--space-20); }
+.page { position: relative; z-index: 2; flex: 1; width: 100%; padding: 140px 0 var(--space-20); }
+.page-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-10); }
 
 /* Hero */
 .hero { text-align: center; max-width: 720px; margin: 0 auto var(--space-20); }
@@ -100,19 +101,31 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-heading { font-size: clamp(1.8rem, 4.4vw, 2.8rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--fg); margin-bottom: var(--space-6); }
 .hero-sub { font-size: 1rem; color: var(--fg-muted); line-height: 1.7; max-width: 600px; margin: 0 auto; }
 
-/* Grid */
-.section-row { margin-bottom: var(--space-16); }
-.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: var(--space-8); }
-.grid { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
-@media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1024px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+/* Slider section */
+.rail-section { margin-bottom: var(--space-20); }
+.rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-8); padding: 0 var(--space-10); max-width: 1280px; margin-left: auto; margin-right: auto; }
+.rail-head-text { display: flex; flex-direction: column; gap: var(--space-2); }
+.rail-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
+.rail-heading { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--fg); }
+.rail-arrows { display: none; gap: var(--space-3); }
+.rail-arrow { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--fg-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.rail-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
+.rail-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.rail-arrow svg { width: 18px; height: 18px; }
+@media (min-width: 1024px) { .rail-arrows { display: flex; } }
+
+.rail-track { display: flex; gap: var(--space-6); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-padding-left: var(--space-10); padding: 4px var(--space-10) var(--space-4); scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
+.rail-track::-webkit-scrollbar { display: none; }
+.rail-track::after { content: ''; flex: 0 0 var(--space-10); }
 
 /* Card */
-.card { position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); overflow: hidden; transition: all 0.3s var(--ease-smooth); cursor: pointer; }
-.card:hover { transform: translateY(-4px); border-color: var(--accent-border-subtle); background: var(--accent-subtle); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.card { scroll-snap-align: start; flex: 0 0 85vw; max-width: 380px; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); overflow: hidden; transition: all 0.3s var(--ease-smooth); cursor: pointer; }
+@media (min-width: 720px) { .card { flex-basis: 320px; } }
+@media (min-width: 1024px) { .card { flex-basis: 380px; } }
+a.card:hover { transform: translateY(-4px); border-color: var(--accent-border-subtle); background: var(--accent-subtle); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
 .card-image { aspect-ratio: 16/9; overflow: hidden; background: #111; position: relative; }
 .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-out); }
-.card:hover .card-image img { transform: scale(1.04); }
+a.card:hover .card-image img { transform: scale(1.04); }
 .card-body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
 .card-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
 .card-title { font-size: 1.15rem; font-weight: 700; color: var(--fg); line-height: 1.3; }
@@ -120,29 +133,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .card-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border); }
 .card-price { font-size: 1.1rem; font-weight: 700; color: var(--fg); }
 .card-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); padding: 8px 14px; border: 1px solid var(--accent); border-radius: var(--radius-sm); transition: all 0.2s; }
-.card:hover .card-btn { background: var(--accent); color: #000; }
+a.card:hover .card-btn { background: var(--accent); color: #000; }
 
-/* Coming soon variant */
-.card-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 12px; border-radius: var(--radius-pill); background: rgba(255, 255, 255, 0.06); color: var(--fg-muted); border: 1px solid var(--border); }
-.card-pill::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-.card-btn-notify { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: all 0.2s; }
-.card:hover .card-btn-notify { border-color: var(--fg); }
-
-/* Notify section */
-.notify { position: relative; z-index: 2; max-width: 640px; margin: 0 auto var(--space-16); padding: var(--space-12); border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); text-align: center; }
-.notify-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
-.notify-heading { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); margin-bottom: var(--space-4); }
-.notify-sub { font-size: 0.95rem; color: var(--fg-muted); line-height: 1.6; max-width: 520px; margin: 0 auto var(--space-8); }
-.notify-form { display: flex; gap: var(--space-3); max-width: 460px; margin: 0 auto; }
-.notify-input { flex: 1; padding: 14px 18px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
-.notify-input:focus { outline: none; border-color: var(--accent); }
-.notify-btn { padding: 14px 22px; background: var(--accent); color: #000; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; transition: all 0.2s; }
-.notify-btn:hover:not(:disabled) { background: var(--accent-hover); }
-.notify-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.notify-msg { margin-top: var(--space-5); font-size: 0.9rem; min-height: 22px; }
-.notify-msg.success { color: var(--accent); }
-.notify-msg.error { color: #ff8b8b; }
+/* Unavailable variant */
+.card-unavailable { cursor: default; }
+.card-unavailable:hover { transform: none; border-color: var(--border); background: rgba(255,255,255,0.02); box-shadow: none; }
+.card-unavailable .card-image img { transform: none !important; }
+.card-unavailable .card-foot { justify-content: center; }
+.card-pill-muted { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 14px; border-radius: var(--radius-pill); background: rgba(255, 255, 255, 0.06); color: var(--fg-dim); border: 1px solid var(--border); }
 
 /* Footer */
 .footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
@@ -157,11 +155,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav-inner { padding: 0 16px; }
   .nav-links { display: none; }
   .nav-mobile-toggle { display: flex; }
-  .page { padding: 110px var(--space-5) var(--space-12); }
+  .page { padding: 110px 0 var(--space-12); }
+  .page-inner { padding: 0 var(--space-5); }
   .hero { margin-bottom: var(--space-12); }
-  .section-row { margin-bottom: var(--space-12); }
-  .notify { padding: var(--space-8) var(--space-5); }
-  .notify-form { flex-direction: column; gap: var(--space-3); }
+  .rail-section { margin-bottom: var(--space-16); }
+  .rail-head { padding: 0 var(--space-5); }
+  .rail-track { padding: 4px var(--space-5) var(--space-4); scroll-padding-left: var(--space-5); }
+  .rail-track::after { flex-basis: var(--space-5); }
   .footer { padding: var(--space-12) var(--space-6); }
   .footer-socials { flex-wrap: wrap; gap: 16px; }
 }
@@ -207,29 +207,27 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <main class="page">
 
   <!-- Hero -->
-  <section class="hero">
-    <p class="hero-eyebrow">910 Academy · Products</p>
-    <h1 class="hero-heading">Workshops, masterclasses, and systems.</h1>
-    <p class="hero-sub">Learn directly from the operators behind some of the most-watched real estate media work shipped today.</p>
-  </section>
+  <div class="page-inner">
+    <section class="hero">
+      <p class="hero-eyebrow">910 Academy · Products</p>
+      <h1 class="hero-heading">Workshops, masterclasses, and systems.</h1>
+      <p class="hero-sub">Learn directly from the operators behind some of the most-watched real estate media work shipped today.</p>
+    </section>
+  </div>
 
-  <!-- Row 1: Studio 910 in-house -->
-  <section class="section-row">
-    <p class="section-label">By Studio 910</p>
-    <div class="grid">
-      <a href="/products/910-admin-assistant" class="card">
-        <div class="card-image"><img src="/og-images/910-admin-assistant.jpg" alt="910 Admin Assistant" loading="lazy"></div>
-        <div class="card-body">
-          <p class="card-eyebrow">Handbook · PDF</p>
-          <h3 class="card-title">910 Admin Assistant</h3>
-          <p class="card-desc">The exact playbook Studio 910 uses to run seven-figure operations.</p>
-          <div class="card-foot">
-            <span class="card-price">$299</span>
-            <span class="card-btn">View →</span>
-          </div>
-        </div>
-      </a>
-
+  <!-- Rail 1: Studio 910 in-house -->
+  <section class="rail-section">
+    <div class="rail-head">
+      <div class="rail-head-text">
+        <p class="rail-eyebrow">By Studio 910</p>
+        <h2 class="rail-heading">Built In-House</h2>
+      </div>
+      <div class="rail-arrows" data-arrows-for="rail1">
+        <button class="rail-arrow" data-rail-prev aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="rail-arrow" data-rail-next aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+    <div class="rail-track" id="rail1">
       <a href="/products/910-sales-system" class="card">
         <div class="card-image"><img src="/og-images/910-sales-system.jpg" alt="910 Sales System" loading="lazy"></div>
         <div class="card-body">
@@ -242,71 +240,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
           </div>
         </div>
       </a>
-
-      <a href="/products/instagram-masterclass" class="card">
-        <div class="card-image"><img src="/og-images/instagram-masterclass.jpg" alt="Instagram Masterclass" loading="lazy"></div>
-        <div class="card-body">
-          <p class="card-eyebrow">Masterclass</p>
-          <h3 class="card-title">The Instagram Masterclass</h3>
-          <p class="card-desc">The full step-by-step playbook for building a real estate Instagram brand that actually books clients.</p>
-          <div class="card-foot">
-            <span class="card-price">$91</span>
-            <span class="card-btn">View →</span>
-          </div>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Row 2: Partner workshops -->
-  <section class="section-row">
-    <p class="section-label">Partner workshops</p>
-    <div class="grid">
-      <a href="/products/lucid-horizon-workshop" class="card">
-        <div class="card-image"><img src="/og-images/lucid-horizon-workshop.jpg" alt="Lucid Horizon Workshop" loading="lazy"></div>
-        <div class="card-body">
-          <p class="card-eyebrow">Workshop</p>
-          <h3 class="card-title">Lucid Horizon × 910 Academy</h3>
-          <p class="card-desc">The full edit-room walk-through behind the cinematic real estate look — stabilizers, transitions, color, sound design.</p>
-          <div class="card-foot">
-            <span class="card-price">$91</span>
-            <span class="card-btn">View →</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="/products/known-productions-workshop" class="card">
-        <div class="card-image"><img src="/og-images/known-productions-workshop.jpg" alt="Known Productions Workshop" loading="lazy"></div>
-        <div class="card-body">
-          <p class="card-eyebrow">Workshop</p>
-          <h3 class="card-title">Known Productions × 910 Academy</h3>
-          <p class="card-desc">A high-end editorial breakdown for ultra-luxury listings — pacing, music, restraint.</p>
-          <div class="card-foot">
-            <span class="card-price">$91</span>
-            <span class="card-btn">View →</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="/products/jt-visuals-workshop" class="card">
-        <div class="card-image"><img src="/og-images/jt-visuals-workshop.jpg" alt="JT Visuals Workshop" loading="lazy"></div>
-        <div class="card-body">
-          <p class="card-eyebrow">Workshop</p>
-          <h3 class="card-title">JT Visuals × 910 Academy</h3>
-          <p class="card-desc">A walk-through of the JT Visuals shooting and editing approach that's redefined the listing reel format.</p>
-          <div class="card-foot">
-            <span class="card-price">$91</span>
-            <span class="card-btn">View →</span>
-          </div>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Row 3: Standalone + coming soon -->
-  <section class="section-row">
-    <p class="section-label">More from the academy</p>
-    <div class="grid">
       <a href="/products/3d-made-easy" class="card">
         <div class="card-image"><img src="/og-images/3d-made-easy.jpg" alt="3D Made Easy" loading="lazy"></div>
         <div class="card-body">
@@ -319,33 +252,94 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
           </div>
         </div>
       </a>
-
-      <a href="#notify" class="card" id="fhCard">
-        <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Workshop" loading="lazy"></div>
+      <a href="/products/instagram-masterclass" class="card">
+        <div class="card-image"><img src="/og-images/instagram-masterclass.jpg" alt="Instagram Masterclass" loading="lazy"></div>
         <div class="card-body">
-          <p class="card-eyebrow">Workshop · Two parts</p>
-          <h3 class="card-title">Four Horsemen × 910 Academy</h3>
-          <p class="card-desc">The most in-depth real estate media workshop we've shipped, covering both the business and the editing rooms.</p>
+          <p class="card-eyebrow">Masterclass</p>
+          <h3 class="card-title">The Instagram Masterclass</h3>
+          <p class="card-desc">The full step-by-step playbook for building a real estate Instagram brand that actually books clients.</p>
           <div class="card-foot">
-            <span class="card-pill">Coming Soon</span>
-            <span class="card-btn-notify">Notify Me</span>
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+      <a href="/products/910-admin-assistant" class="card">
+        <div class="card-image"><img src="/og-images/910-admin-assistant.jpg" alt="910 Admin Assistant" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Handbook · PDF</p>
+          <h3 class="card-title">910 Admin Assistant</h3>
+          <p class="card-desc">The exact playbook Studio 910 uses to run seven-figure operations.</p>
+          <div class="card-foot">
+            <span class="card-price">$299</span>
+            <span class="card-btn">View →</span>
           </div>
         </div>
       </a>
     </div>
   </section>
 
-  <!-- Notify section for Four Horsemen -->
-  <!-- TODO: Shayan to replace FOUR_HORSEMEN_WAITLIST_WEBHOOK with real n8n webhook URL when workflow is created -->
-  <section class="notify" id="notify">
-    <p class="notify-eyebrow">Releasing soon</p>
-    <h2 class="notify-heading">Four Horsemen × 910 Academy</h2>
-    <p class="notify-sub">Two parts of the most in-depth real estate media workshop we've shipped — covering both the business and the editing rooms. Drop your email and we'll let you know the moment it's live.</p>
-    <form class="notify-form" id="notifyForm" novalidate>
-      <input type="email" name="email" class="notify-input" placeholder="you@email.com" autocomplete="email" required>
-      <button type="submit" class="notify-btn" id="notifyBtn">Notify Me</button>
-    </form>
-    <p class="notify-msg" id="notifyMsg" role="status" aria-live="polite"></p>
+  <!-- Rail 2: Partner workshops -->
+  <section class="rail-section">
+    <div class="rail-head">
+      <div class="rail-head-text">
+        <p class="rail-eyebrow">Partner Workshops</p>
+        <h2 class="rail-heading">Built With Operators</h2>
+      </div>
+      <div class="rail-arrows" data-arrows-for="rail2">
+        <button class="rail-arrow" data-rail-prev aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="rail-arrow" data-rail-next aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+    <div class="rail-track" id="rail2">
+      <div class="card card-unavailable">
+        <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Takeover" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop · Two parts</p>
+          <h3 class="card-title">Four Horsemen Takeover</h3>
+          <p class="card-desc">The most in-depth real estate media workshop we've shipped, covering both the business and the editing rooms.</p>
+          <div class="card-foot">
+            <span class="card-pill-muted">Unavailable</span>
+          </div>
+        </div>
+      </div>
+      <a href="/products/jt-visuals-workshop" class="card">
+        <div class="card-image"><img src="/og-images/jt-visuals-workshop.jpg" alt="JT Visuals Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">JT Visuals × 910 Academy</h3>
+          <p class="card-desc">A walk-through of the JT Visuals shooting and editing approach that's redefined the listing reel format.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+      <a href="/products/lucid-horizon-workshop" class="card">
+        <div class="card-image"><img src="/og-images/lucid-horizon-workshop.jpg" alt="Lucid Horizon Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">Lucid Horizon × 910 Academy</h3>
+          <p class="card-desc">The full edit-room walk-through behind the cinematic real estate look — stabilizers, transitions, color, sound design.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+      <a href="/products/known-productions-workshop" class="card">
+        <div class="card-image"><img src="/og-images/known-productions-workshop.jpg" alt="Known Productions Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">Known Productions × 910 Academy</h3>
+          <p class="card-desc">A high-end editorial breakdown for ultra-luxury listings — pacing, music, restraint.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+    </div>
   </section>
 
 </main>
@@ -384,59 +378,30 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   });
 })();
 (function() {
-  // TODO: Shayan to replace with real n8n webhook URL when workflow is created
-  var FOUR_HORSEMEN_WAITLIST_WEBHOOK = "https://YOUR_N8N_INSTANCE_URL/webhook/four-horsemen-waitlist";
-
-  var form = document.getElementById('notifyForm');
-  var btn = document.getElementById('notifyBtn');
-  var msg = document.getElementById('notifyMsg');
-  if (!form) return;
-
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    msg.className = 'notify-msg';
-    msg.textContent = '';
-    var email = form.email.value.trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      msg.className = 'notify-msg error';
-      msg.textContent = 'Please enter a valid email.';
-      return;
+  // Wire up rail arrows: each arrow group scrolls its associated rail by one card width.
+  document.querySelectorAll('.rail-arrows').forEach(function(group) {
+    var railId = group.getAttribute('data-arrows-for');
+    var rail = document.getElementById(railId);
+    if (!rail) return;
+    var prev = group.querySelector('[data-rail-prev]');
+    var next = group.querySelector('[data-rail-next]');
+    function step() {
+      var card = rail.querySelector('.card');
+      if (!card) return 0;
+      var gap = parseFloat(getComputedStyle(rail).columnGap) || 24;
+      return card.getBoundingClientRect().width + gap;
     }
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
-
-    try {
-      // Will silently fail until the webhook URL is set; UX still shows success.
-      if (FOUR_HORSEMEN_WAITLIST_WEBHOOK.indexOf('YOUR_N8N_INSTANCE_URL') === -1) {
-        await fetch(FOUR_HORSEMEN_WAITLIST_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, source: 'four-horsemen-waitlist', submitted_at: new Date().toISOString() })
-        });
-      }
-      msg.className = 'notify-msg success';
-      msg.textContent = "You're on the list. We'll email you when it's available.";
-      form.reset();
-    } catch (err) {
-      msg.className = 'notify-msg error';
-      msg.innerHTML = 'Something went wrong. Try again or email <a href="mailto:academy@studio910pb.com" style="color:var(--accent);text-decoration:underline;">academy@studio910pb.com</a>';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Notify Me';
+    function update() {
+      if (!prev || !next) return;
+      prev.disabled = rail.scrollLeft <= 4;
+      next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
     }
+    if (prev) prev.addEventListener('click', function() { rail.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', function() { rail.scrollBy({ left: step(), behavior: 'smooth' }); });
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   });
-
-  // Smooth-scroll the FH card click to notify section
-  var fhCard = document.getElementById('fhCard');
-  if (fhCard) {
-    fhCard.addEventListener('click', function(e) {
-      e.preventDefault();
-      var target = document.getElementById('notify');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      var input = document.querySelector('.notify-input');
-      if (input) setTimeout(function() { input.focus(); }, 600);
-    });
-  }
 })();
 </script>
 </body>
