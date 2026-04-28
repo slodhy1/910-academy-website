@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products — 910 Academy</title>
+<meta name="description" content="Workshops, masterclasses, and systems from Studio 910 and the operators behind some of the most-watched real estate media work shipped today.">
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:title" content="Products — 910 Academy">
+<meta property="og:description" content="Workshops, masterclasses, and systems from Studio 910 and the operators behind some of the most-watched real estate media work shipped today.">
+<meta property="og:image" content="https://www.910academy.com/og-images/products-grid.jpg">
+<meta property="og:url" content="https://www.910academy.com/products">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Products — 910 Academy">
+<meta name="twitter:description" content="Workshops, masterclasses, and systems from 910 Academy.">
+<meta name="twitter:image" content="https://www.910academy.com/og-images/products-grid.jpg">
+<link rel="canonical" href="https://www.910academy.com/products">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --glass-blur-heavy: blur(30px);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+  --space-12: 48px; --space-16: 64px; --space-20: 80px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-pill: 100px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  background: var(--bg-base); color: var(--fg);
+  font-family: var(--font); font-weight: 400;
+  line-height: var(--leading-normal);
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
+.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.02); filter: blur(120px); animation-delay: 0s; }
+.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
+.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56, 182, 255, 0.01); filter: blur(100px); animation-delay: -8s; }
+@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
+
+/* Nav (matches site) */
+.nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: var(--space-5) 0; transition: all 0.4s var(--ease-out); }
+.nav.scrolled { padding: 14px 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy); border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-10); display: flex; align-items: center; justify-content: space-between; }
+.nav-logo img { height: 36px; width: auto; opacity: 0.95; }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-link { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); transition: color 0.3s var(--ease-smooth); position: relative; }
+.nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--fg); transition: width 0.3s var(--ease-out); }
+.nav-link:hover { color: var(--fg); }
+.nav-link:hover::after { width: 100%; }
+.nav-cta { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #000; background: #FFF; padding: var(--space-3) var(--space-8); border-radius: 8px; transition: all 0.25s ease; }
+.nav-cta:hover { background: var(--accent); color: #FFF; transform: translateY(-1px); }
+.nav-mobile-toggle { display: none; flex-direction: column; gap: 5px; padding: var(--space-1); }
+.nav-mobile-toggle span { display: block; width: 22px; height: 1.5px; background: var(--fg); transition: all 0.3s var(--ease-out); }
+
+.mobile-nav { display: none; position: fixed; inset: 0; background: rgba(5, 5, 6, 0.95); backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 36px; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out); }
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav a { font-size: 1.6rem; font-weight: 300; text-transform: uppercase; color: var(--fg); transition: color 0.3s var(--ease-smooth); }
+.mobile-nav a:hover { color: var(--accent); }
+.mobile-nav-close { position: absolute; top: 24px; right: 32px; font-size: 28px; color: var(--fg); }
+
+/* Page */
+.page { position: relative; z-index: 2; flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 140px var(--space-10) var(--space-20); }
+
+/* Hero */
+.hero { text-align: center; max-width: 720px; margin: 0 auto var(--space-20); }
+.hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-5); }
+.hero-heading { font-size: clamp(1.8rem, 4.4vw, 2.8rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--fg); margin-bottom: var(--space-6); }
+.hero-sub { font-size: 1rem; color: var(--fg-muted); line-height: 1.7; max-width: 600px; margin: 0 auto; }
+
+/* Grid */
+.section-row { margin-bottom: var(--space-16); }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: var(--space-8); }
+.grid { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+@media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+/* Card */
+.card { position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); overflow: hidden; transition: all 0.3s var(--ease-smooth); cursor: pointer; }
+.card:hover { transform: translateY(-4px); border-color: var(--accent-border-subtle); background: var(--accent-subtle); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.card-image { aspect-ratio: 16/9; overflow: hidden; background: #111; position: relative; }
+.card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-out); }
+.card:hover .card-image img { transform: scale(1.04); }
+.card-body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
+.card-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--fg); line-height: 1.3; }
+.card-desc { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.55; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border); }
+.card-price { font-size: 1.1rem; font-weight: 700; color: var(--fg); }
+.card-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); padding: 8px 14px; border: 1px solid var(--accent); border-radius: var(--radius-sm); transition: all 0.2s; }
+.card:hover .card-btn { background: var(--accent); color: #000; }
+
+/* Coming soon variant */
+.card-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 12px; border-radius: var(--radius-pill); background: rgba(255, 255, 255, 0.06); color: var(--fg-muted); border: 1px solid var(--border); }
+.card-pill::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.card-btn-notify { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); transition: all 0.2s; }
+.card:hover .card-btn-notify { border-color: var(--fg); }
+
+/* Notify section */
+.notify { position: relative; z-index: 2; max-width: 640px; margin: 0 auto var(--space-16); padding: var(--space-12); border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); text-align: center; }
+.notify-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
+.notify-heading { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); margin-bottom: var(--space-4); }
+.notify-sub { font-size: 0.95rem; color: var(--fg-muted); line-height: 1.6; max-width: 520px; margin: 0 auto var(--space-8); }
+.notify-form { display: flex; gap: var(--space-3); max-width: 460px; margin: 0 auto; }
+.notify-input { flex: 1; padding: 14px 18px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
+.notify-input:focus { outline: none; border-color: var(--accent); }
+.notify-btn { padding: 14px 22px; background: var(--accent); color: #000; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; transition: all 0.2s; }
+.notify-btn:hover:not(:disabled) { background: var(--accent-hover); }
+.notify-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.notify-msg { margin-top: var(--space-5); font-size: 0.9rem; min-height: 22px; }
+.notify-msg.success { color: var(--accent); }
+.notify-msg.error { color: #ff8b8b; }
+
+/* Footer */
+.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
+.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
+.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
+.footer-socials a { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--fg-dim); transition: color 0.3s var(--ease-smooth); }
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 0.75rem; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; margin-bottom: var(--space-4); }
+.footer-disclaimer { font-size: 0.7rem; color: var(--fg-ghost); letter-spacing: 0.02em; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .page { padding: 110px var(--space-5) var(--space-12); }
+  .hero { margin-bottom: var(--space-12); }
+  .section-row { margin-bottom: var(--space-12); }
+  .notify { padding: var(--space-8) var(--space-5); }
+  .notify-form { flex-direction: column; gap: var(--space-3); }
+  .footer { padding: var(--space-12) var(--space-6); }
+  .footer-socials { flex-wrap: wrap; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/gear" class="nav-link">Our Gear</a>
+      <a href="/products" class="nav-link">Products</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+  <a href="/gear">Our Gear</a>
+  <a href="/products">Products</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
+</div>
+
+<main class="page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-eyebrow">910 Academy · Products</p>
+    <h1 class="hero-heading">Workshops, masterclasses, and systems.</h1>
+    <p class="hero-sub">Learn directly from the operators behind some of the most-watched real estate media work shipped today.</p>
+  </section>
+
+  <!-- Row 1: Studio 910 in-house -->
+  <section class="section-row">
+    <p class="section-label">By Studio 910</p>
+    <div class="grid">
+      <a href="/products/910-admin-assistant" class="card">
+        <div class="card-image"><img src="/og-images/910-admin-assistant.jpg" alt="910 Admin Assistant" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Handbook · PDF</p>
+          <h3 class="card-title">910 Admin Assistant</h3>
+          <p class="card-desc">The exact playbook Studio 910 uses to run seven-figure operations.</p>
+          <div class="card-foot">
+            <span class="card-price">$299</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/products/910-sales-system" class="card">
+        <div class="card-image"><img src="/og-images/910-sales-system.jpg" alt="910 Sales System" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop · 1h 45m + PDF</p>
+          <h3 class="card-title">910 Sales System</h3>
+          <p class="card-desc">The exact phone process Studio 910 uses to attract clients, sell brand, and close deals at premium prices.</p>
+          <div class="card-foot">
+            <span class="card-price">$299</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/products/instagram-masterclass" class="card">
+        <div class="card-image"><img src="/og-images/instagram-masterclass.jpg" alt="Instagram Masterclass" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Masterclass</p>
+          <h3 class="card-title">The Instagram Masterclass</h3>
+          <p class="card-desc">The full step-by-step playbook for building a real estate Instagram brand that actually books clients.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Row 2: Partner workshops -->
+  <section class="section-row">
+    <p class="section-label">Partner workshops</p>
+    <div class="grid">
+      <a href="/products/lucid-horizon-workshop" class="card">
+        <div class="card-image"><img src="/og-images/lucid-horizon-workshop.jpg" alt="Lucid Horizon Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">Lucid Horizon × 910 Academy</h3>
+          <p class="card-desc">The full edit-room walk-through behind the cinematic real estate look — stabilizers, transitions, color, sound design.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/products/known-productions-workshop" class="card">
+        <div class="card-image"><img src="/og-images/known-productions-workshop.jpg" alt="Known Productions Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">Known Productions × 910 Academy</h3>
+          <p class="card-desc">A high-end editorial breakdown for ultra-luxury listings — pacing, music, restraint.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/products/jt-visuals-workshop" class="card">
+        <div class="card-image"><img src="/og-images/jt-visuals-workshop.jpg" alt="JT Visuals Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">JT Visuals × 910 Academy</h3>
+          <p class="card-desc">A walk-through of the JT Visuals shooting and editing approach that's redefined the listing reel format.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Row 3: Standalone + coming soon -->
+  <section class="section-row">
+    <p class="section-label">More from the academy</p>
+    <div class="grid">
+      <a href="/products/3d-made-easy" class="card">
+        <div class="card-image"><img src="/og-images/3d-made-easy.jpg" alt="3D Made Easy" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop</p>
+          <h3 class="card-title">3D Made Easy</h3>
+          <p class="card-desc">The 910 system for adding viral 3D text and snap captions to real estate reels.</p>
+          <div class="card-foot">
+            <span class="card-price">$91</span>
+            <span class="card-btn">View →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#notify" class="card" id="fhCard">
+        <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Workshop" loading="lazy"></div>
+        <div class="card-body">
+          <p class="card-eyebrow">Workshop · Two parts</p>
+          <h3 class="card-title">Four Horsemen × 910 Academy</h3>
+          <p class="card-desc">The most in-depth real estate media workshop we've shipped, covering both the business and the editing rooms.</p>
+          <div class="card-foot">
+            <span class="card-pill">Coming Soon</span>
+            <span class="card-btn-notify">Notify Me</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Notify section for Four Horsemen -->
+  <!-- TODO: Shayan to replace FOUR_HORSEMEN_WAITLIST_WEBHOOK with real n8n webhook URL when workflow is created -->
+  <section class="notify" id="notify">
+    <p class="notify-eyebrow">Releasing soon</p>
+    <h2 class="notify-heading">Four Horsemen × 910 Academy</h2>
+    <p class="notify-sub">Two parts of the most in-depth real estate media workshop we've shipped — covering both the business and the editing rooms. Drop your email and we'll let you know the moment it's live.</p>
+    <form class="notify-form" id="notifyForm" novalidate>
+      <input type="email" name="email" class="notify-input" placeholder="you@email.com" autocomplete="email" required>
+      <button type="submit" class="notify-btn" id="notifyBtn">Notify Me</button>
+    </form>
+    <p class="notify-msg" id="notifyMsg" role="status" aria-live="polite"></p>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank" rel="noopener noreferrer">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+  <p class="footer-disclaimer">All sales are final. Results vary based on individual effort and circumstances. 910 Academy makes no income guarantees. By purchasing, you agree to our terms.</p>
+</footer>
+
+<script>
+(function() {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function() {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) { scrolled = s; nav.classList.toggle('scrolled', s); }
+  }, { passive: true });
+})();
+(function() {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  toggle.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  });
+})();
+(function() {
+  // TODO: Shayan to replace with real n8n webhook URL when workflow is created
+  var FOUR_HORSEMEN_WAITLIST_WEBHOOK = "https://YOUR_N8N_INSTANCE_URL/webhook/four-horsemen-waitlist";
+
+  var form = document.getElementById('notifyForm');
+  var btn = document.getElementById('notifyBtn');
+  var msg = document.getElementById('notifyMsg');
+  if (!form) return;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    msg.className = 'notify-msg';
+    msg.textContent = '';
+    var email = form.email.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.className = 'notify-msg error';
+      msg.textContent = 'Please enter a valid email.';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    try {
+      // Will silently fail until the webhook URL is set; UX still shows success.
+      if (FOUR_HORSEMEN_WAITLIST_WEBHOOK.indexOf('YOUR_N8N_INSTANCE_URL') === -1) {
+        await fetch(FOUR_HORSEMEN_WAITLIST_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, source: 'four-horsemen-waitlist', submitted_at: new Date().toISOString() })
+        });
+      }
+      msg.className = 'notify-msg success';
+      msg.textContent = "You're on the list. We'll email you when it's available.";
+      form.reset();
+    } catch (err) {
+      msg.className = 'notify-msg error';
+      msg.innerHTML = 'Something went wrong. Try again or email <a href="mailto:academy@studio910pb.com" style="color:var(--accent);text-decoration:underline;">academy@studio910pb.com</a>';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Notify Me';
+    }
+  });
+
+  // Smooth-scroll the FH card click to notify section
+  var fhCard = document.getElementById('fhCard');
+  if (fhCard) {
+    fhCard.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.getElementById('notify');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var input = document.querySelector('.notify-input');
+      if (input) setTimeout(function() { input.focus(); }, 600);
+    });
+  }
+})();
+</script>
+</body>
+</html>

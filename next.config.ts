@@ -12,6 +12,7 @@ const STATIC_PAGES = [
   "coaching",
   "affiliate-guidelines",
   "maintenance",
+  "products",
   "products-archive",
 ];
 
