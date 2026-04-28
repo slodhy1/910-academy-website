@@ -15,8 +15,8 @@ insert into public.products (
   null,
   null,
   '/og-images/910-admin-assistant.jpg',
-  null,
-  null,
+  'https://buy.stripe.com/14A4gyblA3YG9O9fhd5Rm0M',
+  'plink_1RhJb8BgZ35gA9jq09fQh1JP',
   'active',
   'pdf',
   'admin-assistant/910-admin-assistant-handbook.pdf'
@@ -27,6 +27,8 @@ on conflict (slug) do update set
   long_description = excluded.long_description,
   price_cents = excluded.price_cents,
   thumbnail_url = excluded.thumbnail_url,
+  stripe_payment_link = excluded.stripe_payment_link,
+  stripe_payment_link_id = excluded.stripe_payment_link_id,
   status = excluded.status,
   resource_type = excluded.resource_type,
   resource_path = excluded.resource_path;

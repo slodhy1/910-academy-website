@@ -515,6 +515,59 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .reel-grid { grid-template-columns: 1fr; max-width: 360px; }
 }
 
+/* TOC layout (handbook table of contents) */
+.toc {
+  max-width: 820px;
+  margin: var(--space-8) auto 0;
+}
+.toc-section { margin-bottom: var(--space-12); }
+.toc-section:last-child { margin-bottom: 0; }
+.toc-section-header {
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.toc-section-roman {
+  color: var(--accent);
+  margin-right: var(--space-3);
+  font-weight: 700;
+}
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  font-size: 0.95rem;
+  color: var(--fg);
+  line-height: 1.45;
+}
+.toc-title { flex: 0 1 auto; }
+.toc-leader {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+  min-width: 16px;
+}
+.toc-page {
+  flex: 0 0 auto;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+@media (max-width: 640px) {
+  .toc-leader { display: none; }
+  .toc-list li { flex-wrap: wrap; gap: 4px var(--space-3); }
+  .toc-page { margin-left: auto; }
+}
+
 /* What's Inside (bullets) */
 .bullets {
   list-style: none;
@@ -834,7 +887,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <a href="#pricing" class="thumb-card" aria-label="Scroll to pricing to get instant access">
     <img src="/og-images/910-admin-assistant.jpg" alt="910 Admin Assistant" width="1200" height="630" loading="eager" decoding="async">
     <div class="thumb-card-overlay">
-      <a href="STRIPE_PAYMENT_LINK_TBD" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $299</a>
+      <a href="https://buy.stripe.com/14A4gyblA3YG9O9fhd5Rm0M" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $299</a>
     </div>
   </a>
   <p class="thumb-meta">150-page handbook · Lifetime access · Instant download</p>
@@ -844,19 +897,78 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <section class="section" id="whats-inside">
   <p class="section-label">WHAT'S INSIDE</p>
   <h2 class="section-heading">What's inside the handbook</h2>
-  <p class="section-sub">Every system, SOP, and template that runs Studio 910's daily operations.</p>
-  <ul class="bullets">
-    <li>Client onboarding workflow, intake forms, contracts, and kickoff call structure</li>
-    <li>Project management templates, timelines, deliverables, and milestone gates</li>
-    <li>Editor handoff system, file naming, asset organization, and revision rounds</li>
-    <li>Invoice + payment follow-up sequences</li>
-    <li>Email reply templates for the most common client situations</li>
-    <li>SOPs for shoot-day prep, gear checks, and on-site logistics</li>
-    <li>Hiring workflow, how to find, vet, and onboard editors and admins</li>
-    <li>Weekly + monthly operational cadence, what to review, when, with whom</li>
-    <li>Crisis playbooks, missed deadlines, dropped equipment, client conflicts</li>
-    <li>Internal docs structure, how every team member knows where to find anything</li>
-  </ul>
+  <p class="section-sub">150 pages. Six sections. Every system Studio 910 uses to run at scale.</p>
+
+  <div class="toc">
+
+    <div class="toc-section">
+      <h3 class="toc-section-header"><span class="toc-section-roman">I</span>Admin Training and Proper Delegation</h3>
+      <ul class="toc-list">
+        <li><span class="toc-title">The 910 GPT</span><span class="toc-leader"></span><span class="toc-page">p. 9</span></li>
+        <li><span class="toc-title">How To Onboard an Admin</span><span class="toc-leader"></span><span class="toc-page">p. 13</span></li>
+        <li><span class="toc-title">Admin Delegation and Expectations</span><span class="toc-leader"></span><span class="toc-page">p. 22</span></li>
+        <li><span class="toc-title">Admin Daily Responsibilities</span><span class="toc-leader"></span><span class="toc-page">p. 29</span></li>
+        <li><span class="toc-title">Sales Role vs Admin Role</span><span class="toc-leader"></span><span class="toc-page">p. 37</span></li>
+      </ul>
+    </div>
+
+    <div class="toc-section">
+      <h3 class="toc-section-header"><span class="toc-section-roman">II</span>Client Communication and Professional Presence</h3>
+      <ul class="toc-list">
+        <li><span class="toc-title">How To Speak the Language of Luxury</span><span class="toc-leader"></span><span class="toc-page">p. 43</span></li>
+        <li><span class="toc-title">How to Be a True Professional, Admin Edition</span><span class="toc-leader"></span><span class="toc-page">p. 48</span></li>
+        <li><span class="toc-title">How to Answer the Phone</span><span class="toc-leader"></span><span class="toc-page">p. 52</span></li>
+        <li><span class="toc-title">Managing Expectations</span><span class="toc-leader"></span><span class="toc-page">p. 54</span></li>
+        <li><span class="toc-title">What to Say if Weather Is Bad Day of Shoot</span><span class="toc-leader"></span><span class="toc-page">p. 57</span></li>
+        <li><span class="toc-title">What to Say if Shooter Is Running Late</span><span class="toc-leader"></span><span class="toc-page">p. 59</span></li>
+        <li><span class="toc-title">How To Let A Client Know Delivery Is Late Properly</span><span class="toc-leader"></span><span class="toc-page">p. 61</span></li>
+        <li><span class="toc-title">Google Review Request Flow</span><span class="toc-leader"></span><span class="toc-page">p. 63</span></li>
+        <li><span class="toc-title">How to Remind Someone to Complete an Unpaid Invoice</span><span class="toc-leader"></span><span class="toc-page">p. 65</span></li>
+      </ul>
+    </div>
+
+    <div class="toc-section">
+      <h3 class="toc-section-header"><span class="toc-section-roman">III</span>Scheduling and Coordination</h3>
+      <ul class="toc-list">
+        <li><span class="toc-title">How To Manually Book Shoots Properly Without Overbooking</span><span class="toc-leader"></span><span class="toc-page">p. 68</span></li>
+        <li><span class="toc-title">How To Send Shoot Reminders</span><span class="toc-leader"></span><span class="toc-page">p. 76</span></li>
+        <li><span class="toc-title">How To Send a Calendar Invite</span><span class="toc-leader"></span><span class="toc-page">p. 78</span></li>
+      </ul>
+    </div>
+
+    <div class="toc-section">
+      <h3 class="toc-section-header"><span class="toc-section-roman">IV</span>Client Delivery and Relationship Management</h3>
+      <ul class="toc-list">
+        <li><span class="toc-title">How To Deliver a Video</span><span class="toc-leader"></span><span class="toc-page">p. 83</span></li>
+        <li><span class="toc-title">How To Do a Bespoke Delivery</span><span class="toc-leader"></span><span class="toc-page">p. 87</span></li>
+        <li><span class="toc-title">What To Do if a Client Doesn't Like Their Video</span><span class="toc-leader"></span><span class="toc-page">p. 92</span></li>
+        <li><span class="toc-title">How To Onboard a Client</span><span class="toc-leader"></span><span class="toc-page">p. 100</span></li>
+      </ul>
+    </div>
+
+    <div class="toc-section">
+      <h3 class="toc-section-header"><span class="toc-section-roman">V</span>Systems and Operations</h3>
+      <ul class="toc-list">
+        <li><span class="toc-title">How To Use Dropbox for Project Organization</span><span class="toc-leader"></span><span class="toc-page">p. 106</span></li>
+        <li><span class="toc-title">How To Use Monday.com for Organization</span><span class="toc-leader"></span><span class="toc-page">p. 109</span></li>
+        <li><span class="toc-title">Best Software for Client Communication</span><span class="toc-leader"></span><span class="toc-page">p. 117</span></li>
+        <li><span class="toc-title">How To Streamline Quality Control of Edits</span><span class="toc-leader"></span><span class="toc-page">p. 125</span></li>
+        <li><span class="toc-title">How To Create an Invoice</span><span class="toc-leader"></span><span class="toc-page">p. 128</span></li>
+        <li><span class="toc-title">HubSpot for CRM</span><span class="toc-leader"></span><span class="toc-page">p. 132</span></li>
+        <li><span class="toc-title">Internal Team Communication</span><span class="toc-leader"></span><span class="toc-page">p. 136</span></li>
+        <li><span class="toc-title">How To Send Evening Round-Ups</span><span class="toc-leader"></span><span class="toc-page">p. 141</span></li>
+        <li><span class="toc-title">Purchase Company Products</span><span class="toc-leader"></span><span class="toc-page">p. 145</span></li>
+      </ul>
+    </div>
+
+    <div class="toc-section">
+      <h3 class="toc-section-header"><span class="toc-section-roman">VI</span>Policies and Standards</h3>
+      <ul class="toc-list">
+        <li><span class="toc-title">Terms and Conditions</span><span class="toc-leader"></span><span class="toc-page">p. 149</span></li>
+      </ul>
+    </div>
+
+  </div>
 </section>
 
 <!-- WHO THIS IS FOR -->
@@ -891,7 +1003,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <li>Lifetime access via your 910 Academy account</li>
       <li>Read in-browser or download to keep</li>
     </ul>
-    <a href="STRIPE_PAYMENT_LINK_TBD" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">Get Instant Access: $299</a>
+    <a href="https://buy.stripe.com/14A4gyblA3YG9O9fhd5Rm0M" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">Get Instant Access: $299</a>
   </div>
 </section>
 
