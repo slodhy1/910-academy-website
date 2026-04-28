@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
       { source: "/products/jt-visuals-workshop", destination: "/products/jt-visuals-workshop.html" },
       { source: "/products/instagram-masterclass", destination: "/products/instagram-masterclass.html" },
       { source: "/products/910-admin-assistant", destination: "/products/910-admin-assistant.html" },
+      { source: "/products/3d-made-easy", destination: "/products/3d-made-easy.html" },
+      { source: "/products/910-sales-system", destination: "/products/910-sales-system.html" },
     ];
   },
 };
