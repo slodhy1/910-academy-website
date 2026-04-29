@@ -140,25 +140,6 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
 .card-unavailable:hover { transform: none; border-color: var(--border); background: rgba(255,255,255,0.02); box-shadow: none; }
 .card-unavailable .card-image img { transform: none !important; }
 .card-unavailable .card-foot { justify-content: center; }
-
-/* Partner rail: center the first card on initial load */
-.rail--partner {
-  padding-inline: calc(50% - 190px);
-  scroll-padding-inline: calc(50% - 190px);
-}
-.rail--partner::after { display: none; }
-@media (max-width: 1023px) {
-  .rail--partner {
-    padding-inline: calc(50% - 160px);
-    scroll-padding-inline: calc(50% - 160px);
-  }
-}
-@media (max-width: 719px) {
-  .rail--partner {
-    padding-inline: calc(50% - 42.5vw);
-    scroll-padding-inline: calc(50% - 42.5vw);
-  }
-}
 .card-pill-muted { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 14px; border-radius: var(--radius-pill); background: rgba(255, 255, 255, 0.06); color: var(--fg-dim); border: 1px solid var(--border); }
 
 /* Footer */
@@ -308,7 +289,7 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
         <button class="rail-arrow" data-rail-next aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-    <div class="rail-track rail--partner" id="rail2">
+    <div class="rail-track" id="rail2" data-rail="partner">
       <div class="card card-unavailable">
         <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Takeover" loading="lazy"></div>
         <div class="card-body">
@@ -419,6 +400,32 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
     window.addEventListener('resize', update);
     update();
   });
+})();
+(function() {
+  // Center the first card of the partner rail on initial load (FH card).
+  // JS-only — no scroll-padding/scroll-margin tricks.
+  function centerFirstCard(rail) {
+    if (!rail) return;
+    var firstCard = rail.querySelector('.card');
+    if (!firstCard) return;
+    var target = firstCard.offsetLeft - (rail.clientWidth / 2 - firstCard.offsetWidth / 2);
+    target = Math.max(0, target);
+    var prevBehavior = rail.style.scrollBehavior;
+    rail.style.scrollBehavior = 'auto';
+    rail.scrollLeft = target;
+    rail.style.scrollBehavior = prevBehavior;
+  }
+  function init() {
+    var partner = document.querySelector('[data-rail="partner"]');
+    centerFirstCard(partner);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  // Re-center after images settle layout.
+  window.addEventListener('load', init);
 })();
 </script>
 </body>
