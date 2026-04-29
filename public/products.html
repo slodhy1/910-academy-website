@@ -101,27 +101,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-heading { font-size: clamp(1.8rem, 4.4vw, 2.8rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--fg); margin-bottom: var(--space-6); }
 .hero-sub { font-size: 1rem; color: var(--fg-muted); line-height: 1.7; max-width: 600px; margin: 0 auto; }
 
-/* Slider section */
-.rail-section { margin-bottom: var(--space-20); }
-.rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-8); padding: 0 var(--space-10); max-width: 1280px; margin-left: auto; margin-right: auto; }
-.rail-head-text { display: flex; flex-direction: column; gap: var(--space-2); }
-.rail-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
-.rail-heading { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--fg); }
-.rail-arrows { display: none; gap: var(--space-3); }
-.rail-arrow { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--fg-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.rail-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--accent-subtle); }
-.rail-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
-.rail-arrow svg { width: 18px; height: 18px; }
-@media (min-width: 1024px) { .rail-arrows { display: flex; } }
+/* Products section */
+.products-section { margin-bottom: var(--space-20); padding: 0 var(--space-10); max-width: 1400px; margin-left: auto; margin-right: auto; }
+.products-section__header { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-8); }
+.products-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
+.products-heading { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--fg); }
 
-.rail-track { display: flex; gap: var(--space-6); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-padding-left: var(--space-10); padding: 4px var(--space-10) var(--space-4); scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
-.rail-track::-webkit-scrollbar { display: none; }
-.rail-track::after { content: ''; flex: 0 0 var(--space-10); }
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; width: 100%; }
+@media (max-width: 1023px) { .product-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+@media (max-width: 640px) { .product-grid { grid-template-columns: 1fr; gap: 16px; } }
 
 /* Card */
-.card { scroll-snap-align: start; flex: 0 0 85vw; max-width: 380px; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); overflow: hidden; transition: all 0.3s var(--ease-smooth); cursor: pointer; }
-@media (min-width: 720px) { .card { flex-basis: 320px; } }
-@media (min-width: 1024px) { .card { flex-basis: 380px; } }
+.card { position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); overflow: hidden; transition: all 0.3s var(--ease-smooth); cursor: pointer; width: 100%; }
 a.card:hover { transform: translateY(-4px); border-color: var(--accent-border-subtle); background: var(--accent-subtle); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
 .card-image { aspect-ratio: 16/9; overflow: hidden; background: #111; position: relative; }
 .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-out); }
@@ -158,10 +149,7 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
   .page { padding: 110px 0 var(--space-12); }
   .page-inner { padding: 0 var(--space-5); }
   .hero { margin-bottom: var(--space-12); }
-  .rail-section { margin-bottom: var(--space-16); }
-  .rail-head { padding: 0 var(--space-5); }
-  .rail-track { padding: 4px var(--space-5) var(--space-4); scroll-padding-left: var(--space-5); }
-  .rail-track::after { flex-basis: var(--space-5); }
+  .products-section { margin-bottom: var(--space-16); padding: 0 var(--space-5); }
   .footer { padding: var(--space-12) var(--space-6); }
   .footer-socials { flex-wrap: wrap; gap: 16px; }
 }
@@ -213,19 +201,13 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
     </section>
   </div>
 
-  <!-- Rail 1: Studio 910 in-house -->
-  <section class="rail-section">
-    <div class="rail-head">
-      <div class="rail-head-text">
-        <p class="rail-eyebrow">BY STUDIO 910</p>
-        <h2 class="rail-heading">Built In-House</h2>
-      </div>
-      <div class="rail-arrows" data-arrows-for="rail1">
-        <button class="rail-arrow" data-rail-prev aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="rail-arrow" data-rail-next aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
+  <!-- Section 1: Studio 910 in-house -->
+  <section class="products-section">
+    <div class="products-section__header">
+      <p class="products-eyebrow">BY STUDIO 910</p>
+      <h2 class="products-heading">Built In-House</h2>
     </div>
-    <div class="rail-track" id="rail1">
+    <div class="product-grid">
       <a href="/products/910-sales-system" class="card">
         <div class="card-image"><picture><source srcset="/og-images/910-sales-system.webp" type="image/webp"><img src="/og-images/910-sales-system.jpg" alt="910 Sales System" loading="lazy"></picture></div>
         <div class="card-body">
@@ -277,19 +259,13 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
     </div>
   </section>
 
-  <!-- Rail 2: Partner workshops -->
-  <section class="rail-section">
-    <div class="rail-head">
-      <div class="rail-head-text">
-        <p class="rail-eyebrow">PARTNER WORKSHOPS</p>
-        <h2 class="rail-heading">Built With Operators</h2>
-      </div>
-      <div class="rail-arrows" data-arrows-for="rail2">
-        <button class="rail-arrow" data-rail-prev aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="rail-arrow" data-rail-next aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-      </div>
+  <!-- Section 2: Partner workshops -->
+  <section class="products-section">
+    <div class="products-section__header">
+      <p class="products-eyebrow">PARTNER WORKSHOPS</p>
+      <h2 class="products-heading">Built With Operators</h2>
     </div>
-    <div class="rail-track" id="rail2" data-rail="partner">
+    <div class="product-grid">
       <div class="card card-unavailable">
         <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Takeover" loading="lazy"></div>
         <div class="card-body">
@@ -374,58 +350,6 @@ a.card:hover .card-btn { background: var(--accent); color: #000; }
   mobileNav.querySelectorAll('a').forEach(function(a) {
     a.addEventListener('click', function() { mobileNav.classList.remove('open'); });
   });
-})();
-(function() {
-  // Wire up rail arrows: each arrow group scrolls its associated rail by one card width.
-  document.querySelectorAll('.rail-arrows').forEach(function(group) {
-    var railId = group.getAttribute('data-arrows-for');
-    var rail = document.getElementById(railId);
-    if (!rail) return;
-    var prev = group.querySelector('[data-rail-prev]');
-    var next = group.querySelector('[data-rail-next]');
-    function step() {
-      var card = rail.querySelector('.card');
-      if (!card) return 0;
-      var gap = parseFloat(getComputedStyle(rail).columnGap) || 24;
-      return card.getBoundingClientRect().width + gap;
-    }
-    function update() {
-      if (!prev || !next) return;
-      prev.disabled = rail.scrollLeft <= 4;
-      next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
-    }
-    if (prev) prev.addEventListener('click', function() { rail.scrollBy({ left: -step(), behavior: 'smooth' }); });
-    if (next) next.addEventListener('click', function() { rail.scrollBy({ left: step(), behavior: 'smooth' }); });
-    rail.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  });
-})();
-(function() {
-  // Center the first card of the partner rail on initial load (FH card).
-  // JS-only — no scroll-padding/scroll-margin tricks.
-  function centerFirstCard(rail) {
-    if (!rail) return;
-    var firstCard = rail.querySelector('.card');
-    if (!firstCard) return;
-    var target = firstCard.offsetLeft - (rail.clientWidth / 2 - firstCard.offsetWidth / 2);
-    target = Math.max(0, target);
-    var prevBehavior = rail.style.scrollBehavior;
-    rail.style.scrollBehavior = 'auto';
-    rail.scrollLeft = target;
-    rail.style.scrollBehavior = prevBehavior;
-  }
-  function init() {
-    var partner = document.querySelector('[data-rail="partner"]');
-    centerFirstCard(partner);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-  // Re-center after images settle layout.
-  window.addEventListener('load', init);
 })();
 </script>
 </body>
