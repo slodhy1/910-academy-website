@@ -586,6 +586,46 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   stroke: #FFFFFF;
 }
 
+/* Retailer affiliate buttons (Amazon + B&H) */
+.retailer-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: stretch;
+}
+.retailer-buttons--single .retailer-btn { flex: 0 1 50%; }
+.retailer-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  text-decoration: none;
+  transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+.retailer-btn:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.30);
+  transform: translateY(-1px);
+}
+.retailer-logo {
+  max-height: 28px;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+@media (max-width: 480px) {
+  .retailer-buttons { gap: 8px; }
+  .retailer-btn { min-height: 48px; padding: 10px 12px; }
+  .retailer-logo { max-height: 22px; }
+}
+
 /* ========== PRODUCT IMAGES ========== */
 .card-image img {
   object-fit: contain;
@@ -1034,8 +1074,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">Sony A7SIII</h3>
         <p class="card-desc">Our primary body for every luxury shoot</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4rnBxFr" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons">
+          <a class="retailer-btn retailer-btn--amazon" href="https://amzn.to/4rnBxFr" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on Amazon"><img src="/images/retailers/amazon.svg" alt="Amazon" class="retailer-logo"></a>
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1577838-REG/sony_ilce7sm3_b_alpha_a7s_iii_mirrorless.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1481189/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
@@ -1045,8 +1086,8 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">Laowa 10mm f/2.8</h3>
         <p class="card-desc">The widest we go for interiors</p>
-        <div class="card-buttons">
-          <a href="https://www.laowalenses.ca/product/laowa-10mm-f-2-8-zero-d-ff/" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons retailer-buttons--single">
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1811369-REG/venus_optics_ve1028mf14fe_laowa_10mm_f_2_8_zero_d.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1420003/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
@@ -1056,8 +1097,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">Sony 50mm 1.2 GM</h3>
         <p class="card-desc">Our go-to for lifestyle and detail shots</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4kFFToR" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons">
+          <a class="retailer-btn retailer-btn--amazon" href="https://amzn.to/4kFFToR" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on Amazon"><img src="/images/retailers/amazon.svg" alt="Amazon" class="retailer-logo"></a>
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1630079-REG/sony_sel50f12gm_fe_50mm_f_1_2_gm.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1105331/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
@@ -1067,8 +1109,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">DJI RS4 Pro Gimbal</h3>
         <p class="card-desc">Buttery smooth on every walk</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/3Ocfkvp" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons">
+          <a class="retailer-btn retailer-btn--amazon" href="https://amzn.to/3Ocfkvp" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on Amazon"><img src="/images/retailers/amazon.svg" alt="Amazon" class="retailer-logo"></a>
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1816788-REG/dji_cp_rn_00000345_01_rs_4_pro_gimbal.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1454710/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
@@ -1078,8 +1121,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">DJI Mavic 4 Pro</h3>
         <p class="card-desc">Our aerial workhorse</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4av1nS1" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons">
+          <a class="retailer-btn retailer-btn--amazon" href="https://amzn.to/4av1nS1" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on Amazon"><img src="/images/retailers/amazon.svg" alt="Amazon" class="retailer-logo"></a>
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1886938-REG/dji_cp_ma_00000848_01_mavic_4_pro_drone.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1806678/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
@@ -1089,8 +1133,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">DJI Mic 2</h3>
         <p class="card-desc">Clean wireless audio on every shoot</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4rF92TX" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons">
+          <a class="retailer-btn retailer-btn--amazon" href="https://amzn.to/4rF92TX" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on Amazon"><img src="/images/retailers/amazon.svg" alt="Amazon" class="retailer-logo"></a>
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1800665-REG/dji_cp_rn_00000325_01_dji_mic_2_2.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1393006/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
@@ -1100,8 +1145,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="card-body">
         <h3 class="card-name">Peak Design Pro Lite Tripod</h3>
         <p class="card-desc">Stable, fast, professional</p>
-        <div class="card-buttons">
-          <a href="https://amzn.to/4aAHDv0" target="_blank" class="card-btn-buy"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buy Now</a>
+        <div class="retailer-buttons">
+          <a class="retailer-btn retailer-btn--amazon" href="https://amzn.to/4aAHDv0" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on Amazon"><img src="/images/retailers/amazon.svg" alt="Amazon" class="retailer-logo"></a>
+          <a class="retailer-btn retailer-btn--bh" href="https://www.bhphotovideo.com/c/product/1906573-REG/peak_design_pt_l_bk_1_pro_lite_tripod_black.html/BI/24055/KBID/29477/DFF/d10-v21-t1-x1886392/SID/DFF" target="_blank" rel="nofollow noopener sponsored" aria-label="Buy on B&amp;H Photo"><img src="/images/retailers/bh.png" alt="B&amp;H Photo" class="retailer-logo"></a>
         </div>
       </div>
     </div>
