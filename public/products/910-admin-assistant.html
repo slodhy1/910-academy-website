@@ -373,13 +373,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: #000;
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
   text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
-}
-.thumb-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 36px 100px rgba(0,0,0,0.7);
+  cursor: default;
 }
 .thumb-card img {
   position: absolute; inset: 0;
@@ -882,12 +876,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <section class="thumb-card-section">
   <p class="section-label">PREVIEW</p>
   <h2 class="section-heading">What's inside the handbook</h2>
-  <a href="#pricing" class="thumb-card" aria-label="Scroll to pricing to get instant access">
-    <img src="/og-images/910-admin-assistant.jpg" alt="910 Admin Assistant" width="1200" height="630" loading="eager" decoding="async">
+  <!-- Bump ?v= when the underlying JPG changes; immutable cache header otherwise prevents re-fetch -->
+  <div class="thumb-card">
+    <img src="/og-images/910-admin-assistant.jpg?v=2" alt="910 Admin Assistant preview thumbnail" width="1200" height="630" loading="eager" decoding="async">
     <div class="thumb-card-overlay">
       <a href="https://buy.stripe.com/14A4gyblA3YG9O9fhd5Rm0M" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Instant Access: $299</a>
     </div>
-  </a>
+  </div>
   <p class="thumb-meta">150-page handbook · Lifetime access · Instant download</p>
 </section>
 
