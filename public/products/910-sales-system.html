@@ -240,12 +240,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: #000;
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
 }
-.hero-trailer-frame iframe {
+.hero-trailer-frame iframe,
+.hero-trailer-frame img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
+  object-fit: cover;
+  display: block;
 }
 
 /* Hero CTA + scroll indicator block (inside hero) */
@@ -734,7 +737,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </div>
   <div class="hero-trailer">
     <div class="hero-trailer-frame">
-      <iframe src="https://player.vimeo.com/video/1065700962" title="910 Sales System, trailer" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      <img src="/og-images/910-sales-system.jpg" alt="910 Sales System preview thumbnail" width="1200" height="630" loading="eager" decoding="async">
     </div>
   </div>
   <div class="hero-cta">
