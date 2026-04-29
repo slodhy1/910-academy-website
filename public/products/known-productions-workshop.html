@@ -27,13 +27,14 @@
   --bg-base: #0a0a0a;
   --bg-elevated: #0f0f10;
   --bg-surface: rgba(255, 255, 255, 0.05);
-  --accent: #38B6FF;
-  --accent-hover: #5ac4ff;
-  --accent-glow: rgba(56, 182, 255, 0.15);
-  --accent-subtle: rgba(56, 182, 255, 0.04);
-  --accent-muted: rgba(56, 182, 255, 0.2);
-  --accent-border: rgba(56, 182, 255, 0.4);
-  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --accent-color: #F5F5F0;
+  --accent: var(--accent-color, #38B6FF);
+  --accent-hover: #FFFFFF;
+  --accent-glow: rgba(245, 245, 240, 0.15);
+  --accent-subtle: rgba(245, 245, 240, 0.04);
+  --accent-muted: rgba(245, 245, 240, 0.2);
+  --accent-border: rgba(245, 245, 240, 0.4);
+  --accent-border-subtle: rgba(245, 245, 240, 0.12);
   --fg: #FFFFFF;
   --fg-muted: rgba(255, 255, 255, 0.7);
   --fg-dim: rgba(255, 255, 255, 0.4);
@@ -464,7 +465,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .split-text p { color: var(--fg-muted); line-height: 1.7; margin-bottom: var(--space-4); font-size: 1rem; }
 .split-text p:last-child { margin-bottom: 0; }
 .split-text strong { color: var(--fg); font-weight: 700; }
-.split-text a { color: var(--accent); border-bottom: 1px solid rgba(56,182,255,0.3); transition: border-color 0.25s; }
+.split-text a { color: var(--accent); border-bottom: 1px solid rgba(245, 245, 240,0.3); transition: border-color 0.25s; }
 .split-text a:hover { border-color: var(--accent); }
 
 .tools {
@@ -618,7 +619,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .faq-item.open .faq-icon {
   transform: rotate(45deg);
-  border-color: rgba(56, 182, 255, 0.4);
+  border-color: rgba(245, 245, 240, 0.4);
   color: var(--accent);
 }
 .faq-a-wrap { max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease-smooth); }
@@ -630,7 +631,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   line-height: 1.7;
   font-size: 0.95rem;
 }
-.faq-a a { color: var(--accent); border-bottom: 1px solid rgba(56,182,255,0.3); }
+.faq-a a { color: var(--accent); border-bottom: 1px solid rgba(245, 245, 240,0.3); }
 
 /* Footer */
 .footer {
