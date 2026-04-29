@@ -621,10 +621,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: block;
   filter: brightness(0) invert(1);
 }
+.retailer-btn--amazon .retailer-logo {
+  max-height: 28px;
+}
 @media (max-width: 480px) {
   .retailer-buttons { gap: 8px; }
   .retailer-btn { min-height: 48px; padding: 10px 12px; }
   .retailer-logo { max-height: 28px; }
+  .retailer-btn--amazon .retailer-logo { max-height: 22px; }
 }
 
 /* ========== PRODUCT IMAGES ========== */
