@@ -2936,5 +2936,16 @@ const EMAIL_WEBHOOK_URL = 'REPLACE_WITH_N8N_EMAIL_WEBHOOK_URL';
 </section>
 -->
 
+<script>
+// Defense in depth: if a Supabase password-reset email lands here with ?code=...
+// (e.g., dashboard Site URL is bare domain or template uses {{ .SiteURL }}),
+// preserve the code and redirect to the actual reset page.
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('code') && window.location.pathname === '/') {
+    window.location.replace('/account/reset-password' + window.location.search);
+  }
+})();
+</script>
 </body>
 </html>
