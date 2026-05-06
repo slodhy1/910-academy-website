@@ -17,6 +17,9 @@ const STATIC_PAGES = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
+  },
   async rewrites() {
     return [
       // / → /index.html (homepage)
