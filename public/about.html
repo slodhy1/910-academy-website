@@ -507,8 +507,8 @@ img, video, iframe { max-width: 100%; height: auto; }
       <a href="/" class="nav-link">Home</a>
       <a href="/gear" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
-      <a href="/account" class="nav-link" data-account-link>Account</a>
-      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+      <a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta" data-join-cta>Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -522,8 +522,8 @@ img, video, iframe { max-width: 100%; height: auto; }
   <a href="/">Home</a>
   <a href="/gear">Our Gear</a>
   <a href="/products">Products</a>
-  <a href="/account" data-account-link>Account</a>
-  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
+  <a href="/account/login" data-auth-link data-state="logged-out">Sign In</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);" data-join-cta>Join 910 Academy</a>
 </div>
 
 <!-- About Hero -->
@@ -653,9 +653,15 @@ img, video, iframe { max-width: 100%; height: auto; }
 (function(){
   try {
     var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
-    if (!hasSession) {
-      var els = document.querySelectorAll("[data-account-link]");
-      els.forEach(function(el){ el.setAttribute("href", "/account/login"); });
+    var authLinks = document.querySelectorAll("[data-auth-link]");
+    if (hasSession) {
+      authLinks.forEach(function(el){
+        el.setAttribute("href", "/account");
+        el.setAttribute("data-state", "logged-in");
+        el.textContent = "My Account";
+      });
+      var joinCtas = document.querySelectorAll("[data-join-cta]");
+      joinCtas.forEach(function(el){ el.style.display = "none"; });
     }
   } catch (e) { /* no-op */ }
 })();

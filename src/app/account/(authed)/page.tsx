@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { LogoutButton } from "./logout-button";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +63,6 @@ export default async function AccountDashboard({
           <p className="dash-eyebrow">YOUR ACCOUNT</p>
           <h1 className="dash-heading">Welcome back, {greetingName}.</h1>
         </div>
-        <LogoutButton />
       </header>
 
       {params.purchase === "success" && (

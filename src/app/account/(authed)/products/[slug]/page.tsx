@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getSignedResourceUrl } from "@/lib/supabase/storage";
-import { LogoutButton } from "../../logout-button";
 import { VideoViewer } from "@/components/account/VideoViewer";
 import {
   MultiVideoViewer,
@@ -129,7 +128,6 @@ export default async function ProductViewerPage({
           <p className="viewer-eyebrow">{typeLabel}</p>
           <h1 className="viewer-title">{product.title}</h1>
         </div>
-        <LogoutButton />
       </header>
 
       <div className="viewer-body">

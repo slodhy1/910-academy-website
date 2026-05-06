@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { LogoutButton } from "../logout-button";
 import { SettingsForms } from "./forms";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +37,6 @@ export default async function SettingsPage() {
             <p className="settings-meta">Member since {memberSince}</p>
           )}
         </div>
-        <LogoutButton />
       </header>
 
       <SettingsForms

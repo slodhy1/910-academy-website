@@ -1,624 +1,466 @@
-# Phase B v3 plan — self-healing linkage + settings page + dashboard greeting fix + marketing-nav login + email restyle
+# Phase B v4 plan — split account layout into (auth) + (authed) + marketing nav refactor
 
-Six coordinated changes. Diff-level precision. No file outside this list will be touched.
-
----
-
-## Change 1 — `middleware.ts`: self-healing customer linkage
-
-Add admin client, fire one UPDATE on authed `/account/*` requests.
-
-**Edits**:
-
-```diff
- import { createServerClient, type CookieOptions } from "@supabase/ssr";
-+import { createClient as createAdminLib } from "@supabase/supabase-js";
- import { NextResponse, type NextRequest } from "next/server";
- 
- type CookieToSet = { name: string; value: string; options: CookieOptions };
- 
-+function escapeIlike(s: string) {
-+  return s.replace(/[\\%_]/g, "\\$&");
-+}
-+
- export async function middleware(request: NextRequest) {
-   ...
-   const { data: { user } } = await supabase.auth.getUser();
- 
-+  // Self-healing customer linkage: when an authed user visits /account/*,
-+  // attempt to link any unlinked customers row matching their email. The
-+  // UPDATE is idempotent and affects 0 rows in the common case (already
-+  // linked or no row exists). Single round-trip; never blocks the request.
-+  if (user?.email) {
-+    const admin = createAdminLib(
-+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-+      { auth: { persistSession: false } }
-+    );
-+    const { error: linkErr, count: linkedCount } = await admin
-+      .from("customers")
-+      .update({ auth_user_id: user.id }, { count: "exact" })
-+      .ilike("email", escapeIlike(user.email))
-+      .is("auth_user_id", null);
-+    if (linkErr) {
-+      console.error("[middleware] self-heal link failed:", linkErr);
-+    } else if (linkedCount && linkedCount > 0) {
-+      console.log(
-+        `[middleware] self-heal linked customers row to auth user ${user.id} (${user.email})`
-+      );
-+    }
-+  }
-+
-   const path = request.nextUrl.pathname;
-   ...
-```
-
-**Notes**:
-- Uses `count: "exact"` so we know whether anything was linked (for logging only). Postgres returns this cheaply.
-- Service-role key is server-only; middleware runs server-only.
-- Runs even on auth pages (logged-in users hitting `/account/login` etc are redirected away — but a logged-in user can still visit `/account/forgot-password` per current code; this is fine, the linkage is harmless there).
-- No user-blocking awaits beyond the existing `auth.getUser()` + this UPDATE.
+Diff-level precision. No file outside this list will be touched.
 
 ---
 
-## Change 2 — `src/app/account/page.tsx`: greeting name from auth metadata
-
-**Edit (lines 51-52)**:
-
-```diff
--  const greetingName =
--    (customer?.full_name && customer.full_name.split(" ")[0]) || user.email?.split("@")[0] || "there";
-+  const fullName =
-+    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
-+    customer?.full_name ||
-+    null;
-+  const greetingName =
-+    (fullName && fullName.trim().split(" ")[0]) ||
-+    user.email?.split("@")[0] ||
-+    "there";
-```
-
-Resolution chain: `auth.users.raw_user_meta_data.full_name` → `customers.full_name` (kept as a backstop) → email local-part → `"there"`. First word of full_name. The CSS uppercase rule (`.dash-heading` `text-transform: uppercase`) keeps rendering uppercase.
-
-**Settings link goes in `src/app/account/layout.tsx`** (persistent across `/account`, `/account/settings`, `/account/products/[slug]`). No edit to `account/page.tsx` for the Settings link. Diff for layout:
-
-```diff
-           <div className="acct-nav-links">
-             <Link href="/" className="acct-nav-link">Home</Link>
-             <Link href="/account" className="acct-nav-link">Account</Link>
-+            <Link href="/account/settings" className="acct-nav-link">Settings</Link>
-           </div>
-```
-
-(One line added to the existing `acct-nav-links` row. Existing `.acct-nav-link` style covers it.)
+## Schema migration: NONE.
+## Webhook / email / smoke test: untouched.
 
 ---
 
-## Change 3 — `src/app/account/settings/page.tsx`: account profile page (new)
+## Change 1 — Route group reshuffle
 
-Three independent sub-forms with their own state, submit, and toast. Single client component for simplicity. Reads initial values from `auth.getUser()` server-side, then the form is rendered with those defaults via a server-fetched object passed to a client island.
+### `git mv` operations
 
-Approach: server component that fetches `user`, then renders a `<SettingsForms user={...} />` client component.
+```bash
+mkdir -p src/app/account/'(auth)'
+mkdir -p src/app/account/'(authed)'
 
-**Files**:
-- `src/app/account/settings/page.tsx` — server component (default export)
-- `src/app/account/settings/forms.tsx` — client component with the three forms
+git mv src/app/account/login            src/app/account/'(auth)'/login
+git mv src/app/account/sign-up          src/app/account/'(auth)'/sign-up
+git mv src/app/account/forgot-password  src/app/account/'(auth)'/forgot-password
+git mv src/app/account/reset-password   src/app/account/'(auth)'/reset-password
 
-**`page.tsx` content**:
+git mv src/app/account/page.tsx         src/app/account/'(authed)'/page.tsx
+git mv src/app/account/settings         src/app/account/'(authed)'/settings
+git mv src/app/account/products         src/app/account/'(authed)'/products
+
+git rm src/app/account/layout.tsx
+```
+
+`logout-button.tsx` does NOT move — it stays at `src/app/account/logout-button.tsx`. Both new layouts and the moved authed pages import it via relative paths that resolve correctly under route groups.
+
+### Import path adjustments
+
+Route groups DO add a real folder layer in the filesystem; URL routing skips them, file resolution does not. The pages that imported `../logout-button` previously were one level deep (e.g. `account/page.tsx` → `./logout-button`). After moving into `(authed)/`, the relative path becomes `../logout-button`.
+
+| File | Old import | New import |
+|---|---|---|
+| `(authed)/page.tsx` (was `account/page.tsx`) | `import { LogoutButton } from "./logout-button"` | `import { LogoutButton } from "../logout-button"` |
+| `(authed)/settings/page.tsx` (was `account/settings/page.tsx`) | `import { LogoutButton } from "../logout-button"` | `import { LogoutButton } from "../../logout-button"` |
+| `(authed)/products/[slug]/page.tsx` (was `account/products/[slug]/page.tsx`) | `import { LogoutButton } from "../../logout-button"` | `import { LogoutButton } from "../../../logout-button"` |
+
+**Per spec change #5**, the layout's right-side renders the LogoutButton — so the per-page LogoutButton becomes redundant. Plan: **remove** the per-page LogoutButton from these three pages along with the surrounding header `<div>` that wraps it (since the header layout becomes simpler). The pages keep their own page headings (e.g. `dash-heading`, `settings-heading`, `viewer-title`) as content. The shell logo + center nav + LogoutButton lives only in `(authed)/layout.tsx`.
+
+After the LogoutButton imports are removed from the three pages, those imports go away. Net: `logout-button.tsx` is imported only by `(authed)/layout.tsx`.
+
+---
+
+## Change 2 — `src/app/account/(auth)/layout.tsx` (new)
+
+Minimal centered chrome. No nav. Just the brand logo at top and a "← Back to home" link below.
 
 ```tsx
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import { LogoutButton } from "../logout-button";
-import { SettingsForms } from "./forms";
 
-export const dynamic = "force-dynamic";
-
-export default async function SettingsPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/account/login");
-
-  const fullName =
-    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) || "";
-  const memberSince = user.created_at
-    ? new Date(user.created_at).toLocaleDateString("en-US", {
-        year: "numeric", month: "long", day: "numeric",
-      })
-    : null;
-
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="settings">
-      <header className="settings-head">
-        <div>
-          <Link href="/account" className="settings-back">← Back to your account</Link>
-          <p className="settings-eyebrow">SETTINGS</p>
-          <h1 className="settings-heading">Account</h1>
-          {memberSince && <p className="settings-meta">Member since {memberSince}</p>}
-        </div>
-        <LogoutButton />
-      </header>
-
-      <SettingsForms initialFullName={fullName} initialEmail={user.email ?? ""} />
-
+    <>
+      <div className="auth-shell">
+        <Link href="/" className="auth-logo" aria-label="910 Academy home">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-white.svg" alt="910 Academy" width={36} height={36} />
+        </Link>
+        <main className="auth-shell-main">{children}</main>
+        <Link href="/" className="auth-shell-back">
+          ← Back to home
+        </Link>
+      </div>
       <style>{`
-        .settings { display: flex; flex-direction: column; gap: 40px; }
-        .settings-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
-        .settings-back { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); transition: color 0.2s; margin-bottom: 8px; display: inline-block; }
-        .settings-back:hover { color: var(--accent); }
-        .settings-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-top: 12px; }
-        .settings-heading { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 300; text-transform: uppercase; line-height: 1.1; }
-        .settings-meta { font-size: 13px; color: var(--fg-muted); margin-top: 8px; }
+        .auth-shell {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 64px 24px 48px;
+          gap: 32px;
+        }
+        .auth-logo { display: inline-block; opacity: 0.95; transition: opacity 0.2s; }
+        .auth-logo:hover { opacity: 1; }
+        .auth-logo img { height: 36px; width: auto; display: block; }
+        .auth-shell-main {
+          width: 100%;
+          max-width: 480px;
+          display: flex;
+          justify-content: center;
+        }
+        .auth-shell-back {
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--fg-muted);
+          transition: color 0.2s;
+        }
+        .auth-shell-back:hover { color: var(--accent); }
+        @media (max-width: 600px) {
+          .auth-shell { padding: 48px 16px 32px; gap: 28px; }
+        }
       `}</style>
-    </div>
+    </>
   );
 }
 ```
 
-**`forms.tsx` content** (client component):
+The auth pages each have their own `<div class="auth-card">` form chrome inside their own `<style>` block — the layout doesn't duplicate or override those.
+
+---
+
+## Change 3 — `src/app/account/(authed)/layout.tsx` (new)
+
+Portal shell: logo left, Dashboard + Settings center (active-state from `usePathname`), Sign Out right. Persistent across all `(authed)` routes.
+
+Two files: a server-rendered layout shell + a client `<PortalNav />` for active-state. Or simpler — make the entire layout client. The brief favors keeping layouts server-rendered when possible. We'll make a small client island for the nav links and keep the rest server.
+
+### `src/app/account/(authed)/layout.tsx`
+
+```tsx
+import Link from "next/link";
+import { LogoutButton } from "../logout-button";
+import { PortalNav } from "./portal-nav";
+
+export default function AuthedLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <nav className="portal-nav">
+        <div className="portal-nav-inner">
+          <Link href="/" className="portal-nav-logo" aria-label="910 Academy home">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-white.svg" alt="910 Academy" width={36} height={36} />
+          </Link>
+          <PortalNav />
+          <div className="portal-nav-right">
+            <LogoutButton />
+          </div>
+        </div>
+      </nav>
+      <main className="portal-main">{children}</main>
+      <footer className="portal-footer">
+        <p className="portal-footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+      </footer>
+      <style>{`
+        .portal-nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 18px 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-bottom: 1px solid var(--border); }
+        .portal-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+        .portal-nav-logo img { height: 36px; width: auto; opacity: 0.95; transition: opacity 0.2s; }
+        .portal-nav-logo:hover img { opacity: 1; }
+        .portal-nav-right { display: flex; align-items: center; }
+        .portal-main { padding: 120px 24px 80px; max-width: 1100px; margin: 0 auto; min-height: calc(100vh - 200px); }
+        .portal-footer { border-top: 1px solid var(--border); padding: 56px 40px; text-align: center; }
+        .portal-footer-copy { font-size: 12px; color: var(--fg-ghost); letter-spacing: 0.04em; }
+        @media (max-width: 768px) {
+          .portal-nav-inner { padding: 0 16px; gap: 12px; }
+          .portal-main { padding: 100px 20px 64px; }
+          .portal-footer { padding: 40px 24px; }
+        }
+      `}</style>
+    </>
+  );
+}
+```
+
+### `src/app/account/(authed)/portal-nav.tsx` (new client component)
 
 ```tsx
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-type Toast = { kind: "success" | "error" | "info"; text: string } | null;
+const ITEMS = [
+  { href: "/account", label: "Dashboard" },
+  { href: "/account/settings", label: "Settings" },
+];
 
-export function SettingsForms({
-  initialFullName,
-  initialEmail,
-}: {
-  initialFullName: string;
-  initialEmail: string;
-}) {
-  const router = useRouter();
-
-  // Full name form state
-  const [fullName, setFullName] = useState(initialFullName);
-  const [nameToast, setNameToast] = useState<Toast>(null);
-  const [nameLoading, setNameLoading] = useState(false);
-
-  // Email form state
-  const [email, setEmail] = useState(initialEmail);
-  const [emailToast, setEmailToast] = useState<Toast>(null);
-  const [emailLoading, setEmailLoading] = useState(false);
-
-  // Password form state
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [pwToast, setPwToast] = useState<Toast>(null);
-  const [pwLoading, setPwLoading] = useState(false);
-
-  async function onSubmitName(e: React.FormEvent) {
-    e.preventDefault();
-    setNameToast(null);
-    setNameLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.updateUser({ data: { full_name: fullName.trim() } });
-    setNameLoading(false);
-    if (error) {
-      setNameToast({ kind: "error", text: error.message });
-    } else {
-      setNameToast({ kind: "success", text: "Name updated." });
-      router.refresh();
-    }
-  }
-
-  async function onSubmitEmail(e: React.FormEvent) {
-    e.preventDefault();
-    setEmailToast(null);
-    if (email.trim() === initialEmail) {
-      setEmailToast({ kind: "info", text: "Email unchanged." });
-      return;
-    }
-    setEmailLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.auth.updateUser({ email: email.trim() });
-    setEmailLoading(false);
-    if (error) {
-      setEmailToast({ kind: "error", text: error.message });
-    } else {
-      setEmailToast({
-        kind: "info",
-        text: `Confirmation sent to ${email.trim()}. Click the link there to complete the change.`,
-      });
-    }
-  }
-
-  async function onSubmitPassword(e: React.FormEvent) {
-    e.preventDefault();
-    setPwToast(null);
-    if (newPassword.length < 8) {
-      setPwToast({ kind: "error", text: "New password must be at least 8 characters." });
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPwToast({ kind: "error", text: "New passwords don't match." });
-      return;
-    }
-    setPwLoading(true);
-    const supabase = createClient();
-    const { error: signInErr } = await supabase.auth.signInWithPassword({
-      email: initialEmail,
-      password: currentPassword,
-    });
-    if (signInErr) {
-      setPwToast({ kind: "error", text: "Current password incorrect." });
-      setPwLoading(false);
-      return;
-    }
-    const { error: updateErr } = await supabase.auth.updateUser({ password: newPassword });
-    setPwLoading(false);
-    if (updateErr) {
-      setPwToast({ kind: "error", text: updateErr.message });
-      return;
-    }
-    setPwToast({ kind: "success", text: "Password updated." });
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  }
-
+export function PortalNav() {
+  const pathname = usePathname();
   return (
-    <div className="settings-grid">
-      <Section title="Full name">
-        <form onSubmit={onSubmitName} className="settings-form">
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            autoComplete="name"
-            className="settings-input"
-          />
-          <ToastView toast={nameToast} />
-          <button type="submit" disabled={nameLoading} className="settings-btn">
-            {nameLoading ? "Saving..." : "Save name"}
-          </button>
-        </form>
-      </Section>
-
-      <Section title="Email address">
-        <form onSubmit={onSubmitEmail} className="settings-form">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="settings-input"
-          />
-          <ToastView toast={emailToast} />
-          <button type="submit" disabled={emailLoading} className="settings-btn">
-            {emailLoading ? "Sending..." : "Update email"}
-          </button>
-          <p className="settings-help">A confirmation link will be sent to the new address. The change takes effect after you click that link.</p>
-        </form>
-      </Section>
-
-      <Section title="Change password">
-        <form onSubmit={onSubmitPassword} className="settings-form">
-          <label className="settings-label">
-            Current password
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              className="settings-input"
-            />
-          </label>
-          <label className="settings-label">
-            New password
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              minLength={8}
-              autoComplete="new-password"
-              className="settings-input"
-            />
-          </label>
-          <label className="settings-label">
-            Confirm new password
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={8}
-              autoComplete="new-password"
-              className="settings-input"
-            />
-          </label>
-          <ToastView toast={pwToast} />
-          <button type="submit" disabled={pwLoading} className="settings-btn">
-            {pwLoading ? "Updating..." : "Change password"}
-          </button>
-        </form>
-      </Section>
-
+    <div className="portal-nav-links">
+      {ITEMS.map((item) => {
+        const isActive =
+          item.href === "/account"
+            ? pathname === "/account"
+            : pathname?.startsWith(item.href);
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`portal-nav-link${isActive ? " portal-nav-link-active" : ""}`}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
       <style>{`
-        .settings-grid { display: flex; flex-direction: column; gap: 32px; }
-        .settings-section { padding: 32px; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 16px; }
-        .settings-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 4px; }
-        .settings-form { display: flex; flex-direction: column; gap: 12px; max-width: 480px; }
-        .settings-label { display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
-        .settings-input { padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--fg); font-family: var(--font); font-size: 15px; }
-        .settings-input:focus { outline: none; border-color: var(--accent); }
-        .settings-btn { align-self: flex-start; padding: 12px 22px; border-radius: var(--radius-sm); background: #FFF; color: #000; border: 1px solid #FFF; font-family: var(--font); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-        .settings-btn:hover:not(:disabled) { background: var(--accent); color: #FFF; border-color: var(--accent); }
-        .settings-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .settings-help { font-size: 12px; color: var(--fg-muted); line-height: 1.5; }
-        .settings-toast { font-size: 13px; padding: 10px 14px; border-radius: var(--radius-sm); }
-        .settings-toast-success { background: rgba(56,182,255,0.08); border: 1px solid var(--accent-border-subtle); color: var(--fg); }
-        .settings-toast-error { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); color: #ff6b6b; }
-        .settings-toast-info { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--fg-muted); }
+        .portal-nav-links { display: flex; align-items: center; gap: 28px; }
+        .portal-nav-link { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); transition: color 0.2s; position: relative; padding: 4px 0; }
+        .portal-nav-link:hover { color: var(--fg); }
+        .portal-nav-link-active { color: var(--fg); }
+        .portal-nav-link-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: var(--accent); }
+        @media (max-width: 600px) {
+          .portal-nav-links { gap: 18px; }
+          .portal-nav-link { font-size: 12px; letter-spacing: 0.1em; }
+        }
       `}</style>
     </div>
   );
 }
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="settings-section">
-      <h2 className="settings-section-title">{title}</h2>
-      {children}
-    </section>
-  );
-}
-
-function ToastView({ toast }: { toast: Toast }) {
-  if (!toast) return null;
-  return <p className={`settings-toast settings-toast-${toast.kind}`}>{toast.text}</p>;
-}
 ```
+
+Active rule: `/account` matches exactly; `/account/settings` matches with `startsWith`. `/account/products/[slug]` doesn't match either nav link, so neither shows active — correct (users on a product viewer see no portal-link highlighted).
 
 ---
 
-## Change 4 — `emails/purchase-confirmed.html`: restyle to brand pattern
+## Change 4 — Edits to moved authed pages
 
-Full rewrite. New body keeps placeholders `{{productName}}` and `{{accessLink}}`. Structure mirrors the 3 reference templates.
+### `(authed)/page.tsx` (was `account/page.tsx`)
 
-```html
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="x-apple-disable-message-reformatting">
-<title>Purchase confirmed — 910 Academy</title>
-</head>
-
-<body style="margin:0;padding:0;background-color:#f5f6f8;">
-
-<!-- Preheader -->
-<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#f5f6f8;opacity:0;">
-Your purchase is unlocked. Sign in to access it.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</div>
-
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f6f8;">
-<tr>
-<td align="center" style="padding:24px 12px;">
-
-<!-- Main container -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="width:640px;max-width:640px;background-color:#ffffff;border-radius:14px;overflow:hidden;">
-
-<!-- Header -->
-<tr>
-<td style="background-color:#0b0b0f;padding:28px 32px;">
-<div style="font-family:Arial,Helvetica,sans-serif;letter-spacing:0.18em;font-size:11px;opacity:0.75;color:#ffffff;">
-910 ACADEMY
-</div>
-
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:26px;font-weight:700;margin-top:12px;line-height:1.25;color:#ffffff;">
-Purchase confirmed.
-</div>
-
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;margin-top:8px;opacity:0.85;color:#ffffff;">
-{{productName}}
-</div>
-</td>
-</tr>
-
-<!-- Body -->
-<tr>
-<td style="padding:32px;">
-<div style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;font-size:15px;line-height:1.7;">
-
-<p style="margin:0 0 16px 0;">
-Thanks for your purchase. Your access is ready.
-</p>
-
-<p style="margin:0 0 28px 0;">
-Sign in below to access your content. If this is your first time, you'll be prompted to create your account using the email from your Stripe receipt — same email both places, lifetime access on every product you buy through 910 Academy.
-</p>
-
-<!-- Primary CTA -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px 0;">
-<tr>
-<td style="background-color:#0f172a;border-radius:10px;">
-<a href="{{accessLink}}" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:0.04em;">
-Access Your Purchase &rarr;
-</a>
-</td>
-</tr>
-</table>
-
-<!-- Divider -->
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px 0;">
-<tr>
-<td style="border-top:1px solid #e5e7eb;line-height:1px;font-size:1px;">&nbsp;</td>
-</tr>
-</table>
-
-<p style="margin:0 0 8px 0;font-size:14px;color:#64748b;">
-Questions? Reply to this email. We respond same-day.
-</p>
-
-</div>
-</td>
-</tr>
-
-<!-- Footer -->
-<tr>
-<td style="padding:20px 32px;background:#f8fafc;border-top:1px solid #e5e7eb;">
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#64748b;line-height:1.6;">
-910 Academy &middot; West Palm Beach, FL<br>
-<a href="https://www.910academy.com" style="color:#64748b;text-decoration:none;">910academy.com</a>
-</div>
-</td>
-</tr>
-
-</table>
-
-</td>
-</tr>
-</table>
-
-</body>
-</html>
-```
-
-Differences vs reference set: no info-box (we don't surface credentials). No bullet list section ("What's inside"). Otherwise identical chrome. Subject line stays `Purchase confirmed — ${productName}` (no edit to `purchase-confirmed.ts`).
-
----
-
-## Change 5 — Marketing-site nav: Account link + auth detection
-
-Per-file edits across **18 HTML files** in `public/`. Two precise insertions per file.
-
-### Insertion A — desktop nav-links
-
-In each file's `nav-links` block, insert an Account link **before** the `nav-cta`:
+**Imports**:
 
 ```diff
-   <div class="nav-links">
-     <a href="/" class="nav-link">Home</a>
-     <a href="/gear" class="nav-link">Our Gear</a>
-     <a href="/products" class="nav-link">Products</a>
-+    <a href="/account" class="nav-link" data-account-link>Account</a>
-     <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
-   </div>
+-import { LogoutButton } from "./logout-button";
++import { LogoutButton } from "../logout-button";
 ```
 
-(Some files have `target="_blank"` without `rel`; the diff respects the file's existing form.)
+Actually: per the layout-renders-LogoutButton plan, **remove the import entirely** since the page no longer renders LogoutButton. Same for the JSX usage:
 
-### Insertion B — mobile nav
+```diff
+       <header className="dash-header">
+         <div>
+           <p className="dash-eyebrow">YOUR ACCOUNT</p>
+           <h1 className="dash-heading">Welcome back, {greetingName}.</h1>
+         </div>
+-        <LogoutButton />
+       </header>
+```
 
-Inside `mobile-nav` div, before the `Join 910 Academy` link:
+The `dash-header` flex-row with two children becomes a single child. CSS keeps `flex-wrap: wrap` so it still renders fine; no CSS edit needed.
+
+### `(authed)/settings/page.tsx` (was `account/settings/page.tsx`)
+
+```diff
+-import { LogoutButton } from "../logout-button";
++import { LogoutButton } from "../../logout-button";
+```
+
+Actually remove entirely:
+
+```diff
+-import { LogoutButton } from "../logout-button";
+   ...
+       <header className="settings-head">
+         <div>
+           <Link href="/account" className="settings-back">← Back to your account</Link>
+           ...
+         </div>
+-        <LogoutButton />
+       </header>
+```
+
+### `(authed)/products/[slug]/page.tsx` (was `account/products/[slug]/page.tsx`)
+
+```diff
+-import { LogoutButton } from "../../logout-button";
+   ...
+       <header className="viewer-head">
+         <div className="viewer-head-left">
+           ...
+         </div>
+-        <LogoutButton />
+       </header>
+```
+
+---
+
+## Change 5 — Marketing nav refactor in 18 HTML files
+
+Done via a one-off Node helper (same approach as v3). Per file, three operations:
+
+### Operation A — desktop nav-links
+
+Replace the v3 Account link with the new Sign In auth slot, and add `data-join-cta` to the Join CTA.
+
+```diff
+       <a href="/products" class="nav-link">Products</a>
+-      <a href="/account" class="nav-link" data-account-link>Account</a>
+-      <a href="https://www.skool.com/910-academy/about" target="_blank" ... class="nav-cta">Join 910 Academy</a>
++      <a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>
++      <a href="https://www.skool.com/910-academy/about" target="_blank" ... class="nav-cta" data-join-cta>Join 910 Academy</a>
+```
+
+(Some files use `target="_blank" rel="noopener noreferrer"`, others `target="_blank"` only. The replace preserves the existing form.)
+
+For `maintenance.html`: Products line is `/maintenance`. Replace pattern handles both via regex.
+
+### Operation B — mobile nav
 
 ```diff
    <a href="/products">Products</a>
-+  <a href="/account" data-account-link>Account</a>
-   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
+-  <a href="/account" data-account-link>Account</a>
+-  <a href="https://www.skool.com/910-academy/about" target="_blank" ... style="color:var(--accent);">Join 910 Academy</a>
++  <a href="/account/login" data-auth-link data-state="logged-out">Sign In</a>
++  <a href="https://www.skool.com/910-academy/about" target="_blank" ... style="color:var(--accent);" data-join-cta>Join 910 Academy</a>
 ```
 
-### Insertion C — auth-detection script
+For `toolkit.html`: mobile uses `class="mobile-nav-link"`. The replacement adds the same class and the new attributes.
 
-Just before `</body>` on each file:
+### Operation C — script swap
 
-```html
-<script>
-(function(){
-  try {
-    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
-    if (!hasSession) {
-      var els = document.querySelectorAll("[data-account-link]");
-      for (var i = 0; i < els.length; i++) els[i].setAttribute("href", "/account/login");
-    }
-  } catch (e) { /* no-op */ }
-})();
-</script>
+The v3 script (single-purpose) is replaced with the dual-purpose script:
+
+```diff
+ <script>
+ (function(){
+   try {
+     var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
+-    if (!hasSession) {
+-      var els = document.querySelectorAll("[data-account-link]");
+-      els.forEach(function(el){ el.setAttribute("href", "/account/login"); });
++    var authLinks = document.querySelectorAll("[data-auth-link]");
++    if (hasSession) {
++      authLinks.forEach(function(el){
++        el.setAttribute("href", "/account");
++        el.setAttribute("data-state", "logged-in");
++        el.textContent = "My Account";
++      });
++      var joinCtas = document.querySelectorAll("[data-join-cta]");
++      joinCtas.forEach(function(el){ el.style.display = "none"; });
+     }
+   } catch (e) { /* no-op */ }
+ })();
+ </script>
 ```
 
-(uses for-loop instead of forEach since IE compat doesn't matter but for-loop is one fewer arrow function for older mobile WebKits — same minified size; either works. Final version uses forEach.)
+### Helper script outline
 
-### Files to edit (18)
+```js
+import { readFileSync, writeFileSync } from "node:fs";
 
+const FILES = [ /* same 18 paths as v3 */ ];
+const NEW_SCRIPT = `<script>\n(function(){\n  try {\n    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;\n    var authLinks = document.querySelectorAll("[data-auth-link]");\n    if (hasSession) {\n      authLinks.forEach(function(el){\n        el.setAttribute("href", "/account");\n        el.setAttribute("data-state", "logged-in");\n        el.textContent = "My Account";\n      });\n      var joinCtas = document.querySelectorAll("[data-join-cta]");\n      joinCtas.forEach(function(el){ el.style.display = "none"; });\n    }\n  } catch (e) { /* no-op */ }\n})();\n</script>\n`;
+
+for (const f of FILES) {
+  let src = readFileSync(f, "utf-8");
+
+  // 1. Desktop: replace v3 Account link with Sign In auth slot
+  src = src.replace(
+    /<a href="\/account" class="nav-link" data-account-link>Account<\/a>\n/,
+    `<a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>\n`
+  );
+
+  // 2. Mobile: replace v3 Account link with Sign In auth slot (preserve mobile-nav-link class if present)
+  src = src.replace(
+    /(  )<a href="\/account"( class="mobile-nav-link")? data-account-link>Account<\/a>\n/,
+    (m, indent, cls) =>
+      `${indent}<a href="/account/login"${cls ?? ""} data-auth-link data-state="logged-out">Sign In</a>\n`
+  );
+
+  // 3. Add data-join-cta to desktop Join CTA (idempotent — only if not already present)
+  src = src.replace(
+    /<a (href="https:\/\/www\.skool\.com\/910-academy\/about"[^>]*class="nav-cta")(?![^>]*data-join-cta)>/,
+    `<a $1 data-join-cta>`
+  );
+
+  // 4. Add data-join-cta to mobile Join CTA
+  src = src.replace(
+    /<a (href="https:\/\/www\.skool\.com\/910-academy\/about"[^>]*style="color:var\(--accent\);")(?![^>]*data-join-cta)>/,
+    `<a $1 data-join-cta>`
+  );
+
+  // 5. Replace the v3 script with v4 script
+  src = src.replace(
+    /<script>\n\(function\(\)\{\n  try \{\n    var hasSession = document\.cookie\.indexOf\("sb-qkmkxthpeapuecobahhx-auth-token"\) !== -1;\n    if \(!hasSession\) \{\n      var els = document\.querySelectorAll\("\[data-account-link\]"\);\n      els\.forEach\(function\(el\)\{ el\.setAttribute\("href", "\/account\/login"\); \}\);\n    \}\n  \} catch \(e\) \{ \/\* no-op \*\/ \}\n\}\)\(\);\n<\/script>\n/,
+    NEW_SCRIPT
+  );
+
+  writeFileSync(f, src);
+}
 ```
-public/index.html
-public/about.html
-public/coaching.html
-public/products.html
-public/products-archive.html
-public/affiliate-guidelines.html
-public/book.html
-public/waitlist.html
-public/maintenance.html
-public/toolkit.html
-public/gear.html
-public/products/lucid-horizon-workshop.html
-public/products/known-productions-workshop.html
-public/products/jt-visuals-workshop.html
-public/products/instagram-masterclass.html
-public/products/3d-made-easy.html
-public/products/910-sales-system.html
-public/products/910-admin-assistant.html
-```
+
+The regex for step 5 escapes carefully — using a multi-line `RegExp` literal with the exact string content of the v3 script. Verified by grep that all 18 files have the exact same block.
 
 ---
 
-## Change 6 — schema migration: NONE.
+## Change 6 — CSS for `nav-auth-link`
 
-Hard rule. The brief explicitly forbids adding a name column. No DDL.
+Per research: no per-file CSS additions required. The class is added as a no-op hook (matches the brief's "match existing nav-link styling exactly" — and the existing class is `nav-link`, which is already applied alongside).
+
+If the brief intended a literal new CSS rule in each file, the rule would be:
+
+```css
+.nav-auth-link { /* same as .nav-link — handled by composition */ }
+```
+
+Plan **does not** add this empty rule across 18 files. The class hook exists; future styling can target `.nav-auth-link` if needed without re-editing each file (the variable could be set per-state in JS too via `data-state="logged-in"`).
+
+---
+
+## Change 7 — Optional sanity: confirm root `globals.css`
+
+Plan checks before relying on global vars:
+
+```bash
+grep -E "^:root|--bg-base|--accent|--border" src/app/globals.css | head
+```
+
+If vars are present (expected from inheritance), no change needed. If not, plan reads `src/app/layout.tsx` to confirm where they're defined. Likely OK — Phase B v2/v3 already use these vars on `auth-card`, `dash-grid`, `settings-section`, etc.
 
 ---
 
 ## Order of operations in execute step
 
-1. Edit `middleware.ts` — admin client + escapeIlike + UPDATE.
-2. Edit `src/app/account/page.tsx` — greeting resolution chain only.
-3. Edit `src/app/account/layout.tsx` — add persistent Settings link.
-4. Create `src/app/account/settings/page.tsx`.
-5. Create `src/app/account/settings/forms.tsx`.
-6. Rewrite `emails/purchase-confirmed.html`.
-7. Edit 18 marketing HTML files (nav-links + mobile-nav + script).
-8. `npm run build` — must pass clean.
-9. STOP for "deploy".
+1. `git mv` the auth pages into `(auth)/`.
+2. `git mv` the authed pages into `(authed)/`.
+3. `git rm` the old `src/app/account/layout.tsx`.
+4. Create `src/app/account/(auth)/layout.tsx`.
+5. Create `src/app/account/(authed)/layout.tsx`.
+6. Create `src/app/account/(authed)/portal-nav.tsx`.
+7. Edit `(authed)/page.tsx` — drop LogoutButton import + JSX.
+8. Edit `(authed)/settings/page.tsx` — drop LogoutButton import + JSX.
+9. Edit `(authed)/products/[slug]/page.tsx` — drop LogoutButton import + JSX.
+10. Run Node helper to patch 18 marketing HTML files.
+11. `npm run build` — must pass clean.
+12. STOP for "deploy".
 
 ---
 
 ## Files explicitly NOT touched
 
-- `src/lib/webhook/process-checkout.ts` — out of scope.
-- `src/app/api/stripe-webhook/route.ts` — out of scope.
-- `src/app/account/sign-up/page.tsx` and `actions.ts` — already correct.
-- `src/app/account/login/page.tsx` — already has Create-account link.
-- `src/app/account/forgot-password/page.tsx` and `reset-password/page.tsx` — protected.
-- `src/app/account/products/[slug]/page.tsx` — grant lookup unchanged.
-- (none — `layout.tsx` IS edited for the persistent Settings nav link)
-- `next.config.ts` — `outputFileTracingIncludes` already covers email path.
-- All Supabase migrations — no schema changes.
-- All `scripts/*` — smoke test scope unchanged.
-- All HTML in `public/_drafts/*` — out of marketing flow.
+- `src/lib/webhook/process-checkout.ts` — webhook untouched.
+- `src/app/api/stripe-webhook/route.ts` — untouched.
+- `emails/*.html` — untouched.
+- `scripts/smoke-test-webhook.ts` — untouched.
+- `middleware.ts` — Phase B v3 self-healing already correct; route groups don't change matchers.
+- `src/app/account/logout-button.tsx` — untouched.
+- `src/app/account/(auth)/login/page.tsx` and the other 3 auth pages — moved verbatim, internal contents unchanged.
+- `src/app/account/(auth)/sign-up/actions.ts` — moved verbatim.
+- `src/app/account/(authed)/products/[slug]/not-found.tsx` — moved verbatim.
+- `src/app/account/(authed)/settings/forms.tsx` — moved verbatim.
+- All Supabase migrations — schema unchanged.
 
 ---
 
 ## Risks / soft warnings
 
-1. **`auth.users.raw_user_meta_data` is not type-safe in supabase-js.** `user.user_metadata` is typed as `UserMetadata` which is `{ [key: string]: any }`. We narrow with `typeof user.user_metadata?.full_name === "string"` to avoid runtime surprises. ✅
+1. **Route group `()` folder names need shell-quoting in `git mv`**. Plan uses single quotes: `git mv src/app/account/login src/app/account/'(auth)'/login`. Verified safe under zsh + bash.
 
-2. **The `customers.full_name` backstop in the resolution chain** is intentional: a customer who paid via Stripe with `customer_details.name` captured (some Stripe configurations do this), but never typed it again at signup, would otherwise lose access to the name on the dashboard. Backstop survives that case.
+2. **Next 15 metadata file resolution under route groups**. App router's `not-found.tsx`, `loading.tsx`, etc. are co-located. We're moving `products/[slug]/not-found.tsx` along with `page.tsx`. Verified Next.js handles this correctly.
 
-3. **Email-change flow on the settings page**. Supabase sends a confirmation to the NEW address. With "Secure email change" enabled (default), it ALSO sends a notification to the OLD address. The user sees a clear info toast. They MUST click the link in the new inbox to complete the change. **Caveat**: until Supabase Auth SMTP is reconfigured to Resend, this confirmation email is sent from `noreply@mail.app.supabase.io` (Supabase's default sender). Functional but off-brand. Shayan to configure custom SMTP separately; flow works either way today.
+3. **No-op `nav-auth-link` class**. Per research — class is added without new CSS rules. If you want a visual variant later, target `.nav-auth-link[data-state="logged-in"]` etc.
 
-4. **Re-signin during password change**. `signInWithPassword` issues fresh tokens. The browser's existing cookie session is replaced by a refreshed one — same user, no logout. Confirmed by reading the @supabase/ssr behavior. ✅
+4. **The portal nav's `usePathname`** runs client-side. The layout itself stays a server component; only the small `<PortalNav />` island is client. This avoids forcing the entire layout to client-render and keeps fast initial paint.
 
-5. **18-file mechanical edit** — string-replace on each. If any file has a slightly different nav structure, the replace fails. Per hard rule, two failed attempts on any single file → stop. I'll verify each file is touched by checking diff stats per file.
+5. **`document.cookie.indexOf(...)` is substring match** — a malicious cookie name like `xx-sb-qkmkxthpeapuecobahhx-auth-token` would falsely satisfy. Real Supabase auth cookies are first-party HTTP-cookie-set by the SSR client; the browser doesn't accept arbitrary similar-named cookies from arbitrary origins. Acceptable risk for a soft UI signal (clicking the link still hits the middleware which authoritatively redirects). Same approach as v3.
 
-6. **Inline script project-ref hardcode**. `qkmkxthpeapuecobahhx` is hardcoded in the static HTML script. If you ever migrate Supabase projects, this needs updating across 18 files. Acceptable for a single static-domain prod; documenting here.
+6. **Hidden Join CTA when logged-in** uses `el.style.display = "none"` — wins over CSS rules (inline style highest specificity short of `!important`). Verified safe across all 18 files.
 
-7. **Cookie detection vs localStorage**. Brief said "localStorage (key: sb-<project-ref>-auth-token)". @supabase/ssr stores session in cookies, not localStorage. Detection via `document.cookie`. Same key name. Plan deviates from brief here for correctness — flagging for explicit review at the gate.
+7. **Mobile-nav layout** with the new "Sign In" item: `gap: 36px` between items in `.mobile-nav` flex column already accommodates an extra row. No CSS change needed.
+
+8. **Delete old layout sequence**: `git rm src/app/account/layout.tsx` is idempotent; if the file was already moved/renamed earlier, the rm errors. Plan rms only after the page moves are complete.
 
 ---
 
 ## Stop point
 
-Execute does NOT begin until user replies "go" (per spec Step 3).
+Execute does NOT begin until user replies "go".
