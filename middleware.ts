@@ -28,10 +28,15 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isAuthPage = ["/account/login", "/account/forgot-password", "/account/reset-password"].includes(path);
+  const isAuthPage = ["/account/login", "/account/sign-up", "/account/forgot-password", "/account/reset-password"].includes(path);
   const isAccountPage = path.startsWith("/account");
 
   if (isAccountPage && !isAuthPage && !user) {
+    if (path === "/account" && request.nextUrl.searchParams.get("purchase") === "success") {
+      const target = new URL("/account/sign-up", request.url);
+      target.searchParams.set("purchase", "success");
+      return NextResponse.redirect(target);
+    }
     return NextResponse.redirect(new URL("/account/login", request.url));
   }
   if (isAuthPage && user) {

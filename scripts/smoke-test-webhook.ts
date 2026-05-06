@@ -1,15 +1,13 @@
 /**
- * Phase B smoke test for the Stripe webhook handler.
+ * Phase B v2 smoke test for the Stripe webhook handler.
  *
- * Iterates 7 active products, builds a synthetic checkout.session.completed
- * event for each, calls processCheckoutCompleted directly (bypassing HTTP +
- * signature verification), and asserts customers + customer_products + auth
- * user + Resend send all succeeded.
+ * The new flow does NOT create auth users from the webhook. The test asserts:
+ *  - customers row created (auth_user_id IS NULL — no auth account yet)
+ *  - customer_products row created with correct amount_paid_cents
+ *  - NO auth.users row exists for the test email
+ *  - purchase-confirmed email sent successfully (Resend success: true)
  *
- * Run with:  npx tsx scripts/smoke-test-webhook.ts
- * Requires:  .env.local has SUPABASE_*, STRIPE_*, RESEND_API_KEY, EMAIL_FROM
- *            (load via:  node --env-file=.env.local --import tsx scripts/smoke-test-webhook.ts
- *             or via dotenv if installed).
+ * Run with:  set -a; source .env.local; set +a; npx tsx scripts/smoke-test-webhook.ts
  */
 import type Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
@@ -77,14 +75,13 @@ async function main() {
   }
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
     console.warn(
-      "Note: RESEND_API_KEY or EMAIL_FROM not set — welcome emails will fail (logged, not fatal)"
+      "Note: RESEND_API_KEY or EMAIL_FROM not set — emails will fail (logged, not fatal)"
     );
   }
 
   const sb = createClient(url, serviceKey, {
     auth: { persistSession: false },
   });
-
   const rows: Row[] = [];
 
   for (const slug of SLUGS) {
@@ -153,6 +150,9 @@ async function main() {
     if (!customer) {
       pass = false;
       notes.push("no customers row");
+    } else if (customer.auth_user_id !== null) {
+      pass = false;
+      notes.push(`auth_user_id should be null, got ${customer.auth_user_id}`);
     }
 
     if (customer) {
@@ -174,16 +174,12 @@ async function main() {
     }
 
     const { data: list } = await sb.auth.admin.listUsers({ perPage: 200 });
-    const authUser = list?.users.find(
+    const ghost = list?.users.find(
       (u) => u.email?.toLowerCase() === email.toLowerCase()
     );
-    if (!authUser) {
+    if (ghost) {
       pass = false;
-      notes.push("auth user not found");
-    }
-
-    if (processResult.wasNewUser === false) {
-      notes.push("(wasNewUser=false)");
+      notes.push(`unexpected auth user exists: ${ghost.id}`);
     }
 
     rows.push({ slug, pass, email: emailStatus, notes });
@@ -216,13 +212,14 @@ async function main() {
   let deleted = 0;
   for (const u of authMatches) {
     const { error: delErr } = await sb.auth.admin.deleteUser(u.id);
-    if (delErr) {
-      console.error(`auth delete error for ${u.email}:`, delErr);
-    } else {
-      deleted++;
-    }
+    if (delErr) console.error(`auth delete error for ${u.email}:`, delErr);
+    else deleted++;
   }
-  console.log(`Deleted ${deleted} auth users`);
+  if (deleted > 0) {
+    console.log(
+      `Defensive cleanup: deleted ${deleted} auth users (none expected in v2 flow)`
+    );
+  }
 
   console.log("\n=== Smoke test results ===");
   let allPass = true;

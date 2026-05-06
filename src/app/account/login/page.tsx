@@ -62,6 +62,9 @@ export default function LoginPage() {
         <Link href="/account/forgot-password" className="auth-link">
           Forgot your password?
         </Link>
+        <Link href="/account/sign-up" className="auth-link">
+          No account yet? Create one
+        </Link>
       </form>
       <style>{`
         .auth-card { max-width: 440px; margin: 0 auto; padding: 48px 32px; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); }

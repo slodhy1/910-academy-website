@@ -1,114 +1,155 @@
-# Phase B research — webhook bug fixes + welcome email + smoke test
+# Phase B v2 research — webhook rework + customer signup + new email
 
 ## Preconditions
-- `emails/welcome-email.html` — present (137 lines, 5124 B). Uses placeholders `{{productName}}`, `{{email}}`, `{{tempPassword}}`, `{{loginLink}}` — matches spec exactly.
-- `emails/migration-email.html` — present (137 lines, 5238 B).
-- `emails/password-reset-email.html` — present (114 lines, 3889 B).
+- `emails/purchase-confirmed.html` — present (light theme, two placeholders confirmed):
+  - line 17: `{{productName}}`
+  - line 22: `{{accessLink}}`
 
-(Migration + password-reset templates are not consumed by Phase B but are required-existing.)
+## Schema — `public.customers` (from migration 0001, unchanged through 0005)
 
-## Current webhook flow — `src/app/api/stripe-webhook/route.ts` (132 lines)
+```sql
+create table public.customers (
+  id uuid default gen_random_uuid() primary key,
+  created_at timestamptz default now() not null,
+  email text not null unique,            -- natural key for email-based linking
+  full_name text,
+  stripe_customer_id text unique,
+  auth_user_id uuid references auth.users(id) on delete set null  -- nullable
+);
 
-| Step | Lines | Behavior |
-|---|---|---|
-| Env check | 8-10 | requires `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` |
-| Stripe client init | 11 | new Stripe instance per request |
-| Read body + sig | 13-15 | `req.text()` + `stripe-signature` header |
-| Verify signature | 17-23 | `stripe.webhooks.constructEvent` — returns 400 on mismatch |
-| Filter event type | 25-27 | non-`checkout.session.completed` → 200 ignored |
-| Extract email | 29-34 | `customer_details.email` ?? `customer_email`; missing → 200 warn |
-| Resolve product slug | 38-63 | metadata first, then plink lookup; no match → 200 warn |
-| Load product row | 67-75 | by slug; missing → 200 warn |
-| Find/create customer | 77-117 | **two bugs live here** |
-| Upsert customer_products | 119-129 | idempotent on `(customer_id, product_id)` |
-| Return | 131 | `{ ok: true }` 200 |
-
-## Bug locations (exact)
-
-### Bug 1 — Math.random temp password
-- **Line 88**: `const tempPassword = Math.random().toString(36).slice(-12) + "A1!";`
-- Replacement per spec: `crypto.randomBytes(12).toString('base64url').slice(0, 16)`
-- Need: `import { randomBytes } from "crypto";` at top (currently no `crypto` import).
-
-### Bug 2 — orphaned auth user retry loop
-- **Lines 89-93**: `auth.admin.createUser` called; on success, `authData.user.id` used.
-- **Line 96**: `if (authErr || !authData?.user) return 500` — Stripe retries on 5xx.
-- **Lines 100-113**: `customers` insert. On error → return 500 (line 112). Auth user already created at this point → orphaned.
-- **Failure mode**: retry → `createUser` errors with email-exists → return 500 → infinite retry. Customer paid; never gets row in `customers`.
-- Fix path: catch `createUser` error, detect "email exists" via `error.code === 'email_exists'` OR `status === 422` OR `message.includes('already')`, look up user via `auth.admin.listUsers()` filtered to email, take match, continue. Same recovery applies if `createUser` *succeeded* this run but on a retry: existing branch (line 85, looking up `customers` row by email) wouldn't have inserted yet — so we'd hit createUser again, get email-exists, and we want to recover by listing.
-
-### Where `wasNewUser` is determined
-- True when we just (a) called `createUser` successfully OR (b) looked up an existing auth user AND no `customers` row was found at line 78. Practically: `wasNewUser = (existing row in customers was NOT found at line 78)`. The auth user may have been pre-existing (orphan) but if `customers` is fresh, this is still effectively a first-grant for our system → send welcome email.
-
-### Email injection point
-- After line 129 (customer_products upsert succeeds), before line 131. Conditional on `wasNewUser === true`. Fire-and-await but never throw; log on failure; return 200 regardless.
-
-## Library files reviewed
-
-- `src/lib/supabase/admin.ts` (10 lines): factory `createAdminClient()` returning service-role client with `persistSession: false, autoRefreshToken: false`. Suitable for both webhook + smoke test. Reuse as-is.
-- `src/lib/supabase/server.ts` (28 lines): SSR cookies-bound anon client — not used by webhook or smoke test.
-- `src/lib/supabase/` also has `client.ts` and `storage.ts` (untouched by this plan).
-
-## next.config.ts
-
-42 lines. Single export, contains `rewrites()` only. No existing `outputFileTracingIncludes`. Safe to add the key; need to preserve `rewrites()` and the `STATIC_PAGES` array verbatim.
-
-Per Next 15 docs, `outputFileTracingIncludes` is a top-level `NextConfig` key, value is `Record<string, string[]>` keyed by route file path (relative to repo root). Spec value is fine:
-```ts
-outputFileTracingIncludes: {
-  'src/app/api/stripe-webhook/route.ts': ['./emails/**/*.html'],
-}
+create table public.customer_products (
+  id uuid default gen_random_uuid() primary key,
+  customer_id uuid references public.customers(id) on delete cascade not null,
+  product_id uuid references public.products(id) on delete cascade not null,
+  stripe_session_id text,
+  amount_paid_cents integer,
+  unique(customer_id, product_id)
+);
 ```
 
-## package.json
+**Critical findings:**
+
+| Question | Answer |
+|---|---|
+| Is `customers.id == auth.users.id`? | **No.** `customers.id` is an independent UUID. |
+| Is `auth_user_id` nullable? | **Yes**, with `on delete set null`. |
+| Is `email` unique on `customers`? | **Yes** (UNIQUE constraint). Natural key for linkage. |
+| Does `customer_products` reference auth users? | **No** — references `customers.id`, which is stable. |
+| Migration required? | **NO.** Schema already supports the new flow. |
+
+The schema is already perfectly shaped for the new model:
+- Webhook can create `customers` rows with `auth_user_id = null` (no auth user yet).
+- Customer signs up later → server action sets `auth_user_id` by matching `email`.
+- Grants on `customer_products` reference stable `customers.id` regardless of when signup happens.
+
+## Current grant lookup pattern
+
+Both `src/app/account/page.tsx` (line 32) and `src/app/account/products/[slug]/page.tsx` (line 65) lookup customer by `auth_user_id = user.id`. So the SSR auth-user → customer chain is:
 
 ```
-deps: next ^15.1.0, react ^19.0.0, react-dom ^19.0.0,
-      @supabase/supabase-js ^2.45.0, @supabase/ssr ^0.5.0,
-      stripe ^17.0.0
-devDeps: typescript ^5, @types/node ^22, @types/react ^19, @types/react-dom ^19
+auth.users.id  →  customers.auth_user_id  →  customers.id  →  customer_products.customer_id
 ```
 
-**Missing dep:** `resend` — install per spec.
-**Smoke test runner:** `tsx` not installed. Spec says `npx tsx scripts/smoke-test-webhook.ts` — `npx` will fetch + cache it on demand (no need to add to package.json devDeps unless we want pinned). Not adding unless prompted.
+For the new flow to work, after signup we MUST link `customers.auth_user_id` to the new `auth.users.id`. Otherwise the dashboard fetches `customers` by `auth_user_id` and finds nothing → empty state.
 
-Installed Next is `15.5.15`. Node `24.14.0`. Resend SDK current version supports Node ≥18; compatible.
+## Sign-up route — does NOT exist
 
-## Edge cases & assumptions to flag
+`grep -rn "signUp\|sign-up" src/` → 0 matches. Need to create `/account/sign-up`.
 
-1. **`auth.admin.listUsers` does not support a server-side email filter** in `@supabase/supabase-js@2.x` per the SDK signature `listUsers({ page?, perPage? })`. Workaround: paginate and filter client-side. For our use case (webhook + smoke test, low frequency), `listUsers({ perPage: 200 })` and `find(u => u.email === email)` is acceptable. If user count exceeds page size it will silently miss — but at our scale (single-digit thousands max) one page is fine. Flagging for review. Alternative: use `auth.admin.getUserByEmail()` if available in the installed SDK version — need to verify 2.45.0 ships it; older versions don't.
+## Login flow — `src/app/account/login/page.tsx`
 
-2. **`process.cwd()` at runtime on Vercel.** Next.js Functions execute from the bundle root. `path.join(process.cwd(), 'emails/welcome-email.html')` resolves to whatever Vercel sets as cwd (typically `/var/task/`). With `outputFileTracingIncludes` the file is bundled into the function output and accessible at this path. Verified pattern used in many Next deployments. No change needed beyond the config addition.
+Client component. Calls `supabase.auth.signInWithPassword`. After success → `router.push("/account")`. No "Create account" link present. Need to add.
 
-3. **EMAIL_FROM domain verification.** `academy@studio910pb.com` — Resend requires `studio910pb.com` to have its DNS records (SPF, DKIM, DMARC) verified in the Resend dashboard. If not yet verified, Resend SDK calls return a 403 with `validation_error`. Smoke test will detect this. Surfacing here so user knows to verify before deploy.
+## Middleware — `middleware.ts`
 
-4. **Smoke test recipients.** Per spec: `slodhy1+webhook-test-{slug}@gmail.com` (Gmail plus-aliasing). 7 emails will land in `slodhy1@gmail.com` inbox. Acceptable per user direction.
+Matcher: `/account/:path*`. Behavior:
+- `isAuthPage` = `["/account/login", "/account/forgot-password", "/account/reset-password"]`
+- Logged-in users on auth pages → redirect to `/account`
+- Logged-out users on `/account/*` non-auth → redirect to `/account/login`
 
-5. **Smoke test side effects on prod DB.** Will create 7 `auth.users` + 7 `customers` + 7 `customer_products` rows. Cleanup script handles `customers` + `customer_products` (cascade-deletes `customer_products`). Auth users require dashboard deletion — printed link.
+**Two implications for the new flow:**
 
-6. **Smoke test runs against PROD.** `.env.local` points at `qkmkxthpeapuecobahhx`. No staging Supabase. The `slodhy1+webhook-test-*@gmail.com` namespace makes them easy to filter post-run.
+1. After purchase, Stripe redirects to `/account?purchase=success`. The customer is **not logged in yet** (signup happens AFTER payment). The middleware redirects them to `/account/login`, **dropping the `?purchase=success` query param** in the redirect.
 
-7. **`event.id` not used for idempotency.** Outside scope of the six changes — flagging as a future hardening, not fixing here.
+2. The new `/account/sign-up` page is by definition for not-logged-in users → must be added to `isAuthPage` so middleware doesn't bounce them, AND so logged-in users on this page get redirected to `/account`.
 
-8. **Existing `wasNewUser` is not currently tracked.** We need to add a local `let wasNewUser = false` and set it true on the create-or-recover branch. Existing customer (line 85 `if (existing)`) leaves it false.
+**Required middleware changes (small):**
+- Add `/account/sign-up` to `isAuthPage`.
+- Special-case `/account?purchase=success` for not-logged-in users → redirect to `/account/sign-up?purchase=success` (preserves intent).
 
-9. **`processCheckoutCompleted` return type.** Spec: `{ success: boolean; customerId?: string; wasNewUser?: boolean; error?: string }`. The POST handler will inspect `success` and return 500 only on internal failures (auth-create that's not duplicate, customers insert failure with no recovery, customer_products upsert error). 200 on success or no-op (no email, no product match, etc — preserving current behavior).
+## Stripe checkout flow — `src/app/api/checkout/route.ts`
 
-10. **Email send timing.** Sent inside `processCheckoutCompleted` after `customer_products` upsert. Returns from the function regardless of email outcome. Smoke test inspects email-result from the same function call.
+Currently the 7 active products use `stripe_payment_link` directly (line 31-33 returns the buy.stripe.com URL without going through Stripe's session API). The `success_url: ${siteUrl}/account?purchase=success` at line 48 only applies to the unused `stripe_price_id` path.
 
-## Files to modify or create — preview (full diffs in plan.md)
+So the actual success URL is **whatever each Stripe payment link is configured to redirect to in the Stripe dashboard**. Per the brief: "Don't break the existing 7 plinks — success_url stays /account?purchase=success" — confirming all 7 plinks are already configured to redirect to that URL.
+
+**No changes needed to checkout/route.ts or the plinks.**
+
+## Existing files to leave alone
+
+- `src/app/account/forgot-password/page.tsx` — uses `resetPasswordForEmail`, works on existing accounts. Not affected.
+- `src/app/account/reset-password/page.tsx` — handles the reset link callback. Not affected.
+- `src/app/account/products/[slug]/page.tsx` — grant lookup unchanged.
+- `src/app/account/layout.tsx` — top-level chrome only.
+- `src/app/api/checkout/route.ts` — payment link path unchanged.
+
+## Edge cases
+
+| Scenario | Handling |
+|---|---|
+| **Pays then never signs up** | Orphan `customers` row with `auth_user_id = null`. Email goes out with `accessLink` → /account?purchase=success → middleware redirects unsigned to /account/sign-up. They sign up later (could be days later) using the same email → server action links the row. |
+| **Signs up before paying** | Auth user exists, no `customers` row. They land on /account → empty state. They pay → webhook upsert `customers` by email → webhook also detects existing auth user with this email (admin.listUsers) → links `auth_user_id`. |
+| **Pays twice with same email** | First payment: webhook creates `customers` + first `customer_products`. Second payment: `customers` upsert by email finds existing row, no-ops; `customer_products` upsert on `(customer_id, product_id)` adds the second grant. Both visible on next `/account` load. New flow only sends purchase-confirmed email if `wasNewCustomer` (no existing customers row before this insert). |
+| **Tries to sign up with email already linked to an account** | Server action checks: if `customers.auth_user_id IS NOT NULL` for this email, return error "An account already exists — please sign in." |
+| **Tries to sign up with email that already has an auth user (no customers row)** | Supabase `auth.signUp` will return `email_exists` or success-but-no-confirmation depending on config. We surface that error verbatim. |
+| **Confirms email but signup hasn't completed (Supabase email-verification flow)** | Out of scope for this work. Whatever the project's email-confirmation setting is, applies. We don't fight it. |
+| **Customer pays, sees email, clicks link, /account/sign-up, but webhook hasn't finished yet** | Race: webhook is fast (<1s typically). If they sign up immediately and the customers row doesn't exist yet, the linkage step finds nothing, signup completes, they hit /account → empty state. Webhook arrives milliseconds later → creates customers row but with `auth_user_id = null` (because they signed up first). The dashboard fetches by `auth_user_id` → nothing. **This is a race condition.** Mitigation: webhook should ALSO check for existing auth user by email and link if found. With both webhook AND signup doing the email-based linkage in opposite directions, the race is closed. |
+
+## Risks and assumptions
+
+1. **`auth.admin.listUsers` lacks email filter in supabase-js 2.45.0.** Same constraint as Phase B. Pagination at 200 per page, `find()` by email. At <50 customers today, fine. Plan flag for future.
+
+2. **Supabase email confirmation setting.** If "Confirm email" is enabled in Supabase Auth → users must click verification link before signing in. Whatever the current project setting is, applies. Not changing it.
+
+3. **`signUp` with already-existing email on Supabase.** Public `auth.signUp` returns success with no session (anti-enumeration default). If we want explicit "already exists" feedback, we need to first check `customers.auth_user_id` server-side via admin client BEFORE calling signUp. Plan covers this.
+
+4. **No password reset for orphan customers.** The "skip email on orphan recovery" behavior added in Phase B 1.0 becomes irrelevant — there are no temp passwords any more. The recovery-on-duplicate code path in `process-checkout.ts` should be removed; the new webhook never tries to create auth users.
+
+5. **Welcome email sent to customer means they have a `customers` row with no auth account yet.** That's the new norm. The email's `accessLink` must lead to a sign-up flow, not assume an account exists.
+
+6. **`accessLink` value.** Two options:
+   - `https://www.910academy.com/account?purchase=success` — matches existing Stripe redirect URL. Middleware will redirect unsigned to /account/sign-up.
+   - `https://www.910academy.com/account/sign-up` — direct to signup, skipping the middleware bounce.
+   
+   Going with **option 1** for consistency with the post-checkout redirect. One URL, one experience.
+
+7. **Smoke test changes.** Must:
+   - Assert `customers` row created (with `auth_user_id IS NULL`).
+   - Assert `customer_products` row created with correct amount.
+   - Assert **NO `auth.users` row** for the test email (key inversion from Phase B 1.0 which asserted auth-user existence).
+   - Assert email `success: true`.
+   - Cleanup: delete `customers` + cascade-deleted `customer_products`. **No auth users to delete** (none should exist).
+
+8. **`outputFileTracingIncludes` in next.config.ts.** Currently set to `["./emails/**/*.html"]` for the webhook route — covers the new template too. No change needed.
+
+## Files that will be touched (preview — exact diffs in plan.md)
 
 | File | Action |
 |---|---|
-| `src/app/api/stripe-webhook/route.ts` | modify — bugs 1+2, refactor + export `processCheckoutCompleted`, call email |
-| `src/lib/email/welcome.ts` | create — `sendWelcomeEmail` |
-| `next.config.ts` | modify — add `outputFileTracingIncludes` |
-| `scripts/smoke-test-webhook.ts` | create |
-| `package.json` + `package-lock.json` | modify — add `resend` |
-| `.env.local` | user adds `RESEND_API_KEY` + `EMAIL_FROM` for smoke test |
+| `src/lib/webhook/process-checkout.ts` | rewrite — remove auth-user creation; upsert customer; link existing auth user if found by email; remove `tempPassword`/`wasNewUser` semantics; add `wasNewCustomer` |
+| `src/lib/email/welcome.ts` | rename → `src/lib/email/purchase-confirmed.ts`; new placeholders `{productName, accessLink}`; new subject; new template path |
+| `src/app/account/sign-up/page.tsx` | **new** — full name + email + password + confirm; calls signUp + server action to link |
+| `src/app/account/sign-up/actions.ts` | **new** — `linkCustomerToAuthUser(email, authUserId)` server action using admin client |
+| `src/app/account/login/page.tsx` | small edit — add "Create account" link |
+| `src/app/account/page.tsx` | small edit — improve flash banner copy when `?purchase=success` (no functional change needed) |
+| `middleware.ts` | small edit — add `/account/sign-up` to auth-pages; preserve `?purchase=success` query through redirect to sign-up |
+| `scripts/smoke-test-webhook.ts` | rewrite — invert auth-user assertions; update import to renamed email lib; cleanup only customers + cps |
+| `next.config.ts` | no change needed — `outputFileTracingIncludes: ["./emails/**/*.html"]` already covers the new template |
+| `src/lib/email/welcome.ts` (old file) | **delete** after the new file is in place |
 
-No other files touched.
+## Open questions to flag in plan, not blocking
 
-## Open items requiring user decision
-
-None blocking. The spec is precise enough to write the plan. One soft item: the `listUsers` pagination caveat in #1 above — flagging in case user wants pagination, but the simple single-page implementation is what plan.md will specify unless objected.
+- **Should sign-up require name as required field, or optional?** Spec says "full name, email, password, confirm password" — implying required. Plan: required, but trim/sanitize.
+- **Confirm-password client-side validation only, or also server-side?** Plan: client-side only (mismatch is impossible to land at the server if client checks first; defense in depth would be cheap to add — will include both).
+- **Show purchased product name on /account/sign-up post-checkout?** Spec doesn't say, but the email's productName is implicitly visible on the dashboard. Plan: a small "Just purchased? Use the email from your Stripe receipt." hint, no product name (we don't know which product on the sign-up page since we don't pass slug through the URL).
+- **Server action vs API route for the linkage step?** Plan: server action — simpler, type-safe, no extra route file.

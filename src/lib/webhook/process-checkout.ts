@@ -1,12 +1,13 @@
 import type Stripe from "stripe";
-import { randomBytes } from "node:crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendWelcomeEmail } from "@/lib/email/welcome";
+import { sendPurchaseConfirmedEmail } from "@/lib/email/purchase-confirmed";
+
+const ACCESS_LINK = "https://www.910academy.com/account?purchase=success";
 
 export type ProcessResult = {
   success: boolean;
   customerId?: string;
-  wasNewUser?: boolean;
+  wasNewCustomer?: boolean;
   error?: string;
   emailResult?: { success: boolean; error?: string };
 };
@@ -75,73 +76,34 @@ export async function processCheckoutCompleted(
     .maybeSingle();
 
   let customerId: string;
-  let wasNewUser = false;
-  let tempPassword: string | undefined;
+  let wasNewCustomer = false;
 
   if (existing) {
     customerId = existing.id;
+
+    if (!existing.auth_user_id) {
+      const matchedAuthId = await findAuthUserIdByEmail(supabase, email);
+      if (matchedAuthId) {
+        const { error: linkErr } = await supabase
+          .from("customers")
+          .update({ auth_user_id: matchedAuthId })
+          .eq("id", customerId);
+        if (linkErr) {
+          console.error(
+            "[stripe-webhook] failed to link auth user:",
+            linkErr
+          );
+        } else {
+          console.log(
+            `[stripe-webhook] linked existing auth user ${matchedAuthId} to customer ${customerId}`
+          );
+        }
+      }
+    }
   } else {
-    wasNewUser = true;
-    tempPassword = randomBytes(12).toString("base64url").slice(0, 16);
+    wasNewCustomer = true;
 
-    let authUserId: string | undefined;
-    const { data: authData, error: authErr } =
-      await supabase.auth.admin.createUser({
-        email,
-        password: tempPassword,
-        email_confirm: true,
-      });
-
-    if (authErr) {
-      const msg = (authErr.message ?? "").toLowerCase();
-      const looksLikeDuplicate =
-        (authErr as { code?: string }).code === "email_exists" ||
-        authErr.status === 422 ||
-        msg.includes("already registered") ||
-        msg.includes("already been registered") ||
-        msg.includes("already exists");
-
-      if (!looksLikeDuplicate) {
-        console.error("[stripe-webhook] auth user create failed:", authErr);
-        return { success: false, error: "Auth create failed" };
-      }
-
-      // Recover from a prior failed attempt (or returning customer with an
-      // existing auth row but no customers row). Look up the existing user.
-      // TODO: distinguish genuine orphans (no customer_products rows for any
-      // product under this auth user) from returning customers, and for true
-      // orphans reset the password via auth.admin.updateUserById and send a
-      // welcome email with the new password. For now we skip the email so we
-      // never disrupt a real logged-in returning customer's session.
-      console.warn(
-        "[stripe-webhook] auth user already exists, recovering by lookup:",
-        email
-      );
-      const { data: list, error: listErr } =
-        await supabase.auth.admin.listUsers({ perPage: 200 });
-      if (listErr) {
-        console.error("[stripe-webhook] auth list failed:", listErr);
-        return { success: false, error: "Auth lookup failed" };
-      }
-      const match = list.users.find(
-        (u) => u.email?.toLowerCase() === email.toLowerCase()
-      );
-      if (!match) {
-        console.error(
-          "[stripe-webhook] auth said duplicate but lookup found no match:",
-          email
-        );
-        return { success: false, error: "Auth lookup miss" };
-      }
-      authUserId = match.id;
-      tempPassword = undefined;
-    } else if (authData?.user) {
-      authUserId = authData.user.id;
-    }
-
-    if (!authUserId) {
-      return { success: false, error: "Auth user resolution failed" };
-    }
+    const matchedAuthId = await findAuthUserIdByEmail(supabase, email);
 
     const stripeCustomerId =
       typeof session.customer === "string" ? session.customer : null;
@@ -149,20 +111,25 @@ export async function processCheckoutCompleted(
       .from("customers")
       .insert({
         email,
-        auth_user_id: authUserId,
+        auth_user_id: matchedAuthId ?? null,
         stripe_customer_id: stripeCustomerId,
         full_name: session.customer_details?.name || null,
       })
       .select("id")
       .single();
     if (insertErr || !newCustomer) {
-      console.error("[stripe-webhook] customer row insert failed:", insertErr);
+      console.error(
+        "[stripe-webhook] customer row insert failed:",
+        insertErr
+      );
       return { success: false, error: "Customer insert failed" };
     }
     customerId = newCustomer.id;
     console.log(
-      `[stripe-webhook] new customer created: ${email}${
-        tempPassword ? "" : " (recovered orphan, no password reset)"
+      `[stripe-webhook] new customer: ${email}${
+        matchedAuthId
+          ? " (linked to existing auth user)"
+          : " (no auth account yet)"
       }`
     );
   }
@@ -179,27 +146,42 @@ export async function processCheckoutCompleted(
       { onConflict: "customer_id,product_id" }
     );
   if (cpErr) {
-    console.error("[stripe-webhook] customer_products upsert failed:", cpErr);
+    console.error(
+      "[stripe-webhook] customer_products upsert failed:",
+      cpErr
+    );
     return { success: false, error: "Grant insert failed" };
   }
 
   let emailResult: ProcessResult["emailResult"];
-  if (wasNewUser && tempPassword) {
-    const sendResult = await sendWelcomeEmail({
-      to: email,
-      productName: product.title,
-      tempPassword,
-    });
-    emailResult = sendResult.success
-      ? { success: true }
-      : { success: false, error: sendResult.error };
-    if (!sendResult.success) {
-      console.error(
-        "[stripe-webhook] welcome email failed (continuing):",
-        sendResult.error
-      );
-    }
+  const sendResult = await sendPurchaseConfirmedEmail({
+    to: email,
+    productName: product.title,
+    accessLink: ACCESS_LINK,
+  });
+  emailResult = sendResult.success
+    ? { success: true }
+    : { success: false, error: sendResult.error };
+  if (!sendResult.success) {
+    console.error(
+      "[stripe-webhook] purchase email failed (continuing):",
+      sendResult.error
+    );
   }
 
-  return { success: true, customerId, wasNewUser, emailResult };
+  return { success: true, customerId, wasNewCustomer, emailResult };
+}
+
+async function findAuthUserIdByEmail(
+  supabase: ReturnType<typeof createAdminClient>,
+  email: string
+): Promise<string | undefined> {
+  const { data, error } = await supabase.auth.admin.listUsers({ perPage: 200 });
+  if (error) {
+    console.error("[stripe-webhook] auth list failed:", error);
+    return undefined;
+  }
+  return data.users.find(
+    (u) => u.email?.toLowerCase() === email.toLowerCase()
+  )?.id;
 }
