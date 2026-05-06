@@ -972,6 +972,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       <a href="/" class="nav-link">Home</a>
       <a href="/gear" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
+      <a href="/account" class="nav-link" data-account-link>Account</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta">Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
@@ -986,6 +987,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   <a href="/">Home</a>
   <a href="/gear">Our Gear</a>
   <a href="/products">Products</a>
+  <a href="/account" data-account-link>Account</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
@@ -1302,6 +1304,17 @@ img, video, iframe { max-width: 100%; height: auto; }
       if (products) products.scrollIntoView({ behavior: 'smooth' });
     });
   }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
+    if (!hasSession) {
+      var els = document.querySelectorAll("[data-account-link]");
+      els.forEach(function(el){ el.setAttribute("href", "/account/login"); });
+    }
+  } catch (e) { /* no-op */ }
 })();
 </script>
 </body>

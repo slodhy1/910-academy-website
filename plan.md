@@ -1,875 +1,621 @@
-# Phase B v2 plan — webhook rework + customer signup + new email
+# Phase B v3 plan — self-healing linkage + settings page + dashboard greeting fix + marketing-nav login + email restyle
 
-Diff-level precision. No file outside this list will be touched.
-
-## Schema migration: NONE.
-
-The `customers` table already has `auth_user_id uuid references auth.users(id) on delete set null` and `email text not null unique`. Email-based linkage works as-is. No DDL.
+Six coordinated changes. Diff-level precision. No file outside this list will be touched.
 
 ---
 
-## File 1 — `src/lib/email/purchase-confirmed.ts` (new — replaces `welcome.ts`)
+## Change 1 — `middleware.ts`: self-healing customer linkage
 
-```ts
-import { readFileSync } from "node:fs";
-import path from "node:path";
-import { Resend } from "resend";
+Add admin client, fire one UPDATE on authed `/account/*` requests.
 
-const TEMPLATE = readFileSync(
-  path.join(process.cwd(), "emails/purchase-confirmed.html"),
-  "utf-8"
-);
+**Edits**:
 
-export type SendPurchaseConfirmedParams = {
-  to: string;
-  productName: string;
-  accessLink: string;
-};
-
-export type SendPurchaseConfirmedResult =
-  | { success: true; id: string }
-  | { success: false; error: string };
-
-export async function sendPurchaseConfirmedEmail(
-  params: SendPurchaseConfirmedParams
-): Promise<SendPurchaseConfirmedResult> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  if (!apiKey || !from) {
-    return { success: false, error: "RESEND_API_KEY or EMAIL_FROM not set" };
-  }
-
-  const html = TEMPLATE.replaceAll("{{productName}}", escapeHtml(params.productName))
-    .replaceAll("{{accessLink}}", params.accessLink);
-  // accessLink is a URL we control (always /account?purchase=success); no escape.
-
-  try {
-    const resend = new Resend(apiKey);
-    const { data, error } = await resend.emails.send({
-      from,
-      to: params.to,
-      subject: `Purchase confirmed — ${params.productName}`,
-      html,
-    });
-    if (error) {
-      console.error("[purchase-confirmed] Resend error:", error);
-      return { success: false, error: error.message ?? String(error) };
-    }
-    if (!data?.id) {
-      return { success: false, error: "Resend returned no id" };
-    }
-    console.log(`[purchase-confirmed] sent to ${params.to} id=${data.id}`);
-    return { success: true, id: data.id };
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    console.error("[purchase-confirmed] threw:", message);
-    return { success: false, error: message };
-  }
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+```diff
+ import { createServerClient, type CookieOptions } from "@supabase/ssr";
++import { createClient as createAdminLib } from "@supabase/supabase-js";
+ import { NextResponse, type NextRequest } from "next/server";
+ 
+ type CookieToSet = { name: string; value: string; options: CookieOptions };
+ 
++function escapeIlike(s: string) {
++  return s.replace(/[\\%_]/g, "\\$&");
++}
++
+ export async function middleware(request: NextRequest) {
+   ...
+   const { data: { user } } = await supabase.auth.getUser();
+ 
++  // Self-healing customer linkage: when an authed user visits /account/*,
++  // attempt to link any unlinked customers row matching their email. The
++  // UPDATE is idempotent and affects 0 rows in the common case (already
++  // linked or no row exists). Single round-trip; never blocks the request.
++  if (user?.email) {
++    const admin = createAdminLib(
++      process.env.NEXT_PUBLIC_SUPABASE_URL!,
++      process.env.SUPABASE_SERVICE_ROLE_KEY!,
++      { auth: { persistSession: false } }
++    );
++    const { error: linkErr, count: linkedCount } = await admin
++      .from("customers")
++      .update({ auth_user_id: user.id }, { count: "exact" })
++      .ilike("email", escapeIlike(user.email))
++      .is("auth_user_id", null);
++    if (linkErr) {
++      console.error("[middleware] self-heal link failed:", linkErr);
++    } else if (linkedCount && linkedCount > 0) {
++      console.log(
++        `[middleware] self-heal linked customers row to auth user ${user.id} (${user.email})`
++      );
++    }
++  }
++
+   const path = request.nextUrl.pathname;
+   ...
 ```
 
-## File 2 — `src/lib/email/welcome.ts` — **delete**
-
-After File 1 is created and File 3's import is swapped, delete the old file with `git rm`.
+**Notes**:
+- Uses `count: "exact"` so we know whether anything was linked (for logging only). Postgres returns this cheaply.
+- Service-role key is server-only; middleware runs server-only.
+- Runs even on auth pages (logged-in users hitting `/account/login` etc are redirected away — but a logged-in user can still visit `/account/forgot-password` per current code; this is fine, the linkage is harmless there).
+- No user-blocking awaits beyond the existing `auth.getUser()` + this UPDATE.
 
 ---
 
-## File 3 — `src/lib/webhook/process-checkout.ts` (rewrite)
+## Change 2 — `src/app/account/page.tsx`: greeting name from auth metadata
 
-New flow: upsert customer (no auth user creation), link to existing auth user if any, upsert grant, send purchase-confirmed email.
+**Edit (lines 51-52)**:
 
-```ts
-import type Stripe from "stripe";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { sendPurchaseConfirmedEmail } from "@/lib/email/purchase-confirmed";
-
-const ACCESS_LINK = "https://www.910academy.com/account?purchase=success";
-
-export type ProcessResult = {
-  success: boolean;
-  customerId?: string;
-  wasNewCustomer?: boolean;
-  error?: string;
-  emailResult?: { success: boolean; error?: string };
-};
-
-export async function processCheckoutCompleted(
-  event: Stripe.Event
-): Promise<ProcessResult> {
-  if (event.type !== "checkout.session.completed") {
-    return { success: true };
-  }
-
-  const session = event.data.object as Stripe.Checkout.Session;
-  const email = session.customer_details?.email || session.customer_email;
-  if (!email) {
-    console.warn(
-      "[stripe-webhook] checkout.session.completed without customer email",
-      session.id
-    );
-    return { success: true };
-  }
-
-  const supabase = createAdminClient();
-
-  // Resolve product slug. Metadata first, then payment_link lookup.
-  let productSlug: string | undefined = session.metadata?.product_slug;
-
-  if (!productSlug && session.payment_link) {
-    const linkId =
-      typeof session.payment_link === "string"
-        ? session.payment_link
-        : session.payment_link.id;
-    console.log(`Webhook: matching payment_link ${linkId}`);
-    const { data: p, error } = await supabase
-      .from("products")
-      .select("slug")
-      .eq("stripe_payment_link_id", linkId)
-      .maybeSingle();
-
-    if (error) console.error("Product lookup error:", error);
-    if (p) productSlug = p.slug;
-  }
-
-  if (!productSlug) {
-    console.error(
-      `Webhook: no product matched for session ${session.id}, payment_link=${session.payment_link}, metadata=`,
-      session.metadata
-    );
-    return { success: true };
-  }
-
-  console.log(`Webhook: granting access for ${productSlug} to ${email}`);
-
-  const { data: product } = await supabase
-    .from("products")
-    .select("id, title")
-    .eq("slug", productSlug)
-    .single();
-  if (!product) {
-    console.warn("[stripe-webhook] product row missing for slug", productSlug);
-    return { success: true };
-  }
-
-  // Find existing customer
-  const { data: existing } = await supabase
-    .from("customers")
-    .select("id, auth_user_id")
-    .eq("email", email)
-    .maybeSingle();
-
-  let customerId: string;
-  let wasNewCustomer = false;
-
-  if (existing) {
-    customerId = existing.id;
-
-    // If the customers row has no auth_user_id but an auth user exists for
-    // this email (signup-before-payment case), link them.
-    if (!existing.auth_user_id) {
-      const matchedAuthId = await findAuthUserIdByEmail(supabase, email);
-      if (matchedAuthId) {
-        const { error: linkErr } = await supabase
-          .from("customers")
-          .update({ auth_user_id: matchedAuthId })
-          .eq("id", customerId);
-        if (linkErr) {
-          console.error("[stripe-webhook] failed to link auth user:", linkErr);
-        } else {
-          console.log(
-            `[stripe-webhook] linked existing auth user ${matchedAuthId} to customer ${customerId}`
-          );
-        }
-      }
-    }
-  } else {
-    wasNewCustomer = true;
-
-    // Customer paying for the first time. They may or may not have an auth
-    // account already — link if they do, otherwise leave null until they
-    // sign up via /account/sign-up.
-    const matchedAuthId = await findAuthUserIdByEmail(supabase, email);
-
-    const stripeCustomerId =
-      typeof session.customer === "string" ? session.customer : null;
-    const { data: newCustomer, error: insertErr } = await supabase
-      .from("customers")
-      .insert({
-        email,
-        auth_user_id: matchedAuthId ?? null,
-        stripe_customer_id: stripeCustomerId,
-        full_name: session.customer_details?.name || null,
-      })
-      .select("id")
-      .single();
-    if (insertErr || !newCustomer) {
-      console.error("[stripe-webhook] customer row insert failed:", insertErr);
-      return { success: false, error: "Customer insert failed" };
-    }
-    customerId = newCustomer.id;
-    console.log(
-      `[stripe-webhook] new customer: ${email}${
-        matchedAuthId ? " (linked to existing auth user)" : " (no auth account yet)"
-      }`
-    );
-  }
-
-  const { error: cpErr } = await supabase
-    .from("customer_products")
-    .upsert(
-      {
-        customer_id: customerId,
-        product_id: product.id,
-        stripe_session_id: session.id,
-        amount_paid_cents: session.amount_total ?? null,
-      },
-      { onConflict: "customer_id,product_id" }
-    );
-  if (cpErr) {
-    console.error("[stripe-webhook] customer_products upsert failed:", cpErr);
-    return { success: false, error: "Grant insert failed" };
-  }
-
-  // Send purchase-confirmed email on every successful grant — the email is
-  // a receipt + access link, not a welcome. Returning customers buying a
-  // second product still need confirmation that the transaction landed and
-  // where to access it.
-  let emailResult: ProcessResult["emailResult"];
-  const sendResult = await sendPurchaseConfirmedEmail({
-    to: email,
-    productName: product.title,
-    accessLink: ACCESS_LINK,
-  });
-  emailResult = sendResult.success
-    ? { success: true }
-    : { success: false, error: sendResult.error };
-  if (!sendResult.success) {
-    console.error(
-      "[stripe-webhook] purchase email failed (continuing):",
-      sendResult.error
-    );
-  }
-
-  return { success: true, customerId, wasNewCustomer, emailResult };
-}
-
-async function findAuthUserIdByEmail(
-  supabase: ReturnType<typeof createAdminClient>,
-  email: string
-): Promise<string | undefined> {
-  const { data, error } = await supabase.auth.admin.listUsers({ perPage: 200 });
-  if (error) {
-    console.error("[stripe-webhook] auth list failed:", error);
-    return undefined;
-  }
-  return data.users.find(
-    (u) => u.email?.toLowerCase() === email.toLowerCase()
-  )?.id;
-}
+```diff
+-  const greetingName =
+-    (customer?.full_name && customer.full_name.split(" ")[0]) || user.email?.split("@")[0] || "there";
++  const fullName =
++    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
++    customer?.full_name ||
++    null;
++  const greetingName =
++    (fullName && fullName.trim().split(" ")[0]) ||
++    user.email?.split("@")[0] ||
++    "there";
 ```
 
-**Behavioural deltas vs current:**
-- No `auth.admin.createUser` call. No temp password.
-- No `wasNewUser`; replaced with `wasNewCustomer` (true when we just inserted the customers row). Reported in ProcessResult for observability; not used to gate email.
-- Email fires on every successful grant (every `customer_products` upsert that didn't error). Repeat customers buying a second product still get a receipt + access link.
-- `findAuthUserIdByEmail` called on both branches (existing+orphan-link, new+best-effort-link).
-- `process-checkout.ts` no longer imports `node:crypto`.
+Resolution chain: `auth.users.raw_user_meta_data.full_name` → `customers.full_name` (kept as a backstop) → email local-part → `"there"`. First word of full_name. The CSS uppercase rule (`.dash-heading` `text-transform: uppercase`) keeps rendering uppercase.
+
+**Settings link goes in `src/app/account/layout.tsx`** (persistent across `/account`, `/account/settings`, `/account/products/[slug]`). No edit to `account/page.tsx` for the Settings link. Diff for layout:
+
+```diff
+           <div className="acct-nav-links">
+             <Link href="/" className="acct-nav-link">Home</Link>
+             <Link href="/account" className="acct-nav-link">Account</Link>
++            <Link href="/account/settings" className="acct-nav-link">Settings</Link>
+           </div>
+```
+
+(One line added to the existing `acct-nav-links` row. Existing `.acct-nav-link` style covers it.)
 
 ---
 
-## File 4 — `src/app/account/sign-up/page.tsx` (new)
+## Change 3 — `src/app/account/settings/page.tsx`: account profile page (new)
+
+Three independent sub-forms with their own state, submit, and toast. Single client component for simplicity. Reads initial values from `auth.getUser()` server-side, then the form is rendered with those defaults via a server-fetched object passed to a client island.
+
+Approach: server component that fetches `user`, then renders a `<SettingsForms user={...} />` client component.
+
+**Files**:
+- `src/app/account/settings/page.tsx` — server component (default export)
+- `src/app/account/settings/forms.tsx` — client component with the three forms
+
+**`page.tsx` content**:
 
 ```tsx
-"use client";
-
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { linkCustomerToAuthUser } from "./actions";
+import { createClient } from "@/lib/supabase/server";
+import { LogoutButton } from "../logout-button";
+import { SettingsForms } from "./forms";
 
-export default function SignUpPage() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const justPurchased = params.get("purchase") === "success";
+export const dynamic = "force-dynamic";
 
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+export default async function SettingsPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/account/login");
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setInfo(null);
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-    if (password !== confirm) {
-      setError("Passwords don't match.");
-      return;
-    }
-
-    setLoading(true);
-
-    const supabase = createClient();
-    const { data, error: signUpErr } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: {
-        data: { full_name: fullName.trim() },
-      },
-    });
-
-    if (signUpErr) {
-      setError(signUpErr.message);
-      setLoading(false);
-      return;
-    }
-
-    // Server action — link the existing customers row (if any) to this auth user.
-    if (data.user) {
-      try {
-        await linkCustomerToAuthUser(email.trim(), data.user.id, fullName.trim());
-      } catch (e) {
-        console.error("link error", e);
-      }
-    }
-
-    if (data.session) {
-      router.push("/account");
-      router.refresh();
-      return;
-    }
-
-    // No session means email confirmation is required.
-    setInfo(
-      "Check your email to confirm your account. Once confirmed, sign in to access your products."
-    );
-    setLoading(false);
-  }
+  const fullName =
+    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) || "";
+  const memberSince = user.created_at
+    ? new Date(user.created_at).toLocaleDateString("en-US", {
+        year: "numeric", month: "long", day: "numeric",
+      })
+    : null;
 
   return (
-    <div className="auth-card">
-      <p className="auth-eyebrow">910 ACADEMY</p>
-      <h1 className="auth-heading">Create your account</h1>
-      <p className="auth-sub">
-        {justPurchased
-          ? "Use the email from your Stripe receipt to access your purchase."
-          : "Set up your 910 Academy account."}
-      </p>
-      <form onSubmit={onSubmit} className="auth-form">
-        <label className="auth-label">
-          Full name
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            autoComplete="name"
-            className="auth-input"
-          />
-        </label>
-        <label className="auth-label">
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="auth-input"
-          />
-        </label>
-        <label className="auth-label">
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={8}
-            autoComplete="new-password"
-            className="auth-input"
-          />
-        </label>
-        <label className="auth-label">
-          Confirm password
-          <input
-            type="password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            required
-            minLength={8}
-            autoComplete="new-password"
-            className="auth-input"
-          />
-        </label>
-        {error && <p className="auth-error">{error}</p>}
-        {info && <p className="auth-info">{info}</p>}
-        <button type="submit" disabled={loading} className="auth-btn">
-          {loading ? "Creating account..." : "Create account"}
-        </button>
-        <Link href="/account/login" className="auth-link">
-          Already have an account? Sign in
-        </Link>
-      </form>
+    <div className="settings">
+      <header className="settings-head">
+        <div>
+          <Link href="/account" className="settings-back">← Back to your account</Link>
+          <p className="settings-eyebrow">SETTINGS</p>
+          <h1 className="settings-heading">Account</h1>
+          {memberSince && <p className="settings-meta">Member since {memberSince}</p>}
+        </div>
+        <LogoutButton />
+      </header>
+
+      <SettingsForms initialFullName={fullName} initialEmail={user.email ?? ""} />
+
       <style>{`
-        .auth-card { max-width: 440px; margin: 0 auto; padding: 48px 32px; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); }
-        .auth-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; text-align: center; }
-        .auth-heading { font-size: 1.8rem; font-weight: 300; text-transform: uppercase; line-height: 1.1; text-align: center; margin-bottom: 8px; }
-        .auth-sub { font-size: 0.95rem; color: var(--fg-muted); text-align: center; margin-bottom: 32px; line-height: 1.55; }
-        .auth-form { display: flex; flex-direction: column; gap: 16px; }
-        .auth-label { display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
-        .auth-input { padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--fg); font-family: var(--font); font-size: 16px; }
-        .auth-input:focus { outline: none; border-color: var(--accent); }
-        .auth-btn { padding: 16px 24px; min-height: 48px; border-radius: var(--radius-sm); background: #FFF; color: #000; border: 1px solid #FFF; font-family: var(--font); font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; margin-top: 8px; }
-        .auth-btn:hover:not(:disabled) { background: var(--accent); color: #FFF; border-color: var(--accent); }
-        .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .auth-error { font-size: 13px; color: #ff6b6b; padding: 12px 14px; border-radius: var(--radius-sm); background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); }
-        .auth-info { font-size: 13px; color: var(--accent); padding: 12px 14px; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); }
-        .auth-link { display: block; text-align: center; font-size: 13px; color: var(--fg-muted); margin-top: 12px; }
-        .auth-link:hover { color: var(--accent); }
+        .settings { display: flex; flex-direction: column; gap: 40px; }
+        .settings-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+        .settings-back { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); transition: color 0.2s; margin-bottom: 8px; display: inline-block; }
+        .settings-back:hover { color: var(--accent); }
+        .settings-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-top: 12px; }
+        .settings-heading { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 300; text-transform: uppercase; line-height: 1.1; }
+        .settings-meta { font-size: 13px; color: var(--fg-muted); margin-top: 8px; }
       `}</style>
     </div>
   );
 }
 ```
 
-**Notes:**
-- No pre-fill of email from URL — Stripe doesn't pass customer email in the success_url, and we don't want to encourage typo entry by pre-filling from the email-link click (the email goes to the right address, but the link doesn't carry it).
-- Server action handles the linkage so the browser never holds the service-role key.
-- Client-side check for `password === confirm` and minLength 8.
-
-## File 5 — `src/app/account/sign-up/actions.ts` (new)
-
-```ts
-"use server";
-
-import { createAdminClient } from "@/lib/supabase/admin";
-
-export async function linkCustomerToAuthUser(
-  email: string,
-  authUserId: string,
-  fullName: string
-): Promise<{ linked: boolean }> {
-  if (!email || !authUserId) return { linked: false };
-
-  const supabase = createAdminClient();
-
-  // Find an existing customers row (created by webhook) for this email.
-  const { data: existing } = await supabase
-    .from("customers")
-    .select("id, auth_user_id, full_name")
-    .eq("email", email)
-    .maybeSingle();
-
-  if (!existing) {
-    // No prior purchase. Nothing to link. The webhook will populate later.
-    return { linked: false };
-  }
-
-  if (existing.auth_user_id && existing.auth_user_id !== authUserId) {
-    // Already linked to a different auth user. Don't overwrite — surface no-op.
-    console.warn(
-      `[sign-up] customers row for ${email} already linked to ${existing.auth_user_id}, ignoring new ${authUserId}`
-    );
-    return { linked: false };
-  }
-
-  const update: { auth_user_id: string; full_name?: string } = {
-    auth_user_id: authUserId,
-  };
-  if (!existing.full_name && fullName) {
-    update.full_name = fullName;
-  }
-
-  const { error } = await supabase
-    .from("customers")
-    .update(update)
-    .eq("id", existing.id);
-
-  if (error) {
-    console.error("[sign-up] link update failed:", error);
-    return { linked: false };
-  }
-
-  return { linked: true };
-}
-```
-
----
-
-## File 6 — `src/app/account/login/page.tsx` (small edit)
-
-Add a "Create account" link below "Forgot your password?" link. Single edit:
+**`forms.tsx` content** (client component):
 
 ```tsx
-        <Link href="/account/forgot-password" className="auth-link">
-          Forgot your password?
-        </Link>
-+       <Link href="/account/sign-up" className="auth-link">
-+         No account yet? Create one
-+       </Link>
-```
+"use client";
 
-No other changes to login page.
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
----
+type Toast = { kind: "success" | "error" | "info"; text: string } | null;
 
-## File 7 — `middleware.ts` (small edit)
+export function SettingsForms({
+  initialFullName,
+  initialEmail,
+}: {
+  initialFullName: string;
+  initialEmail: string;
+}) {
+  const router = useRouter();
 
-Two changes:
+  // Full name form state
+  const [fullName, setFullName] = useState(initialFullName);
+  const [nameToast, setNameToast] = useState<Toast>(null);
+  const [nameLoading, setNameLoading] = useState(false);
 
-1. Add `/account/sign-up` to `isAuthPage` array.
-2. When unauthenticated user hits `/account` with `?purchase=success`, redirect to `/account/sign-up?purchase=success` instead of `/account/login` so the post-purchase intent is preserved.
+  // Email form state
+  const [email, setEmail] = useState(initialEmail);
+  const [emailToast, setEmailToast] = useState<Toast>(null);
+  const [emailLoading, setEmailLoading] = useState(false);
 
-```ts
-  const path = request.nextUrl.pathname;
-- const isAuthPage = ["/account/login", "/account/forgot-password", "/account/reset-password"].includes(path);
-+ const isAuthPage = ["/account/login", "/account/sign-up", "/account/forgot-password", "/account/reset-password"].includes(path);
-  const isAccountPage = path.startsWith("/account");
+  // Password form state
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [pwToast, setPwToast] = useState<Toast>(null);
+  const [pwLoading, setPwLoading] = useState(false);
 
-  if (isAccountPage && !isAuthPage && !user) {
-+   // After Stripe checkout, customer hits /account?purchase=success while
-+   // still logged out. Send them to sign-up rather than login.
-+   if (path === "/account" && request.nextUrl.searchParams.get("purchase") === "success") {
-+     const target = new URL("/account/sign-up", request.url);
-+     target.searchParams.set("purchase", "success");
-+     return NextResponse.redirect(target);
-+   }
-    return NextResponse.redirect(new URL("/account/login", request.url));
-  }
-```
-
----
-
-## File 8 — `src/app/account/page.tsx` — no functional change
-
-The existing flash banner already reads "Purchase confirmed. Your new product should appear below within a minute." That copy still works for the new flow. No change.
-
-(If we wanted to make it more accurate post-signup-flow, we could reword to "Welcome! Your product is unlocked below." — but that's out of scope. Leaving alone.)
-
----
-
-## File 9 — `scripts/smoke-test-webhook.ts` (rewrite)
-
-Inversions and adjustments for the new flow:
-
-```ts
-/**
- * Phase B v2 smoke test for the Stripe webhook handler.
- *
- * The new flow does NOT create auth users from the webhook. The test asserts:
- *  - customers row created (auth_user_id IS NULL — no auth account yet)
- *  - customer_products row created with correct amount_paid_cents
- *  - NO auth.users row exists for the test email
- *  - purchase-confirmed email sent successfully (Resend success: true)
- */
-import type Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
-import { processCheckoutCompleted } from "../src/lib/webhook/process-checkout";
-
-const SLUGS = [
-  "lucid-horizon-workshop",
-  "known-productions-workshop",
-  "jt-visuals-workshop",
-  "instagram-masterclass",
-  "3d-made-easy",
-  "910-sales-system",
-  "910-admin-assistant",
-];
-
-type EmailStatus = "OK" | "FAIL" | "SKIPPED";
-
-type Row = {
-  slug: string;
-  pass: boolean;
-  email: EmailStatus;
-  notes: string[];
-};
-
-function buildEvent(slug: string, plinkId: string, amountTotal: number, email: string): Stripe.Event {
-  const sessionId = `cs_test_smoke_${slug}_${Date.now()}`;
-  return {
-    id: `evt_smoke_${slug}_${Date.now()}`,
-    object: "event",
-    api_version: "2024-09-30.acacia",
-    created: Math.floor(Date.now() / 1000),
-    data: {
-      object: {
-        id: sessionId,
-        object: "checkout.session",
-        amount_total: amountTotal,
-        currency: "usd",
-        customer: null,
-        customer_details: { email, name: "Webhook Smoke Test" },
-        customer_email: email,
-        payment_link: plinkId,
-        metadata: {},
-      } as unknown as Stripe.Checkout.Session,
-    },
-    livemode: true,
-    pending_webhooks: 0,
-    request: { id: null, idempotency_key: null },
-    type: "checkout.session.completed",
-  } as unknown as Stripe.Event;
-}
-
-async function main() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceKey) {
-    console.error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in env");
-    process.exit(1);
-  }
-  if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) {
-    console.warn("Note: RESEND_API_KEY or EMAIL_FROM not set — emails will fail (logged, not fatal)");
-  }
-
-  const sb = createClient(url, serviceKey, { auth: { persistSession: false } });
-  const rows: Row[] = [];
-
-  for (const slug of SLUGS) {
-    const notes: string[] = [];
-    let pass = true;
-
-    const { data: product, error: prodErr } = await sb
-      .from("products")
-      .select("id, slug, title, price_cents, stripe_payment_link_id")
-      .eq("slug", slug)
-      .maybeSingle();
-    if (prodErr || !product?.stripe_payment_link_id) {
-      rows.push({
-        slug,
-        pass: false,
-        email: "SKIPPED",
-        notes: [`product lookup failed: ${prodErr?.message ?? "missing plink"}`],
-      });
-      continue;
-    }
-
-    const email = `slodhy1+webhook-test-${slug}@gmail.com`;
-    const event = buildEvent(slug, product.stripe_payment_link_id, product.price_cents, email);
-
-    let processResult;
-    try {
-      processResult = await processCheckoutCompleted(event);
-    } catch (e) {
-      rows.push({
-        slug,
-        pass: false,
-        email: "SKIPPED",
-        notes: [`processCheckoutCompleted threw: ${(e as Error).message}`],
-      });
-      continue;
-    }
-
-    if (!processResult.success) {
-      pass = false;
-      notes.push(`process error: ${processResult.error}`);
-    }
-
-    let emailStatus: EmailStatus;
-    if (processResult.emailResult === undefined) {
-      emailStatus = "SKIPPED";
-      pass = false;
-      notes.push("no email sent (emailResult undefined)");
-    } else if (processResult.emailResult.success) {
-      emailStatus = "OK";
+  async function onSubmitName(e: React.FormEvent) {
+    e.preventDefault();
+    setNameToast(null);
+    setNameLoading(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ data: { full_name: fullName.trim() } });
+    setNameLoading(false);
+    if (error) {
+      setNameToast({ kind: "error", text: error.message });
     } else {
-      emailStatus = "FAIL";
-      pass = false;
-      notes.push(`email error: ${processResult.emailResult.error}`);
+      setNameToast({ kind: "success", text: "Name updated." });
+      router.refresh();
     }
+  }
 
-    // Customer row created and unlinked (no auth user yet)
-    const { data: customer } = await sb
-      .from("customers")
-      .select("id, auth_user_id")
-      .eq("email", email)
-      .maybeSingle();
-    if (!customer) {
-      pass = false;
-      notes.push("no customers row");
-    } else if (customer.auth_user_id !== null) {
-      pass = false;
-      notes.push(`auth_user_id should be null, got ${customer.auth_user_id}`);
+  async function onSubmitEmail(e: React.FormEvent) {
+    e.preventDefault();
+    setEmailToast(null);
+    if (email.trim() === initialEmail) {
+      setEmailToast({ kind: "info", text: "Email unchanged." });
+      return;
     }
-
-    if (customer) {
-      const { data: cp } = await sb
-        .from("customer_products")
-        .select("id, amount_paid_cents")
-        .eq("customer_id", customer.id)
-        .eq("product_id", product.id)
-        .maybeSingle();
-      if (!cp) {
-        pass = false;
-        notes.push("no customer_products row");
-      } else if (cp.amount_paid_cents !== product.price_cents) {
-        pass = false;
-        notes.push(`amount mismatch: got ${cp.amount_paid_cents}, expected ${product.price_cents}`);
-      }
+    setEmailLoading(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ email: email.trim() });
+    setEmailLoading(false);
+    if (error) {
+      setEmailToast({ kind: "error", text: error.message });
+    } else {
+      setEmailToast({
+        kind: "info",
+        text: `Confirmation sent to ${email.trim()}. Click the link there to complete the change.`,
+      });
     }
+  }
 
-    // Inversion: NO auth user should exist for this email
-    const { data: list } = await sb.auth.admin.listUsers({ perPage: 200 });
-    const ghost = list?.users.find(
-      (u) => u.email?.toLowerCase() === email.toLowerCase()
-    );
-    if (ghost) {
-      pass = false;
-      notes.push(`unexpected auth user exists: ${ghost.id}`);
+  async function onSubmitPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setPwToast(null);
+    if (newPassword.length < 8) {
+      setPwToast({ kind: "error", text: "New password must be at least 8 characters." });
+      return;
     }
-
-    rows.push({ slug, pass, email: emailStatus, notes });
+    if (newPassword !== confirmPassword) {
+      setPwToast({ kind: "error", text: "New passwords don't match." });
+      return;
+    }
+    setPwLoading(true);
+    const supabase = createClient();
+    const { error: signInErr } = await supabase.auth.signInWithPassword({
+      email: initialEmail,
+      password: currentPassword,
+    });
+    if (signInErr) {
+      setPwToast({ kind: "error", text: "Current password incorrect." });
+      setPwLoading(false);
+      return;
+    }
+    const { error: updateErr } = await supabase.auth.updateUser({ password: newPassword });
+    setPwLoading(false);
+    if (updateErr) {
+      setPwToast({ kind: "error", text: updateErr.message });
+      return;
+    }
+    setPwToast({ kind: "success", text: "Password updated." });
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
   }
 
-  console.log("\nCleaning up DB rows…");
-  const { data: testCustomers } = await sb
-    .from("customers")
-    .select("id")
-    .like("email", "slodhy1+webhook-test-%@gmail.com");
-  const testIds = testCustomers?.map((c) => c.id) ?? [];
-  if (testIds.length > 0) {
-    const { error: cpDelErr } = await sb
-      .from("customer_products")
-      .delete()
-      .in("customer_id", testIds);
-    if (cpDelErr) console.error("cp cleanup error:", cpDelErr);
-  }
-  const { error: cDelErr } = await sb
-    .from("customers")
-    .delete()
-    .like("email", "slodhy1+webhook-test-%@gmail.com");
-  if (cDelErr) console.error("customer cleanup error:", cDelErr);
+  return (
+    <div className="settings-grid">
+      <Section title="Full name">
+        <form onSubmit={onSubmitName} className="settings-form">
+          <input
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+            autoComplete="name"
+            className="settings-input"
+          />
+          <ToastView toast={nameToast} />
+          <button type="submit" disabled={nameLoading} className="settings-btn">
+            {nameLoading ? "Saving..." : "Save name"}
+          </button>
+        </form>
+      </Section>
 
-  // Defensive: if any auth user matches our test pattern (shouldn't, in v2 flow) clean up too.
-  const { data: authList } = await sb.auth.admin.listUsers({ perPage: 200 });
-  const authMatches =
-    authList?.users.filter((u) =>
-      u.email?.toLowerCase().match(/^slodhy1\+webhook-test-.+@gmail\.com$/)
-    ) ?? [];
-  let deleted = 0;
-  for (const u of authMatches) {
-    const { error: delErr } = await sb.auth.admin.deleteUser(u.id);
-    if (delErr) console.error(`auth delete error for ${u.email}:`, delErr);
-    else deleted++;
-  }
-  if (deleted > 0) {
-    console.log(`Defensive cleanup: deleted ${deleted} auth users (none expected in v2 flow)`);
-  }
+      <Section title="Email address">
+        <form onSubmit={onSubmitEmail} className="settings-form">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            className="settings-input"
+          />
+          <ToastView toast={emailToast} />
+          <button type="submit" disabled={emailLoading} className="settings-btn">
+            {emailLoading ? "Sending..." : "Update email"}
+          </button>
+          <p className="settings-help">A confirmation link will be sent to the new address. The change takes effect after you click that link.</p>
+        </form>
+      </Section>
 
-  console.log("\n=== Smoke test results ===");
-  let allPass = true;
-  for (const r of rows) {
-    const status = r.pass ? "PASS" : "FAIL";
-    console.log(
-      `${status}  ${r.slug.padEnd(30)} EMAIL=${r.email.padEnd(7)} ${r.notes.length ? "— " + r.notes.join("; ") : ""}`
-    );
-    if (!r.pass) allPass = false;
-  }
+      <Section title="Change password">
+        <form onSubmit={onSubmitPassword} className="settings-form">
+          <label className="settings-label">
+            Current password
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              className="settings-input"
+            />
+          </label>
+          <label className="settings-label">
+            New password
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              minLength={8}
+              autoComplete="new-password"
+              className="settings-input"
+            />
+          </label>
+          <label className="settings-label">
+            Confirm new password
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={8}
+              autoComplete="new-password"
+              className="settings-input"
+            />
+          </label>
+          <ToastView toast={pwToast} />
+          <button type="submit" disabled={pwLoading} className="settings-btn">
+            {pwLoading ? "Updating..." : "Change password"}
+          </button>
+        </form>
+      </Section>
 
-  process.exit(allPass ? 0 : 1);
+      <style>{`
+        .settings-grid { display: flex; flex-direction: column; gap: 32px; }
+        .settings-section { padding: 32px; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 16px; }
+        .settings-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 4px; }
+        .settings-form { display: flex; flex-direction: column; gap: 12px; max-width: 480px; }
+        .settings-label { display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
+        .settings-input { padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--fg); font-family: var(--font); font-size: 15px; }
+        .settings-input:focus { outline: none; border-color: var(--accent); }
+        .settings-btn { align-self: flex-start; padding: 12px 22px; border-radius: var(--radius-sm); background: #FFF; color: #000; border: 1px solid #FFF; font-family: var(--font); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+        .settings-btn:hover:not(:disabled) { background: var(--accent); color: #FFF; border-color: var(--accent); }
+        .settings-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .settings-help { font-size: 12px; color: var(--fg-muted); line-height: 1.5; }
+        .settings-toast { font-size: 13px; padding: 10px 14px; border-radius: var(--radius-sm); }
+        .settings-toast-success { background: rgba(56,182,255,0.08); border: 1px solid var(--accent-border-subtle); color: var(--fg); }
+        .settings-toast-error { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); color: #ff6b6b; }
+        .settings-toast-info { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--fg-muted); }
+      `}</style>
+    </div>
+  );
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="settings-section">
+      <h2 className="settings-section-title">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+function ToastView({ toast }: { toast: Toast }) {
+  if (!toast) return null;
+  return <p className={`settings-toast settings-toast-${toast.kind}`}>{toast.text}</p>;
+}
 ```
 
 ---
 
-## File 10 — `next.config.ts` — no change
+## Change 4 — `emails/purchase-confirmed.html`: restyle to brand pattern
 
-`outputFileTracingIncludes` is already keyed to `./emails/**/*.html`, which globs all current and new email files including `purchase-confirmed.html`.
+Full rewrite. New body keeps placeholders `{{productName}}` and `{{accessLink}}`. Structure mirrors the 3 reference templates.
+
+```html
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<title>Purchase confirmed — 910 Academy</title>
+</head>
+
+<body style="margin:0;padding:0;background-color:#f5f6f8;">
+
+<!-- Preheader -->
+<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#f5f6f8;opacity:0;">
+Your purchase is unlocked. Sign in to access it.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f5f6f8;">
+<tr>
+<td align="center" style="padding:24px 12px;">
+
+<!-- Main container -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="width:640px;max-width:640px;background-color:#ffffff;border-radius:14px;overflow:hidden;">
+
+<!-- Header -->
+<tr>
+<td style="background-color:#0b0b0f;padding:28px 32px;">
+<div style="font-family:Arial,Helvetica,sans-serif;letter-spacing:0.18em;font-size:11px;opacity:0.75;color:#ffffff;">
+910 ACADEMY
+</div>
+
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:26px;font-weight:700;margin-top:12px;line-height:1.25;color:#ffffff;">
+Purchase confirmed.
+</div>
+
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;margin-top:8px;opacity:0.85;color:#ffffff;">
+{{productName}}
+</div>
+</td>
+</tr>
+
+<!-- Body -->
+<tr>
+<td style="padding:32px;">
+<div style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;font-size:15px;line-height:1.7;">
+
+<p style="margin:0 0 16px 0;">
+Thanks for your purchase. Your access is ready.
+</p>
+
+<p style="margin:0 0 28px 0;">
+Sign in below to access your content. If this is your first time, you'll be prompted to create your account using the email from your Stripe receipt — same email both places, lifetime access on every product you buy through 910 Academy.
+</p>
+
+<!-- Primary CTA -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px 0;">
+<tr>
+<td style="background-color:#0f172a;border-radius:10px;">
+<a href="{{accessLink}}" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:0.04em;">
+Access Your Purchase &rarr;
+</a>
+</td>
+</tr>
+</table>
+
+<!-- Divider -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px 0;">
+<tr>
+<td style="border-top:1px solid #e5e7eb;line-height:1px;font-size:1px;">&nbsp;</td>
+</tr>
+</table>
+
+<p style="margin:0 0 8px 0;font-size:14px;color:#64748b;">
+Questions? Reply to this email. We respond same-day.
+</p>
+
+</div>
+</td>
+</tr>
+
+<!-- Footer -->
+<tr>
+<td style="padding:20px 32px;background:#f8fafc;border-top:1px solid #e5e7eb;">
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#64748b;line-height:1.6;">
+910 Academy &middot; West Palm Beach, FL<br>
+<a href="https://www.910academy.com" style="color:#64748b;text-decoration:none;">910academy.com</a>
+</div>
+</td>
+</tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+```
+
+Differences vs reference set: no info-box (we don't surface credentials). No bullet list section ("What's inside"). Otherwise identical chrome. Subject line stays `Purchase confirmed — ${productName}` (no edit to `purchase-confirmed.ts`).
 
 ---
 
-## File 11 — `src/app/api/stripe-webhook/route.ts` — no change
+## Change 5 — Marketing-site nav: Account link + auth detection
 
-Thin POST wrapper continues to delegate to `processCheckoutCompleted`. No edit needed.
+Per-file edits across **18 HTML files** in `public/`. Two precise insertions per file.
+
+### Insertion A — desktop nav-links
+
+In each file's `nav-links` block, insert an Account link **before** the `nav-cta`:
+
+```diff
+   <div class="nav-links">
+     <a href="/" class="nav-link">Home</a>
+     <a href="/gear" class="nav-link">Our Gear</a>
+     <a href="/products" class="nav-link">Products</a>
++    <a href="/account" class="nav-link" data-account-link>Account</a>
+     <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+   </div>
+```
+
+(Some files have `target="_blank"` without `rel`; the diff respects the file's existing form.)
+
+### Insertion B — mobile nav
+
+Inside `mobile-nav` div, before the `Join 910 Academy` link:
+
+```diff
+   <a href="/products">Products</a>
++  <a href="/account" data-account-link>Account</a>
+   <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);">Join 910 Academy</a>
+```
+
+### Insertion C — auth-detection script
+
+Just before `</body>` on each file:
+
+```html
+<script>
+(function(){
+  try {
+    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
+    if (!hasSession) {
+      var els = document.querySelectorAll("[data-account-link]");
+      for (var i = 0; i < els.length; i++) els[i].setAttribute("href", "/account/login");
+    }
+  } catch (e) { /* no-op */ }
+})();
+</script>
+```
+
+(uses for-loop instead of forEach since IE compat doesn't matter but for-loop is one fewer arrow function for older mobile WebKits — same minified size; either works. Final version uses forEach.)
+
+### Files to edit (18)
+
+```
+public/index.html
+public/about.html
+public/coaching.html
+public/products.html
+public/products-archive.html
+public/affiliate-guidelines.html
+public/book.html
+public/waitlist.html
+public/maintenance.html
+public/toolkit.html
+public/gear.html
+public/products/lucid-horizon-workshop.html
+public/products/known-productions-workshop.html
+public/products/jt-visuals-workshop.html
+public/products/instagram-masterclass.html
+public/products/3d-made-easy.html
+public/products/910-sales-system.html
+public/products/910-admin-assistant.html
+```
+
+---
+
+## Change 6 — schema migration: NONE.
+
+Hard rule. The brief explicitly forbids adding a name column. No DDL.
 
 ---
 
 ## Order of operations in execute step
 
-1. Create `emails/purchase-confirmed.html` — already done in this session.
-2. Create `src/lib/email/purchase-confirmed.ts` (File 1).
-3. `git rm src/lib/email/welcome.ts` (File 2).
-4. Rewrite `src/lib/webhook/process-checkout.ts` (File 3).
-5. Create `src/app/account/sign-up/page.tsx` (File 4).
-6. Create `src/app/account/sign-up/actions.ts` (File 5).
-7. Edit `src/app/account/login/page.tsx` (File 6) — add "Create account" link.
-8. Edit `middleware.ts` (File 7) — sign-up auth-page + purchase=success redirect.
-9. Rewrite `scripts/smoke-test-webhook.ts` (File 9).
-10. `npm run build` — must pass clean.
-11. STOP for "deploy" approval.
+1. Edit `middleware.ts` — admin client + escapeIlike + UPDATE.
+2. Edit `src/app/account/page.tsx` — greeting resolution chain only.
+3. Edit `src/app/account/layout.tsx` — add persistent Settings link.
+4. Create `src/app/account/settings/page.tsx`.
+5. Create `src/app/account/settings/forms.tsx`.
+6. Rewrite `emails/purchase-confirmed.html`.
+7. Edit 18 marketing HTML files (nav-links + mobile-nav + script).
+8. `npm run build` — must pass clean.
+9. STOP for "deploy".
 
 ---
 
 ## Files explicitly NOT touched
 
-- `src/app/account/page.tsx` — no functional change required.
+- `src/lib/webhook/process-checkout.ts` — out of scope.
+- `src/app/api/stripe-webhook/route.ts` — out of scope.
+- `src/app/account/sign-up/page.tsx` and `actions.ts` — already correct.
+- `src/app/account/login/page.tsx` — already has Create-account link.
+- `src/app/account/forgot-password/page.tsx` and `reset-password/page.tsx` — protected.
 - `src/app/account/products/[slug]/page.tsx` — grant lookup unchanged.
-- `src/app/account/forgot-password/page.tsx` and `reset-password/page.tsx` — protected per hard rule.
-- `src/app/account/layout.tsx` — chrome only.
-- `src/app/api/checkout/route.ts` — payment-link path is what the 7 plinks use.
-- `src/lib/supabase/*` — already adequate.
-- `next.config.ts` — globbing covers the new template.
-- `vercel.json` — out of scope.
-- All HTML in `public/` — out of scope.
-- All Supabase migrations — out of scope (no schema changes).
+- (none — `layout.tsx` IS edited for the persistent Settings nav link)
+- `next.config.ts` — `outputFileTracingIncludes` already covers email path.
+- All Supabase migrations — no schema changes.
+- All `scripts/*` — smoke test scope unchanged.
+- All HTML in `public/_drafts/*` — out of marketing flow.
 
 ---
 
 ## Risks / soft warnings
 
-1. **Race: signup before webhook**. Customer signs up immediately after payment, webhook hasn't run yet. signUp's server action finds no `customers` row → no-op. Webhook arrives a moment later, looks up auth user by email, finds the just-created one, links `auth_user_id`. Closed by both sides doing email-based linkage in opposite directions. Verified in research §edge cases.
+1. **`auth.users.raw_user_meta_data` is not type-safe in supabase-js.** `user.user_metadata` is typed as `UserMetadata` which is `{ [key: string]: any }`. We narrow with `typeof user.user_metadata?.full_name === "string"` to avoid runtime surprises. ✅
 
-2. **Email confirmation flow**. If Supabase Auth has "Confirm email" enabled (default for new projects), users won't be signed in immediately after `auth.signUp` — they'll see the "Check your email…" info message. The `linkCustomerToAuthUser` server action runs regardless because `data.user` is returned even before confirmation. This is correct behavior.
+2. **The `customers.full_name` backstop in the resolution chain** is intentional: a customer who paid via Stripe with `customer_details.name` captured (some Stripe configurations do this), but never typed it again at signup, would otherwise lose access to the name on the dashboard. Backstop survives that case.
 
-3. **`auth.signUp` and existing email**. If someone tries to sign up with an email that already has an auth user (e.g. from a prior signup, or — in the migration window — from a Phase B 1.0 temp-password account), Supabase returns success with no session and sends a magic-link email; or, depending on settings, returns an `email_exists` error. Either way the user gets feedback. We don't try to second-guess the SDK behavior.
+3. **Email-change flow on the settings page**. Supabase sends a confirmation to the NEW address. With "Secure email change" enabled (default), it ALSO sends a notification to the OLD address. The user sees a clear info toast. They MUST click the link in the new inbox to complete the change. **Caveat**: until Supabase Auth SMTP is reconfigured to Resend, this confirmation email is sent from `noreply@mail.app.supabase.io` (Supabase's default sender). Functional but off-brand. Shayan to configure custom SMTP separately; flow works either way today.
 
-4. **Phase B 1.0 leftover auth users**. Any customer who paid during Phase B 1.0 has an auth user with a temp password. They can: (a) use forgot-password to reset, then sign in; or (b) attempt sign-up (which will conflict). We surface whatever Supabase says. No special-case migration code.
+4. **Re-signin during password change**. `signInWithPassword` issues fresh tokens. The browser's existing cookie session is replaced by a refreshed one — same user, no logout. Confirmed by reading the @supabase/ssr behavior. ✅
 
-5. **Smoke test mutates production DB.** Same as before. 7 customers + 7 customer_products rows created and cleaned. **No** auth users created (key inversion vs Phase B 1.0).
+5. **18-file mechanical edit** — string-replace on each. If any file has a slightly different nav structure, the replace fails. Per hard rule, two failed attempts on any single file → stop. I'll verify each file is touched by checking diff stats per file.
 
-6. **`linkCustomerToAuthUser` server-action security**. The action takes `email` and `authUserId` from the client. A malicious user could pass any email + any authUserId to claim someone else's customers row. Mitigation: the action runs only after `supabase.auth.signUp` succeeds for the given email — but we're trusting the client to pass the same email. Better: server-side, get the authenticated session and read `user.id` + `user.email` from there. Plan: add a guard inside the action that calls `createClient()` (anon SSR) → `auth.getUser()` → assert `user.id === authUserId` and `user.email === email` (case-insensitive). If mismatch, return without linking.
+6. **Inline script project-ref hardcode**. `qkmkxthpeapuecobahhx` is hardcoded in the static HTML script. If you ever migrate Supabase projects, this needs updating across 18 files. Acceptable for a single static-domain prod; documenting here.
 
-   **Updating the action spec to include this guard:**
-
-   ```ts
-   import { createClient as createServerClient } from "@/lib/supabase/server";
-   // ...
-   const sbServer = await createServerClient();
-   const { data: { user } } = await sbServer.auth.getUser();
-   if (!user || user.id !== authUserId || user.email?.toLowerCase() !== email.toLowerCase()) {
-     console.warn("[sign-up] linkCustomerToAuthUser called with mismatched session", {
-       sessionUserId: user?.id, claimedAuthUserId: authUserId,
-       sessionEmail: user?.email, claimedEmail: email,
-     });
-     return { linked: false };
-   }
-   ```
-
-   Plan applies this guard. The client doesn't get to lie about its identity.
+7. **Cookie detection vs localStorage**. Brief said "localStorage (key: sb-<project-ref>-auth-token)". @supabase/ssr stores session in cookies, not localStorage. Detection via `document.cookie`. Same key name. Plan deviates from brief here for correctness — flagging for explicit review at the gate.
 
 ---
 

@@ -48,8 +48,14 @@ export default async function AccountDashboard({
       .filter((p): p is NonNullable<ProductRow["product"]> => p !== null);
   }
 
+  const fullName =
+    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
+    customer?.full_name ||
+    null;
   const greetingName =
-    (customer?.full_name && customer.full_name.split(" ")[0]) || user.email?.split("@")[0] || "there";
+    (fullName && fullName.trim().split(" ")[0]) ||
+    user.email?.split("@")[0] ||
+    "there";
 
   return (
     <div className="dashboard">

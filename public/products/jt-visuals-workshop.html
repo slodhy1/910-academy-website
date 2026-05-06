@@ -710,6 +710,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <a href="/" class="nav-link">Home</a>
       <a href="/gear" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
+      <a href="/account" class="nav-link" data-account-link>Account</a>
       <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
@@ -723,6 +724,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <a href="/">Home</a>
   <a href="/gear">Our Gear</a>
   <a href="/products">Products</a>
+  <a href="/account" data-account-link>Account</a>
   <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
 </div>
 
@@ -927,6 +929,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       w.style.maxHeight = w.scrollHeight + 'px';
     });
   });
+})();
+</script>
+<script>
+(function(){
+  try {
+    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
+    if (!hasSession) {
+      var els = document.querySelectorAll("[data-account-link]");
+      els.forEach(function(el){ el.setAttribute("href", "/account/login"); });
+    }
+  } catch (e) { /* no-op */ }
 })();
 </script>
 </body>

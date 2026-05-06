@@ -11,6 +11,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
           <div className="acct-nav-links">
             <Link href="/" className="acct-nav-link">Home</Link>
             <Link href="/account" className="acct-nav-link">Account</Link>
+            <Link href="/account/settings" className="acct-nav-link">Settings</Link>
           </div>
         </div>
       </nav>
