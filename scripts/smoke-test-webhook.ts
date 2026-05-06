@@ -25,9 +25,12 @@ const SLUGS = [
   "910-admin-assistant",
 ];
 
+type EmailStatus = "OK" | "FAIL" | "SKIPPED";
+
 type Row = {
   slug: string;
   pass: boolean;
+  email: EmailStatus;
   notes: string[];
 };
 
@@ -97,6 +100,7 @@ async function main() {
       rows.push({
         slug,
         pass: false,
+        email: "SKIPPED",
         notes: [`product lookup failed: ${prodErr?.message ?? "missing plink"}`],
       });
       continue;
@@ -117,6 +121,7 @@ async function main() {
       rows.push({
         slug,
         pass: false,
+        email: "SKIPPED",
         notes: [`processCheckoutCompleted threw: ${(e as Error).message}`],
       });
       continue;
@@ -125,6 +130,19 @@ async function main() {
     if (!processResult.success) {
       pass = false;
       notes.push(`process error: ${processResult.error}`);
+    }
+
+    let emailStatus: EmailStatus;
+    if (processResult.emailResult === undefined) {
+      emailStatus = "SKIPPED";
+      pass = false;
+      notes.push("no email sent (emailResult undefined)");
+    } else if (processResult.emailResult.success) {
+      emailStatus = "OK";
+    } else {
+      emailStatus = "FAIL";
+      pass = false;
+      notes.push(`email error: ${processResult.emailResult.error}`);
     }
 
     const { data: customer } = await sb
@@ -165,10 +183,10 @@ async function main() {
     }
 
     if (processResult.wasNewUser === false) {
-      notes.push("(wasNewUser=false — no email sent)");
+      notes.push("(wasNewUser=false)");
     }
 
-    rows.push({ slug, pass, notes });
+    rows.push({ slug, pass, email: emailStatus, notes });
   }
 
   console.log("\nCleaning up DB rows…");
@@ -190,23 +208,33 @@ async function main() {
     .like("email", "slodhy1+webhook-test-%@gmail.com");
   if (cDelErr) console.error("customer cleanup error:", cDelErr);
 
+  const { data: authList } = await sb.auth.admin.listUsers({ perPage: 200 });
+  const authMatches =
+    authList?.users.filter((u) =>
+      u.email?.toLowerCase().match(/^slodhy1\+webhook-test-.+@gmail\.com$/)
+    ) ?? [];
+  let deleted = 0;
+  for (const u of authMatches) {
+    const { error: delErr } = await sb.auth.admin.deleteUser(u.id);
+    if (delErr) {
+      console.error(`auth delete error for ${u.email}:`, delErr);
+    } else {
+      deleted++;
+    }
+  }
+  console.log(`Deleted ${deleted} auth users`);
+
   console.log("\n=== Smoke test results ===");
   let allPass = true;
   for (const r of rows) {
     const status = r.pass ? "PASS" : "FAIL";
     console.log(
-      `${status}  ${r.slug.padEnd(30)} ${
+      `${status}  ${r.slug.padEnd(30)} EMAIL=${r.email.padEnd(7)} ${
         r.notes.length ? "— " + r.notes.join("; ") : ""
       }`
     );
     if (!r.pass) allPass = false;
   }
-  console.log(
-    "\nhttps://supabase.com/dashboard/project/qkmkxthpeapuecobahhx/auth/users"
-  );
-  console.log(
-    "Manually delete 7 webhook-test-* auth users — SQL DELETE doesn't work on auth schema."
-  );
 
   process.exit(allPass ? 0 : 1);
 }

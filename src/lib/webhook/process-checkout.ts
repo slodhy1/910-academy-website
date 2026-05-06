@@ -8,6 +8,7 @@ export type ProcessResult = {
   customerId?: string;
   wasNewUser?: boolean;
   error?: string;
+  emailResult?: { success: boolean; error?: string };
 };
 
 export async function processCheckoutCompleted(
@@ -182,19 +183,23 @@ export async function processCheckoutCompleted(
     return { success: false, error: "Grant insert failed" };
   }
 
+  let emailResult: ProcessResult["emailResult"];
   if (wasNewUser && tempPassword) {
-    const emailResult = await sendWelcomeEmail({
+    const sendResult = await sendWelcomeEmail({
       to: email,
       productName: product.title,
       tempPassword,
     });
-    if (!emailResult.success) {
+    emailResult = sendResult.success
+      ? { success: true }
+      : { success: false, error: sendResult.error };
+    if (!sendResult.success) {
       console.error(
         "[stripe-webhook] welcome email failed (continuing):",
-        emailResult.error
+        sendResult.error
       );
     }
   }
 
-  return { success: true, customerId, wasNewUser };
+  return { success: true, customerId, wasNewUser, emailResult };
 }
