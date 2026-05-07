@@ -14,11 +14,13 @@ const STATIC_PAGES = [
   "maintenance",
   "products",
   "products-archive",
+  "apply-claudio",
 ];
 
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
+    "src/app/api/claudio-application/route.ts": ["./emails/**/*.html"],
   },
   async rewrites() {
     return [
