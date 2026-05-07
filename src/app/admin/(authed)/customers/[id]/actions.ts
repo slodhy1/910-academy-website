@@ -4,8 +4,11 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { logAdminAction } from "@/lib/admin/audit";
+import { sendAdminGrantNotify } from "@/lib/email/admin-grant-notify";
 
-export type ActionResult = { success: true } | { success: false; error: string };
+export type ActionResult =
+  | { success: true; emailId?: string; emailError?: string }
+  | { success: false; error: string };
 
 export async function grantProductAction(
   customerId: string,
@@ -52,6 +55,23 @@ export async function grantProductAction(
     return { success: false, error: insErr.message };
   }
 
+  // Fire the grant notify email. Failure must NOT roll back the grant — the
+  // customer has access either way, and the email is recoverable. Log the
+  // error into the audit metadata so it surfaces at the audit log later.
+  const loginLink =
+    (process.env.NEXT_PUBLIC_SITE_URL || "https://www.910academy.com") + "/account";
+  const customerNameRow = await sb
+    .from("customers")
+    .select("full_name")
+    .eq("id", customerId)
+    .maybeSingle();
+  const emailResult = await sendAdminGrantNotify({
+    to: customer.email,
+    customerName: customerNameRow.data?.full_name ?? null,
+    productName: product.title,
+    loginLink,
+  });
+
   await logAdminAction(sb, {
     adminUserId: adminUser.id,
     adminEmail: adminUser.email!,
@@ -62,11 +82,15 @@ export async function grantProductAction(
       product_slug: product.slug,
       product_title: product.title,
       customer_email: customer.email,
+      email_id: emailResult.success ? emailResult.id : null,
+      email_error: emailResult.success ? null : emailResult.error,
     },
   });
 
   revalidatePath(`/admin/customers/${customerId}`);
-  return { success: true };
+  return emailResult.success
+    ? { success: true, emailId: emailResult.id }
+    : { success: true, emailError: emailResult.error };
 }
 
 export async function revokeProductAction(

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { ChevronLeft } from "lucide-react";
 import { requireAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -19,6 +20,7 @@ import { formatCents } from "@/lib/admin/format";
 import { GrantForm } from "./grant-form";
 import { RevokeButton } from "./revoke-button";
 import { AuditList, type AuditEntry } from "./audit-list";
+import { StripeCharges, StripeChargesSkeleton } from "./stripe-charges";
 
 export const dynamic = "force-dynamic";
 
@@ -178,6 +180,23 @@ export default async function CustomerDetailPage({
             <p className="text-sm font-medium">Grant a product</p>
             <GrantForm customerId={customer.id} availableProducts={availableProducts} />
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Stripe charges</CardTitle>
+          <p className="text-xs text-muted-foreground">
+            Last 10 charges matching this email. Search across all Stripe customer ids.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <Suspense fallback={<StripeChargesSkeleton />}>
+            <StripeCharges
+              email={customer.email}
+              stripeCustomerId={customer.stripe_customer_id}
+            />
+          </Suspense>
         </CardContent>
       </Card>
 

@@ -30,7 +30,15 @@ export function GrantForm({
     startTransition(async () => {
       const res = await grantProductAction(customerId, productId);
       if (res.success) {
-        toast.success(`Granted ${product?.title || "product"}`);
+        if (res.emailError) {
+          toast.warning(
+            `Granted ${product?.title || "product"} - email failed: ${res.emailError}`
+          );
+        } else {
+          toast.success(
+            `Granted ${product?.title || "product"}${res.emailId ? ` (email sent)` : ""}`
+          );
+        }
         setProductId("");
       } else {
         toast.error(`Grant failed: ${res.error}`);

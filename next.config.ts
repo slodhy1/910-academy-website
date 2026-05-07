@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
     "src/app/api/claudio-application/route.ts": ["./emails/**/*.html"],
+    "src/app/admin/(authed)/customers/[id]/page.tsx": ["./emails/**/*.html"],
   },
   async rewrites() {
     return [
