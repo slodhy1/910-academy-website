@@ -74,10 +74,15 @@ export default async function AccountDashboard({
       <section className="dash-products">
         <p className="dash-section-label">YOUR PRODUCTS</p>
         {products.length === 0 ? (
-          <div className="dash-empty">
-            <p>You don&apos;t have any products yet.</p>
-            <p className="dash-empty-sub">Browse our products to get started.</p>
-          </div>
+          <>
+            <div className="dash-empty">
+              <p>You don&apos;t have any products yet.</p>
+              <p className="dash-empty-sub">Browse our products to get started.</p>
+            </div>
+            <div className="dash-grid">
+              <UpsellGhostCard />
+            </div>
+          </>
         ) : (
           <div className="dash-grid">
             {products.map((p) => (
@@ -96,6 +101,7 @@ export default async function AccountDashboard({
                 </div>
               </Link>
             ))}
+            <UpsellGhostCard />
           </div>
         )}
       </section>
@@ -119,7 +125,46 @@ export default async function AccountDashboard({
         .dash-card-title { font-size: 1.1rem; font-weight: 700; color: var(--fg); }
         .dash-card-desc { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.55; }
         .dash-card-cta { margin-top: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+        .dash-card-ghost {
+          display: flex; align-items: center; justify-content: center;
+          border: 1px dashed var(--border); background: transparent;
+          opacity: 0.7; min-height: 220px; text-decoration: none;
+          transition: all 0.25s var(--ease-smooth);
+        }
+        .dash-card-ghost:hover {
+          opacity: 1; transform: translateY(-3px);
+          border-color: var(--accent); background: var(--accent-subtle);
+        }
+        .dash-card-ghost-body {
+          display: flex; flex-direction: column; align-items: center;
+          gap: 6px; padding: 32px 24px; text-align: center;
+        }
+        .dash-card-ghost-plus {
+          font-size: 2.4rem; font-weight: 200; color: var(--accent);
+          line-height: 1; margin-bottom: 8px;
+        }
+        .dash-card-ghost-title {
+          font-size: 1rem; font-weight: 700; color: var(--fg);
+        }
+        .dash-card-ghost-sub {
+          font-size: 0.85rem; color: var(--fg-muted); line-height: 1.5;
+        }
       `}</style>
     </div>
+  );
+}
+
+function UpsellGhostCard() {
+  return (
+    <a
+      href="https://www.910academy.com/products"
+      className="dash-card dash-card-ghost"
+    >
+      <div className="dash-card-ghost-body">
+        <span className="dash-card-ghost-plus" aria-hidden>+</span>
+        <span className="dash-card-ghost-title">Add to your library</span>
+        <span className="dash-card-ghost-sub">Browse all 910 Academy products</span>
+      </div>
+    </a>
   );
 }
