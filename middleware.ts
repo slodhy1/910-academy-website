@@ -57,6 +57,12 @@ export async function middleware(request: NextRequest) {
   const isAccountPage = path.startsWith("/account");
 
   if (isAccountPage && !isAuthPage && !user) {
+    console.log("[middleware-debug]", {
+      path,
+      search: request.nextUrl.search,
+      searchParams: request.nextUrl.searchParams.toString(),
+      url: request.url,
+    });
     if (path === "/account" && request.nextUrl.searchParams.get("purchase") === "success") {
       const target = new URL("/account/sign-up", request.url);
       target.searchParams.set("purchase", "success");
