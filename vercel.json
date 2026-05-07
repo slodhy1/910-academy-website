@@ -22,7 +22,7 @@
   ],
   "headers": [
     {
-      "source": "/(.*)\\.(jpg|jpeg|png|webp|avif|svg|ico|woff2)",
+      "source": "/(.*)\\.(jpg|jpeg|png|webp|avif|svg|ico|woff2|mp4|webm|mp3|m4a|ogg)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
