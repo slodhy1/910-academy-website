@@ -1,148 +1,134 @@
-# Phase E1.5 research — launch Four Horsemen as 2 products on a shared sales page
+# Phase B v5 research — post-purchase auth flow + signup polish
 
-## Files & state
+## Change 1 — middleware redirect: ALREADY CORRECT
 
-| Asset | Status |
-|---|---|
-| `public/_drafts/four-horsemen-workshop.html` | exists (1033 lines) — already structured as a two-part bundle |
-| `public/products/lucid-horizon-workshop.html` | canonical reference for active product page |
-| `public/products.html` | already has a `card-unavailable` placeholder for Four Horsemen at lines 271-281 |
-| `public/og-images/four-horsemen-workshop.jpg` | **exists** (67 KB) |
-| `public/og-images/four-horsemen-workshop.{png,webp}` | NOT present |
-| `scripts/check-gated-pages.sh` | actively blocks the build if `public/products/four-horsemen-workshop.html` exists |
-| `src/components/account/VideoViewer.tsx` | confirms `vimeoHash` is optional/nullable |
-| `supabase/migrations/` | latest is `0005_…`; next free number is `0006` |
-
-**OG image — no new images needed.** Other partner workshops (`lucid-horizon`, `jt-visuals`, `known-productions`) use only `.jpg`. The existing `four-horsemen-workshop.jpg` already matches that pattern. No `.webp`/`.png` siblings required for parity. The storefront card at line 272 already references `.jpg` only.
-
-## `check-gated-pages.sh` — must be edited
-
-Lines 7-9:
-```bash
-GATED_PAGES=(
-  "public/products/four-horsemen-workshop.html"
-)
-```
-
-If the file exists in `public/products/` while still listed in `GATED_PAGES`, the prebuild errors and `npm run build` fails. Removing `four-horsemen-workshop.html` from this array (or removing the array entirely if no other gated pages exist) is implicit in the launch — not optional.
-
-## Existing draft sales page — already two-part shaped
-
-Hero + trailer → 2-card "Choose Your Path" pricing → reels grid → Part 1 bullets → Part 2 bullets → instructor block → final CTA (mirrors choose-your-path) → FAQ. **No structural rework needed.** Just three substantive edits:
-
-1. **4× Stripe URL replacement.** Two checkout buttons in `path-section` (lines 836, 845) and two in the final CTA mirror (lines 936, 942):
-
-   | Old (placeholder URL in draft) | New (per Phase E1.5 brief) |
-   |---|---|
-   | `https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n` (Part 1, ×2) | `https://buy.stripe.com/00w3cublA9j0bWh0mj5Rm1B` |
-   | `https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o` (Part 2, ×2) | `https://buy.stripe.com/cNi9ASdtIeDk4tPb0X5Rm1C` |
-
-2. **Nav patch to Phase B v4 state.** Current draft nav (lines 777-794) is pre-v4: no Sign In auth slot, no `data-join-cta`, no cookie-detection script. Three insertions match what the v3→v4 helper did for the other 18 pages:
-   - Add `<a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>` between Products and Join CTA in desktop nav.
-   - Add `<a href="/account/login" data-auth-link data-state="logged-out">Sign In</a>` in mobile-nav.
-   - Add `data-join-cta` to both Join CTAs.
-   - Add the v4 dual-purpose cookie-detection script before `</body>`.
-
-3. **OG meta tag.** Line 13 currently `<meta property="og:image" content="/images/og-image.jpg">` (broken — `/images/og-image.jpg` is not the right asset). Replace with `https://www.910academy.com/og-images/four-horsemen-workshop.jpg`. Also add `<meta name="twitter:card">` etc. and a `<link rel="canonical">` to match lucid-horizon's pattern. Cheap, but flagging as a small bonus that's strictly out-of-scope-of-the-spec; will be in plan.md as optional polish — flagging here, will default to **doing it** since lucid-horizon canonical structure is named in #3 of the brief.
-
-## Storefront card — already exists, currently disabled
-
-Lines 271-281 of `public/products.html`:
-
-```html
-<div class="card card-unavailable">
-  <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Takeover" loading="lazy"></div>
-  <div class="card-body">
-    <p class="card-eyebrow">Workshop · Two parts</p>
-    <h3 class="card-title">Four Horsemen Takeover</h3>
-    <p class="card-desc">The most in-depth real estate media workshop we've shipped, covering both the business and the editing rooms.</p>
-    <div class="card-foot">
-      <span class="card-pill-muted">UNAVAILABLE</span>
-    </div>
-  </div>
-</div>
-```
-
-To enable: change the wrapping element from `<div class="card card-unavailable">` to `<a href="/products/four-horsemen-workshop" class="card">`, swap the `<span class="card-pill-muted">UNAVAILABLE</span>` for the standard `<span class="card-price">$91 per part</span><span class="card-btn">View →</span>` cluster. The eyebrow ("Workshop · Two parts"), title ("Four Horsemen Takeover"), and description don't need to change. The `</div>` closing tag becomes `</a>`.
-
-## VideoViewer hash assumption
-
-Lines 13-14: `const qs = …; if (vimeoHash) qs.set("h", vimeoHash);` — hash is optional. NULL hash is fine when the Vimeo video is **public or unlisted**. Both Four Horsemen videos must be in one of those privacy states for null-hash playback to work. Plan flags this as a confirmation item.
-
-## Schema column-name mismatch in brief
-
-Brief says `name: "Four Horsemen — Part 1"` but the actual column is `title` (per `0001_init_products_schema.sql`). Migration uses `title`.
-
-## Resource type vs. `product_videos` — brief is contradictory
-
-Brief #1 says `resource_type: video` for both products. Brief #2 says insert `product_videos` rows.
-
-But the gated viewer at `src/app/account/(authed)/products/[slug]/page.tsx` only consults `product_videos` when `resource_type === 'multi'`. For `resource_type === 'video'`, it reads `products.vimeo_id` and `products.vimeo_hash` directly:
+`middleware.ts` lines 60-64:
 
 ```ts
-let videos: ProductVideo[] = [];
-if (resourceType === "multi") {
-  const { data } = await supabase.from("product_videos").select(...).eq("product_id", product.id)...;
-  videos = (data as ProductVideo[] | null) ?? [];
+if (isAccountPage && !isAuthPage && !user) {
+  if (path === "/account" && request.nextUrl.searchParams.get("purchase") === "success") {
+    const target = new URL("/account/sign-up", request.url);
+    target.searchParams.set("purchase", "success");
+    return NextResponse.redirect(target);
+  }
+  return NextResponse.redirect(new URL("/account/login", request.url));
 }
-
-// ...later:
-{resourceType === "video" && product.vimeo_id && (
-  <VideoViewer vimeoId={product.vimeo_id} vimeoHash={product.vimeo_hash} title={product.title} />
-)}
 ```
 
-Three options:
+The `/account?purchase=success` → `/account/sign-up?purchase=success` unauth redirect was added in Phase B v3 and remains present. **No change needed.** Plan will document it in step 1 only and move on.
 
-- **(a)** `resource_type='video'`, populate `products.vimeo_id` + `vimeo_hash`, **skip product_videos**. Cleanest for single-video products. Matches the lucid-horizon / jt-visuals pattern. Requires the user to set Vimeo videos public/unlisted or supply hashes.
-- **(b)** `resource_type='multi'`, populate `product_videos` (single row per product), set `products.vimeo_id=null`. This is the IG Masterclass pattern. Wastes a multi-video viewer UI on a single-video product.
-- **(c)** Both. `resource_type='video'`, populate `products.vimeo_id`, ALSO insert `product_videos` rows for future "multi" flexibility. Dead data today; viewer ignores `product_videos`.
+(Earlier `grep "purchase=success"` on the file returned nothing because the literal string isn't in the source — `searchParams.get("purchase") === "success"` is the actual matcher. False negative.)
 
-**Plan recommends (a)** as the natural fit. Single-video products use `products.vimeo_id` per existing convention. We'll surface this as a decision point at the gate.
+## Change 2 — "Check your email" info box
 
-## product_videos schema confirm
+`src/app/account/(auth)/sign-up/page.tsx`:
 
-From migration `0003_add_product_videos.sql`:
+| Line | Content |
+|---|---|
+| 27 | `const [info, setInfo] = useState<string | null>(null);` |
+| 33 | `setInfo(null);` |
+| 79-81 | `setInfo("Check your email to confirm your account…")` |
+| 142 | `{info && <p className="auth-info">{info}</p>}` |
+| 163 | `.auth-info { … }` (CSS rule, can stay or be removed) |
 
-```sql
-create table product_videos (
-  id uuid primary key default gen_random_uuid(),
-  product_id uuid not null references products(id) on delete cascade,
-  vimeo_id text not null,
-  vimeo_hash text,
-  display_order int default 0,
-  title text,
-  description text,
-  unique(product_id, display_order)
-);
+**To remove**: drop the `info` state entirely (line 27, 33, 79-81), the JSX render (line 142), and optionally the CSS rule (line 163). Keeping the CSS rule is harmless dead code; removing is cleaner. Plan picks **remove the rule too** (no callers).
+
+## Change 3 — Auto sign-in via server-action redirect
+
+Current flow (client-driven):
+1. `page.tsx` calls `supabase.auth.signUp()` from the **browser** SSR client (line 47-53). Cookie written browser-side.
+2. Calls `linkCustomerToAuthUser` server action (line 63-67) which has an identity-guard verifying browser session matches claimed values.
+3. If `data.session` present → `router.push("/account")` (line 73-76). Otherwise → set `info` ("Check your email…").
+
+Spec wants the server action to do the work: signUp, link, redirect. Move signUp into the action so the SSR cookie write happens server-side and `redirect("/account")` issues an HTTP redirect with the session cookie attached. Eliminates the browser→server→browser round-trip.
+
+**Implications:**
+- The current identity-guard (lines 13-32 of `actions.ts`) becomes unnecessary — the action IS the authority that creates both records, so impersonation surface goes away.
+- The form's onSubmit calls a single server action: `await signUpAndLink({ email, password, fullName })`. On success-with-session, the action throws `redirect("/account")` — Next handles navigation, the function never returns. On error, returns `{ success: false, error }`. On no-session (defensive: email confirmation unexpectedly enabled), returns `{ success: true, needsSignIn: true }` and the client surfaces a "Account created. Please sign in to continue." error.
+- The existing `linkCustomerToAuthUser` export becomes redundant — only caller is the sign-up page. Plan: replace `linkCustomerToAuthUser` with new `signUpAndLink` (single public export).
+
+**Cookie writing in server actions**: `@supabase/ssr`'s `createServerClient` from `src/lib/supabase/server.ts` is bound to `next/headers cookies()` and DOES write cookies during server actions. The `cookies()` API in Next 15 server actions is mutable. The set-cookie headers are returned with the action's response, so the redirect carries the new session.
+
+## Change 4 — Eye toggle + 8-char/match indicators
+
+8 password inputs across 4 files:
+
+| File | Count | Roles |
+|---|---|---|
+| `(auth)/sign-up/page.tsx` | 2 | new + confirm |
+| `(auth)/login/page.tsx` | 1 | current |
+| `(auth)/reset-password/page.tsx` | 2 | new + confirm |
+| `(authed)/settings/forms.tsx` | 3 | current + new + confirm |
+
+**Extract to `src/components/PasswordInput.tsx`** as a reusable client component. API:
+
+```ts
+type Props = {
+  value: string;
+  onChange: (v: string) => void;
+  autoComplete: "current-password" | "new-password";
+  required?: boolean;
+  minLength?: number;
+  className?: string;  // class to apply to <input>; optional, default "auth-input" for auth-card forms, "settings-input" elsewhere
+  id?: string;
+  // No label — caller wraps in <label>.
+};
 ```
 
-If we go with option (b) or (c), each product needs `display_order=1` (or 0). Unique-key constraint on `(product_id, display_order)` — fine for single rows.
+Internal state: `const [revealed, setRevealed] = useState(false);`. Renders an absolutely-positioned `<button type="button">` overlaid on the right edge of the input. Click toggles `type` between `"password"` and `"text"`. Lucide-react Eye / EyeOff icons.
 
-## Files to touch — preview
+**Lucide-react NOT installed**. Plan adds: `npm install lucide-react`. Tree-shakable, named imports keep bundle small.
+
+**Indicator components** (signup-page-only and settings-change-password-only):
+
+- `<MinLengthIndicator value={password} min={8} />` — gray dot when value is empty, red ✗ when 0<len<8, green ✓ when len>=8.
+- `<MatchIndicator a={password} b={confirm} />` — null when `b` is empty, red ✗ when b !== a, green ✓ when b === a && b !== "".
+
+These are tiny 5-10 line inline components — plan colocates them in `PasswordInput.tsx` and exports them so signup/settings can import individually.
+
+## Change 5 — Browser-side validation rules
+
+Already present at the input level (`type="email"`, `required`, `minLength={8}`). The `disabled` Create Account button is the new piece — needs a `formValid` derived boolean:
+
+```ts
+const isEmailLooking = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+const formValid =
+  fullName.trim().length > 0 &&
+  isEmailLooking(email.trim()) &&
+  password.length >= 8 &&
+  confirm === password;
+```
+
+`<button … disabled={loading || !formValid}>`. CSS already covers `:disabled` (line 161 of sign-up page).
+
+## Files to touch
 
 | File | Action |
 |---|---|
-| `supabase/migrations/0006_four_horsemen_products.sql` | new — `INSERT ... ON CONFLICT (slug) DO UPDATE` for both products |
-| `public/_drafts/four-horsemen-workshop.html` → `public/products/four-horsemen-workshop.html` | `git mv` |
-| `public/products/four-horsemen-workshop.html` | edit — 4× Stripe URL update, nav patch, OG fix |
-| `public/products.html` | edit — convert card-unavailable to active link card |
-| `scripts/check-gated-pages.sh` | edit — remove `four-horsemen-workshop.html` from `GATED_PAGES` |
+| `package.json` + lock | npm install `lucide-react` |
+| `src/components/PasswordInput.tsx` | new — reusable input + 2 indicator components |
+| `src/app/account/(auth)/sign-up/page.tsx` | rewrite onSubmit to call new server action; replace 2× password inputs with `<PasswordInput>`; add indicators; add disabled button logic; remove info state/render/CSS |
+| `src/app/account/(auth)/sign-up/actions.ts` | replace `linkCustomerToAuthUser` with `signUpAndLink` (server-side signUp + link + redirect) |
+| `src/app/account/(auth)/login/page.tsx` | replace 1× password input with `<PasswordInput>` |
+| `src/app/account/(auth)/reset-password/page.tsx` | replace 2× password inputs with `<PasswordInput>` |
+| `src/app/account/(authed)/settings/forms.tsx` | replace 3× password inputs with `<PasswordInput>`; add indicators on new + confirm |
 
-**No changes to**: `process-checkout.ts`, `route.ts`, smoke test, email templates, customers schema, `/account/*` URLs.
-
-## Migration application path
-
-Brief says: "Apply via supabase db push OR direct SQL editor — surface in plan.md which path you prefer."
-
-The repo does not have a Supabase CLI workflow set up (no `supabase` package in `package.json`, no `supabase/.config.toml` with linked project). All prior schema changes were applied manually via SQL editor or directly via the admin client during the InstaMC seed. **Plan recommends**: apply the migration by running the SQL directly via the admin client from a local script (like the InstaMC seed work — same pattern). Idempotent; safe to re-run.
-
-Alternative: paste SQL into the Supabase dashboard SQL editor — also fine; user preference. Plan will pick admin-client-from-local-script as default unless user pushes back.
+`middleware.ts`: no change.
 
 ## Risks / soft warnings
 
-1. **Vimeo privacy state**: NULL hash requires both videos to be public OR unlisted on Vimeo. If they're private with hash-required, we need the hashes — surface to user before executing.
-2. **OG meta polish**: technically out of strict scope of brief but the brief says "Match the visual structure of lucid-horizon for header, hero, body sections" — interpreting "header" as page hero, not HTML `<head>`. Plan defaults to keeping the OG meta minimal-correct (just fix the broken `/images/og-image.jpg` reference) without going as deep as lucid-horizon's full og/twitter/canonical block. If you want full parity, say so.
-3. **Storefront card eyebrow** currently reads "Workshop · Two parts". Keeping as-is. If you want it to say something like "Workshop · 2 parts · $91 each", say so.
-4. **No homepage edit**. Brief says don't bundle. The Four Horsemen workshop is not currently surfaced on the homepage; it stays that way.
-5. **Stripe payment link sanity**: assumed both new plinks are configured to redirect post-purchase to `/account?purchase=success` (matching the other 7 plinks). If not, the purchase flow will land users on a Stripe-hosted thank-you page; webhook still fires correctly. Out of scope to verify here — flagging.
+1. **Server-action signUp + redirect**: Next.js `redirect()` throws `NEXT_REDIRECT`, which Next's runtime catches and turns into a 303 with new cookies. The Set-Cookie header is included automatically because `createServerClient`'s cookie adapter writes via `cookies().set()` during the signUp call. Verified pattern.
+2. **The browser form** still needs to handle the `success: true, needsSignIn: true` case (defensive). If email confirmation is unexpectedly enabled, the redirect doesn't fire and the form gets `{ needsSignIn: true }` — surface inline error, don't auto-redirect.
+3. **`lucide-react` bundle size**: tree-shaken named imports add ~1.5 KB per icon used. We use 2 (Eye, EyeOff) → minor.
+4. **Password input class**: caller passes `className`. Default to `"auth-input"`. Settings forms pass `"settings-input"`. The wrapper div needs CSS for relative positioning (so the eye button can be absolutely placed). Plan: `<PasswordInput>` renders a wrapper div with class `password-input-wrap` + scoped style block. Or applies the wrapper styling inline. Plan picks scoped `<style jsx>` per the existing pattern in this codebase (other auth pages embed styles).
+5. **Eye-icon button position**: `position: absolute; right: 12px; top: 50%; transform: translateY(-50%);`. The input gets `padding-right: 44px` to leave room for the icon. Touch target 36×36 px minimum.
+6. **`PasswordInput` is a client component** (uses useState). Marking with `"use client"` at top — but Next.js 15 will infer client-only for any file using hooks, so the directive is required.
+7. **Settings change-password form**: indicators apply ONLY to "New password" and "Confirm new password" — NOT the "Current password" field. Current password has no length requirement (matches whatever the user already has set).
+8. **Reset password page**: per spec, eye toggle goes on both fields. No length/match indicators called out for reset-password, but it has the same shape as signup change-password. Plan: keep consistent — apply MinLength + Match indicators on reset-password too. (Spec says "ALL password inputs" get eye toggle; spec only spells out indicators for sign-up and settings. Plan errs on consistency: same UX everywhere reduces cognitive load. Will flag this as a minor deviation/expansion.)
+9. **Form-validity gate** (disabled Create Account button): only on sign-up per spec. Login/reset/settings buttons remain enabled (they have their own loading/error handling). Plan respects spec.
+10. **Auto-redirect after settings password change**: spec says the settings form's password change re-uses signInWithPassword + updateUser. Current code in `forms.tsx` does this. Spec doesn't ask to change it. Plan: leave that flow as-is, only add eye toggle and indicators.
+
+## Open items requiring user decision
+
+- **Reset-password indicators**: spec is silent. Plan defaults to applying min-length + match indicators for consistency. Push back if you want them off there.
+- **Server-action vs. keep-client signUp**: spec is clear that signUp moves to server action. Plan complies. Restating for confirmation: the form will do `await signUpAndLink({...})` from `onSubmit`, the action throws `redirect("/account")` on success. Old `linkCustomerToAuthUser` export goes away.

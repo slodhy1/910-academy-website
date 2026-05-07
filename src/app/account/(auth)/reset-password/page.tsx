@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import {
+  PasswordInput,
+  MinLengthIndicator,
+  MatchIndicator,
+} from "@/components/PasswordInput";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -41,27 +46,27 @@ export default function ResetPasswordPage() {
       <form onSubmit={onSubmit} className="auth-form">
         <label className="auth-label">
           New password
-          <input
-            type="password"
+          <PasswordInput
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
             required
             autoComplete="new-password"
             minLength={8}
             className="auth-input"
           />
+          <MinLengthIndicator value={password} min={8} />
         </label>
         <label className="auth-label">
           Confirm password
-          <input
-            type="password"
+          <PasswordInput
             value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
+            onChange={setConfirm}
             required
             autoComplete="new-password"
             minLength={8}
             className="auth-input"
           />
+          <MatchIndicator a={password} b={confirm} />
         </label>
         {error && <p className="auth-error">{error}</p>}
         <button type="submit" disabled={loading} className="auth-btn">

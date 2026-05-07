@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import {
+  PasswordInput,
+  MinLengthIndicator,
+  MatchIndicator,
+} from "@/components/PasswordInput";
 
 type Toast = { kind: "success" | "error" | "info"; text: string } | null;
 
@@ -154,10 +159,9 @@ export function SettingsForms({
         <form onSubmit={onSubmitPassword} className="settings-form">
           <label className="settings-label">
             Current password
-            <input
-              type="password"
+            <PasswordInput
               value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              onChange={setCurrentPassword}
               required
               autoComplete="current-password"
               className="settings-input"
@@ -165,27 +169,27 @@ export function SettingsForms({
           </label>
           <label className="settings-label">
             New password
-            <input
-              type="password"
+            <PasswordInput
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={setNewPassword}
               required
               minLength={8}
               autoComplete="new-password"
               className="settings-input"
             />
+            <MinLengthIndicator value={newPassword} min={8} />
           </label>
           <label className="settings-label">
             Confirm new password
-            <input
-              type="password"
+            <PasswordInput
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={setConfirmPassword}
               required
               minLength={8}
               autoComplete="new-password"
               className="settings-input"
             />
+            <MatchIndicator a={newPassword} b={confirmPassword} />
           </label>
           <ToastView toast={pwToast} />
           <button type="submit" disabled={pwLoading} className="settings-btn">

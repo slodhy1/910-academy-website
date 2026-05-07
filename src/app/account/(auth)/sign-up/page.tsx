@@ -1,10 +1,16 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { linkCustomerToAuthUser } from "./actions";
+import {
+  PasswordInput,
+  MinLengthIndicator,
+  MatchIndicator,
+} from "@/components/PasswordInput";
+import { signUpAndLink } from "./actions";
+
+const isEmailLooking = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 export default function SignUpPage() {
   return (
@@ -15,7 +21,6 @@ export default function SignUpPage() {
 }
 
 function SignUpForm() {
-  const router = useRouter();
   const params = useSearchParams();
   const justPurchased = params.get("purchase") === "success";
 
@@ -24,62 +29,35 @@ function SignUpForm() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const formValid =
+    fullName.trim().length > 0 &&
+    isEmailLooking(email.trim()) &&
+    password.length >= 8 &&
+    confirm === password;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setInfo(null);
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-    if (password !== confirm) {
-      setError("Passwords don't match.");
-      return;
-    }
+    if (!formValid) return;
 
     setLoading(true);
-
-    const supabase = createClient();
-    const { data, error: signUpErr } = await supabase.auth.signUp({
+    const result = await signUpAndLink({
       email: email.trim(),
       password,
-      options: {
-        data: { full_name: fullName.trim() },
-      },
+      fullName: fullName.trim(),
     });
-
-    if (signUpErr) {
-      setError(signUpErr.message);
+    // success-with-session: server action redirected; this code does not run.
+    if (!result.success) {
+      setError(result.error);
       setLoading(false);
       return;
     }
-
-    if (data.user) {
-      try {
-        await linkCustomerToAuthUser(
-          email.trim(),
-          data.user.id,
-          fullName.trim()
-        );
-      } catch (e) {
-        console.error("link error", e);
-      }
+    if (result.needsSignIn) {
+      setError("Account created. Please sign in to continue.");
+      setLoading(false);
     }
-
-    if (data.session) {
-      router.push("/account");
-      router.refresh();
-      return;
-    }
-
-    setInfo(
-      "Check your email to confirm your account. Once confirmed, sign in to access your products."
-    );
-    setLoading(false);
   }
 
   return (
@@ -116,31 +94,34 @@ function SignUpForm() {
         </label>
         <label className="auth-label">
           Password
-          <input
-            type="password"
+          <PasswordInput
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
             required
             minLength={8}
             autoComplete="new-password"
             className="auth-input"
           />
+          <MinLengthIndicator value={password} min={8} />
         </label>
         <label className="auth-label">
           Confirm password
-          <input
-            type="password"
+          <PasswordInput
             value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
+            onChange={setConfirm}
             required
             minLength={8}
             autoComplete="new-password"
             className="auth-input"
           />
+          <MatchIndicator a={password} b={confirm} />
         </label>
         {error && <p className="auth-error">{error}</p>}
-        {info && <p className="auth-info">{info}</p>}
-        <button type="submit" disabled={loading} className="auth-btn">
+        <button
+          type="submit"
+          disabled={loading || !formValid}
+          className="auth-btn"
+        >
           {loading ? "Creating account..." : "Create account"}
         </button>
         <Link href="/account/login" className="auth-link">
@@ -160,7 +141,6 @@ function SignUpForm() {
         .auth-btn:hover:not(:disabled) { background: var(--accent); color: #FFF; border-color: var(--accent); }
         .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .auth-error { font-size: 13px; color: #ff6b6b; padding: 12px 14px; border-radius: var(--radius-sm); background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.25); }
-        .auth-info { font-size: 13px; color: var(--accent); padding: 12px 14px; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); }
         .auth-link { display: block; text-align: center; font-size: 13px; color: var(--fg-muted); margin-top: 12px; }
         .auth-link:hover { color: var(--accent); }
       `}</style>
