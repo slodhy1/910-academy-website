@@ -5,7 +5,6 @@
 set -e
 
 GATED_PAGES=(
-  "public/products/four-horsemen-workshop.html"
 )
 
 FAILED=0

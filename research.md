@@ -1,272 +1,148 @@
-# Phase B v4 research — layout separation auth/portal + marketing nav refactor
+# Phase E1.5 research — launch Four Horsemen as 2 products on a shared sales page
 
-## Preconditions
-- All 18 static HTML files in `public/` have v3 Account link + cookie-detection script. Verified: each file has 3× `data-account-link` (desktop nav + mobile-nav + script's `querySelectorAll`) and 1× `sb-qkmkxthpeapuecobahhx-auth-token` (cookie name in script). ✅
+## Files & state
 
----
+| Asset | Status |
+|---|---|
+| `public/_drafts/four-horsemen-workshop.html` | exists (1033 lines) — already structured as a two-part bundle |
+| `public/products/lucid-horizon-workshop.html` | canonical reference for active product page |
+| `public/products.html` | already has a `card-unavailable` placeholder for Four Horsemen at lines 271-281 |
+| `public/og-images/four-horsemen-workshop.jpg` | **exists** (67 KB) |
+| `public/og-images/four-horsemen-workshop.{png,webp}` | NOT present |
+| `scripts/check-gated-pages.sh` | actively blocks the build if `public/products/four-horsemen-workshop.html` exists |
+| `src/components/account/VideoViewer.tsx` | confirms `vimeoHash` is optional/nullable |
+| `supabase/migrations/` | latest is `0005_…`; next free number is `0006` |
 
-## Current `/account/*` layout inheritance
+**OG image — no new images needed.** Other partner workshops (`lucid-horizon`, `jt-visuals`, `known-productions`) use only `.jpg`. The existing `four-horsemen-workshop.jpg` already matches that pattern. No `.webp`/`.png` siblings required for parity. The storefront card at line 272 already references `.jpg` only.
 
-Single `src/app/account/layout.tsx` wraps **everything** under `/account`. 45 lines, contains:
-- `<nav class="acct-nav">` with logo + 3 links (Home, Account, Settings) — visible to ALL `/account/*` pages including login/sign-up/forgot/reset.
-- `<main class="acct-main">` with top padding for the fixed nav.
-- `<footer class="acct-footer">` with logo + copyright.
-- All styles in a `<style>` block at the bottom.
+## `check-gated-pages.sh` — must be edited
 
-**Bug**: unauth users on `/account/login` see the "Home / Account / Settings" links rendered above the form. The user clicks "Account" → middleware redirects back to login → confused state.
-
-**Fix**: route groups. Move auth pages into `(auth)`, authed pages into `(authed)`, give each its own layout. URLs unchanged because `()` route groups are URL-invisible.
-
----
-
-## Files in `src/app/account/` (current tree)
-
-| File | Lines | Audience | Goes into |
-|---|---|---|---|
-| `layout.tsx` | 45 | both | **delete** |
-| `logout-button.tsx` | 23 | authed | shared, no move |
-| `login/page.tsx` | 88 | unauth | `(auth)/login/page.tsx` |
-| `sign-up/page.tsx` | 173 | unauth | `(auth)/sign-up/page.tsx` |
-| `sign-up/actions.ts` | 75 | unauth | `(auth)/sign-up/actions.ts` |
-| `forgot-password/page.tsx` | 79 | unauth | `(auth)/forgot-password/page.tsx` |
-| `reset-password/page.tsx` | 88 | unauth (via Supabase email link) | `(auth)/reset-password/page.tsx` |
-| `page.tsx` | 122 | authed | `(authed)/page.tsx` |
-| `settings/page.tsx` | 56 | authed | `(authed)/settings/page.tsx` |
-| `settings/forms.tsx` | 226 | authed | `(authed)/settings/forms.tsx` |
-| `products/[slug]/page.tsx` | 199 | authed | `(authed)/products/[slug]/page.tsx` |
-| `products/[slug]/not-found.tsx` | (small) | authed | `(authed)/products/[slug]/not-found.tsx` |
-
-Imports relative to current `account/` folder (e.g. `../logout-button`) need updating after the move because the depth changes (`(authed)/page.tsx` → `../logout-button`).
-
-`logout-button.tsx` stays at `src/app/account/logout-button.tsx`. From `(authed)/page.tsx` the import path becomes `../logout-button` (route groups don't add a path segment, but the FOLDER nesting is real, so depth stays the same). Confirmed: route group folders DO add a real folder layer in the filesystem; URL routing skips them but file resolution does not. Verified against Next.js 15 docs.
-
-So:
-- `account/(authed)/page.tsx` → `../logout-button` resolves to `account/logout-button.tsx` ✅
-- `account/(authed)/settings/page.tsx` → `../../logout-button` ✅
-- `account/(authed)/products/[slug]/page.tsx` → `../../../logout-button` ✅
-
-(Same depth shift as before since route groups count as one folder.)
-
----
-
-## Reusable client-side bits the new (auth) layout needs
-
-The auth pages already use a self-contained `auth-card` style block in each page's `<style>` element. The new (auth) layout doesn't need to know about those — it just provides the page chrome (centered logo + footer link).
-
-The `auth-card` styling currently relies on CSS vars set in some root global stylesheet (e.g. `--bg-base`, `--accent`, `--border`, `--radius-sm`, `--font`). Those vars are defined in… let me check.
-
+Lines 7-9:
 ```bash
-$ grep -rln "^:root\|--bg-base\|--accent" src/app/globals.css 2>/dev/null
+GATED_PAGES=(
+  "public/products/four-horsemen-workshop.html"
+)
 ```
 
-We'll verify this in execute step. If they're in `src/app/globals.css`, they apply globally and both new layouts inherit them.
+If the file exists in `public/products/` while still listed in `GATED_PAGES`, the prebuild errors and `npm run build` fails. Removing `four-horsemen-workshop.html` from this array (or removing the array entirely if no other gated pages exist) is implicit in the launch — not optional.
 
----
+## Existing draft sales page — already two-part shaped
 
-## Route-group structure (target)
+Hero + trailer → 2-card "Choose Your Path" pricing → reels grid → Part 1 bullets → Part 2 bullets → instructor block → final CTA (mirrors choose-your-path) → FAQ. **No structural rework needed.** Just three substantive edits:
 
-```
-src/app/account/
-├── logout-button.tsx                    (no move — shared by authed)
-├── (auth)/
-│   ├── layout.tsx                       (NEW — minimal centered)
-│   ├── login/page.tsx                   (move from account/login)
-│   ├── sign-up/
-│   │   ├── page.tsx
-│   │   └── actions.ts
-│   ├── forgot-password/page.tsx
-│   └── reset-password/page.tsx
-└── (authed)/
-    ├── layout.tsx                       (NEW — portal shell)
-    ├── page.tsx                         (move from account/page.tsx)
-    ├── settings/
-    │   ├── page.tsx
-    │   └── forms.tsx
-    └── products/[slug]/
-        ├── page.tsx
-        └── not-found.tsx
-```
+1. **4× Stripe URL replacement.** Two checkout buttons in `path-section` (lines 836, 845) and two in the final CTA mirror (lines 936, 942):
 
-The old `src/app/account/layout.tsx` is deleted.
+   | Old (placeholder URL in draft) | New (per Phase E1.5 brief) |
+   |---|---|
+   | `https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n` (Part 1, ×2) | `https://buy.stripe.com/00w3cublA9j0bWh0mj5Rm1B` |
+   | `https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o` (Part 2, ×2) | `https://buy.stripe.com/cNi9ASdtIeDk4tPb0X5Rm1C` |
 
-`middleware.ts` matcher `/account/:path*` is unaffected — route groups are URL-invisible. The existing isAuthPage / purchase-success redirect logic continues to work as-is.
+2. **Nav patch to Phase B v4 state.** Current draft nav (lines 777-794) is pre-v4: no Sign In auth slot, no `data-join-cta`, no cookie-detection script. Three insertions match what the v3→v4 helper did for the other 18 pages:
+   - Add `<a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>` between Products and Join CTA in desktop nav.
+   - Add `<a href="/account/login" data-auth-link data-state="logged-out">Sign In</a>` in mobile-nav.
+   - Add `data-join-cta` to both Join CTAs.
+   - Add the v4 dual-purpose cookie-detection script before `</body>`.
 
----
+3. **OG meta tag.** Line 13 currently `<meta property="og:image" content="/images/og-image.jpg">` (broken — `/images/og-image.jpg` is not the right asset). Replace with `https://www.910academy.com/og-images/four-horsemen-workshop.jpg`. Also add `<meta name="twitter:card">` etc. and a `<link rel="canonical">` to match lucid-horizon's pattern. Cheap, but flagging as a small bonus that's strictly out-of-scope-of-the-spec; will be in plan.md as optional polish — flagging here, will default to **doing it** since lucid-horizon canonical structure is named in #3 of the brief.
 
-## Marketing nav — current Phase B v3 state
+## Storefront card — already exists, currently disabled
 
-Per file (all 18 same shape, with toolkit.html and maintenance.html having minor variants):
+Lines 271-281 of `public/products.html`:
 
 ```html
-<!-- Sticky Nav — line ~704 in product pages, ~2137 in index, etc. -->
-<nav class="nav" id="nav">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo">
-      <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
-    </a>
-    <div class="nav-links">
-      <a href="/" class="nav-link">Home</a>
-      <a href="/gear" class="nav-link">Our Gear</a>
-      <a href="/products" class="nav-link">Products</a>     <!-- /maintenance in maintenance.html -->
-      <a href="/account" class="nav-link" data-account-link>Account</a>     <!-- v3 added -->
-      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+<div class="card card-unavailable">
+  <div class="card-image"><img src="/og-images/four-horsemen-workshop.jpg" alt="Four Horsemen Takeover" loading="lazy"></div>
+  <div class="card-body">
+    <p class="card-eyebrow">Workshop · Two parts</p>
+    <h3 class="card-title">Four Horsemen Takeover</h3>
+    <p class="card-desc">The most in-depth real estate media workshop we've shipped, covering both the business and the editing rooms.</p>
+    <div class="card-foot">
+      <span class="card-pill-muted">UNAVAILABLE</span>
     </div>
-    <button class="nav-mobile-toggle" id="mobileToggle">…</button>
   </div>
-</nav>
-
-<!-- Mobile nav -->
-<div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close">…</button>
-  <a href="/">Home</a>
-  <a href="/gear">Our Gear</a>
-  <a href="/products">Products</a>     <!-- /maintenance in maintenance.html -->
-  <a href="/account" data-account-link>Account</a>     <!-- v3 added; toolkit has class="mobile-nav-link" -->
-  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
 </div>
-
-<!-- before </body> -->
-<script>
-(function(){
-  try {
-    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
-    if (!hasSession) {
-      var els = document.querySelectorAll("[data-account-link]");
-      els.forEach(function(el){ el.setAttribute("href", "/account/login"); });
-    }
-  } catch (e) { /* no-op */ }
-})();
-</script>
 ```
 
-**What needs to change** in each file:
+To enable: change the wrapping element from `<div class="card card-unavailable">` to `<a href="/products/four-horsemen-workshop" class="card">`, swap the `<span class="card-pill-muted">UNAVAILABLE</span>` for the standard `<span class="card-price">$91 per part</span><span class="card-btn">View →</span>` cluster. The eyebrow ("Workshop · Two parts"), title ("Four Horsemen Takeover"), and description don't need to change. The `</div>` closing tag becomes `</a>`.
 
-1. **Remove the v3 inline Account links** (desktop + mobile, both `data-account-link`).
-2. **Add a Sign In auth slot** (default state) in the same place — desktop `class="nav-link nav-auth-link" data-auth-link data-state="logged-out"`; mobile uses appropriate class (toolkit gets `mobile-nav-link`).
-3. **Add `data-join-cta` attribute** to both desktop and mobile "Join 910 Academy" links so the script can hide them when logged in.
-4. **Replace the cookie-detection script** with the new richer version that toggles BOTH the auth-link state AND the join-cta visibility.
+## VideoViewer hash assumption
 
-The brief says "REMOVE the existing inline 'Account' link from .nav-links and .mobile-nav (where Phase B v3 added them)" and "ADD a right-aligned auth slot in the nav, BEFORE the 'Join 910 Academy' CTA button". So slot position remains where the v3 link was (between Products and Join CTA). The right-alignment piece is achieved via `margin-left: auto` on `.nav-auth-link` in the desktop nav — it pushes the "Sign In" / "My Account" element to the right of the flex container, leaving the Join CTA after it. Wait — that's a layout question. Let me re-read.
+Lines 13-14: `const qs = …; if (vimeoHash) qs.set("h", vimeoHash);` — hash is optional. NULL hash is fine when the Vimeo video is **public or unlisted**. Both Four Horsemen videos must be in one of those privacy states for null-hash playback to work. Plan flags this as a confirmation item.
 
-"ADD a right-aligned auth slot in the nav, BEFORE the 'Join 910 Academy' CTA button"
+## Schema column-name mismatch in brief
 
-Two reasonable interpretations:
-- (a) `Sign In` sits immediately to the LEFT of `Join 910 Academy`, both right-aligned at the end of the flex. (Same DOM order as v3, just a stylistic right-side cluster.)
-- (b) `Sign In` is right-aligned to the far right and `Join 910 Academy` sits before it.
+Brief says `name: "Four Horsemen — Part 1"` but the actual column is `title` (per `0001_init_products_schema.sql`). Migration uses `title`.
 
-Brief literally says "right-aligned … BEFORE the Join 910 Academy CTA". So the auth link is BEFORE the CTA in DOM but still right-aligned. The current `.nav-links` is a flex with `gap: 36px` and the whole `.nav-inner` is `justify-content: space-between` — so logo on left, the entire `nav-links` cluster (Home / Gear / Products / Sign In / Join CTA) is on the right.
+## Resource type vs. `product_videos` — brief is contradictory
 
-Interpretation (a) is what we have now: Sign In sits between Products and Join CTA, both at the right edge of the page. The v3 layout already produced this. The "right-aligned" wording is satisfied by the existing flex right-cluster.
+Brief #1 says `resource_type: video` for both products. Brief #2 says insert `product_videos` rows.
 
-**No layout change to `.nav-links` flex needed**. Just swap "Account" for "Sign In" with the new attributes + the new CSS class. The brief's CSS section (#3) specifies `nav-auth-link` matches existing `nav-link` styling — so no new visual rules are strictly required, but a class hook is added for future variations.
+But the gated viewer at `src/app/account/(authed)/products/[slug]/page.tsx` only consults `product_videos` when `resource_type === 'multi'`. For `resource_type === 'video'`, it reads `products.vimeo_id` and `products.vimeo_hash` directly:
 
----
-
-## CSS for `nav-auth-link`
-
-Current `.nav-link` definition (sample from index.html line 252-270):
-
-```css
-.nav-link {
-  font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--fg-muted);
-  transition: color 0.3s var(--ease-smooth); position: relative;
+```ts
+let videos: ProductVideo[] = [];
+if (resourceType === "multi") {
+  const { data } = await supabase.from("product_videos").select(...).eq("product_id", product.id)...;
+  videos = (data as ProductVideo[] | null) ?? [];
 }
-.nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0;
-  width: 0; height: 1px; background: var(--fg);
-  transition: width 0.3s var(--ease-out); }
-.nav-link:hover { color: var(--fg); }
-.nav-link:hover::after { width: 100%; }
+
+// ...later:
+{resourceType === "video" && product.vimeo_id && (
+  <VideoViewer vimeoId={product.vimeo_id} vimeoHash={product.vimeo_hash} title={product.title} />
+)}
 ```
 
-For `nav-auth-link`: the brief says match existing styling. Since `<a class="nav-link nav-auth-link">` already gets the `.nav-link` rules, no per-state CSS is required. The `data-state` attribute can drive visual variation later if desired — for now, both states render identically per spec point #3 ("don't try to make it a button — let the visual hierarchy stay clean").
+Three options:
 
-Per-file CSS additions: **none required**. The `nav-auth-link` class can be omitted entirely if we don't add any new rules — but the brief specifies adding it as a class hook. We'll include it as a no-op class for now (minor).
+- **(a)** `resource_type='video'`, populate `products.vimeo_id` + `vimeo_hash`, **skip product_videos**. Cleanest for single-video products. Matches the lucid-horizon / jt-visuals pattern. Requires the user to set Vimeo videos public/unlisted or supply hashes.
+- **(b)** `resource_type='multi'`, populate `product_videos` (single row per product), set `products.vimeo_id=null`. This is the IG Masterclass pattern. Wastes a multi-video viewer UI on a single-video product.
+- **(c)** Both. `resource_type='video'`, populate `products.vimeo_id`, ALSO insert `product_videos` rows for future "multi" flexibility. Dead data today; viewer ignores `product_videos`.
 
-Actually re-reading: "CSS for the new nav-auth-link class … Match existing nav-link styling." — implies add the class but don't add new rules. Empty rule set, or inherit only. The cleanest implementation is to NOT add new CSS rules and rely on `.nav-link` (which is shared via `class="nav-link nav-auth-link"`). Plan will note this.
+**Plan recommends (a)** as the natural fit. Single-video products use `products.vimeo_id` per existing convention. We'll surface this as a decision point at the gate.
 
----
+## product_videos schema confirm
 
-## New cookie-detection script (target)
+From migration `0003_add_product_videos.sql`:
 
-```js
-(function(){
-  try {
-    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
-    var authLinks = document.querySelectorAll("[data-auth-link]");
-    if (hasSession) {
-      authLinks.forEach(function(el){
-        el.setAttribute("href", "/account");
-        el.setAttribute("data-state", "logged-in");
-        el.textContent = "My Account";
-      });
-      var joinCtas = document.querySelectorAll("[data-join-cta]");
-      joinCtas.forEach(function(el){ el.style.display = "none"; });
-    }
-    // Logged-out path: defaults are already correct (Sign In + visible Join CTA).
-  } catch (e) { /* no-op */ }
-})();
+```sql
+create table product_videos (
+  id uuid primary key default gen_random_uuid(),
+  product_id uuid not null references products(id) on delete cascade,
+  vimeo_id text not null,
+  vimeo_hash text,
+  display_order int default 0,
+  title text,
+  description text,
+  unique(product_id, display_order)
+);
 ```
 
-`element.textContent = "My Account"` replaces the inner text without removing/adding child nodes (the link is just text — works cleanly).
-
----
+If we go with option (b) or (c), each product needs `display_order=1` (or 0). Unique-key constraint on `(product_id, display_order)` — fine for single rows.
 
 ## Files to touch — preview
 
 | File | Action |
 |---|---|
-| `src/app/account/layout.tsx` | **delete** (replaced by two new layouts) |
-| `src/app/account/(auth)/layout.tsx` | **new** |
-| `src/app/account/(authed)/layout.tsx` | **new** |
-| `src/app/account/login/` → `src/app/account/(auth)/login/` | git mv |
-| `src/app/account/sign-up/` → `src/app/account/(auth)/sign-up/` | git mv |
-| `src/app/account/forgot-password/` → `src/app/account/(auth)/forgot-password/` | git mv |
-| `src/app/account/reset-password/` → `src/app/account/(auth)/reset-password/` | git mv |
-| `src/app/account/page.tsx` → `src/app/account/(authed)/page.tsx` | git mv |
-| `src/app/account/settings/` → `src/app/account/(authed)/settings/` | git mv |
-| `src/app/account/products/` → `src/app/account/(authed)/products/` | git mv |
-| `src/app/account/logout-button.tsx` | unchanged (used by `(authed)/layout.tsx` and existing pages) |
-| 18 × `public/**/*.html` | nav swap + script swap (Node helper, same approach as v3) |
+| `supabase/migrations/0006_four_horsemen_products.sql` | new — `INSERT ... ON CONFLICT (slug) DO UPDATE` for both products |
+| `public/_drafts/four-horsemen-workshop.html` → `public/products/four-horsemen-workshop.html` | `git mv` |
+| `public/products/four-horsemen-workshop.html` | edit — 4× Stripe URL update, nav patch, OG fix |
+| `public/products.html` | edit — convert card-unavailable to active link card |
+| `scripts/check-gated-pages.sh` | edit — remove `four-horsemen-workshop.html` from `GATED_PAGES` |
 
----
+**No changes to**: `process-checkout.ts`, `route.ts`, smoke test, email templates, customers schema, `/account/*` URLs.
 
-## Risks & open questions
+## Migration application path
 
-1. **Auth pages already render their own `<style>` blocks** with `auth-card` rules. The new `(auth)/layout.tsx` shouldn't duplicate them. Plan: layout provides ONLY a wrapper (centered flex, top logo) + global page-level positioning. Each auth page keeps its own form CSS.
+Brief says: "Apply via supabase db push OR direct SQL editor — surface in plan.md which path you prefer."
 
-2. **The existing `.acct-nav` / `.acct-main` / `.acct-footer` styles in `account/layout.tsx`** — do any of the auth/portal pages reference those class names directly? Quick grep needed in plan to confirm.
+The repo does not have a Supabase CLI workflow set up (no `supabase` package in `package.json`, no `supabase/.config.toml` with linked project). All prior schema changes were applied manually via SQL editor or directly via the admin client during the InstaMC seed. **Plan recommends**: apply the migration by running the SQL directly via the admin client from a local script (like the InstaMC seed work — same pattern). Idempotent; safe to re-run.
 
-3. **`/account/products/[slug]` has its own header** with a "Back to your account" link and product-page eyebrow. The new portal shell's central nav (Dashboard / Settings) will sit ABOVE that header — fine, just stacked. No collision with existing classes.
+Alternative: paste SQL into the Supabase dashboard SQL editor — also fine; user preference. Plan will pick admin-client-from-local-script as default unless user pushes back.
 
-4. **Active-state styling** for Dashboard/Settings nav links in portal shell: brief says "active-state styling on whichever matches the current path". Layouts run on the server in Next 15 App Router; we have access to `usePathname` only in client components. Plan: make the portal layout's nav a small client component (`<PortalNav />`) that uses `usePathname` for active state. The rest of the layout stays server-rendered.
+## Risks / soft warnings
 
-5. **`/account/settings/forms.tsx` is already a client component** — fine as-is.
-
-6. **`logout-button.tsx`** is used by `account/page.tsx` and `account/settings/page.tsx` directly today. Plan: it'll be used by the new `(authed)/layout.tsx`'s portal shell instead — so the per-page LogoutButton uses become redundant. Remove them from the moved page.tsx and settings/page.tsx (they were inside per-page headers); the layout's right-side LogoutButton replaces them.
-
-7. **`/account/products/[slug]` has its own `LogoutButton` import/render** in the page. Same: the layout-level button covers it. Remove from the product page header.
-
-8. **Product page back link** ("← Back to your account") — keep it; it's content, not chrome. The layout nav has logo→/, plus Dashboard/Settings center, plus Sign Out right. Page-level back link is independent.
-
-9. **CSS variable inheritance** — verify `globals.css` defines the `--bg-base` `--accent` `--border` etc. used by both layouts. If layouts depend on those, they must already be loaded by `src/app/layout.tsx` (root layout). Plan: confirm by reading root layout in execute step.
-
-10. **Mobile nav toggling** in marketing pages is handled by an existing JS block in each HTML file (mobileToggle button, mobileNav `.open` class). The new auth-state script runs alongside; no interaction.
-
-11. **Deviation in toolkit.html** — its mobile-nav uses `class="mobile-nav-link"` on each `<a>`. The Sign In replacement must preserve that class. Same as v3's handling.
-
-12. **Deviation in maintenance.html** — its desktop AND mobile Products link points to `/maintenance` not `/products`. The auth-link insertion needs to come AFTER whichever Products line exists. The Phase B v3 helper already handled this via regex alternation `(products|maintenance)`. We reuse the same regex.
-
-13. **Empty CSS hook**: we add `.nav-auth-link` class to the desktop link, but the brief says match existing styling exactly — so no new CSS is added per-file. The class is purely a future hook. If we'd rather not add a no-op class, we can drop it. **Plan defaults to including it** because the brief explicitly named it (#3 "CSS for the new nav-auth-link class"); the class is added with zero new rules.
-
----
-
-## What ships unchanged (per hard rules)
-
-- `src/lib/webhook/process-checkout.ts` — webhook untouched.
-- `src/app/api/stripe-webhook/route.ts` — untouched.
-- `emails/*.html` — untouched.
-- `scripts/smoke-test-webhook.ts` — untouched.
-- `customers` schema — no migrations.
-- `/account/*` URLs — only layout inheritance changes; routes resolve to the same paths.
-- Marketing nav typography — `.nav-link` class reused, no new font/size/color.
+1. **Vimeo privacy state**: NULL hash requires both videos to be public OR unlisted on Vimeo. If they're private with hash-required, we need the hashes — surface to user before executing.
+2. **OG meta polish**: technically out of strict scope of brief but the brief says "Match the visual structure of lucid-horizon for header, hero, body sections" — interpreting "header" as page hero, not HTML `<head>`. Plan defaults to keeping the OG meta minimal-correct (just fix the broken `/images/og-image.jpg` reference) without going as deep as lucid-horizon's full og/twitter/canonical block. If you want full parity, say so.
+3. **Storefront card eyebrow** currently reads "Workshop · Two parts". Keeping as-is. If you want it to say something like "Workshop · 2 parts · $91 each", say so.
+4. **No homepage edit**. Brief says don't bundle. The Four Horsemen workshop is not currently surfaced on the homepage; it stays that way.
+5. **Stripe payment link sanity**: assumed both new plinks are configured to redirect post-purchase to `/account?purchase=success` (matching the other 7 plinks). If not, the purchase flow will land users on a Stripe-hosted thank-you page; webhook still fires correctly. Out of scope to verify here — flagging.

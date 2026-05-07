@@ -10,7 +10,7 @@
 <meta property="og:type" content="product">
 <meta property="og:title" content="Four Horsemen Workshop, 910 Academy × Four Horsemen Media">
 <meta property="og:description" content="Two-part workshop. Part 1 covers the business of scaling a real estate media company. Part 2 covers the editing room, transitions, and the exact post-production system.">
-<meta property="og:image" content="/images/og-image.jpg">
+<meta property="og:image" content="https://www.910academy.com/og-images/four-horsemen-workshop.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -778,7 +778,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <a href="/" class="nav-link">Home</a>
       <a href="/gear" class="nav-link">Our Gear</a>
       <a href="/products" class="nav-link">Products</a>
-      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta">Join 910 Academy</a>
+      <a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="nav-cta" data-join-cta>Join 910 Academy</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -791,7 +792,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <a href="/">Home</a>
   <a href="/gear">Our Gear</a>
   <a href="/products">Products</a>
-  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Join 910 Academy</a>
+  <a href="/account/login" data-auth-link data-state="logged-out">Sign In</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" style="color:var(--accent);" data-join-cta>Join 910 Academy</a>
 </div>
 
 <!-- HERO (compact, trailer + scroll indicator) -->
@@ -833,7 +835,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="path-card-desc">The full business playbook: pricing, sales scripts, scaling beyond yourself, and the systems behind a seven-figure media company. For operators who want a real business, not a side hustle.</p>
       <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
       <p class="path-card-price-sub">ONE-TIME · LIFETIME ACCESS</p>
-      <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1</a>
+      <a href="https://buy.stripe.com/00w3cublA9j0bWh0mj5Rm1B" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1</a>
     </div>
 
     <div class="path-card">
@@ -842,7 +844,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="path-card-desc">The editing room. Transitions, sound design, color, and the post-production system Four Horsemen use to ship work that lands at the top of the feed every time.</p>
       <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
       <p class="path-card-price-sub">ONE-TIME · LIFETIME ACCESS</p>
-      <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
+      <a href="https://buy.stripe.com/cNi9ASdtIeDk4tPb0X5Rm1C" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
     </div>
 
   </div>
@@ -933,13 +935,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="path-card-eyebrow">PART 1</p>
       <h3 class="path-card-title">The Business</h3>
       <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
-      <a href="https://buy.stripe.com/4gMdR95GS1lYbwWdAa7bW0n" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1</a>
+      <a href="https://buy.stripe.com/00w3cublA9j0bWh0mj5Rm1B" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 1</a>
     </div>
     <div class="path-card">
       <p class="path-card-eyebrow">PART 2</p>
       <h3 class="path-card-title">The Editing</h3>
       <p class="path-card-price"><span style="font-size:0.5em;font-weight:400;opacity:0.7;vertical-align:super;">$</span>91</p>
-      <a href="https://buy.stripe.com/28EdR9glw0hUdF42Vw7bW0o" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
+      <a href="https://buy.stripe.com/cNi9ASdtIeDk4tPb0X5Rm1C" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Part 2</a>
     </div>
   </div>
 </section>
@@ -1026,6 +1028,23 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       w.style.maxHeight = w.scrollHeight + 'px';
     });
   });
+})();
+</script>
+<script>
+(function(){
+  try {
+    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
+    var authLinks = document.querySelectorAll("[data-auth-link]");
+    if (hasSession) {
+      authLinks.forEach(function(el){
+        el.setAttribute("href", "/account");
+        el.setAttribute("data-state", "logged-in");
+        el.textContent = "My Account";
+      });
+      var joinCtas = document.querySelectorAll("[data-join-cta]");
+      joinCtas.forEach(function(el){ el.style.display = "none"; });
+    }
+  } catch (e) { /* no-op */ }
 })();
 </script>
 </body>
