@@ -55,6 +55,8 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAuthPage = ["/account/login", "/account/sign-up", "/account/forgot-password", "/account/reset-password"].includes(path);
   const isAccountPage = path.startsWith("/account");
+  const isAdminPath = path.startsWith("/admin");
+  const isAdminLogin = path === "/admin/login";
 
   if (isAccountPage && !isAuthPage && !user) {
     if (path === "/account" && request.nextUrl.searchParams.get("purchase") === "success") {
@@ -67,9 +69,32 @@ export async function middleware(request: NextRequest) {
   if (isAuthPage && user) {
     return NextResponse.redirect(new URL("/account", request.url));
   }
+
+  if (isAdminPath) {
+    const adminEmails = (process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean);
+    const userEmail = user?.email?.toLowerCase();
+    const isAdmin = !!userEmail && adminEmails.includes(userEmail);
+
+    if (isAdminLogin) {
+      if (isAdmin) {
+        return NextResponse.redirect(new URL("/admin/customers", request.url));
+      }
+    } else {
+      if (!user) {
+        return NextResponse.redirect(new URL("/admin/login", request.url));
+      }
+      if (!isAdmin) {
+        return NextResponse.redirect(new URL("/account", request.url));
+      }
+    }
+  }
+
   return response;
 }
 
 export const config = {
-  matcher: ["/account", "/account/:path*"],
+  matcher: ["/account", "/account/:path*", "/admin", "/admin/:path*"],
 };
