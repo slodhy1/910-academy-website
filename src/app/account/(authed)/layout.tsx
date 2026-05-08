@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "@/app/globals.css";
 import { LogoutButton } from "../logout-button";
 import { PortalNav } from "./portal-nav";
 
