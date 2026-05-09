@@ -20,7 +20,18 @@ export default function AuthedLayout({ children }: { children: React.ReactNode }
       </nav>
       <main className="portal-main">{children}</main>
       <footer className="portal-footer">
-        <p className="portal-footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+        <p className="portal-footer-copy">
+          &copy; 2026 910 Academy. All rights reserved.{" "}
+          <span aria-hidden="true">&middot;</span> Built by{" "}
+          <a
+            className="portal-footer-credit-link"
+            href="https://instagram.com/slodhy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @slodhy
+          </a>
+        </p>
       </footer>
       <style>{`
         .portal-nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 18px 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-bottom: 1px solid var(--border); }
@@ -31,6 +42,8 @@ export default function AuthedLayout({ children }: { children: React.ReactNode }
         .portal-main { padding: 120px 24px 80px; max-width: 1100px; margin: 0 auto; min-height: calc(100vh - 200px); }
         .portal-footer { border-top: 1px solid var(--border); padding: 56px 40px; text-align: center; }
         .portal-footer-copy { font-size: 12px; color: var(--fg-ghost); letter-spacing: 0.04em; }
+        .portal-footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s; }
+        .portal-footer-credit-link:hover { color: var(--accent); }
         @media (max-width: 768px) {
           .portal-nav-inner { padding: 0 16px; gap: 12px; }
           .portal-main { padding: 100px 20px 64px; }

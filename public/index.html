@@ -1279,6 +1279,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--fg-ghost);
   letter-spacing: 0.04em;
 }
+.footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
+.footer-credit-link:hover { color: var(--accent); }
 
 /* ========== MOBILE NAV ========== */
 .mobile-nav {
@@ -2652,7 +2654,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
     <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
   </div>
-  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved. <span aria-hidden="true">&middot;</span> Built by <a class="footer-credit-link" href="https://instagram.com/slodhy" target="_blank" rel="noopener noreferrer">@slodhy</a></p>
 </footer>
 
 <script>
