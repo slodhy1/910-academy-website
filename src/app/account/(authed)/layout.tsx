@@ -41,7 +41,7 @@ export default function AuthedLayout({ children }: { children: React.ReactNode }
         .portal-nav-right { display: flex; align-items: center; }
         .portal-main { padding: 120px 24px 80px; max-width: 1100px; margin: 0 auto; min-height: calc(100vh - 200px); }
         .portal-footer { border-top: 1px solid var(--border); padding: 56px 40px; text-align: center; }
-        .portal-footer-copy { font-size: 12px; color: var(--fg-ghost); letter-spacing: 0.04em; }
+        .portal-footer-copy { font-size: 13px; color: var(--fg-ghost); letter-spacing: 0.04em; }
         .portal-footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s; }
         .portal-footer-credit-link:hover { color: var(--accent); }
         @media (max-width: 768px) {
