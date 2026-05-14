@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ICEMAN · 910 ACADEMY × CLIFFSIDE CUTS · TORONTO MAY 22</title>
+
+<!-- Fonts: Archivo Black for poster display, Montserrat for body, Instrument Serif for editorial accents -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   FREEZE FRAME · TORONTO
+   Landing template, Iceman theme
+   910 Academy × Cliffside Cuts
+   ============================================================ */
+
+:root {
+  /* Iceman palette */
+  --black: #000000;
+  --ink: #0a0a0a;
+  --bone: #f7f1e3;
+  --paper: #5bb8c9;          /* Drake cyan poster */
+  --paper-deep: #1f5d6a;     /* embossed text on paper */
+  --paper-shadow: rgba(15,60,72,0.55);
+  --red: #E2231A;            /* Iceman ICE/MAN red */
+  --blue: #1A6BE0;           /* Iceman MAY/15 blue */
+  --hero-bg: #FFFFFF;        /* Iceman poster paper */
+  --hero-ink: #0a0a0a;
+
+  /* Academy palette */
+  --academy-blue: #38b6ff;
+  --white: #ffffff;
+  --grey-90: #111111;
+  --grey-70: #1f1f1f;
+  --grey-50: #4a4a4a;
+  --grey-30: #9a9a9a;
+  --grey-15: #d6d6d6;
+
+  /* Typography */
+  --display: 'Archivo Black', sans-serif;
+  --body: 'Montserrat', sans-serif;
+  --serif: 'Instrument Serif', serif;
+
+  /* Layout */
+  --gutter: clamp(1.25rem, 2.5vw, 2.5rem);
+  --maxw: 1440px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transition: transform 0.12s ease, opacity 0.2s ease;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--academy-blue);
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(56,182,255,0.6);
+  transition: transform 0.25s ease, opacity 0.2s ease, width 0.25s ease, height 0.25s ease;
+}
+.cursor-ring.is-hover {
+  width: 64px; height: 64px;
+  background: rgba(56,182,255,0.08);
+  border-color: rgba(56,182,255,0.9);
+}
+
+@media (hover: none), (pointer: coarse) {
+  html, body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+::selection {
+  background: var(--academy-blue);
+  color: var(--black);
+}
+
+/* Reusable utility */
+.eyebrow {
+  font-family: var(--body);
+  font-weight: 300;
+  font-size: clamp(0.6875rem, 0.85vw, 0.8125rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+}
+.eyebrow.on-paper { color: var(--paper-deep); }
+
+.numeral {
+  font-family: var(--display);
+  font-feature-settings: "tnum";
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: none;
+  color: inherit;
+}
+@media (hover: none), (pointer: coarse) {
+  button { cursor: pointer; }
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem var(--gutter);
+  mix-blend-mode: difference;
+  color: var(--white);
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+.nav__chevron {
+  width: 16px; height: 16px;
+  display: inline-block;
+}
+.nav__chevron svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+.nav__right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.nav__waitlist-cta {
+  padding: 0.625rem 1.125rem;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 100px;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.nav__waitlist-cta:hover {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+}
+
+/* Hide nav text on small screens */
+@media (max-width: 640px) {
+  .nav__time { display: none; }
+  .nav__right { gap: 0.875rem; }
+}
+
+/* ============================================================
+   HERO — Iceman poster, brought to web
+   White paper, red ICE/MAN, blue MAY/22, fits in 100vh
+   SVG rows stretch each line to fill width edge-to-edge
+   ============================================================ */
+.hero {
+  height: 100vh;
+  min-height: 580px;
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 4.5rem var(--gutter) 1.75rem;
+  overflow: hidden;
+}
+
+/* Subtle paper grain on the white hero */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero__topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+.hero__eyebrow-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.hero__eyebrow-stack .eyebrow {
+  color: var(--hero-ink);
+  font-weight: 500;
+  opacity: 0.85;
+}
+.hero__eyebrow-stack .lockup {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--hero-ink);
+}
+
+/* Iceman stack — ICE / MAN / MAY / 22 (SVG rows that fill width) */
+.hero__stack {
+  width: min(88vw, calc(56vh * 1.6), 1080px);
+  aspect-ratio: 1.6 / 1;
+  margin: clamp(0.5rem, 1.5vh, 1.5rem) auto;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  position: relative;
+  z-index: 1;
+  align-self: center;
+}
+.hero__row {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.hero__row text {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 138px;
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+.hero__row--red text { fill: var(--red); }
+.hero__row--blue text { fill: var(--blue); }
+
+/* Hand-printed unevenness — extremely subtle */
+.hero__row:nth-child(1) { transform: translateX(-0.2%) rotate(-0.1deg); }
+.hero__row:nth-child(2) { transform: translateX( 0.3%) rotate( 0.05deg); }
+.hero__row:nth-child(3) { transform: translateX(-0.15%) rotate( 0.08deg); }
+.hero__row:nth-child(4) { transform: translateX( 0.2%) rotate(-0.04deg); }
+
+/* Bottom of hero */
+.hero__bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+}
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1.05rem 1.625rem 1.05rem 1.875rem;
+  background: var(--hero-ink);
+  color: var(--hero-bg);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.hero__cta:hover {
+  background: var(--academy-blue);
+  color: var(--hero-ink);
+  transform: translateY(-2px);
+}
+.hero__cta::after {
+  content: "";
+  width: 24px; height: 1px;
+  background: currentColor;
+  display: inline-block;
+  transition: width 0.3s ease;
+}
+.hero__cta:hover::after { width: 36px; }
+
+.hero__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-end;
+  text-align: right;
+}
+.hero__meta .count {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  color: var(--hero-ink);
+  letter-spacing: -0.02em;
+}
+.hero__meta .label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--hero-ink);
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .hero { padding-top: 3.75rem; }
+  .hero__bottom { align-items: stretch; }
+  .hero__meta { align-items: flex-start; text-align: left; }
+  .hero__topline { flex-direction: column; gap: 0.75rem; }
+  .hero__topline > div:last-child {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+}
+
+/* Particles removed on white hero — were cyan, didn't read */
+.particles { display: none; }
+
+/* ============================================================
+   MARQUEE STRIP
+   ============================================================ */
+.marquee {
+  background: var(--paper);
+  color: var(--paper-deep);
+  border-top: 1px solid rgba(15,60,72,0.18);
+  border-bottom: 1px solid rgba(15,60,72,0.18);
+  overflow: hidden;
+  padding: 1rem 0;
+  position: relative;
+}
+.marquee__track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee__track span {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3rem;
+}
+.marquee__track span::after {
+  content: "✻";
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--paper-deep);
+  opacity: 0.5;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   CYAN POSTER SECTION — "WHAT DID I MISS?"
+   ============================================================ */
+.poster {
+  background: var(--paper);
+  color: var(--paper-deep);
+  padding: clamp(6rem, 12vh, 10rem) var(--gutter);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Paper grain via SVG noise */
+.poster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.22 0 0 0 0 0.27 0 0 0 0.4 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-size: 240px 240px;
+  opacity: 0.55;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+/* Faint vertical fold lines like a printed poster */
+.poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 49.6%, rgba(15,60,72,0.08) 49.85%, rgba(15,60,72,0.08) 50.15%, transparent 50.4%);
+  pointer-events: none;
+}
+
+.poster__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.poster__eyebrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(2.5rem, 6vh, 5rem);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.poster__title {
+  font-family: var(--display);
+  font-size: clamp(3rem, 12vw, 11rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  /* Embossed paper effect */
+  color: var(--paper-deep);
+  text-shadow:
+    1px 1px 0 rgba(255,255,255,0.35),
+    -1px -1px 0 rgba(15,60,72,0.45),
+    2px 3px 0 rgba(15,60,72,0.25);
+  transform: rotate(-1deg);
+  position: relative;
+}
+.poster__title .word {
+  display: block;
+}
+.poster__title .word.indent-1 { padding-left: 8%; }
+.poster__title .word.indent-2 { padding-left: 22%; }
+
+.poster__caption {
+  margin-top: clamp(2rem, 4vh, 3.5rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+.poster__caption .pull {
+  font-family: var(--serif);
+  font-size: clamp(1.125rem, 1.6vw, 1.4rem);
+  font-style: italic;
+  max-width: 38ch;
+  line-height: 1.45;
+  color: var(--paper-deep);
+}
+.poster__caption .signature {
+  font-family: var(--body);
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 300;
+  color: var(--paper-deep);
+}
+
+/* ============================================================
+   NINE CUBES / TEN — "Nine cities. One missing."
+   ============================================================ */
+.cubes {
+  background: var(--black);
+  padding: clamp(7rem, 14vh, 12rem) var(--gutter);
+  position: relative;
+  overflow: hidden;
+}
+
+.cubes__head {
+  max-width: var(--maxw);
+  margin: 0 auto clamp(4rem, 8vh, 6rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+}
+.cubes__head h2 {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 6.5vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--white);
+  max-width: 12ch;
+}
+.cubes__head h2 em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--academy-blue);
+  letter-spacing: -0.01em;
+}
+.cubes__head .meta {
+  font-size: 0.75rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  font-weight: 300;
+  text-align: right;
+  max-width: 24ch;
+  line-height: 1.6;
+}
+
+.cubes__rail {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  gap: clamp(1rem, 2vw, 2rem);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.cubes__rail::-webkit-scrollbar {
+  height: 4px;
+}
+.cubes__rail::-webkit-scrollbar-track { background: var(--grey-90); }
+.cubes__rail::-webkit-scrollbar-thumb { background: var(--academy-blue); border-radius: 2px; }
+
+.cube {
+  flex: 0 0 220px;
+  aspect-ratio: 1 / 1;
+  background:
+    linear-gradient(135deg, rgba(56,182,255,0.18), rgba(56,182,255,0.04) 60%, transparent 100%),
+    linear-gradient(225deg, rgba(91,184,201,0.22), rgba(0,0,0,0.6));
+  border: 1px solid rgba(56,182,255,0.18);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem;
+  position: relative;
+  scroll-snap-align: start;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  overflow: hidden;
+}
+.cube::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent 30%, transparent 70%, rgba(0,0,0,0.4));
+  pointer-events: none;
+}
+.cube:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56,182,255,0.5);
+  box-shadow: 0 18px 40px -20px rgba(56,182,255,0.4);
+}
+.cube__num {
+  font-family: var(--display);
+  font-size: 0.875rem;
+  letter-spacing: 0.18em;
+  color: var(--grey-30);
+  z-index: 1;
+}
+.cube__label {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  z-index: 1;
+}
+.cube__sub {
+  font-family: var(--body);
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  font-weight: 400;
+  z-index: 1;
+  margin-top: 0.5rem;
+}
+
+/* The 10th cube — Toronto */
+.cube.is-toronto {
+  flex: 0 0 280px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(56,182,255,0.45), rgba(56,182,255,0.1) 60%),
+    linear-gradient(225deg, rgba(91,184,201,0.4), rgba(0,40,60,0.9));
+  border: 1px solid rgba(56,182,255,0.7);
+  box-shadow: 0 0 60px -10px rgba(56,182,255,0.55), inset 0 0 40px -10px rgba(56,182,255,0.4);
+  animation: pulse-glow 3.2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 60px -10px rgba(56,182,255,0.5), inset 0 0 40px -10px rgba(56,182,255,0.3); }
+  50% { box-shadow: 0 0 100px -10px rgba(56,182,255,0.85), inset 0 0 60px -10px rgba(56,182,255,0.55); }
+}
+.cube.is-toronto .cube__label {
+  font-size: 1.5rem;
+  color: var(--white);
+}
+.cube.is-toronto .cube__num { color: var(--academy-blue); }
+
+@media (max-width: 768px) {
+  .cubes__head { grid-template-columns: 1fr; }
+  .cubes__head .meta { text-align: left; }
+  .cube { flex: 0 0 180px; }
+  .cube.is-toronto { flex: 0 0 220px; }
+}
+
+/* ============================================================
+   THE DAY — schedule preview
+   ============================================================ */
+.day {
+  background: var(--bone);
+  color: var(--ink);
+  padding: clamp(7rem, 14vh, 12rem) var(--gutter);
+  position: relative;
+}
+
+.day__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(3rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.day__lead {
+  position: sticky;
+  top: 6rem;
+  align-self: start;
+}
+.day__eyebrow {
+  font-family: var(--body);
+  font-weight: 300;
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--grey-50);
+  margin-bottom: 1.5rem;
+}
+.day__title {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 5.5vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.day__title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--red);
+}
+.day__strap {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.125rem, 1.5vw, 1.4rem);
+  line-height: 1.45;
+  margin-top: 2rem;
+  max-width: 28ch;
+  color: var(--grey-50);
+}
+
+.day__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.day__row {
+  display: grid;
+  grid-template-columns: minmax(80px, 130px) 1fr auto;
+  gap: clamp(1rem, 2vw, 2rem);
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  align-items: baseline;
+  transition: padding 0.3s ease;
+}
+.day__row:last-child { border-bottom: 1px solid rgba(0,0,0,0.12); }
+.day__row:hover { padding-left: 0.75rem; }
+.day__time {
+  font-family: var(--display);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.day__heading {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.day__desc {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--grey-50);
+  margin-top: 0.375rem;
+}
+.day__tag {
+  font-family: var(--body);
+  font-size: 0.625rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--grey-50);
+  font-weight: 500;
+  white-space: nowrap;
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .day__inner { grid-template-columns: 1fr; }
+  .day__lead { position: static; }
+  .day__row { grid-template-columns: 90px 1fr; }
+  .day__tag { display: none; }
+}
+
+/* ============================================================
+   PRICING — single locked card
+   ============================================================ */
+.pricing {
+  background: var(--black);
+  padding: clamp(7rem, 14vh, 12rem) var(--gutter);
+  position: relative;
+  overflow: hidden;
+}
+.pricing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(56,182,255,0.06), transparent 60%);
+  pointer-events: none;
+}
+
+.pricing__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.pricing__eyebrow {
+  margin-bottom: 1.5rem;
+}
+.pricing__heading {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.pricing__heading em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--academy-blue);
+  letter-spacing: -0.005em;
+}
+
+.pricing__card {
+  margin-top: clamp(2.5rem, 5vh, 4rem);
+  border: 1px solid rgba(56,182,255,0.25);
+  background:
+    linear-gradient(180deg, rgba(56,182,255,0.06), rgba(0,0,0,0));
+  border-radius: 12px;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  position: relative;
+  overflow: hidden;
+}
+.pricing__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(45deg, rgba(56,182,255,0.04) 0 1px, transparent 1px 8px);
+  pointer-events: none;
+}
+
+.pricing__lock {
+  width: 64px; height: 64px;
+  margin: 0 auto 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--academy-blue);
+  border-radius: 50%;
+  position: relative;
+  background: rgba(56,182,255,0.06);
+}
+.pricing__lock svg {
+  width: 28px; height: 28px;
+  color: var(--academy-blue);
+}
+
+.pricing__price {
+  font-family: var(--display);
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.pricing__currency {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.pricing__divider {
+  width: 32px; height: 1px;
+  background: var(--academy-blue);
+  margin: 2rem auto;
+}
+
+.pricing__details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.pricing__details .item {
+  border-left: 1px solid rgba(255,255,255,0.08);
+  padding: 0 1rem;
+}
+.pricing__details .item:first-child { border-left: none; }
+.pricing__details .label {
+  font-family: var(--body);
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+.pricing__details .value {
+  font-family: var(--display);
+  font-size: 1rem;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  margin: 2rem 0;
+}
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.countdown__num {
+  font-family: var(--display);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1;
+  color: var(--academy-blue);
+  letter-spacing: -0.02em;
+  font-feature-settings: "tnum";
+  min-width: 2.5ch;
+  text-align: center;
+}
+.countdown__label {
+  font-family: var(--body);
+  font-size: 0.625rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  font-weight: 400;
+}
+
+.pricing__note {
+  font-family: var(--body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--grey-30);
+  letter-spacing: 0.04em;
+  margin-top: 1.25rem;
+}
+.pricing__note strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .pricing__details { grid-template-columns: 1fr; }
+  .pricing__details .item {
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1rem 0;
+  }
+  .pricing__details .item:first-child { border-top: none; }
+}
+
+/* ============================================================
+   WAITLIST FORM
+   ============================================================ */
+.waitlist {
+  background: var(--paper);
+  color: var(--paper-deep);
+  padding: clamp(6rem, 12vh, 10rem) var(--gutter);
+  position: relative;
+  overflow: hidden;
+}
+.waitlist::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.22 0 0 0 0 0.27 0 0 0 0 0.4 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.5'/></svg>");
+  background-size: 240px 240px;
+  opacity: 0.5;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.waitlist__inner {
+  max-width: 920px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.waitlist__heading {
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--paper-deep);
+  margin-bottom: 2rem;
+  text-shadow:
+    1px 1px 0 rgba(255,255,255,0.3),
+    -1px -1px 0 rgba(15,60,72,0.35);
+}
+.waitlist__heading em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  color: var(--paper-deep);
+}
+
+.waitlist__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+.waitlist__form input {
+  font: inherit;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 1.125rem 1.25rem;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(15,60,72,0.4);
+  border-radius: 100px;
+  color: var(--paper-deep);
+  outline: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.waitlist__form input::placeholder {
+  color: rgba(15,60,72,0.55);
+  font-weight: 400;
+}
+.waitlist__form input:focus {
+  background: var(--white);
+  border-color: var(--paper-deep);
+}
+.waitlist__form button {
+  padding: 1.125rem 2rem;
+  background: var(--paper-deep);
+  color: var(--paper);
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  cursor: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+@media (hover: none), (pointer: coarse) {
+  .waitlist__form button { cursor: pointer; }
+}
+.waitlist__form button:hover {
+  background: var(--ink);
+  transform: translateY(-2px);
+}
+
+.waitlist__success {
+  display: none;
+  padding: 1.5rem 2rem;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--paper-deep);
+  border-radius: 8px;
+  margin-top: 2rem;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+.waitlist__success.is-visible { display: block; }
+
+.waitlist__below {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.waitlist__count {
+  font-family: var(--display);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.waitlist__count .num { color: var(--paper-deep); font-size: 1.25rem; }
+.waitlist__legal {
+  font-family: var(--body);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(15,60,72,0.7);
+  max-width: 36ch;
+  text-align: right;
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .waitlist__form { grid-template-columns: 1fr; }
+  .waitlist__legal { text-align: left; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--black);
+  color: var(--grey-30);
+  padding: 4rem var(--gutter) 3rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.footer__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+}
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.footer__lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.footer__strap {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--grey-30);
+  max-width: 32ch;
+  line-height: 1.5;
+}
+.footer h4 {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.footer ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.footer ul a {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--grey-30);
+  transition: color 0.2s ease;
+}
+.footer ul a:hover { color: var(--academy-blue); }
+
+.footer__bottom {
+  max-width: var(--maxw);
+  margin: 4rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grey-50);
+}
+.footer__disclaimer {
+  max-width: var(--maxw);
+  margin: 2rem auto 0;
+  padding-top: 1.5rem;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  color: var(--grey-50);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  max-width: 90ch;
+}
+
+@media (max-width: 768px) {
+  .footer__inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .footer__inner { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   ANIMATION INITIAL STATES
+   GSAP will animate these in via ScrollTrigger
+   ============================================================ */
+.reveal-up { opacity: 0; transform: translateY(40px); }
+.reveal-fade { opacity: 0; }
+.reveal-stagger > * { opacity: 0; transform: translateY(60px); }
+
+/* Initial hero state — set by JS once GSAP is ready so no-JS users see content */
+.js-ready .hero__row { opacity: 0; }
+
+/* When JS is disabled, show everything */
+.no-js .reveal-up,
+.no-js .reveal-fade,
+.no-js .reveal-stagger > *,
+.no-js .hero__row {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal-up, .reveal-fade, .reveal-stagger > *, .hero__row,
+  .js-ready .hero__row {
+    opacity: 1 !important;
+  }
+  .marquee__track { animation: none; }
+  .cube.is-toronto { animation: none; }
+  .particles { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     CUSTOM CURSOR
+     ============================================================ -->
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav class="nav">
+  <a href="#" class="nav__brand">
+    <span class="nav__chevron">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square">
+        <polyline points="3,16 12,4 21,16"></polyline>
+        <polyline points="3,21 12,9 21,21" opacity="0.55"></polyline>
+      </svg>
+    </span>
+    <span>910 Academy</span>
+  </a>
+  <div class="nav__right">
+    <span class="nav__time" id="liveTime">--:-- ET</span>
+    <a href="#waitlist" class="nav__waitlist-cta" data-hover>Join Waitlist</a>
+  </div>
+</nav>
+
+
+<!-- ============================================================
+     HERO
+     The poster, brought to web
+     ============================================================ -->
+<section class="hero">
+  <div class="hero__topline">
+    <div class="hero__eyebrow-stack">
+      <span class="eyebrow">910 Academy × Cliffside Cuts</span>
+      <span class="lockup">Toronto · The Tenth Cut</span>
+    </div>
+    <div class="hero__eyebrow-stack" style="text-align:right; align-items:flex-end;">
+      <span class="eyebrow">Coming May 22, 2026</span>
+      <span class="lockup">Tickets drop May 15</span>
+    </div>
+  </div>
+
+  <!-- The four-row poster: ICE / MAN / MAY / 22 — SVG rows stretch to fill width -->
+  <div class="hero__stack" aria-label="ICEMAN MAY 22">
+    <svg class="hero__row hero__row--red" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
+      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">ICE</text>
+    </svg>
+    <svg class="hero__row hero__row--red" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
+      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">MAN</text>
+    </svg>
+    <svg class="hero__row hero__row--blue" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
+      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">MAY</text>
+    </svg>
+    <svg class="hero__row hero__row--blue" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
+      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">22</text>
+    </svg>
+  </div>
+
+  <div class="hero__bottom">
+    <a href="#waitlist" class="hero__cta" data-hover>
+      <span>Notify Me When Tickets Drop</span>
+    </a>
+    <div class="hero__meta">
+      <span class="count" id="waitlistCountHero">412</span>
+      <span class="label">on the waitlist · drops May 15, 10:00 AM ET</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     MARQUEE
+     ============================================================ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>FREEZE THE FRAME</span>
+    <span>WHERE THE F IS TORONTO</span>
+    <span>MAY 22</span>
+    <span>THE TENTH CUT</span>
+    <span>910 ACADEMY × CLIFFSIDE CUTS</span>
+    <span>FREEZE THE FRAME</span>
+    <span>WHERE THE F IS TORONTO</span>
+    <span>MAY 22</span>
+    <span>THE TENTH CUT</span>
+    <span>910 ACADEMY × CLIFFSIDE CUTS</span>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     CYAN POSTER — "WHAT DID I MISS?"
+     Drake @champagnepapi April grid aesthetic
+     ============================================================ -->
+<section class="poster">
+  <div class="poster__inner">
+    <div class="poster__eyebrow">
+      <span class="eyebrow on-paper">Episode One · Toronto</span>
+      <span class="eyebrow on-paper">Filed under: Editorial</span>
+    </div>
+
+    <h2 class="poster__title reveal-up">
+      <span class="word">What</span>
+      <span class="word indent-1">Did</span>
+      <span class="word indent-2">I Miss</span>
+    </h2>
+
+    <div class="poster__caption reveal-up">
+      <p class="pull">
+        From Salt Lake to Nashville. Nine cities, twenty-one days, coast to coast. The question that wouldn't go away: where the F is Toronto. Now we have a date.
+      </p>
+      <span class="signature">Vol. 10 · The Toronto Edit</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE GREAT AMERICAN ROAD TRIP — 9 cities + Toronto = 10
+     Real cities, chronological order from July → Aug 2025
+     ============================================================ -->
+<section class="cubes">
+  <div class="cubes__head">
+    <h2 class="reveal-up">The Great American Road Trip <em>missed one city.</em></h2>
+    <p class="meta reveal-up">From July 14 to August 3, 2025, we hit nine cities coast to coast. The question we kept getting: where the F is Toronto. May 22 is the answer.</p>
+  </div>
+
+  <div class="cubes__rail" id="cubesRail">
+    <div class="cube reveal-up" data-hover><div class="cube__num">01</div><div><div class="cube__label">Salt Lake City</div><div class="cube__sub">July 14, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">02</div><div><div class="cube__label">Los Angeles</div><div class="cube__sub">July 15, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">03</div><div><div class="cube__label">San Diego</div><div class="cube__sub">July 17, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">04</div><div><div class="cube__label">Denver</div><div class="cube__sub">July 24, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">05</div><div><div class="cube__label">Charlotte</div><div class="cube__sub">July 25, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">06</div><div><div class="cube__label">Atlanta</div><div class="cube__sub">July 25, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">07</div><div><div class="cube__label">Austin</div><div class="cube__sub">July 30, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">08</div><div><div class="cube__label">Scottsdale</div><div class="cube__sub">August 2, 2025</div></div></div>
+    <div class="cube reveal-up" data-hover><div class="cube__num">09</div><div><div class="cube__label">Nashville</div><div class="cube__sub">August 3, 2025</div></div></div>
+    <div class="cube is-toronto reveal-up" data-hover><div class="cube__num">10 · TORONTO</div><div><div class="cube__label">Toronto</div><div class="cube__sub">May 22, 2026 · The Tenth Cut</div></div></div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE DAY — schedule preview
+     Editorial layout
+     ============================================================ -->
+<section class="day">
+  <div class="day__inner">
+    <div class="day__lead">
+      <p class="day__eyebrow">May 22 · 09:00 → 18:00</p>
+      <h2 class="day__title reveal-up">Nine hours. <em>One room.</em> We freeze it.</h2>
+      <p class="day__strap reveal-up">A working session, not a panel. Bring the laptop you actually edit on. We open the room, run real timelines, and don't leave until the cut feels right.</p>
+    </div>
+
+    <ul class="day__list">
+      <li class="day__row reveal-up">
+        <span class="day__time">09:00</span>
+        <div>
+          <h3 class="day__heading">Doors · The Cold Open</h3>
+          <p class="day__desc">Coffee, room intro, project files distributed. We start with the same raw footage everyone is going to cut today.</p>
+        </div>
+        <span class="day__tag">Intro</span>
+      </li>
+      <li class="day__row reveal-up">
+        <span class="day__time">10:00</span>
+        <div>
+          <h3 class="day__heading">Bryden's First Cut</h3>
+          <p class="day__desc">Live edit-along. From bin organization to first assembly in Final Cut Pro. Every keyboard shortcut, every panel choice, projected.</p>
+        </div>
+        <span class="day__tag">Edit-Along</span>
+      </li>
+      <li class="day__row reveal-up">
+        <span class="day__time">12:00</span>
+        <div>
+          <h3 class="day__heading">Lunch · The Room</h3>
+          <p class="day__desc">Catered. Cross-table conversation between attendees who came in cold and now have working timelines on identical footage.</p>
+        </div>
+        <span class="day__tag">Break</span>
+      </li>
+      <li class="day__row reveal-up">
+        <span class="day__time">13:00</span>
+        <div>
+          <h3 class="day__heading">Color · Sound · Texture</h3>
+          <p class="day__desc">Bryden walks the polish pass. LUTs, transitions, audio bed selection, and the small details that move a cut from solid to delivered.</p>
+        </div>
+        <span class="day__tag">Craft</span>
+      </li>
+      <li class="day__row reveal-up">
+        <span class="day__time">15:00</span>
+        <div>
+          <h3 class="day__heading">Claudio · The Business</h3>
+          <p class="day__desc">How the pricing actually works. Discovery calls, deliverables, the conversation with realtors. The math behind a $10K month.</p>
+        </div>
+        <span class="day__tag">Business</span>
+      </li>
+      <li class="day__row reveal-up">
+        <span class="day__time">17:00</span>
+        <div>
+          <h3 class="day__heading">Final Reel · Open Room</h3>
+          <p class="day__desc">Everyone exports. We watch each cut on the big screen. Notes, applause, second cuts. Doors close at six.</p>
+        </div>
+        <span class="day__tag">Closer</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     PRICING — single locked card
+     ============================================================ -->
+<section class="pricing" id="tickets">
+  <div class="pricing__inner">
+    <p class="eyebrow pricing__eyebrow">The Drop</p>
+    <h2 class="pricing__heading reveal-up">Tickets are <em>frozen</em> until Iceman drops.</h2>
+
+    <div class="pricing__card reveal-up">
+      <div class="pricing__lock" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+          <path d="M8 11V8a4 4 0 1 1 8 0v3"></path>
+        </svg>
+      </div>
+
+      <div class="pricing__price numeral">$910</div>
+      <p class="pricing__currency">USD · Single Ticket · Includes Lunch</p>
+
+      <div class="pricing__divider"></div>
+
+      <div class="pricing__details">
+        <div class="item">
+          <p class="label">Date</p>
+          <p class="value">May 22, 2026</p>
+        </div>
+        <div class="item">
+          <p class="label">Format</p>
+          <p class="value">In-Person · 1 Day</p>
+        </div>
+        <div class="item">
+          <p class="label">Venue</p>
+          <p class="value">Toronto · TBA</p>
+        </div>
+      </div>
+
+      <p class="eyebrow" style="color: var(--academy-blue);">Tickets unlock in</p>
+
+      <div class="countdown" id="countdown">
+        <div class="countdown__unit"><span class="countdown__num" id="cd-d">--</span><span class="countdown__label">Days</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cd-h">--</span><span class="countdown__label">Hours</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cd-m">--</span><span class="countdown__label">Min</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cd-s">--</span><span class="countdown__label">Sec</span></div>
+      </div>
+
+      <p class="pricing__note">
+        <strong>Iceman drops May 15.</strong> So do tickets. Waitlist members get a one-hour exclusive window starting at 9:00 AM ET. Public sale opens at 10:00 AM ET.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     WAITLIST FORM
+     ============================================================ -->
+<section class="waitlist" id="waitlist">
+  <div class="waitlist__inner">
+    <p class="eyebrow on-paper">The Cold List</p>
+    <h2 class="waitlist__heading reveal-up">
+      Get the <em>direct link</em> when tickets drop.
+    </h2>
+
+    <p class="poster__caption pull" style="max-width:46ch; margin-top:1.5rem;">
+      One hour before the public sale, the waitlist receives a direct Stripe checkout link. No queue. No countdown clock. Just tickets.
+    </p>
+
+    <form class="waitlist__form" id="waitlistForm" novalidate>
+      <input type="text" name="firstName" placeholder="First name" required autocomplete="given-name" />
+      <input type="email" name="email" placeholder="Email address" required autocomplete="email" />
+      <button type="submit" data-hover>Add Me</button>
+    </form>
+
+    <div class="waitlist__success" id="waitlistSuccess">
+      You're on the list. We'll email a direct ticket link on May 15 at 8:55 AM ET.
+    </div>
+
+    <div class="waitlist__below">
+      <span class="waitlist__count">
+        <span class="num numeral" id="waitlistCount">412</span> on the list · 91 confirmed seats
+      </span>
+      <p class="waitlist__legal">
+        We won't share your email. One launch announcement, then nothing. Unsubscribe anytime.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <div class="footer__lockup">
+        <span style="display:inline-flex; width:18px; height:18px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square">
+            <polyline points="3,16 12,4 21,16"></polyline>
+            <polyline points="3,21 12,9 21,21" opacity="0.55"></polyline>
+          </svg>
+        </span>
+        910 Academy × Cliffside Cuts
+      </div>
+      <p class="footer__strap">
+        The tenth cut isn't a city. It's the city.
+      </p>
+    </div>
+    <div>
+      <h4>Event</h4>
+      <ul>
+        <li><a href="#tickets">Tickets</a></li>
+        <li><a href="#waitlist">Waitlist</a></li>
+        <li><a href="#">Schedule</a></li>
+        <li><a href="#">Venue</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>910 Academy</h4>
+      <ul>
+        <li><a href="https://910academy.com">Main Site</a></li>
+        <li><a href="#">Workshops</a></li>
+        <li><a href="#">Skool Community</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Cliffside Cuts</h4>
+      <ul>
+        <li><a href="#">Order Edits</a></li>
+        <li><a href="#">Black Label</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__disclaimer">
+    Results featured are not typical. Individual results vary based on effort, experience, and market conditions. Testimonials reflect the experiences of specific individuals and are not guarantees of future performance. This event is not affiliated with, endorsed by, or sponsored by any third party recording artist, label, or trademark holder. All references are editorial.
+  </div>
+
+  <div class="footer__bottom">
+    <span>© 2026 Studio 910 · West Palm Beach, FL</span>
+    <span>Toronto · May 22 · 2026</span>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS
+     GSAP + Lenis from cdnjs
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.0.45/lenis.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ----------------------------------------------------------
+     Lenis smooth scroll
+     ---------------------------------------------------------- */
+  let lenis;
+  if (window.Lenis) {
+    lenis = new window.Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', window.ScrollTrigger.update);
+      window.gsap.ticker.add((time) => lenis.raf(time * 1000));
+      window.gsap.ticker.lagSmoothing(0);
+    }
+  }
+
+  /* ----------------------------------------------------------
+     Custom cursor
+     ---------------------------------------------------------- */
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let dotX = 0, dotY = 0, ringX = 0, ringY = 0;
+  let mouseX = 0, mouseY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function tickCursor() {
+    dotX += (mouseX - dotX) * 0.45;
+    dotY += (mouseY - dotY) * 0.45;
+    ringX += (mouseX - ringX) * 0.18;
+    ringY += (mouseY - ringY) * 0.18;
+    if (dot) dot.style.transform = `translate(${dotX - 3}px, ${dotY - 3}px)`;
+    if (ring) ring.style.transform = `translate(${ringX - 16}px, ${ringY - 16}px)`;
+    requestAnimationFrame(tickCursor);
+  }
+  tickCursor();
+
+  document.querySelectorAll('[data-hover], a, button, input').forEach(el => {
+    el.addEventListener('mouseenter', () => ring && ring.classList.add('is-hover'));
+    el.addEventListener('mouseleave', () => ring && ring.classList.remove('is-hover'));
+  });
+
+  /* ----------------------------------------------------------
+     Falling particles
+     ---------------------------------------------------------- */
+  const particlesEl = document.getElementById('particles');
+  if (particlesEl) {
+    const COUNT = 24;
+    for (let i = 0; i < COUNT; i++) {
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.animationDuration = (8 + Math.random() * 12) + 's';
+      s.style.animationDelay = -Math.random() * 14 + 's';
+      s.style.opacity = 0.2 + Math.random() * 0.6;
+      const size = 1 + Math.random() * 2;
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      particlesEl.appendChild(s);
+    }
+  }
+
+  /* ----------------------------------------------------------
+     Hero stagger reveal — SVG rows fade up one at a time.
+     We set js-ready on body BEFORE animating so hero is hidden
+     in the right moment, not before JS loads.
+     ---------------------------------------------------------- */
+  if (window.gsap) {
+    document.body.classList.add('js-ready');
+
+    gsap.fromTo('.hero__row',
+      { opacity: 0, y: 28 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.13,
+        ease: 'power3.out',
+        delay: 0.15,
+        onComplete: () => {
+          /* Clear inline transform so the CSS hand-printed rotations re-apply */
+          gsap.set('.hero__row', { clearProps: 'transform' });
+        }
+      }
+    );
+
+    /* ----------------------------------------------------------
+       Scroll reveals
+       ---------------------------------------------------------- */
+    if (window.ScrollTrigger) {
+      gsap.utils.toArray('.reveal-up').forEach(el => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          duration: 0.95,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 86%',
+            toggleActions: 'play none none none'
+          }
+        });
+      });
+
+      /* Cyan poster slight wobble on scroll */
+      gsap.to('.poster__title', {
+        rotation: -1.5,
+        scrollTrigger: {
+          trigger: '.poster',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1
+        }
+      });
+    }
+  }
+
+  /* ----------------------------------------------------------
+     Live clock (Eastern Time)
+     ---------------------------------------------------------- */
+  const liveTime = document.getElementById('liveTime');
+  function updateClock() {
+    if (!liveTime) return;
+    const now = new Date();
+    const fmt = new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Toronto'
+    });
+    liveTime.textContent = fmt.format(now) + ' ET';
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  /* ----------------------------------------------------------
+     Countdown to May 15, 2026 10:00 AM ET (public sale)
+     For waitlist exclusive: 9:00 AM ET
+     ---------------------------------------------------------- */
+  const target = new Date('2026-05-15T14:00:00Z'); /* 10:00 ET = 14:00 UTC */
+  const cdD = document.getElementById('cd-d');
+  const cdH = document.getElementById('cd-h');
+  const cdM = document.getElementById('cd-m');
+  const cdS = document.getElementById('cd-s');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tickCountdown() {
+    const now = new Date();
+    let diff = Math.max(0, target.getTime() - now.getTime());
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff -= d * (1000 * 60 * 60 * 24);
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    diff -= h * (1000 * 60 * 60);
+    const m = Math.floor(diff / (1000 * 60));
+    diff -= m * (1000 * 60);
+    const s = Math.floor(diff / 1000);
+    if (cdD) cdD.textContent = pad(d);
+    if (cdH) cdH.textContent = pad(h);
+    if (cdM) cdM.textContent = pad(m);
+    if (cdS) cdS.textContent = pad(s);
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  /* ----------------------------------------------------------
+     Waitlist count animation
+     ---------------------------------------------------------- */
+  function animateCount(el, to, duration = 1800) {
+    if (!el) return;
+    const from = 0;
+    const start = performance.now();
+    function step(t) {
+      const p = Math.min(1, (t - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const countEls = [
+    document.getElementById('waitlistCount'),
+    document.getElementById('waitlistCountHero')
+  ].filter(Boolean);
+
+  if (countEls.length && window.IntersectionObserver) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target, parseInt(entry.target.textContent, 10) || 412);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    countEls.forEach(el => obs.observe(el));
+  }
+
+  /* ----------------------------------------------------------
+     Waitlist form (faux submit, real wiring goes through n8n
+     webhook in production)
+     ---------------------------------------------------------- */
+  const form = document.getElementById('waitlistForm');
+  const success = document.getElementById('waitlistSuccess');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const email = (data.get('email') || '').toString().trim();
+      const name = (data.get('firstName') || '').toString().trim();
+      if (!email || !name) return;
+      /* In production: POST to /api/toronto-waitlist
+         which writes to Supabase + fires cc-toronto-waitlist webhook */
+      form.style.display = 'none';
+      if (success) success.classList.add('is-visible');
+    });
+  }
+
+  /* ----------------------------------------------------------
+     Smooth anchor scroll via Lenis
+     ---------------------------------------------------------- */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      if (lenis) {
+        lenis.scrollTo(target, { offset: -40 });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
