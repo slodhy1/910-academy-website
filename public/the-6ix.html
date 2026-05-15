@@ -1432,6 +1432,45 @@ button {
 
 
 <!-- ============================================================
+     INTAKE MODAL · purchase order form before Stripe checkout
+     Must live BEFORE the script tag below — the IIFE grabs these
+     elements with getElementById at startup.
+     ============================================================ -->
+<div class="modal" id="intakeModal" aria-hidden="true">
+  <div class="modal__backdrop" data-intake-close aria-hidden="true"></div>
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="intakeTitle">
+    <button type="button" class="modal__close" data-intake-close aria-label="Close">×</button>
+    <p class="modal__eyebrow">The 6ix · Toronto · Jun 5 &amp; 6</p>
+    <h2 class="modal__title" id="intakeTitle"><span id="intakeTicketLabel">Get Your Ticket</span></h2>
+    <p class="modal__sub">A few details before checkout. We'll forward you to Stripe right after.</p>
+
+    <form class="modal__form" id="intakeForm" novalidate>
+      <label class="modal__field">
+        <span class="modal__label">Company name</span>
+        <input name="company_name" type="text" required autocomplete="organization" maxlength="200" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Full name</span>
+        <input name="full_name" type="text" required autocomplete="name" maxlength="200" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Phone</span>
+        <input name="phone" type="tel" required autocomplete="tel" maxlength="40" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Email</span>
+        <input name="email" type="email" required autocomplete="email" maxlength="320" />
+      </label>
+
+      <div class="modal__error" id="intakeError" role="alert" hidden></div>
+
+      <button type="submit" class="modal__submit" id="intakeSubmit">Continue to Checkout</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- ============================================================
      SCRIPTS
      ============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1667,43 +1706,6 @@ button {
 
 })();
 </script>
-
-
-<!-- ============================================================
-     INTAKE MODAL · purchase order form before Stripe checkout
-     ============================================================ -->
-<div class="modal" id="intakeModal" aria-hidden="true">
-  <div class="modal__backdrop" data-intake-close aria-hidden="true"></div>
-  <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="intakeTitle">
-    <button type="button" class="modal__close" data-intake-close aria-label="Close">×</button>
-    <p class="modal__eyebrow">The 6ix · Toronto · Jun 5 &amp; 6</p>
-    <h2 class="modal__title" id="intakeTitle"><span id="intakeTicketLabel">Get Your Ticket</span></h2>
-    <p class="modal__sub">A few details before checkout. We'll forward you to Stripe right after.</p>
-
-    <form class="modal__form" id="intakeForm" novalidate>
-      <label class="modal__field">
-        <span class="modal__label">Company name</span>
-        <input name="company_name" type="text" required autocomplete="organization" maxlength="200" />
-      </label>
-      <label class="modal__field">
-        <span class="modal__label">Full name</span>
-        <input name="full_name" type="text" required autocomplete="name" maxlength="200" />
-      </label>
-      <label class="modal__field">
-        <span class="modal__label">Phone</span>
-        <input name="phone" type="tel" required autocomplete="tel" maxlength="40" />
-      </label>
-      <label class="modal__field">
-        <span class="modal__label">Email</span>
-        <input name="email" type="email" required autocomplete="email" maxlength="320" />
-      </label>
-
-      <div class="modal__error" id="intakeError" role="alert" hidden></div>
-
-      <button type="submit" class="modal__submit" id="intakeSubmit">Continue to Checkout</button>
-    </form>
-  </div>
-</div>
 
 </body>
 </html>
