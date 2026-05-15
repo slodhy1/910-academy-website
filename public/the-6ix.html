@@ -936,6 +936,160 @@ button {
    910 LOGO, reusable inline svg styling
    ============================================================ */
 .logo910 svg polygon { fill: currentColor; }
+
+/* ============================================================
+   INTAKE MODAL · purchase order form before Stripe redirect
+   ============================================================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  cursor: auto;
+}
+.modal[aria-hidden="false"] {
+  display: flex;
+}
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  background: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: clamp(1.75rem, 3.5vw, 2.5rem);
+  color: var(--white);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.85);
+}
+.modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--grey-15);
+  font-family: var(--display);
+  font-size: 1rem;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.modal__close:hover { background: rgba(255, 255, 255, 0.14); color: var(--white); }
+.modal__eyebrow {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  margin-bottom: 0.875rem;
+}
+.modal__title {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 0.625rem;
+}
+.modal__sub {
+  font-family: var(--body);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--grey-30);
+  margin-bottom: 1.75rem;
+}
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.modal__label {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+}
+.modal__field input {
+  font: inherit;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.modal__field input:focus {
+  border-color: var(--academy-blue);
+  background: rgba(255, 255, 255, 0.06);
+}
+.modal__field input::placeholder { color: var(--grey-50); }
+.modal__error {
+  font-family: var(--body);
+  font-size: 0.8125rem;
+  color: var(--red);
+  padding: 0.625rem 0.875rem;
+  background: rgba(226, 35, 26, 0.08);
+  border: 1px solid rgba(226, 35, 26, 0.3);
+  border-radius: 6px;
+}
+.modal__submit {
+  margin-top: 0.5rem;
+  padding: 1.05rem 1.5rem;
+  background: var(--red);
+  color: var(--white);
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  box-shadow:
+    2px 2px 0 rgba(160, 20, 15, 0.4),
+    -1px -1px 0 rgba(255, 255, 255, 0.18) inset;
+}
+.modal__submit:hover:not(:disabled) {
+  background: var(--blue);
+  transform: translateY(-1px);
+}
+.modal__submit:disabled { opacity: 0.6; cursor: wait; }
+
+@media (max-width: 480px) {
+  .modal { padding: 0.75rem; }
+  .modal__panel { padding: 1.5rem 1.25rem; }
+}
 </style>
 </head>
 
@@ -1394,8 +1548,162 @@ button {
     });
   });
 
+  // ----------------------------------------------------------
+  // Intake form: collect company/name/phone/email before forwarding
+  // the user to Stripe checkout. POSTs to /api/the-6ix-intake which
+  // writes to supabase + emails academy@studio910pb.com.
+  // ----------------------------------------------------------
+  const modal = document.getElementById('intakeModal');
+  const intakeForm = document.getElementById('intakeForm');
+  const intakeError = document.getElementById('intakeError');
+  const intakeSubmit = document.getElementById('intakeSubmit');
+  const intakeTicketLabel = document.getElementById('intakeTicketLabel');
+  const TICKET_LABELS = {
+    shooting: 'The Shooting Day',
+    editing: 'The Editing Day',
+    both: 'Both Days · Full Weekend',
+  };
+  let activeStripeUrl = null;
+  let activeTicketType = null;
+
+  function openIntake(stripeUrl, ticketType) {
+    if (!modal) return;
+    activeStripeUrl = stripeUrl;
+    activeTicketType = ticketType;
+    if (intakeTicketLabel) {
+      intakeTicketLabel.textContent = TICKET_LABELS[ticketType] || 'Get Your Ticket';
+    }
+    if (intakeError) {
+      intakeError.hidden = true;
+      intakeError.textContent = '';
+    }
+    if (intakeSubmit) {
+      intakeSubmit.disabled = false;
+      intakeSubmit.textContent = 'Continue to Checkout';
+    }
+    if (intakeForm) intakeForm.reset();
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      const firstInput = intakeForm && intakeForm.querySelector('input');
+      if (firstInput) firstInput.focus();
+    });
+  }
+
+  function closeIntake() {
+    if (!modal) return;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-stripe]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const stripeUrl = el.getAttribute('href');
+      const ticketType = el.dataset.stripe;
+      if (!stripeUrl || stripeUrl === '#' || !ticketType) return;
+      e.preventDefault();
+      openIntake(stripeUrl, ticketType);
+    });
+  });
+
+  document.querySelectorAll('[data-intake-close]').forEach(el => {
+    el.addEventListener('click', closeIntake);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') {
+      closeIntake();
+    }
+  });
+
+  if (intakeForm) {
+    intakeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (intakeError) { intakeError.hidden = true; intakeError.textContent = ''; }
+      if (intakeSubmit) { intakeSubmit.disabled = true; intakeSubmit.textContent = 'Saving...'; }
+
+      const data = new FormData(intakeForm);
+      const payload = {
+        ticket_type: activeTicketType,
+        company_name: String(data.get('company_name') || '').trim(),
+        full_name: String(data.get('full_name') || '').trim(),
+        phone: String(data.get('phone') || '').trim(),
+        email: String(data.get('email') || '').trim(),
+      };
+
+      try {
+        const res = await fetch('/api/the-6ix-intake', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({}));
+          if (intakeError) {
+            intakeError.textContent = errBody.error || 'Something went wrong. Try again.';
+            intakeError.hidden = false;
+          }
+          if (intakeSubmit) {
+            intakeSubmit.disabled = false;
+            intakeSubmit.textContent = 'Continue to Checkout';
+          }
+          return;
+        }
+        // Saved + emailed. Forward to Stripe in the same tab so mobile popup
+        // blockers don't strand the user.
+        if (activeStripeUrl) window.location.href = activeStripeUrl;
+      } catch (err) {
+        if (intakeError) {
+          intakeError.textContent = 'Network error. Please try again.';
+          intakeError.hidden = false;
+        }
+        if (intakeSubmit) {
+          intakeSubmit.disabled = false;
+          intakeSubmit.textContent = 'Continue to Checkout';
+        }
+      }
+    });
+  }
+
 })();
 </script>
+
+
+<!-- ============================================================
+     INTAKE MODAL · purchase order form before Stripe checkout
+     ============================================================ -->
+<div class="modal" id="intakeModal" aria-hidden="true">
+  <div class="modal__backdrop" data-intake-close aria-hidden="true"></div>
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="intakeTitle">
+    <button type="button" class="modal__close" data-intake-close aria-label="Close">×</button>
+    <p class="modal__eyebrow">The 6ix · Toronto · Jun 5 &amp; 6</p>
+    <h2 class="modal__title" id="intakeTitle"><span id="intakeTicketLabel">Get Your Ticket</span></h2>
+    <p class="modal__sub">A few details before checkout. We'll forward you to Stripe right after.</p>
+
+    <form class="modal__form" id="intakeForm" novalidate>
+      <label class="modal__field">
+        <span class="modal__label">Company name</span>
+        <input name="company_name" type="text" required autocomplete="organization" maxlength="200" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Full name</span>
+        <input name="full_name" type="text" required autocomplete="name" maxlength="200" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Phone</span>
+        <input name="phone" type="tel" required autocomplete="tel" maxlength="40" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Email</span>
+        <input name="email" type="email" required autocomplete="email" maxlength="320" />
+      </label>
+
+      <div class="modal__error" id="intakeError" role="alert" hidden></div>
+
+      <button type="submit" class="modal__submit" id="intakeSubmit">Continue to Checkout</button>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>
