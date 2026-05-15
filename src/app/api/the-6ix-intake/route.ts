@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendThe6ixIntakeNotify, type TicketType } from "@/lib/email/the-6ix-intake-notify";
+import type { TicketType } from "@/lib/email/the-6ix-intake-notify";
 
 export const runtime = "nodejs";
 
-const TICKET_TYPES = ["shooting", "editing", "both"] as const;
+const TICKET_TYPES: readonly TicketType[] = ["shooting", "editing", "both"] as const;
 
 const MAX_NAME = 200;
 const MAX_COMPANY = 200;
@@ -63,17 +63,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Could not save intake" }, { status: 500 });
   }
 
-  // Email notify in the background; we don't gate the Stripe redirect on email success.
-  const notifyResult = await sendThe6ixIntakeNotify({
-    ticketType: ticketType as TicketType,
-    companyName,
-    fullName,
-    phone,
-    email,
-  });
-  if (!notifyResult.success) {
-    console.error("[the-6ix-intake] notify failed:", notifyResult.error);
-  }
-
+  // No email here. The Stripe webhook (process-checkout.ts) flips
+  // purchased_at + fires the notify email once payment lands.
   return NextResponse.json({ ok: true, id: data.id });
 }

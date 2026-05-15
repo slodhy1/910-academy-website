@@ -53,7 +53,7 @@ export async function sendThe6ixIntakeNotify(
       from,
       to: ADMIN_EMAIL,
       replyTo: params.email,
-      subject: `The 6ix intake (${ticketLabel}): ${params.fullName}`,
+      subject: `The 6ix sold (${ticketLabel}): ${params.fullName}`,
       html,
     });
     if (error) {
