@@ -234,31 +234,37 @@ button {
   z-index: -1;
 }
 
-/* The ICEMAN poster stack, large SVG rows that stretch */
-.hero__stack {
-  width: min(86vw, calc(54vh * 1.55), 1080px);
-  aspect-ratio: 1.55 / 1;
+/* The 6ix poster — single PNG (transparent, baked-in red/blue typography) */
+.hero__poster {
   margin: auto;
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   align-self: center;
   justify-self: center;
+  padding: clamp(1rem, 3vh, 2.5rem) 0;
+  width: 100%;
 }
-.hero__row { display: block; width: 100%; height: 100%; overflow: visible; }
-.hero__row text {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 138px;
-  font-weight: 900;
-  letter-spacing: -2px;
+.hero__poster img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(82vw, 520px);
+  max-height: min(70vh, 620px);
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
 }
-.hero__row--red text { fill: var(--red); }
-.hero__row--blue text { fill: var(--blue); }
+@media (max-width: 700px) {
+  .hero__poster img {
+    max-width: 78vw;
+    max-height: 62vh;
+  }
+}
+@media (max-width: 380px) {
+  .hero__poster img { max-width: 82vw; }
+}
 
-.hero__row:nth-child(1) { transform: translateX(-0.2%) rotate(-0.15deg); }
-.hero__row:nth-child(2) { transform: translateX( 0.3%) rotate( 0.05deg); }
-.hero__row:nth-child(3) { transform: translateX(-0.15%) rotate( 0.08deg); }
-.hero__row:nth-child(4) { transform: translateX( 0.2%) rotate(-0.04deg); }
 
 .hero__foot {
   align-self: end;
@@ -909,11 +915,11 @@ button {
 .reveal-up { opacity: 0; transform: translateY(40px); }
 .reveal-fade { opacity: 0; }
 
-.js-ready .hero__row { opacity: 0; }
+.js-ready .hero__poster { opacity: 0; }
 
 .no-js .reveal-up,
 .no-js .reveal-fade,
-.no-js .hero__row {
+.no-js .hero__poster {
   opacity: 1;
   transform: none;
 }
@@ -924,8 +930,8 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .reveal-up, .reveal-fade, .hero__row,
-  .js-ready .hero__row {
+  .reveal-up, .reveal-fade, .hero__poster,
+  .js-ready .hero__poster {
     opacity: 1 !important;
   }
   .marquee__track { animation: none; }
@@ -1129,19 +1135,15 @@ button {
   <div class="hero__bg" aria-hidden="true"></div>
   <div class="hero__grain" aria-hidden="true"></div>
 
-  <div class="hero__stack" aria-label="THE 6IX · JUNE 5–6">
-    <svg class="hero__row hero__row--red" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
-      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">THE</text>
-    </svg>
-    <svg class="hero__row hero__row--red" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
-      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">6IX</text>
-    </svg>
-    <svg class="hero__row hero__row--blue" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
-      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">JUN</text>
-    </svg>
-    <svg class="hero__row hero__row--blue" viewBox="0 0 1000 156" preserveAspectRatio="none" aria-hidden="true">
-      <text x="500" y="138" text-anchor="middle" textLength="970" lengthAdjust="spacingAndGlyphs">5-6</text>
-    </svg>
+  <div class="hero__poster">
+    <img
+      src="/the-6ix/poster.png"
+      alt="THE 6IX · JUN 5–6"
+      width="654"
+      height="744"
+      decoding="async"
+      fetchpriority="high"
+    />
   </div>
 
   <div class="hero__foot">
@@ -1502,16 +1504,14 @@ button {
   if (window.gsap) {
     document.body.classList.add('js-ready');
 
-    gsap.fromTo('.hero__row',
-      { opacity: 0, y: 28 },
+    gsap.fromTo('.hero__poster',
+      { opacity: 0, y: 24 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        stagger: 0.13,
+        duration: 0.95,
         ease: 'power3.out',
         delay: 0.15,
-        onComplete: () => { gsap.set('.hero__row', { clearProps: 'transform' }); }
       }
     );
 
