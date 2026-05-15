@@ -18,7 +18,9 @@
   "redirects": [
     { "source": "/affiliate-links", "destination": "/gear", "permanent": true },
     { "source": "/skool", "destination": "/", "permanent": true },
-    { "source": "/products/build-your-instagram", "destination": "/products/instagram-masterclass", "permanent": true }
+    { "source": "/products/build-your-instagram", "destination": "/products/instagram-masterclass", "permanent": true },
+    { "source": "/iceman", "destination": "/the-6ix", "permanent": true },
+    { "source": "/iceman.html", "destination": "/the-6ix", "permanent": true }
   ],
   "headers": [
     {

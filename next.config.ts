@@ -15,7 +15,7 @@ const STATIC_PAGES = [
   "products",
   "products-archive",
   "apply-claudio",
-  "iceman",
+  "the-6ix",
 ];
 
 const nextConfig: NextConfig = {
