@@ -5,6 +5,7 @@ import {
   sendThe6ixIntakeNotify,
   type TicketType,
 } from "@/lib/email/the-6ix-intake-notify";
+import { sendThe6ixConfirm } from "@/lib/email/the-6ix-confirm";
 
 const ACCESS_LINK = "https://www.910academy.com/account?purchase=success";
 
@@ -235,16 +236,28 @@ async function reconcileThe6ixIntake(
     return;
   }
 
-  const notifyResult = await sendThe6ixIntakeNotify({
-    ticketType: row.ticket_type as TicketType,
-    companyName: row.company_name,
-    fullName: row.full_name,
-    phone: row.phone,
-    email: row.email,
-  });
+  const [notifyResult, confirmResult] = await Promise.all([
+    sendThe6ixIntakeNotify({
+      ticketType: row.ticket_type as TicketType,
+      companyName: row.company_name,
+      fullName: row.full_name,
+      phone: row.phone,
+      email: row.email,
+    }),
+    sendThe6ixConfirm({
+      to: row.email,
+      fullName: row.full_name,
+      ticketType: row.ticket_type as TicketType,
+    }),
+  ]);
+
   if (!notifyResult.success) {
-    console.error("[the-6ix-reconcile] notify email failed:", notifyResult.error);
-  } else {
+    console.error("[the-6ix-reconcile] team notify failed:", notifyResult.error);
+  }
+  if (!confirmResult.success) {
+    console.error("[the-6ix-reconcile] buyer confirm failed:", confirmResult.error);
+  }
+  if (notifyResult.success && confirmResult.success) {
     console.log(
       `[the-6ix-reconcile] sold ${row.ticket_type} to ${row.email} (intake ${row.id})`
     );
