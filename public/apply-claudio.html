@@ -1055,6 +1055,10 @@ img, video, iframe { max-width: 100%; height: auto; }
   <p class="reveal" style="color:var(--fg-muted);font-size:0.95rem;line-height:1.7;margin-bottom:var(--space-10);max-width:640px;">We review every application personally. If your business looks like a fit, we will schedule a discovery call within 48 hours to see how Claudio can help.</p>
 
   <form id="applyForm" class="coaching-form reveal" novalidate>
+    <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+      <label for="website">Website (leave this empty)</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+    </div>
     <div class="field">
       <label for="name">Full Name<span class="req">*</span></label>
       <input id="name" name="name" type="text" required maxlength="200">
@@ -1287,7 +1291,8 @@ img, video, iframe { max-width: 100%; height: auto; }
       help_type: helpType ? helpType.value : '',
       budget_range: budgetRange ? budgetRange.value : '',
       goal: form.goal.value.trim(),
-      additional_notes: form.additional_notes.value.trim()
+      additional_notes: form.additional_notes.value.trim(),
+      website: form.website ? form.website.value : ''
     };
 
     fetch('/api/claudio-application', {

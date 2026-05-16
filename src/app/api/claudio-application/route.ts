@@ -16,7 +16,39 @@ const MAX_NAME = 200;
 const MAX_EMAIL = 320;
 const MAX_SHORT = 500;
 
+const ALLOWED_HOSTS = new Set([
+  "www.910academy.com",
+  "910academy.com",
+  "localhost:3000",
+  "localhost:3001",
+]);
+
+function isAllowedOrigin(req: Request): boolean {
+  const origin = req.headers.get("origin");
+  const referer = req.headers.get("referer");
+  const source = origin || referer;
+  if (!source) return false;
+  let host: string;
+  try {
+    host = new URL(source).host;
+  } catch {
+    return false;
+  }
+  if (ALLOWED_HOSTS.has(host)) return true;
+  // Vercel preview deployments
+  if (host.endsWith(".vercel.app")) return true;
+  return false;
+}
+
 export async function POST(req: Request) {
+  if (!isAllowedOrigin(req)) {
+    console.warn("[claudio-application] rejected: bad origin", {
+      origin: req.headers.get("origin"),
+      referer: req.headers.get("referer"),
+    });
+    return NextResponse.json({ ok: true }, { status: 200 });
+  }
+
   let body: unknown;
   try {
     body = await req.json();
@@ -28,6 +60,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
   const b = body as Record<string, unknown>;
+
+  // Honeypot: real users can't see/fill the `website` field. Bots will.
+  if (String(b.website ?? "").trim() !== "") {
+    console.warn("[claudio-application] rejected: honeypot tripped", {
+      website: String(b.website ?? "").slice(0, 80),
+    });
+    return NextResponse.json({ ok: true }, { status: 200 });
+  }
 
   const name = String(b.name ?? "").trim();
   const email = String(b.email ?? "").trim().toLowerCase();
