@@ -22,7 +22,9 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
     "src/app/api/claudio-application/route.ts": ["./emails/**/*.html"],
-    "src/app/admin/(authed)/customers/[id]/page.tsx": ["./emails/**/*.html"],
+    // Note: admin grant notify inlines its template directly (parens/brackets
+    // in the route-group path break the glob matcher, so a trace include here
+    // would silently match nothing).
   },
   async rewrites() {
     return [
