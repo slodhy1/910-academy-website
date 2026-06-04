@@ -118,7 +118,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .aoc-lockup .mark { font-size: 2.4rem; font-weight: 700; letter-spacing: 0.18em; color: var(--fg); }
 .hero-headline { font-size: clamp(2.8rem, 9vw, 6.8rem); font-weight: 300; text-transform: uppercase; line-height: 0.98; letter-spacing: var(--tracking-tight); max-width: 14ch; text-shadow: 0 2px 40px rgba(0,0,0,0.5); }
 .hero-headline .em { color: var(--accent); }
-.hero-sub { margin-top: var(--space-8); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; color: var(--fg); max-width: 28ch; }
+.hero-sub { display: none; margin-top: var(--space-8); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; color: var(--fg); max-width: 28ch; }
+/* spec: "It will be worth the wait" sits bottom-right of the hero on desktop */
+.hero-aside { position: absolute; right: clamp(24px, 5vw, 80px); bottom: clamp(64px, 13vh, 150px); z-index: 2; max-width: 13ch; text-align: right; font-size: clamp(1.5rem, 2.8vw, 2.4rem); font-weight: 300; line-height: 1.2; color: var(--fg); text-shadow: 0 2px 36px rgba(0,0,0,0.75); }
+.hero-aside::before { content: ''; display: block; width: 56px; height: 1px; background: var(--accent); margin: 0 0 var(--space-5) auto; }
 .hero-support { margin-top: var(--space-5); font-size: 1rem; color: var(--fg-muted); max-width: 46ch; line-height: 1.6; }
 .hero-cta-row { margin-top: var(--space-10); display: flex; flex-direction: column; align-items: flex-start; }
 
@@ -236,6 +239,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .section { padding: var(--space-20) 20px; }
   .hero { min-height: auto; padding: calc(var(--bar-h) + var(--space-12)) 20px var(--space-16); }
   .hero-headline { font-size: clamp(2.4rem, 12vw, 3.6rem); max-width: 100%; }
+  .hero-aside { display: none; }
+  .hero-sub { display: block; }
   .hero-sub, .hero-support { max-width: 100%; }
   .hero-cta-row { align-items: stretch; }
   .hero-cta-row .aoc-cta { width: 100%; }
@@ -313,6 +318,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <p class="aoc-cta-note">First access the moment the doors open.</p>
     </div>
   </div>
+  <!-- spec: subhead positioned bottom-right of the hero (desktop) -->
+  <p class="hero-aside">It will be worth the wait.</p>
 </header>
 
 <!-- ===================== STATS STRIP ===================== -->
