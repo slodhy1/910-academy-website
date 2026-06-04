@@ -3,22 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent on Camera · The game is about to change</title>
+<title>AOC · The game is about to change</title>
 <meta name="description" content="The game is about to change. 120 modules. The skill that changes everything. Doors open July 1 — save your seat and get first access the moment they open.">
 
 <!-- Social preview -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Agent on Camera">
+<meta property="og:site_name" content="AOC · 910 Academy">
 <meta property="og:url" content="https://910academy.com/aoc">
-<meta property="og:title" content="Agent on Camera · The game is about to change">
+<meta property="og:title" content="AOC · The game is about to change">
 <meta property="og:description" content="120 modules. The skill that changes everything. Doors open July 1. It will be worth the wait.">
-<meta property="og:image" content="https://910academy.com/og-images/910-og.jpg">
+<meta property="og:image" content="https://910academy.com/images/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Agent on Camera · The game is about to change">
+<meta name="twitter:title" content="AOC · The game is about to change">
 <meta name="twitter:description" content="120 modules. The skill that changes everything. Doors open July 1.">
 
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/logo-white.svg">
+<link rel="preload" as="image" href="/images/hero-bg.webp">
 <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -32,43 +33,22 @@
    DESIGN TOKENS  (canonical 910academy.com system)
    ===================================================== */
 :root {
-  --bg-deep: #050506;
-  --bg-base: #0a0a0a;
-  --bg-elevated: #0f0f10;
-  --accent: #38B6FF;
-  --accent-hover: #5ac4ff;
-  --accent-glow: rgba(56, 182, 255, 0.15);
-  --accent-subtle: rgba(56, 182, 255, 0.04);
-  --accent-muted: rgba(56, 182, 255, 0.2);
-  --accent-border: rgba(56, 182, 255, 0.4);
+  --bg-deep: #050506; --bg-base: #0a0a0a; --bg-elevated: #0f0f10;
+  --accent: #38B6FF; --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15); --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2); --accent-border: rgba(56, 182, 255, 0.4);
   --accent-border-subtle: rgba(56, 182, 255, 0.12);
-  --fg: #FFFFFF;
-  --fg-muted: rgba(255, 255, 255, 0.7);
-  --fg-dim: rgba(255, 255, 255, 0.4);
-  --fg-ghost: rgba(255, 255, 255, 0.2);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.12);
-
-  --glass-blur: blur(20px);
-  --glass-blur-heavy: blur(30px);
-  --glass-saturate: saturate(180%);
-
-  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;  --space-4: 16px;
-  --space-5: 20px; --space-6: 24px; --space-8: 32px;  --space-10: 40px;
-  --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
-
+  --fg: #FFFFFF; --fg-muted: rgba(255, 255, 255, 0.7); --fg-dim: rgba(255, 255, 255, 0.4); --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08); --border-hover: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(20px); --glass-blur-heavy: blur(30px); --glass-saturate: saturate(180%);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
   --radius-sm: 8px; --radius-md: 16px; --radius-lg: 20px; --radius-xl: 24px; --radius-pill: 100px;
-
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-
-  --font: 'Montserrat', sans-serif;
-  --leading-tight: 1.1em;
-  --leading-normal: 1.4em;
-  --tracking-tight: -0.05px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif; --leading-tight: 1.1em; --leading-normal: 1.4em; --tracking-tight: -0.05px;
+  --bar-h: 56px;
 }
 
-/* ========== RESET & BASE ========== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
@@ -76,63 +56,91 @@ body { background: var(--bg-base); color: var(--fg); font-family: var(--font); f
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
+.fadeup { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+.fadeup.in { opacity: 1; transform: translateY(0); }
 
-/* ========== BACKGROUND DEPTH ORBS ========== */
+/* ========== ORBS ========== */
 .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
-.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.02); filter: blur(120px); }
-.bg-orb-2 { top: 35%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
-.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56, 182, 255, 0.012); filter: blur(100px); animation-delay: -8s; }
-@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
+.bg-orb-1 { top: 6%; left: -5%; width: 600px; height: 600px; background: rgba(56,182,255,0.025); filter: blur(120px); }
+.bg-orb-2 { top: 45%; right: -10%; width: 800px; height: 800px; background: rgba(56,182,255,0.018); filter: blur(150px); animation-delay: -4s; }
+.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56,182,255,0.012); filter: blur(100px); animation-delay: -8s; }
+@keyframes orbPulse { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.08) translate(10px,-10px); } }
 
-/* ========== SHARED PRIMARY CTA (the single accent eye-magnet) ========== */
-.aoc-cta {
-  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-  font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: #04131d; background: var(--accent);
-  padding: 18px 44px; border-radius: var(--radius-pill);
-  box-shadow: 0 14px 40px var(--accent-glow);
-  transition: all 0.25s ease;
-}
-.aoc-cta:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 18px 50px rgba(56,182,255,0.28); }
-.aoc-cta-note { margin-top: var(--space-4); font-size: 0.8rem; font-weight: 400; color: var(--fg-dim); letter-spacing: 0.02em; }
+/* ========== SHARED PRIMARY CTA ========== */
+.aoc-cta { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); padding: 18px 44px; border-radius: var(--radius-pill); box-shadow: 0 14px 40px var(--accent-glow); transition: all 0.25s ease; }
+.aoc-cta:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 18px 50px rgba(56,182,255,0.3); }
+.aoc-cta svg { width: 16px; height: 16px; }
+.aoc-cta-note { margin-top: var(--space-4); font-size: 0.8rem; color: var(--fg-dim); letter-spacing: 0.02em; }
 
-/* ========== SECTION SCAFFOLD (matches homepage "THE EXTRAS" treatment) ========== */
+/* ========== STICKY COUNTDOWN HEADER BAR ========== */
+.countbar { position: fixed; top: 0; left: 0; width: 100%; height: var(--bar-h); z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding: 0 var(--space-8);
+  background: linear-gradient(90deg, rgba(56,182,255,0.10), rgba(10,10,10,0.85) 55%);
+  backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-bottom: 1px solid var(--accent-border-subtle); }
+.countbar-left { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.countbar-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2s ease-in-out infinite; flex: none; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.countbar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.countbar-timer { display: flex; align-items: center; gap: var(--space-4); margin-left: auto; }
+.countbar-clock { display: flex; align-items: baseline; gap: var(--space-3); font-variant-numeric: tabular-nums; }
+.countbar-clock .seg { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.countbar-clock .seg b { font-size: 18px; font-weight: 700; color: var(--fg); }
+.countbar-clock .seg span { font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-dim); margin-top: 3px; }
+.countbar-clock .colon { font-size: 16px; font-weight: 300; color: var(--accent); align-self: center; }
+.countbar-cta { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); padding: 9px 18px; border-radius: var(--radius-pill); transition: all 0.2s ease; white-space: nowrap; }
+.countbar-cta:hover { background: var(--accent-hover); }
+.countbar-open { display: none; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.countbar.is-open .countbar-timer { display: none; }
+.countbar.is-open .countbar-open { display: block; }
+
+/* ========== SECTION SCAFFOLD ========== */
 .section { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: var(--space-24) var(--space-10); }
-.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: var(--space-4); }
+.section-divider { max-width: 1180px; margin: 0 auto; height: 1px; background: var(--border); border: none; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
 .section-heading { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 300; text-transform: uppercase; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
-.section-sub { font-size: 1.05rem; font-weight: 400; color: var(--fg-muted); max-width: 560px; line-height: var(--leading-normal); margin-top: var(--space-5); }
+.section-sub { font-size: 1.05rem; color: var(--fg-muted); max-width: 560px; line-height: var(--leading-normal); margin-top: var(--space-5); }
 .section-cta-row { margin-top: var(--space-12); }
 
-/* ========== HERO ========== */
-.hero { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: var(--space-24) var(--space-10) var(--space-20); min-height: 92vh; min-height: 92svh; display: flex; flex-direction: column; justify-content: center; }
-/* TODO: replace this text lockup with the real AOC logo asset when it lands. */
-.aoc-lockup { font-size: 13px; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-10); }
-.hero-countbar { display: inline-flex; align-items: center; gap: var(--space-3); padding: 10px 18px; border: 1px solid var(--accent-border-subtle); background: var(--accent-subtle); border-radius: var(--radius-pill); margin-bottom: var(--space-8); align-self: flex-start; }
-.hero-countbar .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-.hero-countbar .label { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); }
-.hero-headline { font-size: clamp(2.6rem, 9vw, 6.5rem); font-weight: 300; text-transform: uppercase; line-height: 1.02; letter-spacing: var(--tracking-tight); max-width: 16ch; }
-.hero-sub { margin-top: var(--space-8); font-size: clamp(1.05rem, 1.8vw, 1.4rem); font-weight: 300; color: var(--fg-muted); max-width: 32ch; }
-.hero-support { margin-top: var(--space-5); font-size: 1rem; font-weight: 400; color: var(--fg-dim); max-width: 48ch; line-height: 1.6; }
+/* ========== HERO (cinematic video) ========== */
+.hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; overflow: hidden; padding: calc(var(--bar-h) + var(--space-16)) var(--space-10) var(--space-20); background: #000; }
+.hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+.hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(5,5,6,0.92) 0%, rgba(5,5,6,0.72) 42%, rgba(5,5,6,0.25) 100%),
+    linear-gradient(0deg, rgba(5,5,6,0.95) 0%, rgba(5,5,6,0) 38%),
+    radial-gradient(60% 60% at 18% 50%, rgba(56,182,255,0.12), transparent 70%); }
+.hero-content { position: relative; z-index: 2; max-width: 720px; width: 100%; }
+/* "AOC" wordmark — TODO: swap for the real AOC logo asset when it lands */
+.aoc-lockup { display: inline-flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-8); }
+.aoc-lockup .mark { font-size: 2.4rem; font-weight: 700; letter-spacing: 0.18em; color: var(--fg); }
+.hero-headline { font-size: clamp(2.8rem, 9vw, 6.8rem); font-weight: 300; text-transform: uppercase; line-height: 0.98; letter-spacing: var(--tracking-tight); max-width: 14ch; text-shadow: 0 2px 40px rgba(0,0,0,0.5); }
+.hero-headline .em { color: var(--accent); }
+.hero-sub { margin-top: var(--space-8); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; color: var(--fg); max-width: 28ch; }
+.hero-support { margin-top: var(--space-5); font-size: 1rem; color: var(--fg-muted); max-width: 46ch; line-height: 1.6; }
 .hero-cta-row { margin-top: var(--space-10); display: flex; flex-direction: column; align-items: flex-start; }
 
-/* ========== TRUST BAR ========== */
-.trustbar { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 var(--space-10) var(--space-8); }
-.trustbar-inner { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: var(--space-6) 0; text-align: center; }
-.trustbar-text { font-size: 0.9rem; font-weight: 500; letter-spacing: 0.04em; color: var(--fg-muted); }
-.trustbar-text strong { color: var(--fg); font-weight: 700; }
+/* ========== STATS STRIP ========== */
+.stats { position: relative; z-index: 2; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(56,182,255,0.02); }
+.stats-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); }
+.stat { padding: var(--space-12) var(--space-8); text-align: center; }
+.stat + .stat { border-left: 1px solid var(--border); }
+.stat-num { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 300; line-height: 1; color: var(--fg); letter-spacing: var(--tracking-tight); }
+.stat-num .u { color: var(--accent); }
+.stat-key { margin-top: var(--space-4); font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
 
-/* ========== BENEFIT CARDS (homepage perk-card vocabulary) ========== */
+/* ========== BENEFIT CARDS ========== */
 .perks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-top: var(--space-16); }
-.perk-card { padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); transition: all 0.3s var(--ease-smooth); }
-.perk-card:hover { border-color: var(--accent-border-subtle); background: var(--accent-subtle); transform: translateY(-3px); }
-.perk-icon { width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); margin-bottom: var(--space-5); color: var(--accent); transition: all 0.3s var(--ease-smooth); }
+.perk-card { padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)); transition: all 0.3s var(--ease-smooth); }
+.perk-card:hover { border-color: var(--accent-border-subtle); transform: translateY(-4px); box-shadow: 0 18px 50px rgba(0,0,0,0.4); }
+.perk-icon { width: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); margin-bottom: var(--space-5); color: var(--accent); transition: all 0.3s var(--ease-smooth); }
 .perk-card:hover .perk-icon { background: var(--accent-muted); border-color: var(--accent-border); }
-.perk-icon svg { width: 22px; height: 22px; }
-.perk-num { font-size: 1.4rem; font-weight: 300; }
-.perk-title { font-size: 1.05rem; font-weight: 700; color: var(--fg); margin-bottom: var(--space-2); line-height: 1.3; }
-.perk-desc { font-size: 0.9rem; font-weight: 400; color: var(--fg-muted); line-height: 1.55; }
+.perk-icon svg { width: 24px; height: 24px; }
+.perk-num { font-size: 1.5rem; font-weight: 300; }
+.perk-title { font-size: 1.1rem; font-weight: 700; color: var(--fg); margin-bottom: var(--space-2); line-height: 1.3; }
+.perk-desc { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.55; }
 
 /* ========== BEFORE / AFTER ========== */
 .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-top: var(--space-16); }
@@ -143,54 +151,56 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .compare-col.before .compare-tag { color: var(--fg-dim); }
 .compare-col.after .compare-tag { color: var(--accent); }
 .compare-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-4); }
-.compare-list li { font-size: 1rem; font-weight: 400; line-height: 1.5; padding-left: var(--space-6); position: relative; }
+.compare-list li { font-size: 1rem; line-height: 1.5; padding-left: var(--space-6); position: relative; }
 .compare-col.before .compare-list li { color: var(--fg-dim); }
 .compare-col.before .compare-list li::before { content: '–'; position: absolute; left: 0; color: var(--fg-ghost); }
 .compare-col.after .compare-list li { color: var(--fg); }
 .compare-col.after .compare-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
 
-/* ========== COACH ========== */
-.coach { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: var(--space-16); align-items: center; margin-top: var(--space-16); }
-.coach-photo { aspect-ratio: 4 / 5; border-radius: var(--radius-lg); border: 1px solid var(--border); background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.coach-photo .ph { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-ghost); }
+/* ========== COACH (Claudio photo) ========== */
+.coach { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: var(--space-16); align-items: center; }
+.coach-photo { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 80px -30px rgba(0,0,0,0.9); }
+.coach-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center top; }
+.coach-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(5,5,6,0.55)); pointer-events: none; }
+.coach-photo .badge { position: absolute; left: var(--space-5); bottom: var(--space-5); z-index: 2; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg); background: rgba(0,0,0,0.5); border: 1px solid var(--accent-border-subtle); padding: 8px 14px; border-radius: var(--radius-pill); backdrop-filter: blur(8px); }
 .coach-body p { color: var(--fg-muted); line-height: 1.7; margin-bottom: var(--space-5); }
 .coach-body p strong { color: var(--fg); font-weight: 600; }
+.coach-body .section-label { margin-bottom: var(--space-4); }
+.coach-body .section-heading { margin-bottom: var(--space-6); }
 
-/* ========== DETAILS (WHAT / WHEN / WHERE) ========== */
+/* ========== DETAILS ========== */
 .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-top: var(--space-16); }
 .detail-box { padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); }
 .detail-key { font-size: 11px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
-.detail-val { font-size: 1.05rem; font-weight: 400; color: var(--fg-muted); line-height: 1.5; }
+.detail-val { font-size: 1.05rem; color: var(--fg-muted); line-height: 1.5; }
 .detail-val strong { display: block; color: var(--fg); font-weight: 600; font-size: 1.2rem; margin-bottom: var(--space-2); }
 
-/* ========== COUNTDOWN ========== */
-.aoc-countdown { text-align: center; }
-.aoc-countdown-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: var(--space-5); }
-.aoc-countdown-units { display: flex; justify-content: center; gap: var(--space-6); }
-.cd-unit { display: flex; flex-direction: column; align-items: center; min-width: 64px; }
-.cd-num { font-size: clamp(2rem, 5vw, 3rem); font-weight: 300; color: var(--fg); font-variant-numeric: tabular-nums; line-height: 1; }
-.cd-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-top: var(--space-3); }
-.aoc-doors-open { text-align: center; }
-.aoc-doors-title { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); color: var(--accent); }
-
 /* ========== FINAL CTA ========== */
-.final { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10) var(--space-32); }
+.final { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10) var(--space-32); overflow: hidden; }
+.final::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 80% at 50% 0%, rgba(56,182,255,0.10), transparent 70%); }
 .final-inner { max-width: 760px; margin: 0 auto; }
-.final-heading { font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 300; text-transform: uppercase; line-height: 1.05; letter-spacing: var(--tracking-tight); }
+.final-heading { font-size: clamp(2.4rem, 6vw, 4.6rem); font-weight: 300; text-transform: uppercase; line-height: 1.03; letter-spacing: var(--tracking-tight); }
 .final-sub { font-size: 1.1rem; font-weight: 300; color: var(--fg-muted); margin-top: var(--space-6); }
-.final .aoc-countdown, .final .aoc-doors-open { margin-top: var(--space-12); }
+.bigcount { margin-top: var(--space-12); }
+.bigcount-units { display: flex; justify-content: center; gap: var(--space-8); }
+.bc-unit { display: flex; flex-direction: column; align-items: center; min-width: 72px; }
+.bc-num { font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 300; color: var(--fg); font-variant-numeric: tabular-nums; line-height: 1; }
+.bc-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); margin-top: var(--space-3); }
+.bigcount-doors { display: none; }
+.bigcount.is-open .bigcount-units { display: none; }
+.bigcount.is-open .bigcount-doors { display: block; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 300; text-transform: uppercase; color: var(--accent); }
 .final .aoc-cta { margin-top: var(--space-12); }
 
-/* ========== FOOTER (minimal — standalone, no nav/socials/credit) ========== */
+/* ========== FOOTER ========== */
 .footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10); text-align: center; }
-.footer-copy { font-size: 12px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.footer-copy { font-size: 12px; color: var(--fg-ghost); letter-spacing: 0.04em; }
 .footer-copy a { color: var(--fg-dim); text-decoration: underline; text-underline-offset: 2px; }
 .footer-copy a:hover { color: var(--accent); }
 
-/* ========== MODAL (the-6ix intake pattern, email-only) ========== */
+/* ========== MODAL ========== */
 .modal { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: clamp(1rem, 4vw, 2.5rem); }
 .modal[aria-hidden="false"] { display: flex; }
-.modal__backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); cursor: pointer; }
+.modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.78); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); cursor: pointer; }
 .modal__panel { position: relative; width: 100%; max-width: 440px; max-height: calc(100vh - 2rem); overflow-y: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: clamp(1.75rem, 3.5vw, 2.5rem); box-shadow: 0 30px 80px -20px rgba(0,0,0,0.85); }
 .modal__close { position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 100px; background: rgba(255,255,255,0.06); color: var(--fg-dim); font-size: 1.1rem; line-height: 1; transition: all 0.2s ease; }
 .modal__close:hover { background: rgba(255,255,255,0.14); color: var(--fg); }
@@ -214,28 +224,37 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 @media (max-width: 1024px) {
   .perks-grid { grid-template-columns: repeat(2, 1fr); }
   .coach { grid-template-columns: 1fr; gap: var(--space-10); }
-  .coach-photo { max-width: 360px; }
+  .coach-photo { max-width: 420px; }
 }
 @media (max-width: 768px) {
+  :root { --bar-h: 52px; }
+  .countbar { padding: 0 16px; gap: var(--space-3); }
+  .countbar-label { font-size: 9px; letter-spacing: 0.1em; }
+  .countbar-clock .seg b { font-size: 15px; }
+  .countbar-cta { display: none; }
+  .countbar-clock { gap: var(--space-2); }
   .section { padding: var(--space-20) 20px; }
-  .hero { min-height: auto; padding: 64px 20px var(--space-16); }
-  .hero-headline { font-size: clamp(2.1rem, 11vw, 3.2rem); max-width: 100%; }
+  .hero { min-height: auto; padding: calc(var(--bar-h) + var(--space-12)) 20px var(--space-16); }
+  .hero-headline { font-size: clamp(2.4rem, 12vw, 3.6rem); max-width: 100%; }
   .hero-sub, .hero-support { max-width: 100%; }
   .hero-cta-row { align-items: stretch; }
   .hero-cta-row .aoc-cta { width: 100%; }
-  .trustbar { padding: 0 20px var(--space-6); }
+  .stats-inner { grid-template-columns: 1fr; }
+  .stat + .stat { border-left: none; border-top: 1px solid var(--border); }
+  .stat { padding: var(--space-10) var(--space-8); }
   .perks-grid { grid-template-columns: 1fr; }
   .compare-grid { grid-template-columns: 1fr; }
   .detail-grid { grid-template-columns: 1fr; }
   .perk-card, .compare-col, .detail-box { padding: var(--space-8) var(--space-6); }
-  .aoc-countdown-units { gap: var(--space-4); }
-  .cd-unit { min-width: 56px; }
+  .bigcount-units { gap: var(--space-5); }
+  .bc-unit { min-width: 60px; }
   .final { padding: var(--space-20) 20px var(--space-24); }
   .final .aoc-cta, .section-cta-row .aoc-cta { width: 100%; }
   .footer { padding: var(--space-10) 20px; }
 }
 @media (max-width: 480px) {
-  .cd-unit { min-width: 48px; }
+  .countbar-clock .colon { display: none; }
+  .countbar-clock { gap: var(--space-3); }
 }
 </style>
 </head>
@@ -243,12 +262,32 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- ============================================================
      AOC LANDING PAGE — standalone (intentionally NO site nav).
-     PLACEHOLDER COPY: confirm final positioning, and drop in real
-     social-proof numbers, testimonials, and Claudio's full bio where
-     marked TODO below. No fabricated stats are used.
+     PLACEHOLDER COPY: drop in real social-proof numbers,
+     testimonials, and Claudio's full bio where marked TODO.
+     No fabricated stats are used.
      ============================================================ -->
 
-<!-- Background Depth Orbs -->
+<!-- Sticky countdown header bar -->
+<div class="countbar" id="countbar">
+  <div class="countbar-left">
+    <span class="countbar-dot"></span>
+    <span class="countbar-label">Doors open July 1 · 8:00 PM ET</span>
+  </div>
+  <div class="countbar-timer">
+    <div class="countbar-clock">
+      <span class="seg"><b class="js-cd-days">00</b><span>Days</span></span>
+      <span class="colon">:</span>
+      <span class="seg"><b class="js-cd-hours">00</b><span>Hrs</span></span>
+      <span class="colon">:</span>
+      <span class="seg"><b class="js-cd-mins">00</b><span>Min</span></span>
+      <span class="colon">:</span>
+      <span class="seg"><b class="js-cd-secs">00</b><span>Sec</span></span>
+    </div>
+    <button type="button" class="countbar-cta" data-open-seat>Save My Seat</button>
+  </div>
+  <span class="countbar-open">Doors are open →</span>
+</div>
+
 <div class="bg-orbs">
   <div class="bg-orb bg-orb-1"></div>
   <div class="bg-orb bg-orb-2"></div>
@@ -257,93 +296,60 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
-  <!-- TODO: swap text lockup for the real AOC logo asset -->
-  <p class="aoc-lockup">Agent on Camera</p>
-
-  <span class="hero-countbar">
-    <span class="dot"></span>
-    <span class="label">Doors open July 1 · 8:00 PM ET</span>
-  </span>
-
-  <h1 class="hero-headline">The game is about to change</h1>
-  <p class="hero-sub">It will be worth the wait.</p>
-  <p class="hero-support">120 modules. One skill that changes everything. The doors open July 1 — and the seats go to the list first.</p>
-
-  <div class="hero-cta-row">
-    <button type="button" class="aoc-cta" data-open-seat>Save My Seat</button>
-    <p class="aoc-cta-note">First access the moment the doors open.</p>
+  <video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="/images/hero-bg.webp">
+    <source src="/hero-bg.mp4" type="video/mp4">
+  </video>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <!-- TODO: swap "AOC" wordmark for the real AOC logo asset -->
+    <span class="aoc-lockup"><span class="mark">AOC</span></span>
+    <h1 class="hero-headline">The game is <span class="em">about</span> to change</h1>
+    <p class="hero-sub">It will be worth the wait.</p>
+    <p class="hero-support">120 modules. One skill that changes everything. The doors open July 1 — and the seats go to the list first.</p>
+    <div class="hero-cta-row">
+      <button type="button" class="aoc-cta" data-open-seat>Save My Seat
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="aoc-cta-note">First access the moment the doors open.</p>
+    </div>
   </div>
 </header>
 
-<!-- ===================== TRUST BAR ===================== -->
-<!-- TODO: replace with real proof when available (member count, ratings, logos). Kept honest for now. -->
-<div class="trustbar">
-  <div class="trustbar-inner">
-    <p class="trustbar-text">From <strong>Claudio Rivera</strong> and the team behind <strong>910 Academy</strong>.</p>
+<!-- ===================== STATS STRIP ===================== -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">120</div><div class="stat-key">Modules</div></div>
+    <div class="stat"><div class="stat-num">July&nbsp;1</div><div class="stat-key">Doors Open</div></div>
+    <div class="stat"><div class="stat-num">8<span class="u">PM</span> ET</div><div class="stat-key">Go Live</div></div>
   </div>
 </div>
 
 <!-- ===================== WHAT'S INSIDE ===================== -->
 <section class="section">
-  <p class="section-label">Inside Agent on Camera</p>
-  <h2 class="section-heading">The skill that<br>changes everything</h2>
-  <p class="section-sub">120 modules built to take you from camera-shy to camera-ready — and everything that comes after.</p>
+  <p class="section-label fadeup">Inside AOC</p>
+  <h2 class="section-heading fadeup">The skill that<br>changes everything</h2>
+  <p class="section-sub fadeup">120 modules built to take you from camera-shy to camera-ready — and everything that comes after.</p>
 
   <div class="perks-grid">
-    <div class="perk-card">
-      <div class="perk-icon"><span class="perk-num">120</span></div>
-      <h3 class="perk-title">120 Modules</h3>
-      <p class="perk-desc">A complete, step-by-step path. Nothing left to guess, nothing left out.</p>
-    </div>
-    <div class="perk-card">
-      <div class="perk-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
-      </div>
-      <h3 class="perk-title">On-Camera Confidence</h3>
-      <p class="perk-desc">Stop freezing up. Learn to show up on camera like it's second nature.</p>
-    </div>
-    <div class="perk-card">
-      <div class="perk-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-      </div>
-      <h3 class="perk-title">A Repeatable System</h3>
-      <p class="perk-desc">Frameworks you can run again and again — not one-off tricks.</p>
-    </div>
-    <div class="perk-card">
-      <div class="perk-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-      </div>
-      <h3 class="perk-title">Built For You</h3>
-      <p class="perk-desc">Made for the people who have to be seen to win. <!-- TODO: confirm exact audience copy --></p>
-    </div>
-    <div class="perk-card">
-      <div class="perk-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-      </div>
-      <h3 class="perk-title">Momentum, Fast</h3>
-      <p class="perk-desc">Designed so you see a difference early — not six months from now.</p>
-    </div>
-    <div class="perk-card">
-      <div class="perk-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21l2.3-7.1-6-4.5h7.6z"></path></svg>
-      </div>
-      <h3 class="perk-title">First Through The Doors</h3>
-      <p class="perk-desc">The list gets in before anyone else — the moment doors open July 1.</p>
-    </div>
+    <div class="perk-card fadeup"><div class="perk-icon"><span class="perk-num">120</span></div><h3 class="perk-title">120 Modules</h3><p class="perk-desc">A complete, step-by-step path. Nothing left to guess, nothing left out.</p></div>
+    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></div><h3 class="perk-title">On-Camera Confidence</h3><p class="perk-desc">Stop freezing up. Learn to show up on camera like it's second nature.</p></div>
+    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div><h3 class="perk-title">A Repeatable System</h3><p class="perk-desc">Frameworks you can run again and again — not one-off tricks.</p></div>
+    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="perk-title">Built For You</h3><p class="perk-desc">Made for the people who have to be seen to win. <!-- TODO: confirm audience copy --></p></div>
+    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><h3 class="perk-title">Momentum, Fast</h3><p class="perk-desc">Designed so you see a difference early — not six months from now.</p></div>
+    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21l2.3-7.1-6-4.5h7.6z"></path></svg></div><h3 class="perk-title">First Through The Doors</h3><p class="perk-desc">The list gets in before anyone else — the moment doors open July 1.</p></div>
   </div>
 
-  <div class="section-cta-row">
-    <button type="button" class="aoc-cta" data-open-seat>Save My Seat</button>
-  </div>
+  <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Save My Seat</button></div>
 </section>
+
+<hr class="section-divider">
 
 <!-- ===================== BEFORE / AFTER ===================== -->
 <section class="section">
-  <p class="section-label">The shift</p>
-  <h2 class="section-heading">What changes</h2>
-
+  <p class="section-label fadeup">The shift</p>
+  <h2 class="section-heading fadeup">What changes</h2>
   <div class="compare-grid">
-    <div class="compare-col before">
+    <div class="compare-col before fadeup">
       <p class="compare-tag">Before</p>
       <ul class="compare-list">
         <li>Camera-shy. Posting nothing.</li>
@@ -352,7 +358,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         <li>Guessing at what actually works.</li>
       </ul>
     </div>
-    <div class="compare-col after">
+    <div class="compare-col after fadeup">
       <p class="compare-tag">After</p>
       <ul class="compare-list">
         <li>On camera with confidence.</li>
@@ -362,56 +368,41 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       </ul>
     </div>
   </div>
-
-  <div class="section-cta-row">
-    <button type="button" class="aoc-cta" data-open-seat>Save My Seat</button>
-  </div>
+  <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Save My Seat</button></div>
 </section>
+
+<hr class="section-divider">
 
 <!-- ===================== COACH ===================== -->
 <section class="section">
-  <p class="section-label">Your coach</p>
-  <h2 class="section-heading">Who is Claudio</h2>
-
   <div class="coach">
-    <!-- TODO: drop in a real photo of Claudio (e.g. /images/claudio.webp) -->
-    <div class="coach-photo"><span class="ph">Photo</span></div>
-    <div class="coach-body">
+    <div class="coach-photo fadeup">
+      <img src="/images/coaching.webp" alt="Claudio Rivera" width="1200" height="800" loading="lazy" decoding="async">
+      <span class="badge">Claudio Rivera</span>
+    </div>
+    <div class="coach-body fadeup">
+      <p class="section-label">Your coach</p>
+      <h2 class="section-heading">Who is Claudio</h2>
       <p><strong>Claudio Rivera</strong> is the founder of 910 Academy.</p>
       <!-- TODO: replace with Claudio's real bio + verified numbers. No invented stats. -->
-      <p>Add the full story here: where he started, what he's built, and why Agent on Camera exists. Keep it specific and true — real milestones land harder than hype.</p>
+      <p>Add the full story here: where he started, what he's built, and why AOC exists. Keep it specific and true — real milestones land harder than hype.</p>
       <p>It will be worth the wait.</p>
+      <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Save My Seat</button></div>
     </div>
-  </div>
-
-  <div class="section-cta-row">
-    <button type="button" class="aoc-cta" data-open-seat>Save My Seat</button>
   </div>
 </section>
 
+<hr class="section-divider">
+
 <!-- ===================== DETAILS ===================== -->
 <section class="section">
-  <p class="section-label">The details</p>
-  <h2 class="section-heading">When the doors open</h2>
-
+  <p class="section-label fadeup">The details</p>
+  <h2 class="section-heading fadeup">When the doors open</h2>
   <div class="detail-grid">
-    <div class="detail-box">
-      <p class="detail-key">What</p>
-      <p class="detail-val"><strong>Agent on Camera</strong>120 modules. The skill that changes everything.</p>
-    </div>
-    <div class="detail-box">
-      <p class="detail-key">When</p>
-      <p class="detail-val"><strong>July 1, 2026</strong>8:00 PM ET — doors open.</p>
-    </div>
-    <div class="detail-box">
-      <p class="detail-key">Where</p>
-      <!-- TODO: confirm platform / live URL -->
-      <p class="detail-val"><strong>Online</strong>Details land in your inbox.</p>
-    </div>
-  </div>
-
-  <div class="section-cta-row">
-    <button type="button" class="aoc-cta" data-open-seat>Save My Seat</button>
+    <div class="detail-box fadeup"><p class="detail-key">What</p><p class="detail-val"><strong>AOC</strong>120 modules. The skill that changes everything.</p></div>
+    <div class="detail-box fadeup"><p class="detail-key">When</p><p class="detail-val"><strong>July 1, 2026</strong>8:00 PM ET — doors open.</p></div>
+    <!-- TODO: confirm platform / live URL -->
+    <div class="detail-box fadeup"><p class="detail-key">Where</p><p class="detail-val"><strong>Online</strong>Details land in your inbox.</p></div>
   </div>
 </section>
 
@@ -420,28 +411,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <div class="final-inner">
     <h2 class="final-heading">The doors open July 1</h2>
     <p class="final-sub">It will be worth the wait. Get on the list and walk in first.</p>
-
-    <div class="aoc-countdown js-countdown">
-      <p class="aoc-countdown-label">Doors open July 1, 8:00 PM ET</p>
-      <div class="aoc-countdown-units">
-        <div class="cd-unit"><span class="cd-num js-cd-days">00</span><span class="cd-lbl">Days</span></div>
-        <div class="cd-unit"><span class="cd-num js-cd-hours">00</span><span class="cd-lbl">Hours</span></div>
-        <div class="cd-unit"><span class="cd-num js-cd-mins">00</span><span class="cd-lbl">Minutes</span></div>
-        <div class="cd-unit"><span class="cd-num js-cd-secs">00</span><span class="cd-lbl">Seconds</span></div>
+    <div class="bigcount" id="bigcount">
+      <div class="bigcount-units">
+        <div class="bc-unit"><span class="bc-num js-cd-days">00</span><span class="bc-lbl">Days</span></div>
+        <div class="bc-unit"><span class="bc-num js-cd-hours">00</span><span class="bc-lbl">Hours</span></div>
+        <div class="bc-unit"><span class="bc-num js-cd-mins">00</span><span class="bc-lbl">Minutes</span></div>
+        <div class="bc-unit"><span class="bc-num js-cd-secs">00</span><span class="bc-lbl">Seconds</span></div>
       </div>
+      <p class="bigcount-doors">Doors are open</p>
     </div>
-    <div class="aoc-doors-open js-doors" hidden>
-      <p class="aoc-countdown-label">The wait is over</p>
-      <p class="aoc-doors-title">Doors are open</p>
-    </div>
-
     <button type="button" class="aoc-cta" data-open-seat>Save My Seat</button>
   </div>
 </section>
 
-<!-- ===================== FOOTER (minimal) ===================== -->
 <footer class="footer">
-  <p class="footer-copy">&copy; 2026 910 Academy · Agent on Camera &nbsp;·&nbsp; Questions? <a href="mailto:academy@studio910pb.com">academy@studio910pb.com</a></p>
+  <p class="footer-copy">&copy; 2026 910 Academy · AOC &nbsp;·&nbsp; Questions? <a href="mailto:academy@studio910pb.com">academy@studio910pb.com</a></p>
 </footer>
 
 <!-- ===================== SEAT MODAL ===================== -->
@@ -449,19 +433,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <div class="modal__backdrop" data-seat-close aria-hidden="true"></div>
   <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="seatTitle">
     <button type="button" class="modal__close" data-seat-close aria-label="Close">&times;</button>
-    <p class="modal__eyebrow">Agent on Camera</p>
+    <p class="modal__eyebrow">AOC</p>
     <h2 class="modal__title" id="seatTitle">Save your seat</h2>
     <p class="modal__sub">Drop your name and email. You'll get first access the moment the doors open July 1.</p>
-
     <form class="modal__form" id="seatForm" novalidate>
-      <label class="modal__field">
-        <span class="modal__label">First name</span>
-        <input id="seatFirstName" name="firstName" type="text" autocomplete="given-name" required>
-      </label>
-      <label class="modal__field">
-        <span class="modal__label">Email</span>
-        <input id="seatEmail" name="email" type="email" autocomplete="email" required>
-      </label>
+      <label class="modal__field"><span class="modal__label">First name</span><input id="seatFirstName" name="firstName" type="text" autocomplete="given-name" required></label>
+      <label class="modal__field"><span class="modal__label">Email</span><input id="seatEmail" name="email" type="email" autocomplete="email" required></label>
       <button type="submit" class="modal__submit" id="seatSubmit">Save My Seat</button>
       <p class="modal__msg" id="seatMsg" role="status" aria-live="polite"></p>
       <p class="modal__note">First access the moment the doors open.</p>
@@ -474,13 +451,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 var AOC_UTM = (function () {
   var params = new URLSearchParams(window.location.search);
   function get(k) { var v = params.get(k); return v ? v.trim().slice(0, 200) : undefined; }
-  return {
-    source: get('utm_source'),
-    medium: get('utm_medium'),
-    campaign: get('utm_campaign'),
-    content: get('utm_content'),
-    term: get('utm_term'),
-  };
+  return { source: get('utm_source'), medium: get('utm_medium'), campaign: get('utm_campaign'), content: get('utm_content'), term: get('utm_term') };
 })();
 
 // ========== SEAT MODAL + FORM ==========
@@ -497,25 +468,13 @@ var AOC_UTM = (function () {
     btn.disabled = false; btn.textContent = 'Save My Seat';
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    requestAnimationFrame(function () {
-      var first = document.getElementById('seatFirstName');
-      if (first) first.focus();
-    });
+    requestAnimationFrame(function () { var f = document.getElementById('seatFirstName'); if (f) f.focus(); });
   }
-  function closeModal() {
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+  function closeModal() { modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
 
-  document.querySelectorAll('[data-open-seat]').forEach(function (el) {
-    el.addEventListener('click', openModal);
-  });
-  document.querySelectorAll('[data-seat-close]').forEach(function (el) {
-    el.addEventListener('click', closeModal);
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
-  });
+  document.querySelectorAll('[data-open-seat]').forEach(function (el) { el.addEventListener('click', openModal); });
+  document.querySelectorAll('[data-seat-close]').forEach(function (el) { el.addEventListener('click', closeModal); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -524,37 +483,24 @@ var AOC_UTM = (function () {
     var email = form.email.value.trim();
     if (!firstName) { msg.className = 'modal__msg error'; msg.textContent = 'Please enter your first name.'; return; }
     if (!EMAIL_RE.test(email)) { msg.className = 'modal__msg error'; msg.textContent = 'Please enter a valid email.'; return; }
-
     btn.disabled = true; btn.textContent = 'Saving…';
-    fetch('/api/aoc/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ firstName: firstName, email: email, utm: AOC_UTM }),
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Request failed');
-        window.location.href = '/aoc/thanks';
-      })
-      .catch(function () {
-        msg.className = 'modal__msg error';
-        msg.textContent = 'Something went wrong. Please try again.';
-        btn.disabled = false; btn.textContent = 'Save My Seat';
-      });
+    fetch('/api/aoc/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ firstName: firstName, email: email, utm: AOC_UTM }) })
+      .then(function (res) { if (!res.ok) throw new Error('Request failed'); window.location.href = '/aoc/thanks'; })
+      .catch(function () { msg.className = 'modal__msg error'; msg.textContent = 'Something went wrong. Please try again.'; btn.disabled = false; btn.textContent = 'Save My Seat'; });
   });
 })();
 
-// ========== COUNTDOWN (timezone-correct; supports multiple instances) ==========
+// ========== COUNTDOWN (timezone-correct; updates header bar + final block) ==========
 (function () {
   var TARGET = Date.parse('2026-07-02T00:00:00Z'); // July 1, 2026, 8:00 PM ET
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function setAll(sel, val) { document.querySelectorAll(sel).forEach(function (el) { el.textContent = val; }); }
-
   var timer;
   function tick() {
     var diff = TARGET - Date.now();
     if (diff <= 0) {
-      document.querySelectorAll('.js-countdown').forEach(function (el) { el.hidden = true; });
-      document.querySelectorAll('.js-doors').forEach(function (el) { el.hidden = false; });
+      var cb = document.getElementById('countbar'); if (cb) cb.classList.add('is-open');
+      var bc = document.getElementById('bigcount'); if (bc) bc.classList.add('is-open');
       if (timer) clearInterval(timer);
       return;
     }
@@ -569,6 +515,16 @@ var AOC_UTM = (function () {
   }
   tick();
   timer = setInterval(tick, 1000);
+})();
+
+// ========== SCROLL REVEAL ==========
+(function () {
+  var els = document.querySelectorAll('.fadeup');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (e) { obs.observe(e); });
 })();
 </script>
 </body>
