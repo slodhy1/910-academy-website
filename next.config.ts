@@ -16,6 +16,7 @@ const STATIC_PAGES = [
   "products-archive",
   "apply-claudio",
   "the-6ix",
+  "aoc",
 ];
 
 const nextConfig: NextConfig = {
@@ -43,6 +44,8 @@ const nextConfig: NextConfig = {
       { source: "/products/910-admin-assistant", destination: "/products/910-admin-assistant.html" },
       { source: "/products/3d-made-easy", destination: "/products/3d-made-easy.html" },
       { source: "/products/910-sales-system", destination: "/products/910-sales-system.html" },
+      // AOC waitlist thank-you page (nested static page)
+      { source: "/aoc/thanks", destination: "/aoc/thanks.html" },
     ];
   },
 };

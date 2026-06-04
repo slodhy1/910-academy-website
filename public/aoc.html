@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent on Camera · 910 Academy</title>
+<meta name="description" content="The game is about to change. Join the Agent on Camera waitlist for first access the moment the doors open — July 1.">
+
+<!-- Social preview -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:url" content="https://910academy.com/aoc">
+<meta property="og:title" content="Agent on Camera · 910 Academy">
+<meta property="og:description" content="The game is about to change. It will be worth the wait. Doors open July 1.">
+<meta property="og:image" content="https://910academy.com/og-images/910-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agent on Camera · 910 Academy">
+<meta name="twitter:description" content="The game is about to change. It will be worth the wait. Doors open July 1.">
+
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 500; font-display: swap; src: url('/fonts/montserrat-500.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 700; font-display: swap; src: url('/fonts/montserrat-700.woff2') format('woff2'); }
+</style>
+<style>
+/* =====================================================
+   DESIGN TOKENS  (canonical 910academy.com system)
+   ===================================================== */
+:root {
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --bg-elevated: #0f0f10;
+  --bg-surface: rgba(255, 255, 255, 0.05);
+  --bg-surface-hover: rgba(255, 255, 255, 0.08);
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2);
+  --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;  --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px;  --space-10: 40px;
+  --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
+
+  --radius-sm: 8px; --radius-md: 16px; --radius-lg: 20px; --radius-xl: 24px; --radius-pill: 100px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ========== BACKGROUND DEPTH ORBS ========== */
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
+.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.02); filter: blur(120px); animation-delay: 0s; }
+.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
+.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56, 182, 255, 0.01); filter: blur(100px); animation-delay: -8s; }
+@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
+
+/* ========== STICKY NAV ========== */
+.nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: var(--space-5) 0; transition: all 0.4s var(--ease-out); }
+.nav.scrolled { padding: 14px 0; background: rgba(0, 0, 0, 0.4); backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy); border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-10); display: flex; align-items: center; justify-content: space-between; }
+.nav-logo img { height: 36px; width: auto; opacity: 0.95; }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-link { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); transition: color 0.3s var(--ease-smooth); position: relative; }
+.nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--fg); transition: width 0.3s var(--ease-out); }
+.nav-link:hover { color: var(--fg); }
+.nav-link:hover::after { width: 100%; }
+.nav-cta { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #000000; background: #FFFFFF; border: none; padding: var(--space-3) var(--space-8); border-radius: 8px; transition: all 0.25s ease; }
+.nav-cta:hover { background: #38B6FF; color: #FFFFFF; transform: translateY(-1px); }
+.nav-mobile-toggle { display: none; flex-direction: column; gap: 5px; padding: var(--space-1); }
+.nav-mobile-toggle span { display: block; width: 22px; height: 1.5px; background: var(--fg); transition: all 0.3s var(--ease-out); }
+
+/* ========== MOBILE NAV ========== */
+.mobile-nav { display: none; position: fixed; inset: 0; background: rgba(5, 5, 6, 0.95); backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 36px; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out); }
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav a { font-size: 1.6rem; font-weight: 300; text-transform: uppercase; color: var(--fg); transition: color 0.3s var(--ease-smooth); }
+.mobile-nav a:hover { color: var(--accent); }
+.mobile-nav-close { position: absolute; top: 24px; right: 32px; font-size: 28px; color: var(--fg); background: none; border: none; cursor: pointer; }
+
+/* ========== AOC HERO ========== */
+.aoc-hero {
+  position: relative; z-index: 2;
+  max-width: 1280px; margin: 0 auto;
+  padding: var(--space-32) var(--space-10) var(--space-16);
+  min-height: 76vh; min-height: 76svh; min-height: 76dvh;
+  display: flex; flex-direction: column; justify-content: center;
+}
+/* TODO: swap this text lockup for the real AOC logo asset when it lands. */
+.aoc-lockup {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.34em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: var(--space-8);
+}
+.aoc-headline {
+  font-size: clamp(2.4rem, 7.5vw, 6rem); font-weight: 300; text-transform: uppercase;
+  line-height: 1.04; letter-spacing: var(--tracking-tight);
+  max-width: 15ch; text-align: left;
+}
+.aoc-subhead {
+  align-self: flex-end; text-align: right;
+  margin-top: var(--space-10);
+  font-size: clamp(1.05rem, 1.7vw, 1.4rem); font-weight: 300;
+  color: var(--fg-muted); max-width: 26ch;
+}
+
+/* ========== AOC FORM CARD ========== */
+.aoc-form-section { position: relative; z-index: 2; padding: 0 var(--space-10) var(--space-24); }
+.aoc-card {
+  max-width: 480px; margin: 0 auto;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  padding: var(--space-12) var(--space-10);
+}
+
+/* Form fields — same vocabulary as the coaching/waitlist forms */
+.coaching-form { display: flex; flex-direction: column; gap: var(--space-5); }
+.coaching-form .field { display: flex; flex-direction: column; gap: var(--space-2); }
+.coaching-form label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-muted); }
+.coaching-form .req { color: var(--accent); margin-left: 4px; }
+.coaching-form input {
+  width: 100%; font-family: var(--font); font-size: 0.95rem; font-weight: 400; color: var(--fg);
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+  padding: 14px 16px; transition: border-color 0.25s ease, background 0.25s ease; outline: none;
+}
+.coaching-form input::placeholder { color: var(--fg-dim); }
+.coaching-form input:focus { border-color: var(--accent-border); background: rgba(255,255,255,0.06); }
+
+.form-submit {
+  margin-top: var(--space-3); font-family: var(--font);
+  font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #000; background: #FFF; padding: 16px 24px; border-radius: 10px;
+  transition: all 0.25s ease;
+}
+.form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.form-msg { font-size: 0.9rem; color: var(--fg-muted); min-height: 1.2em; margin-top: var(--space-2); }
+.form-msg.success { color: var(--accent); }
+.form-msg.error { color: #ff6b6b; }
+
+/* The single eye-magnet: CTA in the site's primary accent */
+.form-submit.aoc-cta {
+  width: 100%; background: var(--accent); color: #04131d;
+  box-shadow: 0 10px 30px var(--accent-glow);
+}
+.form-submit.aoc-cta:hover:not(:disabled) { background: var(--accent-hover); color: #04131d; transform: translateY(-1px); }
+.aoc-cta-note { text-align: center; margin-top: var(--space-4); font-size: 0.8rem; font-weight: 400; color: var(--fg-dim); }
+
+/* ========== MODULES LINE + COUNTDOWN ========== */
+.aoc-after { display: flex; flex-direction: column; align-items: center; max-width: 560px; margin: 0 auto; }
+.aoc-modules { order: 1; text-align: center; margin-top: var(--space-12); color: var(--fg-muted); font-size: 0.95rem; font-weight: 400; letter-spacing: 0.01em; }
+.aoc-countdown { order: 2; text-align: center; margin-top: var(--space-10); }
+.aoc-countdown-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: var(--space-5); }
+.aoc-countdown-units { display: flex; justify-content: center; gap: var(--space-6); }
+.cd-unit { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+.cd-num { font-size: clamp(1.8rem, 4.5vw, 2.6rem); font-weight: 300; color: var(--fg); font-variant-numeric: tabular-nums; line-height: 1; }
+.cd-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-top: var(--space-3); }
+
+/* Doors-open state (after the countdown expires) */
+.aoc-doors-open { order: 2; text-align: center; margin-top: var(--space-10); }
+.aoc-doors-title { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); margin-bottom: var(--space-6); }
+.aoc-doors-link { display: inline-block; width: auto; padding: 16px 40px; }
+
+/* ========== FOOTER ========== */
+.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
+.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
+.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
+.footer-socials a { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--fg-dim); transition: color 0.3s var(--ease-smooth); }
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 13px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
+.footer-credit-link:hover { color: var(--accent); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: flex; }
+
+  /* Compact hero so the form card + CTA land above the fold on mobile */
+  .aoc-hero { min-height: auto; padding: 96px 20px var(--space-8); }
+  .aoc-headline { font-size: clamp(1.9rem, 9vw, 2.8rem); max-width: 100%; }
+  .aoc-subhead { align-self: stretch; text-align: left; margin-top: var(--space-6); max-width: 100%; }
+
+  .aoc-form-section { padding: 0 20px var(--space-20); }
+  .aoc-card { padding: var(--space-10) var(--space-6); }
+
+  /* Mobile stack order: countdown before the modules line */
+  .aoc-countdown, .aoc-doors-open { order: 1; }
+  .aoc-modules { order: 2; }
+  .aoc-countdown-units { gap: var(--space-4); }
+  .cd-unit { min-width: 52px; }
+
+  /* iOS: 16px inputs prevent zoom-on-focus */
+  .coaching-form input { font-size: 16px; }
+
+  .footer { padding: 48px 20px; }
+  .footer-socials { flex-wrap: wrap; gap: 16px; }
+}
+@media (max-width: 480px) {
+  .nav-inner { padding: 0 12px; }
+  .nav-logo img { height: 28px; }
+  .cd-unit { min-width: 46px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Depth Orbs -->
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+</div>
+
+<!-- Sticky Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/logo-white.svg" alt="910 Academy">
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/gear" class="nav-link">Our Gear</a>
+      <a href="/products" class="nav-link">Products</a>
+      <a href="/account/login" class="nav-link nav-auth-link" data-auth-link data-state="logged-out">Sign In</a>
+      <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta" data-join-cta>Join 910 Academy</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="/">Home</a>
+  <a href="/gear">Our Gear</a>
+  <a href="/products">Products</a>
+  <a href="/account/login" data-auth-link data-state="logged-out">Sign In</a>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" style="color:var(--accent);" data-join-cta>Join 910 Academy</a>
+</div>
+
+<!-- Hero -->
+<section class="aoc-hero">
+  <!-- TODO: replace text lockup with the real AOC logo asset when delivered -->
+  <p class="aoc-lockup">Agent on Camera</p>
+  <h1 class="aoc-headline">The game is about to change</h1>
+  <p class="aoc-subhead">It will be worth the wait</p>
+</section>
+
+<!-- Waitlist Form -->
+<section class="aoc-form-section">
+  <div class="aoc-card">
+    <form id="aocForm" class="coaching-form" novalidate>
+      <div class="field">
+        <label for="firstName">First Name<span class="req">*</span></label>
+        <input id="firstName" name="firstName" type="text" autocomplete="given-name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email<span class="req">*</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <button type="submit" class="form-submit aoc-cta" id="aocSubmit">Join the Waitlist</button>
+      <p class="aoc-cta-note">First access the moment the doors open.</p>
+      <p class="form-msg" id="aocMsg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="aoc-after">
+    <p class="aoc-modules">120 modules. The skill that changes everything. July 1.</p>
+
+    <div class="aoc-countdown" id="aocCountdown">
+      <p class="aoc-countdown-label">Doors open July 1, 8:00 PM ET</p>
+      <div class="aoc-countdown-units">
+        <div class="cd-unit"><span class="cd-num" id="cdDays">00</span><span class="cd-lbl">Days</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cdHours">00</span><span class="cd-lbl">Hours</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cdMins">00</span><span class="cd-lbl">Minutes</span></div>
+        <div class="cd-unit"><span class="cd-num" id="cdSecs">00</span><span class="cd-lbl">Seconds</span></div>
+      </div>
+    </div>
+
+    <!-- Shown once the countdown hits zero -->
+    <div class="aoc-doors-open" id="aocDoorsOpen" hidden>
+      <p class="aoc-countdown-label">The wait is over</p>
+      <p class="aoc-doors-title">Doors are open</p>
+      <!-- TODO: replace "#" with the live Agent on Camera event/launch URL -->
+      <a class="form-submit aoc-cta aoc-doors-link" id="aocDoorsLink" href="#">Enter Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved. <span aria-hidden="true">&middot;</span> Built by <a class="footer-credit-link" href="https://instagram.com/slodhy" target="_blank" rel="noopener noreferrer">@slodhy</a></p>
+</footer>
+
+<script>
+// ========== UTM CAPTURE ==========
+// Read UTM params off the query string and hold them for the POST body.
+var AOC_UTM = (function () {
+  var params = new URLSearchParams(window.location.search);
+  function get(k) { var v = params.get(k); return v ? v.trim().slice(0, 200) : undefined; }
+  return {
+    source: get('utm_source'),
+    medium: get('utm_medium'),
+    campaign: get('utm_campaign'),
+    content: get('utm_content'),
+    term: get('utm_term'),
+  };
+})();
+
+// ========== WAITLIST FORM ==========
+(function () {
+  var form = document.getElementById('aocForm');
+  if (!form) return;
+  var msg = document.getElementById('aocMsg');
+  var btn = document.getElementById('aocSubmit');
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg.className = 'form-msg';
+    msg.textContent = '';
+
+    var firstName = form.firstName.value.trim();
+    var email = form.email.value.trim();
+
+    if (!firstName) {
+      msg.className = 'form-msg error';
+      msg.textContent = 'Please enter your first name.';
+      return;
+    }
+    if (!EMAIL_RE.test(email)) {
+      msg.className = 'form-msg error';
+      msg.textContent = 'Please enter a valid email.';
+      return;
+    }
+
+    btn.disabled = true;
+    var originalText = btn.textContent;
+    btn.textContent = 'Joining…';
+
+    fetch('/api/aoc/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName: firstName, email: email, utm: AOC_UTM }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Request failed');
+        // Success → thank-you page.
+        window.location.href = '/aoc/thanks';
+      })
+      .catch(function () {
+        msg.className = 'form-msg error';
+        msg.textContent = 'Something went wrong. Please try again.';
+        btn.disabled = false;
+        btn.textContent = originalText;
+      });
+  });
+})();
+
+// ========== COUNTDOWN ==========
+// Fixed instant: July 1, 2026, 8:00 PM Eastern == 2026-07-02T00:00:00Z.
+// Computed from the UTC epoch, so it is correct in any visitor timezone.
+(function () {
+  var TARGET = Date.parse('2026-07-02T00:00:00Z');
+  var cd = document.getElementById('aocCountdown');
+  var doors = document.getElementById('aocDoorsOpen');
+  var dEl = document.getElementById('cdDays');
+  var hEl = document.getElementById('cdHours');
+  var mEl = document.getElementById('cdMins');
+  var sEl = document.getElementById('cdSecs');
+  if (!cd || !dEl) return;
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  var timer;
+  function tick() {
+    var diff = TARGET - Date.now();
+    if (diff <= 0) {
+      cd.hidden = true;
+      if (doors) doors.hidden = false;
+      if (timer) clearInterval(timer);
+      return;
+    }
+    var secs = Math.floor(diff / 1000);
+    var days = Math.floor(secs / 86400); secs -= days * 86400;
+    var hrs = Math.floor(secs / 3600); secs -= hrs * 3600;
+    var mins = Math.floor(secs / 60); secs -= mins * 60;
+    dEl.textContent = pad(days);
+    hEl.textContent = pad(hrs);
+    mEl.textContent = pad(mins);
+    sEl.textContent = pad(secs);
+  }
+  tick();
+  timer = setInterval(tick, 1000);
+})();
+
+// ========== STICKY NAV ==========
+(function () {
+  var nav = document.getElementById('nav');
+  var scrolled = false;
+  window.addEventListener('scroll', function () {
+    var s = window.scrollY > 40;
+    if (s !== scrolled) { scrolled = s; nav.classList.toggle('scrolled', s); }
+  }, { passive: true });
+})();
+
+// ========== MOBILE NAV ==========
+(function () {
+  var toggle = document.getElementById('mobileToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  var close = document.getElementById('mobileClose');
+  if (!toggle) return;
+  toggle.addEventListener('click', function () { mobileNav.classList.add('open'); });
+  close.addEventListener('click', function () { mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { mobileNav.classList.remove('open'); });
+  });
+})();
+</script>
+
+<!-- Auth-aware nav (matches the rest of the marketing site) -->
+<script>
+(function () {
+  try {
+    var hasSession = document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1;
+    if (hasSession) {
+      document.querySelectorAll("[data-auth-link]").forEach(function (el) {
+        el.setAttribute("href", "/account");
+        el.setAttribute("data-state", "logged-in");
+        el.textContent = "My Account";
+      });
+      document.querySelectorAll("[data-join-cta]").forEach(function (el) { el.style.display = "none"; });
+    }
+  } catch (e) { /* no-op */ }
+})();
+</script>
+</body>
+</html>
