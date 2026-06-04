@@ -56,13 +56,6 @@ img { max-width: 100%; display: block; }
 .bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
 @keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
 
-/* ===== NAV ===== */
-.nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: var(--space-5) 0; }
-.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-10); display: flex; align-items: center; justify-content: space-between; }
-.nav-logo img { height: 36px; width: auto; opacity: 0.95; }
-.nav-cta { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #000; background: #FFF; padding: var(--space-3) var(--space-8); border-radius: 8px; transition: all 0.25s ease; }
-.nav-cta:hover { background: var(--accent); color: #FFF; transform: translateY(-1px); }
-
 /* ===== THANKS CONTENT ===== */
 .thanks { position: relative; z-index: 2; flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 128px var(--space-10) var(--space-16); }
 .thanks-inner { max-width: 640px; width: 100%; }
@@ -78,15 +71,11 @@ img { max-width: 100%; display: block; }
 .thanks-video-play svg { width: 22px; height: 22px; margin-left: 3px; fill: var(--fg-muted); }
 .thanks-video-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
 
-/* ===== FOOTER ===== */
-.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
-.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
-.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
-.footer-socials a { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--fg-dim); transition: color 0.3s var(--ease-smooth); }
-.footer-socials a:hover { color: var(--accent); }
-.footer-copy { font-size: 13px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
-.footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
-.footer-credit-link:hover { color: var(--accent); }
+/* ===== FOOTER (minimal — standalone) ===== */
+.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10); text-align: center; }
+.footer-copy { font-size: 12px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.footer-copy a { color: var(--fg-dim); text-decoration: underline; text-underline-offset: 2px; }
+.footer-copy a:hover { color: var(--accent); }
 
 @media (max-width: 768px) {
   .nav-inner { padding: 0 16px; }
@@ -103,14 +92,6 @@ img { max-width: 100%; display: block; }
   <div class="bg-orb bg-orb-1"></div>
   <div class="bg-orb bg-orb-2"></div>
 </div>
-
-<!-- Nav (slim) -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo"><img src="/logo-white.svg" alt="910 Academy"></a>
-    <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta" data-join-cta>Join 910 Academy</a>
-  </div>
-</nav>
 
 <!-- Confirmation -->
 <main class="thanks">
@@ -139,28 +120,9 @@ img { max-width: 100%; display: block; }
   </div>
 </main>
 
-<!-- Footer -->
+<!-- Footer (minimal — standalone) -->
 <footer class="footer">
-  <div class="footer-logo">
-    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
-  </div>
-  <div class="footer-socials">
-    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
-    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
-    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
-  </div>
-  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved. <span aria-hidden="true">&middot;</span> Built by <a class="footer-credit-link" href="https://instagram.com/slodhy" target="_blank" rel="noopener noreferrer">@slodhy</a></p>
+  <p class="footer-copy">&copy; 2026 910 Academy · Agent on Camera &nbsp;·&nbsp; Questions? <a href="mailto:academy@studio910pb.com">academy@studio910pb.com</a></p>
 </footer>
-
-<!-- Auth-aware nav (matches the rest of the marketing site) -->
-<script>
-(function () {
-  try {
-    if (document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1) {
-      document.querySelectorAll("[data-join-cta]").forEach(function (el) { el.style.display = "none"; });
-    }
-  } catch (e) { /* no-op */ }
-})();
-</script>
 </body>
 </html>

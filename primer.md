@@ -4,10 +4,12 @@ Email-only waitlist for the **Agent on Camera** launch (doors open **July 1, 202
 
 ## What was built
 
-**Architecture decision:** 910academy.com's public site is **static HTML in `/public`** (the React/shadcn components are portal-only — `/account`, `/admin`). To look native, `/aoc` was built as a static HTML page on the canonical token system (modeled on `public/waitlist.html`), not as a shadcn App Router page. The only Next.js piece is the API route. See `research-aoc.md` for the full rationale.
+**Architecture decision:** 910academy.com's public site is **static HTML in `/public`** (the React/shadcn components are portal-only — `/account`, `/admin`). To look native, `/aoc` was built as static HTML on the canonical token system, not as a shadcn App Router page. The only Next.js piece is the API route. See `research-aoc.md` for the full rationale.
 
-- **`/aoc`** — hero with "AGENT ON CAMERA" text lockup, left-weighted headline "THE GAME IS ABOUT TO CHANGE", bottom-right subhead "It will be worth the wait", a centered glass form card (First name + Email + a single accent CTA — the only eye-magnet), the modules tease line, and a timezone-correct countdown that swaps to a "Doors are open" state on expiry. Captures UTM params, POSTs to the API, redirects to `/aoc/thanks`.
-- **`/aoc/thanks`** — "You're on the list." confirmation with the spec copy + a swappable Claudio video slot (`#aocVideoSlot`).
+**Format:** long-form, conversion-style landing page modeled on the structure of `masterclass.imaccelerator.com`. It is **standalone** — intentionally NO site nav, and a minimal footer (no socials, no "Built by" credit) — so it reads as its own funnel page, separate from the main site.
+
+- **`/aoc`** — section flow: hero (lockup → urgency count-bar → "THE GAME IS ABOUT TO CHANGE" headline → subhead → CTA) → trust bar → "What's inside" benefit cards (homepage `perk-card` style) → before/after → coach bio → WHAT/WHEN/WHERE details → final CTA with countdown. The **CTA is a button — "Save My Seat" (×9)** — that opens an **email-capture modal** (the-6ix modal pattern: backdrop + Esc close, body-scroll lock, focus first input). Modal collects First name + Email, captures UTM, POSTs to `/api/aoc/waitlist`, redirects to `/aoc/thanks`. Timezone-correct countdown (multiple synced instances) swaps to "Doors are open" on expiry. CTA is the only accent eye-magnet.
+- **`/aoc/thanks`** — standalone "You're on the list." confirmation (no nav) with the spec copy + a swappable Claudio video slot (`#aocVideoSlot`).
 - **API + data layer** — zod-validated route, email upsert into Supabase (durable record), best-effort Kit subscriber + waitlist-tag sync that never fails the user.
 
 ## Files added / changed
@@ -48,10 +50,13 @@ If either is missing, the row is still saved, `kit_synced` stays `false`, and th
 
 ## Open TODOs (marked in code)
 
-1. **Live event URL** — `public/aoc.html`, the `aocDoorsLink` anchor (`href="#"`) shown in the post-expiry "Doors are open" state. Replace `#` with the real launch/event URL.
-2. **Claudio video** — `public/aoc/thanks.html`, the `#aocVideoSlot` block. Drop an `<iframe>`/`<video>` into `.thanks-video-frame` (no rebuild needed; instructions are in the inline comment).
-3. **Real AOC logo asset** — `public/aoc.html`, the `.aoc-lockup` text element (and optionally the OG image). Swap the "Agent on Camera" text lockup for the logo when it lands.
-4. **Set Kit env vars** in Vercel (`KIT_API_KEY`, `KIT_TAG_ID_AOC_WAITLIST`) so live signups sync + trigger the welcome sequence.
+1. **Real social proof** — `public/aoc.html`, the trust bar + testimonials. Currently honest placeholder copy only (no fabricated stats). Add real member numbers / ratings / testimonials when available.
+2. **Claudio bio + photo** — `public/aoc.html`, the "Who is Claudio" section (`.coach-body` copy + `.coach-photo` placeholder). Drop in the real story, verified numbers, and a photo (e.g. `/images/claudio.webp`).
+3. **Confirm positioning/audience** — a couple of benefit lines and the "Built For You" card are marked TODO; tighten once the exact AOC audience is locked.
+4. **"Where" / platform** — `public/aoc.html`, the WHERE detail box currently says "Online — details land in your inbox." Confirm platform/live URL.
+5. **Claudio video** — `public/aoc/thanks.html`, the `#aocVideoSlot` block. Drop an `<iframe>`/`<video>` in (instructions in the inline comment).
+6. **Real AOC logo asset** — `public/aoc.html`, the `.aoc-lockup` text element (and OG image). Swap the text lockup for the logo when it lands.
+7. **Set Kit env vars** in Vercel (`KIT_API_KEY`, `KIT_TAG_ID_AOC_WAITLIST`) so live signups sync + trigger the welcome sequence.
 
 ## Notes
 
