@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're on the list · Agent on Camera · 910 Academy</title>
+<meta name="description" content="You're on the Agent on Camera waitlist. The game is about to change — and you'll be among the first through the doors on July 1.">
+<meta name="robots" content="noindex">
+
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 500; font-display: swap; src: url('/fonts/montserrat-500.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 700; font-display: swap; src: url('/fonts/montserrat-700.woff2') format('woff2'); }
+</style>
+<style>
+/* ===== DESIGN TOKENS (canonical 910academy.com system) ===== */
+:root {
+  --bg-base: #0a0a0a;
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+  --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+  --radius-xl: 24px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
+body { background: var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ===== ORBS ===== */
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
+.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.02); filter: blur(120px); }
+.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
+@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
+
+/* ===== NAV ===== */
+.nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: var(--space-5) 0; }
+.nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-10); display: flex; align-items: center; justify-content: space-between; }
+.nav-logo img { height: 36px; width: auto; opacity: 0.95; }
+.nav-cta { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #000; background: #FFF; padding: var(--space-3) var(--space-8); border-radius: 8px; transition: all 0.25s ease; }
+.nav-cta:hover { background: var(--accent); color: #FFF; transform: translateY(-1px); }
+
+/* ===== THANKS CONTENT ===== */
+.thanks { position: relative; z-index: 2; flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 128px var(--space-10) var(--space-16); }
+.thanks-inner { max-width: 640px; width: 100%; }
+.thanks-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-6); }
+.thanks-title { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 300; text-transform: uppercase; line-height: 1.08; letter-spacing: var(--tracking-tight); margin-bottom: var(--space-8); }
+.thanks-body { font-size: 1.05rem; font-weight: 300; color: var(--fg-muted); line-height: 1.7; max-width: 540px; margin: 0 auto; }
+
+/* ===== VIDEO SLOT (swap in Claudio's video later, no rebuild needed) ===== */
+.thanks-video { margin-top: var(--space-12); border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.03); backdrop-filter: var(--glass-blur) var(--glass-saturate); -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate); }
+.thanks-video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-4); }
+.thanks-video-frame::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, var(--accent-glow), transparent 60%); pointer-events: none; }
+.thanks-video-play { width: 64px; height: 64px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; }
+.thanks-video-play svg { width: 22px; height: 22px; margin-left: 3px; fill: var(--fg-muted); }
+.thanks-video-label { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
+
+/* ===== FOOTER ===== */
+.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
+.footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
+.footer-socials { display: flex; justify-content: center; gap: var(--space-8); margin-bottom: var(--space-8); }
+.footer-socials a { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--fg-dim); transition: color 0.3s var(--ease-smooth); }
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 13px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
+.footer-credit-link:hover { color: var(--accent); }
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 16px; }
+  .thanks { padding: 104px 20px var(--space-12); }
+  .footer { padding: 48px 20px; }
+  .footer-socials { flex-wrap: wrap; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background Depth Orbs -->
+<div class="bg-orbs">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+</div>
+
+<!-- Nav (slim) -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><img src="/logo-white.svg" alt="910 Academy"></a>
+    <a href="https://www.skool.com/910-academy/about" target="_blank" class="nav-cta" data-join-cta>Join 910 Academy</a>
+  </div>
+</nav>
+
+<!-- Confirmation -->
+<main class="thanks">
+  <div class="thanks-inner">
+    <p class="thanks-eyebrow">Agent on Camera</p>
+    <h1 class="thanks-title">You're on the list.</h1>
+    <p class="thanks-body">You're in. The game is about to change, and you'll be among the first through the doors on July 1. Watch your inbox over the next few weeks. It will be worth the wait.</p>
+
+    <!-- ============================================================
+         CLAUDIO VIDEO SLOT
+         Drop the video in here later with NO rebuild required — replace
+         the .thanks-video-frame contents below with the embed/<video>,
+         e.g.:
+           <div class="thanks-video">
+             <iframe class="thanks-video-frame" src="…" allow="autoplay; fullscreen" ...></iframe>
+           </div>
+         ============================================================ -->
+    <div class="thanks-video" id="aocVideoSlot">
+      <div class="thanks-video-frame">
+        <span class="thanks-video-play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="thanks-video-label">A message from Claudio · coming soon</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="/logo-white.svg" alt="910 Academy" width="36" height="36" decoding="async">
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved. <span aria-hidden="true">&middot;</span> Built by <a class="footer-credit-link" href="https://instagram.com/slodhy" target="_blank" rel="noopener noreferrer">@slodhy</a></p>
+</footer>
+
+<!-- Auth-aware nav (matches the rest of the marketing site) -->
+<script>
+(function () {
+  try {
+    if (document.cookie.indexOf("sb-qkmkxthpeapuecobahhx-auth-token") !== -1) {
+      document.querySelectorAll("[data-join-cta]").forEach(function (el) { el.style.display = "none"; });
+    }
+  } catch (e) { /* no-op */ }
+})();
+</script>
+</body>
+</html>
