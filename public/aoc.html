@@ -171,12 +171,22 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .coach-body .section-label { margin-bottom: var(--space-4); }
 .coach-body .section-heading { margin-bottom: var(--space-6); }
 
-/* ========== DETAILS ========== */
-.detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-top: var(--space-16); }
-.detail-box { padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); }
-.detail-key { font-size: 11px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
-.detail-val { font-size: 1.05rem; color: var(--fg-muted); line-height: 1.5; }
-.detail-val strong { display: block; color: var(--fg); font-weight: 600; font-size: 1.2rem; margin-bottom: var(--space-2); }
+/* ========== SNEAK PEEK (locked modules) ========== */
+.peek-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.peek-pill { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); padding: 8px 16px; border-radius: var(--radius-pill); }
+.peek-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.peek-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); margin-top: var(--space-16); }
+/* reuses the same card background + border as .perk-card */
+.peek-tile { position: relative; aspect-ratio: 4 / 3; border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)); overflow: hidden; }
+.peek-tile-inner { position: absolute; inset: 0; padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); filter: blur(9px); opacity: 0.55; }
+.peek-thumb { width: 100%; height: 52%; border-radius: var(--radius-sm); background: linear-gradient(135deg, rgba(56,182,255,0.4), rgba(255,255,255,0.06)); }
+.peek-line { height: 9px; border-radius: 4px; background: rgba(255,255,255,0.25); }
+.peek-line.w1 { width: 82%; }
+.peek-line.w2 { width: 56%; }
+.peek-tile::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, rgba(10,10,10,0.45), rgba(10,10,10,0.1)); }
+.peek-lock { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; color: var(--fg-muted); }
+.peek-lock svg { width: 26px; height: 26px; }
+.peek-label { position: absolute; z-index: 2; left: var(--space-4); bottom: var(--space-3); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-dim); }
 
 /* ========== FINAL CTA ========== */
 .final { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10) var(--space-32); overflow: hidden; }
@@ -249,8 +259,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .stat { padding: var(--space-10) var(--space-8); }
   .perks-grid { grid-template-columns: 1fr; }
   .compare-grid { grid-template-columns: 1fr; }
-  .detail-grid { grid-template-columns: 1fr; }
-  .perk-card, .compare-col, .detail-box { padding: var(--space-8) var(--space-6); }
+  .peek-grid { grid-template-columns: repeat(2, 1fr); }
+  .perk-card, .compare-col { padding: var(--space-8) var(--space-6); }
   .bigcount-units { gap: var(--space-5); }
   .bc-unit { min-width: 60px; }
   .final { padding: var(--space-20) 20px var(--space-24); }
@@ -401,16 +411,32 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <hr class="section-divider">
 
-<!-- ===================== DETAILS ===================== -->
+<!-- ===================== SNEAK PEEK (locked modules) ===================== -->
 <section class="section">
-  <p class="section-label fadeup">The details</p>
-  <h2 class="section-heading fadeup">When it drops</h2>
-  <div class="detail-grid">
-    <div class="detail-box fadeup"><p class="detail-key">What</p><p class="detail-val"><strong>AOC</strong>120 modules. The skill that changes everything.</p></div>
-    <div class="detail-box fadeup"><p class="detail-key">When</p><p class="detail-val"><strong>July 1, 2026</strong>8:00 PM ET. AOC drops.</p></div>
-    <!-- TODO: confirm platform / live URL -->
-    <div class="detail-box fadeup"><p class="detail-key">Where</p><p class="detail-val"><strong>Online</strong>Details land in your inbox.</p></div>
+  <div class="peek-top">
+    <p class="section-label fadeup">The sneak peek</p>
+    <span class="peek-pill fadeup">Unlocks July 1</span>
   </div>
+  <h2 class="section-heading fadeup">120 modules. Locked.</h2>
+  <p class="section-sub fadeup">The full system is built and waiting. Every module unlocks the moment AOC drops. Get on the list and you walk in first.</p>
+
+  <!-- TODO: swap in the real blurred module export and real module titles when Malachi delivers them. -->
+  <div class="peek-grid">
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 01</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 02</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 03</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 04</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 05</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 06</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 07</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 08</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 09</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 10</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 11</span></div>
+    <div class="peek-tile fadeup"><div class="peek-tile-inner"><div class="peek-thumb"></div><div class="peek-line w1"></div><div class="peek-line w2"></div></div><div class="peek-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="peek-label">Module 12</span></div>
+  </div>
+
+  <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
 </section>
 
 <!-- ===================== FINAL CTA ===================== -->
