@@ -68,9 +68,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 @keyframes orbPulse { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.08) translate(10px,-10px); } }
 
 /* ========== SHARED PRIMARY CTA ========== */
-.aoc-cta { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); padding: 18px 44px; border-radius: var(--radius-pill); box-shadow: 0 14px 40px var(--accent-glow); transition: all 0.25s ease; }
-.aoc-cta:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 18px 50px rgba(56,182,255,0.3); }
+.aoc-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); padding: 18px 44px; border-radius: var(--radius-pill); transition: transform 0.25s ease, background 0.25s ease; animation: ctaGlow 2.6s var(--ease-smooth) infinite; }
+.aoc-cta:hover { background: var(--accent-hover); transform: translateY(-2px); }
 .aoc-cta svg { width: 16px; height: 16px; }
+/* soft, breathing glow that draws the eye to the click */
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 10px 34px rgba(56,182,255,0.25), 0 0 0 0 rgba(56,182,255,0.0); }
+  50%      { box-shadow: 0 14px 50px rgba(56,182,255,0.5), 0 0 26px 2px rgba(56,182,255,0.5); }
+}
+@media (prefers-reduced-motion: reduce) { .aoc-cta { animation: none; box-shadow: 0 14px 40px var(--accent-glow); } }
 .aoc-cta-note { margin-top: var(--space-4); font-size: 0.8rem; color: var(--fg-dim); letter-spacing: 0.02em; }
 
 /* ========== STICKY COUNTDOWN HEADER BAR ========== */
@@ -130,6 +136,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .stat-num .u { color: var(--accent); }
 .stat-key { margin-top: var(--space-4); font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
 
+/* ========== COUNTDOWN TIMER SECTION ========== */
+.timer-section { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10); overflow: hidden; }
+.timer-section::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 80% at 50% 35%, rgba(56,182,255,0.1), transparent 70%); }
+.timer-date { font-size: 12px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-5); }
+.timer-headline { font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 300; text-transform: uppercase; line-height: 1.05; letter-spacing: var(--tracking-tight); }
+.timer-clock { display: inline-flex; gap: var(--space-4); margin-top: var(--space-12); }
+.tc-unit { position: relative; min-width: clamp(78px, 13vw, 132px); padding: var(--space-6) var(--space-4); border: 1px solid var(--accent-border-subtle); border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(56,182,255,0.06), rgba(255,255,255,0.01)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 20px 50px -30px rgba(56,182,255,0.6); }
+.tc-num { font-size: clamp(2.4rem, 6vw, 4.4rem); font-weight: 300; line-height: 1; color: var(--fg); font-variant-numeric: tabular-nums; text-shadow: 0 0 28px rgba(56,182,255,0.35); }
+.tc-lbl { margin-top: var(--space-3); font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); }
+.timer-doors { display: none; margin-top: var(--space-12); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); color: var(--accent); }
+.timer-section.is-open .timer-clock { display: none; }
+.timer-section.is-open .timer-doors { display: block; }
+
 /* ========== BENEFIT CARDS ========== */
 .perks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-top: var(--space-16); }
 .perk-card { padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)); transition: all 0.3s var(--ease-smooth); }
@@ -160,15 +179,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .peek-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
 .peek-pill { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); padding: 8px 16px; border-radius: var(--radius-pill); }
 .peek-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-.peek-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); margin-top: var(--space-16); }
+/* Auto-rotating vertical carousel: 3 thumbnails at a time, fade up / fade away, next 3 fade in. */
+.peek-carousel { position: relative; margin-top: var(--space-16); }
+.peek-page { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+.peek-page[hidden] { display: none; }
+.peek-page.is-active { opacity: 1; transform: translateY(0); }
+.peek-page.is-leaving { opacity: 0; transform: translateY(-28px); }
+.peek-page.is-entering { opacity: 0; transform: translateY(28px); }
 /* Video-thumbnail tiles: visible enough to recognize, blurred + locked so there's no access yet. */
 .peek-tile { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: #0f0f10; }
 .peek-thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(5px) brightness(0.6) saturate(0.9); transform: scale(1.12); transition: filter 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth); }
 .peek-tile:hover .peek-thumb-img { filter: blur(3px) brightness(0.74) saturate(1); transform: scale(1.16); }
 .peek-tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,6,0.2), rgba(5,5,6,0.55)); pointer-events: none; }
-.peek-play { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); background: rgba(10,10,10,0.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
-.peek-tile:hover .peek-play { background: rgba(56,182,255,0.28); border-color: var(--accent); }
-.peek-play svg { width: 20px; height: 20px; margin-left: 3px; fill: var(--fg); }
+.peek-play { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.45); background: rgba(10,10,10,0.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
+.peek-tile:hover .peek-play { background: rgba(56,182,255,0.3); border-color: var(--accent); transform: translate(-50%, -50%) scale(1.08); }
+.peek-play svg { width: 24px; height: 24px; margin-left: 3px; fill: var(--fg); }
 .peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); background: rgba(0,0,0,0.55); border: 1px solid var(--accent-border-subtle); padding: 5px 9px; border-radius: var(--radius-pill); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .peek-badge svg { width: 11px; height: 11px; }
 .peek-label { position: absolute; z-index: 3; left: var(--space-4); bottom: var(--space-3); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
@@ -240,7 +265,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .stat { padding: var(--space-10) var(--space-8); }
   .perks-grid { grid-template-columns: 1fr; }
   .compare-grid { grid-template-columns: 1fr; }
-  .peek-grid { grid-template-columns: repeat(2, 1fr); }
+  .peek-page { grid-template-columns: 1fr; gap: var(--space-4); }
   .perk-card, .compare-col { padding: var(--space-8) var(--space-6); }
   .bigcount-units { gap: var(--space-5); }
   .bc-unit { min-width: 60px; }
@@ -319,54 +344,75 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </div>
 </div>
 
-<!-- ===================== WHAT'S INSIDE ===================== -->
-<section class="section">
-  <p class="section-label fadeup">Inside AOC</p>
-  <h2 class="section-heading fadeup">The skill that<br>changes everything</h2>
-  <p class="section-sub fadeup">120 modules. The full system, start to finish. The whole picture drops July 1.</p>
-
-  <div class="perks-grid">
-    <div class="perk-card fadeup"><div class="perk-icon"><span class="perk-num">120</span></div><h3 class="perk-title">120 Modules</h3><p class="perk-desc">The complete system, A to Z. Every hook, every cut, every move behind 910-quality video.</p></div>
-    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div><h3 class="perk-title">Mastery, Not A Taste</h3><p class="perk-desc">Two years ago the basics went out for free. This is the full depth, for the ones who want mastery.</p></div>
-    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div><h3 class="perk-title">The Game Is Changing</h3><p class="perk-desc">The industry is moving here. AOC puts you ahead of the curve instead of behind it.</p></div>
-    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="perk-title">Become Irreplaceable</h3><p class="perk-desc">Master the media and you stop being a vendor. You become the partner an agent can't replace.</p></div>
-    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><h3 class="perk-title">Made To Stand Out</h3><p class="perk-desc">Most videos look the same. This is how you make the work that gets you chosen.</p></div>
-    <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21l2.3-7.1-6-4.5h7.6z"></path></svg></div><h3 class="perk-title">First Through The Doors</h3><p class="perk-desc">The list gets in before anyone else, the moment AOC drops July 1.</p></div>
+<!-- ===================== COUNTDOWN TIMER ===================== -->
+<section class="timer-section" id="timerblock">
+  <p class="timer-date fadeup">July 1, 2026 · 8:00 PM ET</p>
+  <h2 class="timer-headline fadeup">It'll be worth the wait.</h2>
+  <div class="timer-clock fadeup">
+    <div class="tc-unit"><div class="tc-num js-cd-days">00</div><div class="tc-lbl">Days</div></div>
+    <div class="tc-unit"><div class="tc-num js-cd-hours">00</div><div class="tc-lbl">Hours</div></div>
+    <div class="tc-unit"><div class="tc-num js-cd-mins">00</div><div class="tc-lbl">Minutes</div></div>
+    <div class="tc-unit"><div class="tc-num js-cd-secs">00</div><div class="tc-lbl">Seconds</div></div>
   </div>
-
-  <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
+  <p class="timer-doors">AOC is live</p>
 </section>
 
 <hr class="section-divider">
 
-<!-- ===================== BEFORE / AFTER ===================== -->
-<section class="section">
-  <p class="section-label fadeup">The shift</p>
-  <h2 class="section-heading fadeup">What changes</h2>
-  <div class="compare-grid">
-    <div class="compare-col before fadeup">
-      <p class="compare-tag">Before</p>
-      <ul class="compare-list">
-        <li>Stuck in the same place.</li>
-        <li>Watching everyone else get picked.</li>
-        <li>Knowing there's another level, and not reaching it.</li>
-        <li>Guessing at what actually works.</li>
-      </ul>
-    </div>
-    <div class="compare-col after fadeup">
-      <p class="compare-tag">After</p>
-      <ul class="compare-list">
-        <li>Operating on a different level.</li>
-        <li>The one that gets remembered.</li>
-        <li>A system you run on repeat.</li>
-        <li>First in line for what's next.</li>
-      </ul>
-    </div>
-  </div>
-  <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
-</section>
+<!-- ============================================================
+     SOFT-DELETED SECTIONS FROM AOC PAGE
+     "Inside AOC" (feature grid) + "What changes" (before/after).
+     Kept here, not rendered (wrapped in <template>), to REUSE on the
+     COURSE RELEASE PAGE. Search: "SOFT-DELETED-FROM-AOC".
+     ============================================================ -->
+<template id="SOFT-DELETED-FROM-AOC" data-reuse="course-release-page">
+  <!-- WHAT'S INSIDE -->
+  <section class="section">
+    <p class="section-label fadeup">Inside AOC</p>
+    <h2 class="section-heading fadeup">The skill that<br>changes everything</h2>
+    <p class="section-sub fadeup">120 modules. The full system, start to finish. The whole picture drops July 1.</p>
 
-<hr class="section-divider">
+    <div class="perks-grid">
+      <div class="perk-card fadeup"><div class="perk-icon"><span class="perk-num">120</span></div><h3 class="perk-title">120 Modules</h3><p class="perk-desc">The complete system, A to Z. Every hook, every cut, every move behind 910-quality video.</p></div>
+      <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div><h3 class="perk-title">Mastery, Not A Taste</h3><p class="perk-desc">Two years ago the basics went out for free. This is the full depth, for the ones who want mastery.</p></div>
+      <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></div><h3 class="perk-title">The Game Is Changing</h3><p class="perk-desc">The industry is moving here. AOC puts you ahead of the curve instead of behind it.</p></div>
+      <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="perk-title">Become Irreplaceable</h3><p class="perk-desc">Master the media and you stop being a vendor. You become the partner an agent can't replace.</p></div>
+      <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><h3 class="perk-title">Made To Stand Out</h3><p class="perk-desc">Most videos look the same. This is how you make the work that gets you chosen.</p></div>
+      <div class="perk-card fadeup"><div class="perk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1-6.3-4.6L5.7 21l2.3-7.1-6-4.5h7.6z"></path></svg></div><h3 class="perk-title">First Through The Doors</h3><p class="perk-desc">The list gets in before anyone else, the moment AOC drops July 1.</p></div>
+    </div>
+
+    <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- BEFORE / AFTER -->
+  <section class="section">
+    <p class="section-label fadeup">The shift</p>
+    <h2 class="section-heading fadeup">What changes</h2>
+    <div class="compare-grid">
+      <div class="compare-col before fadeup">
+        <p class="compare-tag">Before</p>
+        <ul class="compare-list">
+          <li>Stuck in the same place.</li>
+          <li>Watching everyone else get picked.</li>
+          <li>Knowing there's another level, and not reaching it.</li>
+          <li>Guessing at what actually works.</li>
+        </ul>
+      </div>
+      <div class="compare-col after fadeup">
+        <p class="compare-tag">After</p>
+        <ul class="compare-list">
+          <li>Operating on a different level.</li>
+          <li>The one that gets remembered.</li>
+          <li>A system you run on repeat.</li>
+          <li>First in line for what's next.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
+  </section>
+</template>
 
 <!-- ===================== SNEAK PEEK (locked modules) ===================== -->
 <section class="section">
@@ -378,13 +424,22 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <p class="section-sub fadeup">The full system is built and waiting. Every module unlocks the moment AOC drops. Get on the list and you walk in first.</p>
 
   <!-- TODO: swap in the real module video thumbnails + titles when Malachi delivers them. Placeholder images for now. -->
-  <div class="peek-grid">
-    <div class="peek-tile fadeup"><img class="peek-thumb-img" src="/images/coaching.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 01</span></div>
-    <div class="peek-tile fadeup"><img class="peek-thumb-img" src="/images/claudio-pfp.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 02</span></div>
-    <div class="peek-tile fadeup"><img class="peek-thumb-img" src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 03</span></div>
-    <div class="peek-tile fadeup"><img class="peek-thumb-img" src="/images/knownthumbnail-2.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 04</span></div>
-    <div class="peek-tile fadeup"><img class="peek-thumb-img" src="/images/DSC00038-Edit-2-1024x684.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 05</span></div>
-    <div class="peek-tile fadeup"><img class="peek-thumb-img" src="/images/hero-bg.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 06</span></div>
+  <div class="peek-carousel" id="peekCarousel">
+    <div class="peek-page is-active">
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/coaching.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 01</span></div>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/claudio-pfp.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 02</span></div>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 03</span></div>
+    </div>
+    <div class="peek-page" hidden>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/knownthumbnail-2.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 04</span></div>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/DSC00038-Edit-2-1024x684.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 05</span></div>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/hero-bg.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 06</span></div>
+    </div>
+    <div class="peek-page" hidden>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/thumbnails-skool-3.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 07</span></div>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 08</span></div>
+      <div class="peek-tile"><img class="peek-thumb-img" src="/images/thumbnail_logos.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 09</span></div>
+    </div>
   </div>
 
   <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
@@ -484,6 +539,7 @@ var AOC_UTM = (function () {
     if (diff <= 0) {
       var cb = document.getElementById('countbar'); if (cb) cb.classList.add('is-open');
       var bc = document.getElementById('bigcount'); if (bc) bc.classList.add('is-open');
+      var tb = document.getElementById('timerblock'); if (tb) tb.classList.add('is-open');
       if (timer) clearInterval(timer);
       return;
     }
@@ -508,6 +564,45 @@ var AOC_UTM = (function () {
     entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); } });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   els.forEach(function (e) { obs.observe(e); });
+})();
+
+// ========== SNEAK PEEK CAROUSEL (auto vertical fade, 3 at a time) ==========
+(function () {
+  var carousel = document.getElementById('peekCarousel');
+  if (!carousel) return;
+  var pages = Array.prototype.slice.call(carousel.querySelectorAll('.peek-page'));
+  if (pages.length < 2) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var current = 0;
+  var FADE = 800; // matches the CSS transition duration
+  var paused = false;
+  carousel.addEventListener('mouseenter', function () { paused = true; });
+  carousel.addEventListener('mouseleave', function () { paused = false; });
+
+  function advance() {
+    if (paused) return;
+    var cur = pages[current];
+    var nextIdx = (current + 1) % pages.length;
+    var nx = pages[nextIdx];
+    // fade current up + away
+    cur.classList.remove('is-active');
+    cur.classList.add('is-leaving');
+    setTimeout(function () {
+      cur.classList.remove('is-leaving');
+      cur.hidden = true;
+      // bring the next three in from below
+      nx.hidden = false;
+      nx.classList.add('is-entering');
+      void nx.offsetWidth; // flush styles so the transition runs
+      requestAnimationFrame(function () {
+        nx.classList.remove('is-entering');
+        nx.classList.add('is-active');
+      });
+      current = nextIdx;
+    }, FADE);
+  }
+  setInterval(advance, 4200);
 })();
 </script>
 </body>
