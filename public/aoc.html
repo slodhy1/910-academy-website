@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- Dark browser chrome so iOS Safari's top (dynamic island) and bottom bar blend into the page -->
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>AOC · The game is about to change</title>
 <meta name="description" content="The game is about to change. 120 modules. The skill that changes everything. AOC drops July 1. Join the waitlist to be first in line the moment it drops.">
 
@@ -80,9 +83,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .aoc-cta-note { margin-top: var(--space-4); font-size: 0.8rem; color: var(--fg-dim); letter-spacing: 0.02em; }
 
 /* ========== STICKY COUNTDOWN HEADER BAR ========== */
-.countbar { position: fixed; top: 0; left: 0; width: 100%; height: var(--bar-h); z-index: 1000;
+.countbar { position: fixed; top: 0; left: 0; width: 100%; height: calc(var(--bar-h) + env(safe-area-inset-top)); z-index: 1000;
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
-  padding: 0 var(--space-8);
+  /* extend the dark glass behind the dynamic island, keep the content below it */
+  padding: env(safe-area-inset-top) calc(var(--space-8) + env(safe-area-inset-right)) 0 calc(var(--space-8) + env(safe-area-inset-left));
   background: linear-gradient(90deg, rgba(56,182,255,0.10), rgba(10,10,10,0.85) 55%);
   backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy);
   border-bottom: 1px solid var(--accent-border-subtle); }
@@ -111,11 +115,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .section-cta-row { margin-top: var(--space-12); }
 
 /* ========== HERO (cinematic video) ========== */
-.hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--bar-h) + var(--space-16)) var(--space-10) var(--space-20); background: #000; }
+.hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background: var(--bg-base); }
 .hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+/* Bottom of the scrim fades fully to the page bg so the video melts into the next section (no hard cut). */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(5,5,6,0.82) 0%, rgba(5,5,6,0.5) 42%, rgba(5,5,6,0.88) 100%),
+    linear-gradient(180deg, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0.45) 38%, rgba(10,10,10,0.82) 78%, var(--bg-base) 100%),
     radial-gradient(70% 70% at 50% 45%, rgba(56,182,255,0.1), transparent 72%); }
 .hero-content { position: relative; z-index: 2; max-width: 760px; width: 100%; margin: 0 auto; text-align: center; }
 /* "AOC" wordmark, TODO: swap for the real AOC logo asset when it lands */
@@ -195,6 +200,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); background: rgba(0,0,0,0.55); border: 1px solid var(--accent-border-subtle); padding: 5px 9px; border-radius: var(--radius-pill); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .peek-badge svg { width: 11px; height: 11px; }
 .peek-label { position: absolute; z-index: 3; left: var(--space-4); bottom: var(--space-3); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
+/* mobile horizontal scroller (constant auto-scroll + native touch swipe); desktop uses the vertical marquee */
+.peek-strip { display: none; }
 
 /* ========== FINAL CTA ========== */
 .final { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10) var(--space-32); overflow: hidden; }
@@ -213,7 +220,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .final .aoc-cta { margin-top: var(--space-12); }
 
 /* ========== FOOTER ========== */
-.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10); text-align: center; }
+.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10) calc(var(--space-12) + env(safe-area-inset-bottom)); text-align: center; }
 .footer-copy { font-size: 12px; color: var(--fg-ghost); letter-spacing: 0.04em; }
 .footer-copy a { color: var(--fg-dim); text-decoration: underline; text-underline-offset: 2px; }
 .footer-copy a:hover { color: var(--accent); }
@@ -254,7 +261,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .countbar-clock { gap: var(--space-2); }
   .section { padding: var(--space-20) 20px; }
   /* hero fills the screen on mobile */
-  .hero { min-height: 100vh; min-height: 100svh; min-height: 100dvh; padding: calc(var(--bar-h) + var(--space-12)) 20px var(--space-12); }
+  .hero { min-height: 100vh; min-height: 100svh; min-height: 100dvh; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-12)) 20px var(--space-12); }
   .hero-headline { font-size: clamp(2.4rem, 12vw, 3.6rem); max-width: 100%; }
   .hero-support { max-width: 100%; }
   .hero-cta-row { align-items: center; }
@@ -268,9 +275,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .perks-grid { grid-template-columns: 1fr; }
   .compare-grid { grid-template-columns: 1fr; }
   /* single-column scroller on mobile */
-  .peek-cols { grid-template-columns: 1fr; }
-  .peek-col:nth-child(2) { display: none; }
-  .peek-marquee { height: 66vh; margin-top: var(--space-12); }
+  /* swap the vertical marquee for a horizontal touch + auto scroller on mobile */
+  .peek-marquee { display: none; }
+  .peek-strip { display: flex; gap: var(--space-4); margin-top: var(--space-12); overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; padding: 0 0 var(--space-2); scrollbar-width: none; -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .peek-strip::-webkit-scrollbar { display: none; }
+  .peek-strip .peek-tile { flex: 0 0 82%; scroll-snap-align: center; }
+  .peek-strip .peek-play { width: 56px; height: 56px; }
   .perk-card, .compare-col { padding: var(--space-8) var(--space-6); }
   .bigcount-units { gap: var(--space-5); }
   .bc-unit { min-width: 60px; }
@@ -322,7 +334,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
-  <video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="/images/hero-bg.webp">
+  <video class="hero-bg-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback poster="/images/hero-bg.webp">
     <source src="/hero-bg.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim"></div>
@@ -455,6 +467,26 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </div>
   </div>
 
+  <!-- mobile: horizontal scroller — constant auto-scroll + swipeable by touch -->
+  <div class="peek-strip" id="peekStrip">
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/coaching.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 01</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 02</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/knownthumbnail-2.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 03</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/thumbnails-skool-3.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 04</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/DSC00038-Edit-2-1024x684.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 05</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/hero-bg.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 06</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 07</span></div>
+    <div class="peek-tile"><img class="peek-thumb-img" src="/images/thumbnail_logos.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 08</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/coaching.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 01</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 02</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/knownthumbnail-2.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 03</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/thumbnails-skool-3.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 04</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/DSC00038-Edit-2-1024x684.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 05</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/hero-bg.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 06</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 07</span></div>
+    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/thumbnail_logos.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 08</span></div>
+  </div>
+
   <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
 </section>
 
@@ -480,6 +512,26 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 </div>
 
 <script>
+// ========== HERO VIDEO: force inline autoplay (iOS Safari) ==========
+// iOS sometimes blocks autoplay (Low Power Mode, slow buffering) and shows the
+// poster + a play affordance. Force muted inline playback and retry on the first
+// load event and the first user gesture so it kicks in reliably.
+(function () {
+  var v = document.getElementById('heroVideo');
+  if (!v) return;
+  v.muted = true; v.defaultMuted = true; v.playsInline = true;
+  function tryPlay() { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  tryPlay();
+  ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (evt) {
+    v.addEventListener(evt, tryPlay, { once: true });
+  });
+  ['touchstart', 'pointerdown', 'click', 'scroll'].forEach(function (evt) {
+    window.addEventListener(evt, function handler() { tryPlay(); window.removeEventListener(evt, handler); }, { once: true, passive: true });
+  });
+  // If it ever pauses while visible (iOS backgrounding), nudge it back.
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) tryPlay(); });
+})();
+
 // ========== UTM CAPTURE ==========
 var AOC_UTM = (function () {
   var params = new URLSearchParams(window.location.search);
@@ -560,7 +612,41 @@ var AOC_UTM = (function () {
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   els.forEach(function (e) { obs.observe(e); });
 })();
-// Sneak-peek scroller is a CSS-only continuous vertical marquee (see .peek-marquee).
+// Desktop sneak-peek is a CSS-only vertical marquee (.peek-marquee).
+// Mobile sneak-peek (.peek-strip) is a horizontal scroller: constant slow
+// auto-scroll that yields to the user's touch and resumes shortly after.
+(function () {
+  var strip = document.getElementById('peekStrip');
+  if (!strip) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var paused = false;
+  var resumeTimer = null;
+  function pause() { paused = true; if (resumeTimer) clearTimeout(resumeTimer); }
+  // resume well after release so iOS momentum scrolling settles first
+  function resumeSoon() { if (resumeTimer) clearTimeout(resumeTimer); resumeTimer = setTimeout(function () { paused = false; }, 2400); }
+
+  strip.addEventListener('pointerdown', pause);
+  strip.addEventListener('pointerup', resumeSoon);
+  strip.addEventListener('touchstart', pause, { passive: true });
+  strip.addEventListener('touchend', resumeSoon, { passive: true });
+  strip.addEventListener('mouseenter', pause);
+  strip.addEventListener('mouseleave', resumeSoon);
+
+  var SPEED = 0.028; // px per ms (~28px/s, slow + smooth)
+  var last = null;
+  function step(ts) {
+    if (last === null) last = ts;
+    var dt = ts - last; last = ts;
+    if (!paused && strip.scrollWidth > strip.clientWidth) {
+      strip.scrollLeft += dt * SPEED;
+      var half = strip.scrollWidth / 2; // content is duplicated, so loop at the midpoint
+      if (strip.scrollLeft >= half) strip.scrollLeft -= half;
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
 </script>
 </body>
 </html>
