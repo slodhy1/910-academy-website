@@ -200,8 +200,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); background: rgba(0,0,0,0.55); border: 1px solid var(--accent-border-subtle); padding: 5px 9px; border-radius: var(--radius-pill); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .peek-badge svg { width: 11px; height: 11px; }
 .peek-label { position: absolute; z-index: 3; left: var(--space-4); bottom: var(--space-3); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
-/* mobile horizontal scroller (constant auto-scroll + native touch swipe); desktop uses the vertical marquee */
-.peek-strip { display: none; }
 
 /* ========== FINAL CTA ========== */
 .final { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10) var(--space-32); overflow: hidden; }
@@ -274,15 +272,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .tc-lbl { font-size: 8px; letter-spacing: 0.1em; }
   .perks-grid { grid-template-columns: 1fr; }
   .compare-grid { grid-template-columns: 1fr; }
-  /* single-column scroller on mobile */
-  /* swap the vertical marquee for a horizontal touch + auto scroller on mobile */
-  .peek-marquee { display: none; }
-  .peek-strip { display: flex; gap: var(--space-4); margin-top: var(--space-12); overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; padding: 0 0 var(--space-2); scrollbar-width: none; -ms-overflow-style: none;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-  .peek-strip::-webkit-scrollbar { display: none; }
-  .peek-strip .peek-tile { flex: 0 0 82%; scroll-snap-align: center; }
-  .peek-strip .peek-play { width: 56px; height: 56px; }
+  /* mobile: same vertical marquee, single column — but a native scroll container
+     so it auto-scrolls AND you can drag/flick through it yourself */
+  .peek-cols { grid-template-columns: 1fr; }
+  .peek-col:nth-child(2) { display: none; }
+  .peek-marquee { height: 64vh; margin-top: var(--space-12); overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; scrollbar-width: none; -ms-overflow-style: none; }
+  .peek-marquee::-webkit-scrollbar { display: none; }
+  .peek-track { animation: none !important; } /* JS drives the auto-scroll via scrollTop on mobile */
   .perk-card, .compare-col { padding: var(--space-8) var(--space-6); }
   .bigcount-units { gap: var(--space-5); }
   .bc-unit { min-width: 60px; }
@@ -467,26 +463,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </div>
   </div>
 
-  <!-- mobile: horizontal scroller — constant auto-scroll + swipeable by touch -->
-  <div class="peek-strip" id="peekStrip">
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/coaching.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 01</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 02</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/knownthumbnail-2.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 03</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/thumbnails-skool-3.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 04</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/DSC00038-Edit-2-1024x684.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 05</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/hero-bg.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 06</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 07</span></div>
-    <div class="peek-tile"><img class="peek-thumb-img" src="/images/thumbnail_logos.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 08</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/coaching.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 01</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/jtv-x-910-Thumbnail-1-1024x576.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 02</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/knownthumbnail-2.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 03</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/thumbnails-skool-3.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 04</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/DSC00038-Edit-2-1024x684.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 05</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/hero-bg.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 06</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 07</span></div>
-    <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/images/thumbnail_logos.webp" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Module 08</span></div>
-  </div>
-
   <div class="section-cta-row"><button type="button" class="aoc-cta" data-open-seat>Join the Waitlist</button></div>
 </section>
 
@@ -612,36 +588,40 @@ var AOC_UTM = (function () {
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   els.forEach(function (e) { obs.observe(e); });
 })();
-// Desktop sneak-peek is a CSS-only vertical marquee (.peek-marquee).
-// Mobile sneak-peek (.peek-strip) is a horizontal scroller: constant slow
-// auto-scroll that yields to the user's touch and resumes shortly after.
+// Sneak peek scroller:
+//  - Desktop: CSS-only vertical marquee (.peek-track animations) — unchanged.
+//  - Mobile: the SAME vertical marquee, but as a native scroll container so it
+//    auto-scrolls AND the user can drag/flick through it. JS nudges scrollTop;
+//    touching pauses it (native momentum scroll takes over) and it resumes after.
 (function () {
-  var strip = document.getElementById('peekStrip');
-  if (!strip) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var marquee = document.querySelector('.peek-marquee');
+  if (!marquee) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mqMobile = window.matchMedia('(max-width: 768px)');
+  // only drive scrollTop on mobile, where the marquee is a native scroll container;
+  // on desktop the CSS keyframes own the motion (don't double it up via scrollTop)
+  function scrollable() { return mqMobile.matches && marquee.scrollHeight > marquee.clientHeight + 4; }
 
-  var paused = false;
-  var resumeTimer = null;
+  var paused = false, resumeTimer = null;
   function pause() { paused = true; if (resumeTimer) clearTimeout(resumeTimer); }
-  // resume well after release so iOS momentum scrolling settles first
-  function resumeSoon() { if (resumeTimer) clearTimeout(resumeTimer); resumeTimer = setTimeout(function () { paused = false; }, 2400); }
+  function resumeSoon() { if (resumeTimer) clearTimeout(resumeTimer); resumeTimer = setTimeout(function () { paused = false; }, 2200); }
 
-  strip.addEventListener('pointerdown', pause);
-  strip.addEventListener('pointerup', resumeSoon);
-  strip.addEventListener('touchstart', pause, { passive: true });
-  strip.addEventListener('touchend', resumeSoon, { passive: true });
-  strip.addEventListener('mouseenter', pause);
-  strip.addEventListener('mouseleave', resumeSoon);
+  marquee.addEventListener('pointerdown', pause);
+  marquee.addEventListener('pointerup', resumeSoon);
+  marquee.addEventListener('touchstart', pause, { passive: true });
+  marquee.addEventListener('touchend', resumeSoon, { passive: true });
+  marquee.addEventListener('mouseenter', pause);
+  marquee.addEventListener('mouseleave', resumeSoon);
 
-  var SPEED = 0.028; // px per ms (~28px/s, slow + smooth)
+  var SPEED = 0.03; // px per ms (slow, matches the desktop marquee feel)
   var last = null;
   function step(ts) {
     if (last === null) last = ts;
     var dt = ts - last; last = ts;
-    if (!paused && strip.scrollWidth > strip.clientWidth) {
-      strip.scrollLeft += dt * SPEED;
-      var half = strip.scrollWidth / 2; // content is duplicated, so loop at the midpoint
-      if (strip.scrollLeft >= half) strip.scrollLeft -= half;
+    if (!paused && !reduce && scrollable()) {
+      marquee.scrollTop += dt * SPEED;
+      var half = marquee.scrollHeight / 2; // content is duplicated, so loop at the midpoint
+      if (marquee.scrollTop >= half) marquee.scrollTop -= half;
     }
     requestAnimationFrame(step);
   }
