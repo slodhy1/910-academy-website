@@ -116,7 +116,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== HERO (cinematic video) ========== */
 .hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background: var(--bg-base); }
-.hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+.hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 /* Bottom of the scrim fades fully to the page bg so the video melts into the next section (no hard cut). */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
@@ -488,24 +488,42 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 </div>
 
 <script>
-// ========== HERO VIDEO: force inline autoplay (iOS Safari) ==========
-// iOS sometimes blocks autoplay (Low Power Mode, slow buffering) and shows the
-// poster + a play affordance. Force muted inline playback and retry on the first
-// load event and the first user gesture so it kicks in reliably.
+// ========== HERO VIDEO: force inline autoplay + fix iOS frozen-frame ==========
+// iOS Safari often starts muted autoplay but does NOT paint the live frames — it
+// keeps showing the poster/first frame until a scroll forces a repaint. We force
+// play, retry briefly, then nudge a GPU repaint once playback actually advances.
 (function () {
   var v = document.getElementById('heroVideo');
   if (!v) return;
   v.muted = true; v.defaultMuted = true; v.playsInline = true;
   function tryPlay() { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+
+  // Force iOS to paint the current video frame (defeats the frozen-poster bug).
+  var kicked = false;
+  function repaint() {
+    v.style.transform = 'translateZ(0) scale(1.0001)';
+    requestAnimationFrame(function () { v.style.transform = 'translateZ(0)'; });
+  }
+  function onMoving() { if (!kicked) { kicked = true; repaint(); } }
+  v.addEventListener('playing', repaint);
+  v.addEventListener('timeupdate', onMoving); // first real frame advance -> unfreeze
+
   tryPlay();
   ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (evt) {
     v.addEventListener(evt, tryPlay, { once: true });
   });
+  // brief retry burst to catch "not ready yet" without waiting for a gesture
+  var tries = 0;
+  var iv = setInterval(function () {
+    tries++;
+    if (!v.paused || tries > 12) { clearInterval(iv); return; }
+    tryPlay();
+  }, 250);
+  // last-resort: first user gesture
   ['touchstart', 'pointerdown', 'click', 'scroll'].forEach(function (evt) {
-    window.addEventListener(evt, function handler() { tryPlay(); window.removeEventListener(evt, handler); }, { once: true, passive: true });
+    window.addEventListener(evt, function handler() { tryPlay(); repaint(); window.removeEventListener(evt, handler); }, { once: true, passive: true });
   });
-  // If it ever pauses while visible (iOS backgrounding), nudge it back.
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) tryPlay(); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { tryPlay(); repaint(); } });
 })();
 
 // ========== UTM CAPTURE ==========
