@@ -37,6 +37,6 @@
     }
   ],
   "crons": [
-    { "path": "/api/aoc/reconcile", "schedule": "*/15 * * * *" }
+    { "path": "/api/aoc/reconcile", "schedule": "*/2 * * * *" }
   ]
 }
