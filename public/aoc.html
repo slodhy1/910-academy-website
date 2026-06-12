@@ -173,7 +173,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .compare-col.after .compare-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
 
 /* ========== SNEAK PEEK (locked modules) ========== */
-.peek-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-5); flex-wrap: wrap; margin-bottom: var(--space-8); }
+.peek-top { display: flex; align-items: flex-start; justify-content: flex-end; gap: var(--space-5); flex-wrap: wrap; margin-bottom: var(--space-6); }
 .peek-pill { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); padding: 8px 16px; border-radius: var(--radius-pill); }
 .peek-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
 /* Continuous vertical marquee: a slow-moving wall of locked module thumbnails that
@@ -425,11 +425,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <!-- ===================== SNEAK PEEK (locked modules) ===================== -->
 <section class="section">
   <div class="peek-top">
-    <p class="section-label fadeup">The sneak peek</p>
     <span class="peek-pill fadeup">Unlocks July 1</span>
   </div>
   <h2 class="section-heading fadeup">120 modules. Locked.</h2>
-  <p class="section-sub fadeup">The full system is built and waiting. Every module unlocks the moment AOC drops. Get on the list and you walk in first.</p>
 
   <!-- TODO: swap in the real module video thumbnails + titles when Malachi delivers them. Placeholder images for now. -->
   <div class="peek-marquee">
