@@ -140,7 +140,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-content { position: relative; z-index: 2; max-width: 760px; width: 100%; margin: 0 auto; text-align: center; }
 /* "AOC" wordmark, TODO: swap for the real AOC logo asset when it lands */
 .aoc-lockup { display: inline-flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-8); }
-.aoc-lockup img { width: clamp(140px, 17vw, 210px); height: auto; display: block; }
+.aoc-lockup img { width: clamp(112px, 14vw, 168px); height: auto; display: block; }
 .hero-headline { font-size: clamp(2.8rem, 9vw, 6.8rem); font-weight: 300; text-transform: uppercase; line-height: 0.98; letter-spacing: var(--tracking-tight); max-width: 16ch; margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.5); }
 .hero-headline .em { color: var(--accent); }
 .hero-sub { margin: var(--space-8) auto 0; font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; color: var(--fg); max-width: 28ch; }
@@ -346,7 +346,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
   <video class="hero-bg-video" id="heroVideo" muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback>
-    <source data-src="/hero-bg.mp4" type="video/mp4">
+    <source data-src="/hero-bg.mp4" data-src-mobile="/hero-bg-mobile.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim"></div>
   <div class="hero-content">
@@ -506,20 +506,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 </div>
 
 <script>
-// ========== HERO VIDEO: load on larger screens only (perf) + iOS autoplay ==========
-// Mobile gets the poster image only (it's the hero .background) — the heavy 2.3MB
-// .mp4 is never downloaded on phones / Save-Data / reduced-motion. On larger
-// screens we attach the source, then force inline muted autoplay and nudge a GPU
-// repaint to defeat the iOS frozen-poster bug.
+// ========== HERO VIDEO: autoplay (mobile gets a lighter file) + iOS fix ==========
+// The poster image paints instantly (hero .background). We then attach the video
+// source — a lighter 720p ~800KB file on phones, the full file on desktop — force
+// inline muted autoplay, and nudge a GPU repaint to defeat the iOS frozen-poster bug.
+// Skipped only on Save-Data / reduced-motion (poster stays, zero video bytes).
 (function () {
   var v = document.getElementById('heroVideo');
   if (!v) return;
   var conn = navigator.connection || {};
   var allow =
-    window.matchMedia('(min-width: 769px)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
     !conn.saveData;
-  if (!allow) return; // poster background stays; zero video bytes
+  if (!allow) return;
 
   v.muted = true; v.defaultMuted = true; v.playsInline = true;
   function tryPlay() { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
@@ -533,9 +532,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   v.addEventListener('playing', repaint);
   v.addEventListener('timeupdate', function () { if (!kicked) { kicked = true; repaint(); } });
 
-  // attach the source now (deferred so it never competes with first paint)
+  // attach the source (lighter file on phones), deferred so it never blocks first paint
   var source = v.querySelector('source[data-src]');
-  if (source && !source.src) source.src = source.getAttribute('data-src');
+  if (source && !source.src) {
+    var isMobile = window.matchMedia('(max-width: 768px)').matches;
+    source.src = (isMobile && source.getAttribute('data-src-mobile')) || source.getAttribute('data-src');
+  }
   v.load();
   tryPlay();
 

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -202,19 +202,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Could not join the waitlist. Please try again." }, { status: 500 });
   }
 
-  // Kit is best-effort. A Kit failure (429, network, bad config, anything) must
-  // never fail the user — the row above is what matters. kit_synced stays false
-  // and can be backfilled later.
-  const kitSubscriberId = await syncToKit(firstName, email);
-  if (kitSubscriberId !== null) {
-    const { error: updErr } = await sb
-      .from("aoc_waitlist")
-      .update({ kit_subscriber_id: kitSubscriberId, kit_synced: true })
-      .eq("id", data.id);
-    if (updErr) {
-      console.error("[aoc/waitlist] kit_synced update failed:", updErr);
+  // The durable Supabase row is done -> respond NOW (user redirects immediately).
+  // Kit sync is best-effort and runs AFTER the response (Fluid Compute keeps the
+  // invocation alive). A Kit failure leaves kit_synced=false for the cron — no
+  // lead lost, and the user never waits on Kit's 2 round-trips.
+  const rowId = data.id;
+  after(async () => {
+    try {
+      const kitSubscriberId = await syncToKit(firstName, email);
+      if (kitSubscriberId !== null) {
+        const { error: updErr } = await sb
+          .from("aoc_waitlist")
+          .update({ kit_subscriber_id: kitSubscriberId, kit_synced: true })
+          .eq("id", rowId);
+        if (updErr) console.error("[aoc/waitlist] kit_synced update failed:", updErr);
+      }
+    } catch (err) {
+      console.error("[aoc/waitlist] background Kit sync failed:", err instanceof Error ? err.message : err);
     }
-  }
+  });
 
   return NextResponse.json({ ok: true });
 }
