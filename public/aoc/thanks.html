@@ -45,16 +45,10 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
-body { background: var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
+/* Static radial-gradient glow replaces two blurred orbs — same look, zero GPU blur/compositing cost on mobile. */
+body { background: radial-gradient(620px circle at 12% -5%, rgba(56, 182, 255, 0.06), transparent 60%), radial-gradient(820px circle at 92% 28%, rgba(56, 182, 255, 0.045), transparent 55%), var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
-
-/* ===== ORBS ===== */
-.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
-.bg-orb-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: rgba(56, 182, 255, 0.02); filter: blur(120px); }
-.bg-orb-2 { top: 30%; right: -10%; width: 800px; height: 800px; background: rgba(56, 182, 255, 0.015); filter: blur(150px); animation-delay: -4s; }
-@keyframes orbPulse { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.08) translate(10px, -10px); } }
 
 /* ===== THANKS CONTENT ===== */
 .thanks { position: relative; z-index: 2; flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 128px var(--space-10) var(--space-16); }
@@ -66,7 +60,8 @@ img { max-width: 100%; display: block; }
 .thanks-tagline { margin-top: var(--space-4); font-size: 1.05rem; font-weight: 400; color: var(--fg); }
 
 /* ===== LIVE EVENT BLOCK (reuses the glass card + accent CTA design) ===== */
-.thanks-event { margin-top: var(--space-8); border-radius: var(--radius-xl); border: 1px solid var(--border); background: rgba(255, 255, 255, 0.03); backdrop-filter: var(--glass-blur) var(--glass-saturate); -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate); padding: var(--space-10) var(--space-8); text-align: center; }
+/* Flat translucent fill instead of backdrop-filter — nothing meaningful sits behind the card to blur, so the filter only cost GPU time. */
+.thanks-event { margin-top: var(--space-8); border-radius: var(--radius-xl); border: 1px solid var(--border); background: rgba(255, 255, 255, 0.045); padding: var(--space-10) var(--space-8); text-align: center; }
 .thanks-event-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-3); }
 .thanks-event-line { font-size: 1.05rem; font-weight: 300; color: var(--fg); margin-bottom: var(--space-6); }
 .thanks-cta { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); border: none; cursor: pointer; padding: 18px 44px; border-radius: 100px; box-shadow: 0 14px 40px var(--accent-glow); transition: all 0.25s ease; }
@@ -91,12 +86,6 @@ img { max-width: 100%; display: block; }
 </style>
 </head>
 <body>
-
-<!-- Background Depth Orbs -->
-<div class="bg-orbs">
-  <div class="bg-orb bg-orb-1"></div>
-  <div class="bg-orb bg-orb-2"></div>
-</div>
 
 <!-- Confirmation -->
 <main class="thanks">

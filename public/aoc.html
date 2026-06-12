@@ -71,13 +71,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .fadeup { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
 .fadeup.in { opacity: 1; transform: translateY(0); }
 
-/* ========== ORBS ========== */
-.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.bg-orb { position: absolute; border-radius: 50%; animation: orbPulse 12s ease-in-out infinite alternate; }
-.bg-orb-1 { top: 6%; left: -5%; width: 600px; height: 600px; background: rgba(56,182,255,0.025); filter: blur(120px); }
-.bg-orb-2 { top: 45%; right: -10%; width: 800px; height: 800px; background: rgba(56,182,255,0.018); filter: blur(150px); animation-delay: -4s; }
-.bg-orb-3 { bottom: -5%; left: -8%; width: 500px; height: 500px; background: rgba(56,182,255,0.012); filter: blur(100px); animation-delay: -8s; }
-@keyframes orbPulse { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.08) translate(10px,-10px); } }
+/* ========== ATMOSPHERE ========== */
+/* One static fixed gradient layer replaces three blurred + animated orbs.
+   Same soft blue glow, but no blur() filters and no looping animation, so the
+   GPU paints it once instead of recompositing every frame on mobile. */
+.bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(600px circle at 5% 12%, rgba(56,182,255,0.07), transparent 60%),
+    radial-gradient(820px circle at 96% 48%, rgba(56,182,255,0.055), transparent 58%),
+    radial-gradient(560px circle at 6% 98%, rgba(56,182,255,0.04), transparent 60%); }
 
 /* ========== SHARED PRIMARY CTA ========== */
 .aoc-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); padding: 18px 44px; border-radius: var(--radius-pill); transition: transform 0.25s ease, background 0.25s ease; animation: ctaGlow 2.6s var(--ease-smooth) infinite; }
@@ -337,11 +339,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <span class="countbar-open">AOC is live →</span>
 </div>
 
-<div class="bg-orbs">
-  <div class="bg-orb bg-orb-1"></div>
-  <div class="bg-orb bg-orb-2"></div>
-  <div class="bg-orb bg-orb-3"></div>
-</div>
+<div class="bg-orbs"></div>
 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
