@@ -1,0 +1,114 @@
+{
+  "name": "AOC waitlist → Kit reconciliation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "minutes", "minutesInterval": 5 }] }
+      },
+      "id": "schedule-5m",
+      "name": "Every 5 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/aoc_waitlist?kit_synced=eq.false&select=id,first_name,email&order=created_at.asc&limit=50",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-unsynced",
+      "name": "Get unsynced rows",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.kit.com/v4/subscribers",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "X-Kit-Api-Key", "value": "={{ $env.KIT_API_KEY }}" }]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"first_name\": $json.first_name, \"email_address\": $json.email } }}",
+        "options": {}
+      },
+      "id": "kit-create-subscriber",
+      "name": "Kit: create subscriber",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0],
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.kit.com/v4/tags/{{ $env.KIT_TAG_ID_AOC_WAITLIST }}/subscribers/{{ $json.subscriber.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "X-Kit-Api-Key", "value": "={{ $env.KIT_API_KEY }}" }]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {} }}",
+        "options": {}
+      },
+      "id": "kit-apply-tag",
+      "name": "Kit: apply waitlist tag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0],
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/aoc_waitlist?id=eq.{{ $('Get unsynced rows').item.json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "return=minimal" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"kit_synced\": true, \"kit_subscriber_id\": $('Kit: create subscriber').item.json.subscriber.id } }}",
+        "options": {}
+      },
+      "id": "mark-synced",
+      "name": "Supabase: mark synced",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000
+    }
+  ],
+  "connections": {
+    "Every 5 minutes": { "main": [[{ "node": "Get unsynced rows", "type": "main", "index": 0 }]] },
+    "Get unsynced rows": { "main": [[{ "node": "Kit: create subscriber", "type": "main", "index": 0 }]] },
+    "Kit: create subscriber": { "main": [[{ "node": "Kit: apply waitlist tag", "type": "main", "index": 0 }]] },
+    "Kit: apply waitlist tag": { "main": [[{ "node": "Supabase: mark synced", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}
