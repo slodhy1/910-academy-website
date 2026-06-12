@@ -33,9 +33,20 @@ const BodySchema = z.object({
 
 const KIT_BASE = "https://api.kit.com/v4";
 
+// Log a failed Kit response, calling out 429 (rate limit: 120 req / rolling 60s)
+// so it's obvious in the logs that the row should be reconciled later, not lost.
+async function logKitFailure(label: string, res: Response): Promise<void> {
+  const body = await res.text().catch(() => "");
+  if (res.status === 429) {
+    console.error(`[aoc/waitlist] Kit ${label} rate-limited (429) — leaving kit_synced=false for reconciliation. ${body}`);
+  } else {
+    console.error(`[aoc/waitlist] Kit ${label} failed: ${res.status} ${res.statusText} ${body}`);
+  }
+}
+
 /**
  * Best-effort sync to Kit (ConvertKit). Creates/upserts the subscriber, then
- * applies the waitlist tag (which triggers the welcome sequence). Returns the
+ * applies the waitlist tag (which triggers the welcome automation). Returns the
  * Kit subscriber id on full success, or null on ANY failure — the caller treats
  * null as "leave kit_synced = false and move on". Never throws.
  */
@@ -56,7 +67,7 @@ async function syncToKit(firstName: string, email: string): Promise<number | nul
       body: JSON.stringify({ first_name: firstName, email_address: email }),
     });
     if (!subRes.ok) {
-      console.error(`[aoc/waitlist] Kit subscriber upsert failed: ${subRes.status}`);
+      await logKitFailure("subscriber upsert", subRes);
       return null;
     }
     const subJson = (await subRes.json().catch(() => null)) as
@@ -68,14 +79,14 @@ async function syncToKit(firstName: string, email: string): Promise<number | nul
       return null;
     }
 
-    // 2. Apply the waitlist tag -> triggers the welcome sequence.
+    // 2. Apply the waitlist tag -> triggers the welcome automation.
     const tagRes = await fetch(`${KIT_BASE}/tags/${tagId}/subscribers/${subscriberId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Kit-Api-Key": apiKey },
       body: JSON.stringify({}),
     });
     if (!tagRes.ok) {
-      console.error(`[aoc/waitlist] Kit tag apply failed: ${tagRes.status}`);
+      await logKitFailure("tag apply", tagRes);
       return null;
     }
 
