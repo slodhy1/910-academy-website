@@ -19,6 +19,17 @@ const STATIC_PAGES = [
   "aoc",
 ];
 
+// App-wide security headers. CSP is intentionally NOT set here: the static
+// marketing pages (/aoc etc.) rely on inline <style>/<script>, so a strict CSP
+// needs nonces/hashes (a separate decision). These are the safe, non-breaking set.
+const SECURITY_HEADERS = [
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
+];
+
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
@@ -26,6 +37,9 @@ const nextConfig: NextConfig = {
     // Note: admin grant notify inlines its template directly (parens/brackets
     // in the route-group path break the glob matcher, so a trace include here
     // would silently match nothing).
+  },
+  async headers() {
+    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },
   async rewrites() {
     return [

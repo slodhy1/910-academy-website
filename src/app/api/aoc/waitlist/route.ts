@@ -33,14 +33,36 @@ const BodySchema = z.object({
 
 const KIT_BASE = "https://api.kit.com/v4";
 
-// Log a failed Kit response, calling out 429 (rate limit: 120 req / rolling 60s)
-// so it's obvious in the logs that the row should be reconciled later, not lost.
-async function logKitFailure(label: string, res: Response): Promise<void> {
-  const body = await res.text().catch(() => "");
+// Only accept state-changing requests from our own origins (same pattern as the
+// claudio-application route). Blocks naive cross-origin/bot POSTs.
+const ALLOWED_HOSTS = new Set([
+  "www.910academy.com",
+  "910academy.com",
+  "localhost:3000",
+  "localhost:3001",
+]);
+
+function isAllowedOrigin(req: Request): boolean {
+  const source = req.headers.get("origin") || req.headers.get("referer");
+  if (!source) return false;
+  let host: string;
+  try {
+    host = new URL(source).host;
+  } catch {
+    return false;
+  }
+  if (ALLOWED_HOSTS.has(host)) return true;
+  if (host.endsWith(".vercel.app")) return true; // preview deployments
+  return false;
+}
+
+// Log a failed Kit response, calling out 429 (rate limit: 120 req / rolling 60s).
+// Status only — the Kit error body can echo the email, so it's kept out of logs.
+function logKitFailure(label: string, res: Response): void {
   if (res.status === 429) {
-    console.error(`[aoc/waitlist] Kit ${label} rate-limited (429) — leaving kit_synced=false for reconciliation. ${body}`);
+    console.error(`[aoc/waitlist] Kit ${label} rate-limited (429) — leaving kit_synced=false for reconciliation.`);
   } else {
-    console.error(`[aoc/waitlist] Kit ${label} failed: ${res.status} ${res.statusText} ${body}`);
+    console.error(`[aoc/waitlist] Kit ${label} failed: ${res.status} ${res.statusText}`);
   }
 }
 
@@ -67,7 +89,7 @@ async function syncToKit(firstName: string, email: string): Promise<number | nul
       body: JSON.stringify({ first_name: firstName, email_address: email }),
     });
     if (!subRes.ok) {
-      await logKitFailure("subscriber upsert", subRes);
+      logKitFailure("subscriber upsert", subRes);
       return null;
     }
     const subJson = (await subRes.json().catch(() => null)) as
@@ -86,7 +108,7 @@ async function syncToKit(firstName: string, email: string): Promise<number | nul
       body: JSON.stringify({}),
     });
     if (!tagRes.ok) {
-      await logKitFailure("tag apply", tagRes);
+      logKitFailure("tag apply", tagRes);
       return null;
     }
 
@@ -98,11 +120,23 @@ async function syncToKit(firstName: string, email: string): Promise<number | nul
 }
 
 export async function POST(req: Request) {
+  // Reject naive cross-origin/bot POSTs. Return a fake 200 so bots don't learn.
+  if (!isAllowedOrigin(req)) {
+    console.warn("[aoc/waitlist] rejected: bad origin");
+    return NextResponse.json({ ok: true });
+  }
+
   let raw: unknown;
   try {
     raw = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Honeypot: the hidden `website` field is invisible to humans; bots fill it.
+  if (raw && typeof raw === "object" && String((raw as Record<string, unknown>).website ?? "").trim() !== "") {
+    console.warn("[aoc/waitlist] rejected: honeypot tripped");
+    return NextResponse.json({ ok: true });
   }
 
   const parsed = BodySchema.safeParse(raw);

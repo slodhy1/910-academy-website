@@ -3,7 +3,8 @@
 node_modules
 .next
 out
-.env*.local
+.env*
+!.env.local.example
 *.tsbuildinfo
 supabase/.temp/
 supabase/.branches/

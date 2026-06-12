@@ -18,24 +18,29 @@ const KIT_BASE = "https://api.kit.com/v4";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 class KitError extends Error {
-  retryAfterMs?: number;
-  constructor(message: string, retryAfterMs?: number) {
+  rateLimited: boolean;
+  constructor(message: string, rateLimited = false) {
     super(message);
-    this.retryAfterMs = retryAfterMs;
+    this.rateLimited = rateLimited;
   }
 }
 
-/** Run fn with exponential backoff; honors a 429 Retry-After via KitError.retryAfterMs. */
-async function withBackoff<T>(fn: () => Promise<T>, tries = 5, base = 1000): Promise<T> {
+/**
+ * Retry transient errors with short exponential backoff. A 429 is NOT retried
+ * here — it bubbles up so the run can stop cleanly and let the next (frequent)
+ * cron run continue within Kit's rolling rate budget, instead of sleeping ~60s
+ * mid-run and risking the function timeout.
+ */
+async function withBackoff<T>(fn: () => Promise<T>, tries = 3, base = 500): Promise<T> {
   let lastErr: unknown;
   for (let i = 0; i < tries; i++) {
     try {
       return await fn();
     } catch (err) {
       lastErr = err;
+      if (err instanceof KitError && err.rateLimited) throw err;
       if (i === tries - 1) break;
-      const retryAfter = err instanceof KitError ? err.retryAfterMs : undefined;
-      await sleep(retryAfter ?? base * Math.pow(2, i));
+      await sleep(base * Math.pow(2, i));
     }
   }
   throw lastErr;
@@ -48,13 +53,9 @@ async function kitPost(apiKey: string, path: string, body: unknown): Promise<unk
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    if (res.status === 429) {
-      const ra = Number(res.headers.get("retry-after"));
-      const retryAfterMs = Number.isFinite(ra) && ra > 0 ? ra * 1000 : 60_000;
-      throw new KitError(`Kit ${path} -> 429 ${text}`.trim(), retryAfterMs);
-    }
-    throw new KitError(`Kit ${path} -> ${res.status} ${res.statusText} ${text}`.trim());
+    if (res.status === 429) throw new KitError(`Kit ${path} -> 429`, true);
+    // status only — the Kit error body can echo the email (no PII in logs)
+    throw new KitError(`Kit ${path} -> ${res.status} ${res.statusText}`);
   }
   return res.json().catch(() => ({}));
 }
@@ -63,9 +64,17 @@ export interface ReconcileResult {
   processed: number;
   synced: number;
   failed: number;
+  rateLimited: boolean;
 }
 
-export async function reconcileKit({ limit = 40 }: { limit?: number } = {}): Promise<ReconcileResult> {
+/**
+ * Drain up to `limit` unsynced rows, oldest first, stopping early if `deadlineMs`
+ * is reached (stay under the function's maxDuration) or if Kit rate-limits us.
+ * Whatever isn't reached stays kit_synced=false for the next run — nothing lost.
+ */
+export async function reconcileKit(
+  { limit = 200, deadlineMs = 50_000 }: { limit?: number; deadlineMs?: number } = {}
+): Promise<ReconcileResult> {
   const apiKey = process.env.KIT_API_KEY;
   const tagId = process.env.KIT_TAG_ID_AOC_WAITLIST;
   if (!apiKey || !tagId) {
@@ -82,9 +91,12 @@ export async function reconcileKit({ limit = 40 }: { limit?: number } = {}): Pro
 
   if (error) throw new Error(`Supabase select failed: ${error.message}`);
 
-  const result: ReconcileResult = { processed: rows?.length ?? 0, synced: 0, failed: 0 };
+  const result: ReconcileResult = { processed: 0, synced: 0, failed: 0, rateLimited: false };
+  const startedAt = Date.now();
 
   for (const row of rows ?? []) {
+    if (Date.now() - startedAt >= deadlineMs) break; // stay under maxDuration
+    result.processed++;
     try {
       // create / upsert subscriber (Kit returns the existing one on duplicate email)
       const sub = (await withBackoff(() =>
@@ -104,9 +116,14 @@ export async function reconcileKit({ limit = 40 }: { limit?: number } = {}): Pro
 
       result.synced++;
     } catch (err) {
-      // leave kit_synced = false; the next run retries this row
       result.failed++;
-      console.error(`[aoc/reconcile] ${row.email} failed:`, err instanceof Error ? err.message : err);
+      // Kit rate budget exhausted: stop this run; the next run continues. No leads lost.
+      if (err instanceof KitError && err.rateLimited) {
+        result.rateLimited = true;
+        break;
+      }
+      // log row id, never the email (no PII)
+      console.error(`[aoc/reconcile] row ${row.id} failed:`, err instanceof Error ? err.message : err);
     }
   }
 
