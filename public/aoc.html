@@ -15,10 +15,15 @@
 <meta property="og:url" content="https://910academy.com/aoc">
 <meta property="og:title" content="AOC · The game is about to change">
 <meta property="og:description" content="120 modules. The skill that changes everything. AOC drops July 1. It will be worth the wait.">
-<meta property="og:image" content="https://910academy.com/images/og-image.jpg">
+<meta property="og:image" content="https://910academy.com/images/aoc-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="AOC — Agent on Camera">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AOC · The game is about to change">
 <meta name="twitter:description" content="120 modules. The skill that changes everything. AOC drops July 1.">
+<meta name="twitter:image" content="https://910academy.com/images/aoc-og.jpg">
 
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/logo-white.svg">
@@ -131,7 +136,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-content { position: relative; z-index: 2; max-width: 760px; width: 100%; margin: 0 auto; text-align: center; }
 /* "AOC" wordmark, TODO: swap for the real AOC logo asset when it lands */
 .aoc-lockup { display: inline-flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-8); }
-.aoc-lockup .mark { font-size: 2.4rem; font-weight: 700; letter-spacing: 0.18em; color: var(--fg); }
+.aoc-lockup img { width: clamp(200px, 24vw, 300px); height: auto; display: block; }
 .hero-headline { font-size: clamp(2.8rem, 9vw, 6.8rem); font-weight: 300; text-transform: uppercase; line-height: 0.98; letter-spacing: var(--tracking-tight); max-width: 16ch; margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.5); }
 .hero-headline .em { color: var(--accent); }
 .hero-sub { margin: var(--space-8) auto 0; font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; color: var(--fg); max-width: 28ch; }
@@ -341,8 +346,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </video>
   <div class="hero-scrim"></div>
   <div class="hero-content">
-    <!-- TODO: swap "AOC" wordmark for the real AOC logo asset -->
-    <span class="aoc-lockup"><span class="mark">AOC</span></span>
+    <span class="aoc-lockup"><img src="/aoc/brand/aoc-white.svg" alt="AOC — Agent on Camera" width="280" height="147" decoding="async"></span>
     <h1 class="hero-headline">The game is <span class="em">about</span> to change</h1>
     <p class="hero-support">120 modules to teach you everything you need to know about shooting agents on camera.</p>
     <div class="hero-cta-row">
@@ -487,6 +491,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <form class="modal__form" id="seatForm" novalidate>
       <label class="modal__field"><span class="modal__label">First name</span><input id="seatFirstName" name="firstName" type="text" autocomplete="given-name" required></label>
       <label class="modal__field"><span class="modal__label">Email</span><input id="seatEmail" name="email" type="email" autocomplete="email" required></label>
+      <!-- honeypot: hidden from humans, bots fill it -> server rejects -->
+      <input id="seatWebsite" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
       <button type="submit" class="modal__submit" id="seatSubmit">Join the Waitlist</button>
       <p class="modal__msg" id="seatMsg" role="status" aria-live="polite"></p>
     </form>
@@ -575,7 +581,7 @@ var AOC_UTM = (function () {
     if (!firstName) { msg.className = 'modal__msg error'; msg.textContent = 'Please enter your first name.'; return; }
     if (!EMAIL_RE.test(email)) { msg.className = 'modal__msg error'; msg.textContent = 'Please enter a valid email.'; return; }
     btn.disabled = true; btn.textContent = 'Joining...';
-    fetch('/api/aoc/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ firstName: firstName, email: email, utm: AOC_UTM }) })
+    fetch('/api/aoc/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ firstName: firstName, email: email, website: (form.website ? form.website.value : ''), utm: AOC_UTM }) })
       .then(function (res) { if (!res.ok) throw new Error('Request failed'); window.location.href = '/aoc/thanks'; })
       .catch(function () { msg.className = 'modal__msg error'; msg.textContent = 'Something went wrong. Please try again.'; btn.disabled = false; btn.textContent = 'Join the Waitlist'; });
   });
