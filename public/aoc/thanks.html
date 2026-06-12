@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>You're on the list · AOC · 910 Academy</title>
-<meta name="description" content="You're on the AOC waitlist. The game is about to change, and you'll be among the first through the doors on July 1.">
+<meta name="description" content="You're on the AOC waitlist. Agent on Camera drops July 1 — you'll be first in line when the doors open.">
 <meta name="robots" content="noindex">
 
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
@@ -61,14 +61,9 @@ img { max-width: 100%; display: block; }
 .thanks-inner { max-width: 760px; width: 100%; }
 .thanks-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-6); }
 .thanks-title { font-size: clamp(1.5rem, 6vw, 3.4rem); font-weight: 300; text-transform: uppercase; line-height: 1.08; letter-spacing: var(--tracking-tight); white-space: nowrap; margin-bottom: var(--space-8); }
-.thanks-body { font-size: 1.05rem; font-weight: 300; color: var(--fg-muted); line-height: 1.7; max-width: 540px; margin: 0 auto; }
-
-/* ===== VIDEO SLOT (swap in Claudio's video later, no rebuild needed) ===== */
-.thanks-video { margin-top: var(--space-12); border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.03); backdrop-filter: var(--glass-blur) var(--glass-saturate); -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate); }
-.thanks-video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-4); }
-.thanks-video-frame::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, var(--accent-glow), transparent 60%); pointer-events: none; }
-.thanks-video-play { width: 64px; height: 64px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; }
-.thanks-video-play svg { width: 22px; height: 22px; margin-left: 3px; fill: var(--fg-muted); }
+.thanks-body { font-size: 1.05rem; font-weight: 300; color: var(--fg-muted); line-height: 1.7; max-width: 560px; margin: 0 auto; }
+/* brand line directly under the body, centered, tight */
+.thanks-tagline { margin-top: var(--space-4); font-size: 1.05rem; font-weight: 400; color: var(--fg); }
 
 /* ===== LIVE EVENT BLOCK (reuses the glass card + accent CTA design) ===== */
 .thanks-event { margin-top: var(--space-8); border-radius: var(--radius-xl); border: 1px solid var(--border); background: rgba(255, 255, 255, 0.03); backdrop-filter: var(--glass-blur) var(--glass-saturate); -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate); padding: var(--space-10) var(--space-8); text-align: center; }
@@ -77,15 +72,9 @@ img { max-width: 100%; display: block; }
 .thanks-cta { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #04131d; background: var(--accent); border: none; cursor: pointer; padding: 18px 44px; border-radius: 100px; box-shadow: 0 14px 40px var(--accent-glow); transition: all 0.25s ease; }
 .thanks-cta:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 18px 50px rgba(56, 182, 255, 0.3); }
 .thanks-cta svg { width: 16px; height: 16px; }
-.thanks-cta .chev { transition: transform 0.2s ease; }
-.thanks-cta[aria-expanded="true"] .chev { transform: rotate(180deg); }
-/* Add-to-calendar dropdown */
-.thanks-cal { position: relative; display: inline-block; }
-.thanks-cal-menu { position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%); min-width: 240px; z-index: 10; padding: var(--space-2); background: rgba(15, 15, 16, 0.98); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.85); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); }
-.thanks-cal-menu[hidden] { display: none; }
-.thanks-cal-item { display: flex; align-items: center; gap: var(--space-3); width: 100%; text-align: left; padding: 12px 14px; border-radius: 10px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--fg); background: none; border: none; cursor: pointer; transition: background 0.15s ease; }
-.thanks-cal-item:hover { background: rgba(255, 255, 255, 0.06); }
-.thanks-cal-item svg { width: 18px; height: 18px; flex: none; color: var(--fg-muted); }
+/* secondary .ics download for non-Google users */
+.thanks-ics-link { margin-top: var(--space-4); display: inline-block; background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-dim); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s ease; }
+.thanks-ics-link:hover { color: var(--accent); }
 
 /* ===== FOOTER (minimal, standalone) ===== */
 .footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10); text-align: center; }
@@ -114,45 +103,20 @@ img { max-width: 100%; display: block; }
   <div class="thanks-inner">
     <p class="thanks-eyebrow">AOC</p>
     <h1 class="thanks-title">You're on the list.</h1>
-    <p class="thanks-body">You're in. AOC drops July 1 and you'll be first through the doors. Claudio recorded something for you. Press play, then lock in the date below. It will be worth the wait.</p>
+    <p class="thanks-body">You're in. Agent on Camera drops July 1st, and you'll be first in line when the doors open. We have a special live event planned where we will be teaching you the best game when it comes to shooting Agents on Camera. It'll be worth the wait.</p>
+    <p class="thanks-tagline">The game is about to change.</p>
 
-    <!-- ============================================================
-         CLAUDIO VIDEO SLOT
-         Drop the video in here later with NO rebuild required, replace
-         the .thanks-video-frame contents below with the embed/<video>,
-         e.g.:
-           <div class="thanks-video">
-             <iframe class="thanks-video-frame" src="…" allow="autoplay; fullscreen" ...></iframe>
-           </div>
-         ============================================================ -->
-    <div class="thanks-video" id="aocVideoSlot">
-      <div class="thanks-video-frame">
-        <span class="thanks-video-play">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        </span>
-      </div>
-    </div>
+    <!-- TODO: re-add Claudio's intro video here once he records it (prior .thanks-video block is in git history). -->
 
     <!-- Live event: commit to the date -->
     <div class="thanks-event">
       <p class="thanks-event-eyebrow">The live event</p>
-      <p class="thanks-event-line">July 1 · Be there when the doors open.</p>
-      <div class="thanks-cal">
-        <button type="button" class="thanks-cta" id="addToCalBtn" aria-haspopup="true" aria-expanded="false" aria-controls="calMenu">
-          Add to Calendar
-          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="thanks-cal-menu" id="calMenu" role="menu" hidden>
-          <a class="thanks-cal-item" id="gcalLink" href="#" target="_blank" rel="noopener" role="menuitem">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Google Calendar
-          </a>
-          <button type="button" class="thanks-cal-item" id="appleCalBtn" role="menuitem">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Apple Calendar
-          </button>
-        </div>
-      </div>
+      <p class="thanks-event-line">Be there when the doors open.</p>
+      <a class="thanks-cta" id="gcalBtn" href="#" target="_blank" rel="noopener">
+        Add to Google Calendar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </a>
+      <div><button type="button" id="icsBtn" class="thanks-ics-link">Download .ics for other calendars</button></div>
     </div>
   </div>
 </main>
@@ -167,13 +131,13 @@ img { max-width: 100%; display: block; }
 // One UTC instant drives both the .ics download and the Google Calendar link,
 // so the event lands at the right local time in every visitor's timezone.
 (function () {
-  // TODO: confirm the actual live event start time and add the event or Zoom
-  // link to the calendar description once known.
+  // TODO: confirm the real live event start time; update startUTC + add the
+  // Zoom/event link to the description once known.
   var EVENT = {
-    title: 'AOC goes live with Claudio',
-    startUTC: '2026-07-02T02:00:00Z', // July 1, 2026, 10:00 PM ET (EDT = UTC-4) (placeholder)
+    title: 'Official AOC Live Event',
+    startUTC: '2026-07-02T02:00:00Z', // July 1, 2026, 10:00 PM ET (EDT = UTC-4) — placeholder, matches the page countdown
     durationMin: 90,
-    description: 'AOC goes live with Claudio. The doors open and every module unlocks. (Event/Zoom link to come.)',
+    description: 'Official AOC Live Event. (Event/Zoom link to come.)',
     location: 'Online',
   };
 
@@ -187,15 +151,16 @@ img { max-width: 100%; display: block; }
   var endStamp = stamp(end);
 
   // Google Calendar link (same instant)
+  // Primary: Google Calendar template, prefilled (Claudio's preference).
   var gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
     + '&text=' + encodeURIComponent(EVENT.title)
     + '&dates=' + startStamp + '/' + endStamp
     + '&details=' + encodeURIComponent(EVENT.description)
     + '&location=' + encodeURIComponent(EVENT.location);
-  var gcalLink = document.getElementById('gcalLink');
-  if (gcalLink) gcalLink.setAttribute('href', gcal);
+  var gcalBtn = document.getElementById('gcalBtn');
+  if (gcalBtn) gcalBtn.setAttribute('href', gcal);
 
-  // .ics download (same instant)
+  // Secondary: .ics download for non-Google calendars (same instant).
   function downloadIcs() {
     var ics = [
       'BEGIN:VCALENDAR',
@@ -224,30 +189,8 @@ img { max-width: 100%; display: block; }
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
-  // Dropdown: Add to Calendar -> choose Google or Apple (.ics)
-  var btn = document.getElementById('addToCalBtn');
-  var menu = document.getElementById('calMenu');
-  var appleBtn = document.getElementById('appleCalBtn');
-
-  function openMenu() { if (!menu) return; menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
-  function closeMenu() { if (!menu) return; menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
-
-  if (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (menu && menu.hidden) openMenu(); else closeMenu();
-    });
-  }
-  if (appleBtn) appleBtn.addEventListener('click', function () { downloadIcs(); closeMenu(); });
-  if (gcalLink) gcalLink.addEventListener('click', closeMenu); // href opens Google in a new tab
-
-  // Close on outside click / Escape
-  document.addEventListener('click', function (e) {
-    if (menu && !menu.hidden && !e.target.closest('.thanks-cal')) closeMenu();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeMenu();
-  });
+  var icsBtn = document.getElementById('icsBtn');
+  if (icsBtn) icsBtn.addEventListener('click', downloadIcs);
 })();
 </script>
 </body>
