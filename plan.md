@@ -1,547 +1,206 @@
-# Phase B v5 plan — post-purchase auth flow + signup polish
+# AOC Waitlist Landing Page — plan.md
 
-Diff-level precision. No file outside this list will be touched.
+## 1. Objective
 
----
+Ship a high-desirability waitlist page at `910academy.com/aoc` as fast as reasonably possible. The page captures name and email, fires a welcome sequence, and builds anticipation for the Agent on Camera launch on July 1. The creative drives signups. The page is supportive: simple, low friction, one clear action.
 
-## Change 1 — middleware.ts: NO-OP
+Scope is v1 only. The sneak-peek module strip, the blurred full-module grid page, the live-event landing page, and Claudio's "why" video are explicitly out of scope here and tracked in section 12.
 
-The `/account?purchase=success` → `/account/sign-up?purchase=success` unauth redirect is already at lines 60-64 (added in v3). Documented as already-correct in research.md. No diff.
+## 2. Architecture
 
----
+New route on the existing 910academy.com Next.js app. No new app, no new repo.
 
-## Change 2 — install Lucide
+Two layers:
 
-```bash
-npm install lucide-react
+1. Source of truth: Supabase. The form posts to a Next.js API route that writes every signup to an `aoc_waitlist` table. You own the data. This is the only way to later match Instagram handles and Skool buyers for attribution and paying out setters.
+2. Sending engine: Kit (ConvertKit). The same API route upserts the subscriber into Kit and applies the `aoc-waitlist` tag, which triggers the welcome sequence. Kit owns deliverability and lets Claudio and Ryan fire promo broadcasts during launch week without touching code.
+
+Write order is Supabase first (durable record), then Kit (best effort). If Kit fails, the Supabase row persists with `kit_synced = false` and a Vercel Cron job drains the backlog. This protects you from Kit rate limits during a signup spike.
+
+## 3. Prerequisites
+
+a. Existing 910academy.com Next.js app, local checkout, working branch
+b. Supabase project already wired to the 910academy app (confirm)
+c. Kit account created, sending domain authenticated with SPF, DKIM, and DMARC (confirm). Unauthenticated sending domains land in spam during launch week.
+d. Kit `aoc-waitlist` tag created, tag id captured
+e. Kit welcome sequence built and set to trigger on the `aoc-waitlist` tag
+f. AOC placeholder logo asset or text lockup
+
+### Environment variables
+
+```
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=        # server only, never exposed to client
+KIT_API_KEY=
+KIT_TAG_ID_AOC_WAITLIST=
+NEXT_PUBLIC_SITE_URL=https://910academy.com
 ```
 
-Updates `package.json` + `package-lock.json`. Tree-shakable — we use only `Eye` and `EyeOff` icons, ~1.5 KB each.
+## 4. Data layer — Supabase
 
----
+```sql
+create table public.aoc_waitlist (
+  id            uuid primary key default gen_random_uuid(),
+  first_name    text not null,
+  email         text not null unique,
+  source        text,
+  utm_source    text,
+  utm_medium    text,
+  utm_campaign  text,
+  utm_content   text,
+  utm_term      text,
+  kit_subscriber_id  bigint,
+  kit_synced    boolean not null default false,
+  created_at    timestamptz not null default now()
+);
 
-## Change 3 — `src/components/PasswordInput.tsx` (new)
+alter table public.aoc_waitlist enable row level security;
+-- No public policies. The API route uses the service role key and bypasses RLS.
+```
 
-Reusable client component for the password field. Includes the eye toggle, and exports two small indicator components used by sign-up + settings.
+The `unique` on email makes resubmits idempotent. The API route upserts on conflict so a double-tap returns success, not an error.
 
-```tsx
-"use client";
+## 5. API route contract
 
-import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+`POST /api/aoc/waitlist` (App Router: `app/api/aoc/waitlist/route.ts`)
 
-type PasswordInputProps = {
-  value: string;
-  onChange: (v: string) => void;
-  autoComplete: "current-password" | "new-password";
-  required?: boolean;
-  minLength?: number;
-  className?: string;       // applied to <input> — defaults to "auth-input"
-  id?: string;
-  placeholder?: string;
-};
-
-export function PasswordInput({
-  value,
-  onChange,
-  autoComplete,
-  required,
-  minLength,
-  className = "auth-input",
-  id,
-  placeholder,
-}: PasswordInputProps) {
-  const [revealed, setRevealed] = useState(false);
-  return (
-    <div className="pw-wrap">
-      <input
-        id={id}
-        type={revealed ? "text" : "password"}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        minLength={minLength}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        className={`${className} pw-input`}
-      />
-      <button
-        type="button"
-        onClick={() => setRevealed((r) => !r)}
-        className="pw-toggle"
-        aria-label={revealed ? "Hide password" : "Show password"}
-        aria-pressed={revealed}
-        tabIndex={0}
-      >
-        {revealed ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}
-      </button>
-      <style>{`
-        .pw-wrap { position: relative; display: block; }
-        .pw-wrap .pw-input { width: 100%; padding-right: 44px; }
-        .pw-toggle {
-          position: absolute;
-          right: 8px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 36px;
-          height: 36px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: transparent;
-          border: 0;
-          color: var(--fg-muted);
-          cursor: pointer;
-          border-radius: var(--radius-sm);
-          transition: color 0.15s;
-        }
-        .pw-toggle:hover { color: var(--fg); }
-        .pw-toggle:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; }
-      `}</style>
-    </div>
-  );
-}
-
-export function MinLengthIndicator({
-  value,
-  min,
-}: {
-  value: string;
-  min: number;
-}) {
-  // Hide when empty (don't be aggressive). Show ✓/✗ once user types.
-  if (value.length === 0) return null;
-  const ok = value.length >= min;
-  return (
-    <p className={`pw-indicator${ok ? " pw-indicator-ok" : " pw-indicator-bad"}`}>
-      <span aria-hidden>{ok ? "✓" : "✗"}</span> At least {min} characters
-      <style>{`
-        .pw-indicator { font-size: 12px; line-height: 1.4; margin-top: 2px; display: flex; gap: 6px; align-items: center; letter-spacing: 0.02em; }
-        .pw-indicator-ok { color: #5fd16a; }
-        .pw-indicator-bad { color: #ff6b6b; }
-      `}</style>
-    </p>
-  );
-}
-
-export function MatchIndicator({
-  a,
-  b,
-}: {
-  a: string;
-  b: string;
-}) {
-  if (b.length === 0) return null;
-  const ok = a === b;
-  return (
-    <p className={`pw-indicator${ok ? " pw-indicator-ok" : " pw-indicator-bad"}`}>
-      <span aria-hidden>{ok ? "✓" : "✗"}</span> {ok ? "Passwords match" : "Passwords don't match"}
-      <style>{`
-        .pw-indicator { font-size: 12px; line-height: 1.4; margin-top: 2px; display: flex; gap: 6px; align-items: center; letter-spacing: 0.02em; }
-        .pw-indicator-ok { color: #5fd16a; }
-        .pw-indicator-bad { color: #ff6b6b; }
-      `}</style>
-    </p>
-  );
+Request body:
+```json
+{
+  "firstName": "string, required, 1-80 chars",
+  "email": "string, required, valid email",
+  "utm": { "source": "", "medium": "", "campaign": "", "content": "", "term": "" }
 }
 ```
 
-The two indicators duplicate their `<style>` block. Trade-off: zero coordination needed; React de-dupes scoped styles. Could extract a CSS module, but the inline-style pattern in this codebase is already widespread. Plan keeps consistent.
+Steps:
+1. Validate with zod. Reject malformed email or empty first name with 400.
+2. Upsert into `aoc_waitlist` on conflict (email) do update set first_name and utm fields. Capture the row.
+3. Kit upsert subscriber: `POST https://api.kit.com/v4/subscribers` with header `X-Kit-Api-Key`, body `{ "first_name": ..., "email_address": ... }`. Kit returns the existing subscriber instead of erroring on a duplicate email, so no special-casing needed. Capture `subscriber.id`.
+4. Kit tag: `POST https://api.kit.com/v4/tags/{KIT_TAG_ID_AOC_WAITLIST}/subscribers/{subscriber.id}` with empty body `{}`. The subscriber must exist first, which step 3 guarantees. Applying the tag triggers the welcome sequence.
+5. On Kit success, update the Supabase row with `kit_subscriber_id` and `kit_synced = true`.
+6. Return 200 `{ "ok": true }`.
 
----
+Failure handling:
+- If Kit returns 429, do not fail the user. The Supabase row already exists with `kit_synced = false`. Log it. The Vercel Cron reconciliation job retries. Kit allows 120 requests per rolling 60 seconds per key, so a burst from a 50k-follower push can exceed it. The Supabase-first design absorbs this.
+- If Kit returns any other error, same path: persist, mark unsynced, log, return ok.
+- Never leak provider errors to the client. The user sees success the moment Supabase has the row.
 
-## Change 4 — `src/app/account/(auth)/sign-up/actions.ts` (rewrite)
+### Reconciliation (Vercel Cron safety net)
 
-Replace `linkCustomerToAuthUser` with `signUpAndLink`. Server-side signUp via SSR client (writes cookies), then admin-client link, then `redirect("/account")` on success-with-session.
+Vercel Cron hits `GET /api/aoc/reconcile` every 15 minutes (gated by `CRON_SECRET`): select `aoc_waitlist` where `kit_synced = false` (oldest first, batched), run the create-subscriber and tag calls with exponential backoff (honoring 429 Retry-After), set `kit_synced = true` on success. This guarantees no signup is lost to a Kit rate limit during the spike. Shared logic lives in `src/lib/aoc/reconcile.ts`.
 
-```ts
-"use server";
+## 6. Opt-in mode decision
 
-import { redirect } from "next/navigation";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient as createServerClient } from "@/lib/supabase/server";
+Single opt-in (instant, lowest friction) versus double opt-in (Kit sends a confirmation click first). For a waitlist that wants maximum signups and an immediate welcome, single opt-in is the call. Creating the subscriber via the API plus the tag trigger fires the welcome sequence without a confirmation step. Confirm you want single opt-in before build.
 
-export type SignUpResult =
-  | { success: false; error: string }
-  | { success: true; needsSignIn: true };
+## 7. Page spec — `/aoc`
 
-export async function signUpAndLink(input: {
-  email: string;
-  password: string;
-  fullName: string;
-}): Promise<SignUpResult> {
-  const email = input.email.trim();
-  const fullName = input.fullName.trim();
-  const password = input.password;
+Match the existing 910 Academy design system. Do not invent new tokens. Accent `#38B6FF`, Montserrat, glassmorphism, existing dark base. Reuse existing buttons, inputs, and container components from the 910academy app.
 
-  if (!email || !password || !fullName) {
-    return { success: false, error: "All fields are required." };
-  }
-  if (password.length < 8) {
-    return { success: false, error: "Password must be at least 8 characters." };
-  }
+Layout, desktop:
+1. Top: AOC placeholder logo lockup, small, centered or top-left
+2. Hero headline, large, left-weighted: the headline copy in section 9
+3. Centered glass card with the form: first name field, email field, one CTA button in `#38B6FF` as the single eye-magnet on the page
+4. Subhead line positioned bottom-right of the hero: "It will be worth the wait"
+5. Countdown timer below the form, labeled with the launch moment
+6. A single line teasing 120 modules
+7. Footer: 910 Academy branding
 
-  const sbServer = await createServerClient();
-  const { data, error: signUpErr } = await sbServer.auth.signUp({
-    email,
-    password,
-    options: { data: { full_name: fullName } },
-  });
+Mobile: stack in order logo, headline, subhead, form card, countdown, modules tease, footer. Keep the CTA above the fold.
 
-  if (signUpErr) {
-    return { success: false, error: signUpErr.message };
-  }
-  if (!data.user) {
-    return { success: false, error: "Sign-up returned no user." };
-  }
+Countdown target: July 1, 2026, 8:00 PM Eastern. July is daylight time so Eastern is UTC-4. Anchor the timer to the fixed instant `2026-07-02T00:00:00Z` so it is timezone-proof regardless of the visitor's clock. On expiry, swap the timer for a "Doors are open" state linking to the live event or Skool (link TBD, placeholder for now).
 
-  // Link any existing customers row by email (admin client).
-  const admin = createAdminClient();
-  const { data: existing } = await admin
-    .from("customers")
-    .select("id, auth_user_id, full_name")
-    .eq("email", email)
-    .maybeSingle();
+UTM capture: read `utm_*` query params on page load, hold in state, include in the POST body. This is how you measure which outbound channel and which DM batch converted.
 
-  if (existing) {
-    if (!existing.auth_user_id || existing.auth_user_id === data.user.id) {
-      const update: { auth_user_id: string; full_name?: string } = {
-        auth_user_id: data.user.id,
-      };
-      if (!existing.full_name && fullName) update.full_name = fullName;
-      const { error: linkErr } = await admin
-        .from("customers")
-        .update(update)
-        .eq("id", existing.id);
-      if (linkErr) {
-        console.error("[sign-up] link update failed:", linkErr);
-        // Don't fail the signup — the customer is created in auth, they can still log in.
-      }
-    } else {
-      console.warn(
-        `[sign-up] customers row for ${email} already linked to ${existing.auth_user_id}, ignoring new ${data.user.id}`
-      );
-    }
-  }
+Form behavior: client-side validate, disable button on submit, show inline success state in the card (do not navigate away on error), redirect to `/aoc/thanks` on success.
 
-  if (!data.session) {
-    // Defensive: only happens if email confirmation gets re-enabled in Supabase.
-    return { success: true, needsSignIn: true };
-  }
+## 8. Thank-you page spec — `/aoc/thanks`
 
-  redirect("/account"); // throws — never returns
-}
-```
+1. Headline: "You're on the list"
+2. Confirmation body reinforcing "It will be worth the wait" and telling them sneak peeks are coming to their inbox
+3. Add-to-calendar button for July 1, 8:00 PM ET that works across time zones (generate an `.ics` and a Google Calendar link from the same UTC instant). Claudio flagged the missing add-to-calendar as a recurring miss, so include it here.
+4. Placeholder slot for Claudio's "why" video, drops in later without a rebuild
+5. AOC branding
 
-Identity-guard from old `linkCustomerToAuthUser` is gone. The action IS the authority that creates both auth user and customers link, so impersonation surface is the same as it was before (sign-up always lets a user claim any email; that's by design with email confirmation off).
+## 9. Copy (drafted from the call, Claudio's voice)
 
----
+### Page
 
-## Change 5 — `src/app/account/(auth)/sign-up/page.tsx` (rewrite onSubmit + form)
+- Logo lockup: AGENT ON CAMERA (placeholder until the logo asset lands)
+- Hero headline: THE GAME IS ABOUT TO CHANGE
+- Subhead, bottom-right: It will be worth the wait
+- Modules tease line: 120 modules. The skill that changes everything. July 1.
+- Form labels: First name / Email
+- CTA button: Join the Waitlist
+- Microcopy under button: First access the moment the doors open. Nothing else.
+- Countdown label: Doors open July 1, 8:00 PM ET
 
-Drop client-side `supabase.auth.signUp`, drop `linkCustomerToAuthUser` import. Drop `info` state. Use `signUpAndLink` action + new components.
+### Thank-you page
 
-Key edits:
-- Imports: replace `import { linkCustomerToAuthUser } from "./actions";` with `import { signUpAndLink } from "./actions";`. Add `import { PasswordInput, MinLengthIndicator, MatchIndicator } from "@/components/PasswordInput";`. Drop `import { createClient } from "@/lib/supabase/client";` (no longer needed).
-- State: drop `const [info, setInfo] = useState<string | null>(null);` and `setInfo(null)` in onSubmit and the JSX render.
-- onSubmit: simplify to a single server-action call.
+- Headline: You're on the list
+- Body: You're in. The game is about to change, and you'll be among the first through the doors on July 1. Watch your inbox over the next few weeks. I'm going to show you exactly what's coming, piece by piece. It will be worth the wait.
+- Calendar button: Add the launch to my calendar
 
-```tsx
-async function onSubmit(e: React.FormEvent) {
-  e.preventDefault();
-  setError(null);
+### Welcome email (v1 draft, refine with Claudio's journaling input)
 
-  if (!formValid) return;
+Subject: You're in. Now let me tell you why this matters.
 
-  setLoading(true);
-  const result = await signUpAndLink({
-    email: email.trim(),
-    password,
-    fullName: fullName.trim(),
-  });
-  // If success-with-session, server-action redirected; this code doesn't run.
-  if (!result.success) {
-    setError(result.error);
-    setLoading(false);
-    return;
-  }
-  if (result.needsSignIn) {
-    setError("Account created. Please sign in to continue.");
-    setLoading(false);
-  }
-}
-```
+Body:
+I want to tell you something I kept quiet for a long time.
 
-- `formValid` derived:
+Right before all of this, I was a cashier making thirteen dollars an hour. That was my life. If I had listened to the people who say don't buy the hype, be realistic, that kind of success is for someone else, I'd still be standing behind that counter.
 
-```ts
-const isEmailLooking = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-const formValid =
-  fullName.trim().length > 0 &&
-  isEmailLooking(email.trim()) &&
-  password.length >= 8 &&
-  confirm === password;
-```
+I didn't listen. I bet on one skill. And it changed everything.
 
-- Replace 2× password inputs with `<PasswordInput>`:
+Two years ago I started teaching pieces of it for free, and the game shifted. People around the world built real businesses off it. But free only gets you entry-level. It's surface. What's coming on July 1 is the whole thing. 120 modules. Mastery, not a taste.
 
-```diff
--        <label className="auth-label">
--          Password
--          <input
--            type="password"
--            value={password}
--            onChange={(e) => setPassword(e.target.value)}
--            required
--            minLength={8}
--            autoComplete="new-password"
--            className="auth-input"
--          />
--        </label>
-+        <label className="auth-label">
-+          Password
-+          <PasswordInput
-+            value={password}
-+            onChange={setPassword}
-+            required
-+            minLength={8}
-+            autoComplete="new-password"
-+            className="auth-input"
-+          />
-+          <MinLengthIndicator value={password} min={8} />
-+        </label>
--        <label className="auth-label">
--          Confirm password
--          <input
--            type="password"
--            value={confirm}
--            onChange={(e) => setConfirm(e.target.value)}
--            required
--            minLength={8}
--            autoComplete="new-password"
--            className="auth-input"
--          />
--        </label>
-+        <label className="auth-label">
-+          Confirm password
-+          <PasswordInput
-+            value={confirm}
-+            onChange={setConfirm}
-+            required
-+            minLength={8}
-+            autoComplete="new-password"
-+            className="auth-input"
-+          />
-+          <MatchIndicator a={password} b={confirm} />
-+        </label>
-```
+You already did the most important part. You raised your hand. Over the next few weeks I'm going to show you what's inside, bit by bit. Stay close to your inbox.
 
-- Drop `{info && <p className="auth-info">{info}</p>}` from JSX.
-- Drop `.auth-info { … }` from `<style>` block (no callers).
-- Update button:
+The game is about to change.
 
-```diff
--        <button type="submit" disabled={loading} className="auth-btn">
-+        <button type="submit" disabled={loading || !formValid} className="auth-btn">
-           {loading ? "Creating account..." : "Create account"}
-         </button>
-```
+It will be worth the wait.
 
----
+Claudio
 
-## Change 6 — `src/app/account/(auth)/login/page.tsx` (1 password swap)
+Note: this draft uses the Lowe's-cashier story and the don't-buy-the-hype reframe straight from the call. Claudio agreed to journal from inspiring moments and send raw material. Swap his lines in when they arrive. Keep the close on "It will be worth the wait."
 
-```diff
-+import { PasswordInput } from "@/components/PasswordInput";
-        <label className="auth-label">
-          Password
--          <input
--            type="password"
--            value={password}
--            onChange={(e) => setPassword(e.target.value)}
--            required
--            autoComplete="current-password"
--            className="auth-input"
--          />
-+          <PasswordInput
-+            value={password}
-+            onChange={setPassword}
-+            required
-+            autoComplete="current-password"
-+            className="auth-input"
-+          />
-        </label>
-```
+## 10. Validation checklist before ship
 
-No indicators (login uses existing password — no length/match logic).
+a. Form submits, Supabase row appears with correct utm fields
+b. Kit subscriber created, `aoc-waitlist` tag applied, welcome sequence fires to a test inbox
+c. Welcome email lands in inbox, not spam (test Gmail, Outlook, iCloud)
+d. Countdown reads correctly from a non-Eastern timezone
+e. Double submit of the same email returns success, no error, no duplicate row
+f. Thank-you page loads, add-to-calendar produces a correct July 1 8:00 PM ET event
+g. Mobile layout holds, CTA above the fold
+h. Kit failure simulated: row persists with `kit_synced = false`, user still sees success
 
----
+## 11. Build order
 
-## Change 7 — `src/app/account/(auth)/reset-password/page.tsx` (2 password swaps)
+1. Supabase table and RLS
+2. API route with zod validation and Supabase upsert
+3. Kit create-and-tag calls wired into the route
+4. `/aoc` page and form, brand-matched
+5. Countdown component
+6. `/aoc/thanks` page and add-to-calendar
+7. UTM capture
+8. Run the section 10 checklist
+9. Ship
+10. Vercel Cron reconciliation route (`/api/aoc/reconcile`)
 
-Both fields:
+## 12. Out of scope (v2 and later)
 
-```diff
-+import { PasswordInput, MinLengthIndicator, MatchIndicator } from "@/components/PasswordInput";
+- Sneak-peek preview strip at the bottom of the waitlist page
+- Full module grid page with 50 percent Gaussian-blur video and AOC logo, dripped one to three minute previews
+- Live-event landing page for the cold outbound "sleeping giant" push to non-real-estate videographers
+- Claudio "why" video production for the thank-you page
+- Avatar segmentation and post-launch ad campaigns by tag
 
-        <label className="auth-label">
-          New password
--          <input
--            type="password"
--            value={password}
--            onChange={(e) => setPassword(e.target.value)}
--            required
--            autoComplete="new-password"
--            minLength={8}
--            className="auth-input"
--          />
-+          <PasswordInput
-+            value={password}
-+            onChange={setPassword}
-+            required
-+            autoComplete="new-password"
-+            minLength={8}
-+            className="auth-input"
-+          />
-+          <MinLengthIndicator value={password} min={8} />
-        </label>
-        <label className="auth-label">
-          Confirm password
--          <input
--            type="password"
--            value={confirm}
--            onChange={(e) => setConfirm(e.target.value)}
--            required
--            autoComplete="new-password"
--            minLength={8}
--            className="auth-input"
--          />
-+          <PasswordInput
-+            value={confirm}
-+            onChange={setConfirm}
-+            required
-+            autoComplete="new-password"
-+            minLength={8}
-+            className="auth-input"
-+          />
-+          <MatchIndicator a={password} b={confirm} />
-        </label>
-```
+## 13. Open items to confirm before the execute prompt
 
-(Per research §10: spec said "ALL password inputs" get eye toggle and explicitly named sign-up + settings for indicators. Reset-password has the same shape; consistency wins. Flagging — push back if you want indicators OFF here.)
-
----
-
-## Change 8 — `src/app/account/(authed)/settings/forms.tsx` (3 password swaps + 2 indicators)
-
-In the change-password form. Current password gets eye toggle ONLY (no indicator). New + confirm get eye toggle + indicators.
-
-```diff
-+import { PasswordInput, MinLengthIndicator, MatchIndicator } from "@/components/PasswordInput";
-
-        <label className="settings-label">
-          Current password
--          <input
--            type="password"
--            value={currentPassword}
--            onChange={(e) => setCurrentPassword(e.target.value)}
--            required
--            autoComplete="current-password"
--            className="settings-input"
--          />
-+          <PasswordInput
-+            value={currentPassword}
-+            onChange={setCurrentPassword}
-+            required
-+            autoComplete="current-password"
-+            className="settings-input"
-+          />
-        </label>
-        <label className="settings-label">
-          New password
--          <input
--            type="password"
--            value={newPassword}
--            onChange={(e) => setNewPassword(e.target.value)}
--            required
--            minLength={8}
--            autoComplete="new-password"
--            className="settings-input"
--          />
-+          <PasswordInput
-+            value={newPassword}
-+            onChange={setNewPassword}
-+            required
-+            minLength={8}
-+            autoComplete="new-password"
-+            className="settings-input"
-+          />
-+          <MinLengthIndicator value={newPassword} min={8} />
-        </label>
-        <label className="settings-label">
-          Confirm new password
--          <input
--            type="password"
--            value={confirmPassword}
--            onChange={(e) => setConfirmPassword(e.target.value)}
--            required
--            minLength={8}
--            autoComplete="new-password"
--            className="settings-input"
--          />
-+          <PasswordInput
-+            value={confirmPassword}
-+            onChange={setConfirmPassword}
-+            required
-+            minLength={8}
-+            autoComplete="new-password"
-+            className="settings-input"
-+          />
-+          <MatchIndicator a={newPassword} b={confirmPassword} />
-        </label>
-```
-
-The settings password change flow continues to use `signInWithPassword` + `updateUser` — not changed by this plan. Only the inputs and indicators.
-
----
-
-## Order of operations in execute step
-
-1. `npm install lucide-react`.
-2. Create `src/components/PasswordInput.tsx`.
-3. Rewrite `src/app/account/(auth)/sign-up/actions.ts`.
-4. Edit `src/app/account/(auth)/sign-up/page.tsx`: imports, state, onSubmit, formValid, JSX swaps, indicators, disabled button, drop info.
-5. Edit `src/app/account/(auth)/login/page.tsx`: 1 password swap.
-6. Edit `src/app/account/(auth)/reset-password/page.tsx`: 2 password swaps + indicators.
-7. Edit `src/app/account/(authed)/settings/forms.tsx`: 3 password swaps + 2 indicators.
-8. `npm run build` — must pass clean.
-9. STOP for "deploy".
-
----
-
-## Files explicitly NOT touched
-
-- `middleware.ts` — already correct.
-- `src/lib/webhook/process-checkout.ts`, `src/app/api/stripe-webhook/route.ts` — webhook untouched.
-- `emails/*.html`, smoke test, `customers` schema, marketing HTMLs — out of scope.
-- `(auth)/forgot-password/page.tsx` — has only an email field, no password input.
-- `next.config.ts`, `vercel.json` — out of scope.
-
----
-
-## Risks / soft warnings
-
-1. **Server-action redirect carries cookies**: verified pattern in Next 15 with `@supabase/ssr`. Cookies set during signUp are returned with the 303 from `redirect()`. If, somehow, the cookie write doesn't persist, the user lands on `/account` unauth and middleware bounces them to `/account/login` — annoying but not destructive. Easy to verify in Step 7 with a real signup test.
-2. **Lucide tree-shake**: confirmed via `next build` output. If the bundle gets noticeably bigger, we can swap to inline SVG. ~1.5 KB icon × 2 = ~3 KB. Negligible.
-3. **`MinLengthIndicator` and `MatchIndicator`** duplicate their `<style>` block. React de-dupes adjacent identical `<style>` nodes; bundle cost is one copy. Trade-off accepted for self-contained components.
-4. **Settings form's "Current password" field**: gets eye toggle but no indicators. The "current" password length wasn't necessarily set under our 8-char rule (legacy users from any pre-rule signup), so checking 8+ on the current field would be wrong.
-5. **Email regex** (`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`): minimal validity check. Browser's `type="email"` does its own check; the regex here just gates the disabled button before form submit. Both run.
-6. **`autoComplete` semantics**: kept `"new-password"` on signup/reset/settings-new fields, `"current-password"` on login + settings-current.
-7. **Default state of Create Account button on first paint**: `formValid` is `false` (all fields empty). Button starts disabled. Visually matches existing `:disabled` style (opacity 0.6, cursor not-allowed). Good.
-8. **The signup page's `info` state and `.auth-info` CSS rule**: both removed. If ever re-needed, can be re-added.
-
----
-
-## Stop point
-
-Execute does NOT begin until user replies "go".
+1. Kit account exists and sending domain is authenticated (SPF, DKIM, DMARC)
+2. Supabase project is wired to the 910academy app
+3. Single opt-in confirmed
+4. `KIT_TAG_ID_AOC_WAITLIST` value once the tag is created
+5. AOC placeholder logo: text lockup acceptable for v1, or is an asset coming
