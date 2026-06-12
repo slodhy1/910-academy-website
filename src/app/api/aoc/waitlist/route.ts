@@ -1,4 +1,4 @@
-import { NextResponse, after } from "next/server";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -30,8 +30,6 @@ const BodySchema = z.object({
     .optional()
     .default({}),
 });
-
-const KIT_BASE = "https://api.kit.com/v4";
 
 // Only accept state-changing requests from our own origins (same pattern as the
 // claudio-application route). Blocks naive cross-origin/bot POSTs.
@@ -72,69 +70,6 @@ async function verifyTurnstile(token: string, ip: string | null): Promise<boolea
     return data.success === true;
   } catch {
     return true; // Turnstile unreachable -> don't block real users
-  }
-}
-
-// Log a failed Kit response, calling out 429 (rate limit: 120 req / rolling 60s).
-// Status only — the Kit error body can echo the email, so it's kept out of logs.
-function logKitFailure(label: string, res: Response): void {
-  if (res.status === 429) {
-    console.error(`[aoc/waitlist] Kit ${label} rate-limited (429) — leaving kit_synced=false for reconciliation.`);
-  } else {
-    console.error(`[aoc/waitlist] Kit ${label} failed: ${res.status} ${res.statusText}`);
-  }
-}
-
-/**
- * Best-effort sync to Kit (ConvertKit). Creates/upserts the subscriber, then
- * applies the waitlist tag (which triggers the welcome automation). Returns the
- * Kit subscriber id on full success, or null on ANY failure — the caller treats
- * null as "leave kit_synced = false and move on". Never throws.
- */
-async function syncToKit(firstName: string, email: string): Promise<number | null> {
-  const apiKey = process.env.KIT_API_KEY;
-  const tagId = process.env.KIT_TAG_ID_AOC_WAITLIST;
-  if (!apiKey || !tagId) {
-    console.warn("[aoc/waitlist] Kit env missing (KIT_API_KEY / KIT_TAG_ID_AOC_WAITLIST); skipping Kit sync.");
-    return null;
-  }
-
-  try {
-    // 1. Create or upsert the subscriber. Kit returns the existing subscriber
-    //    (not an error) when the email already exists.
-    const subRes = await fetch(`${KIT_BASE}/subscribers`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Kit-Api-Key": apiKey },
-      body: JSON.stringify({ first_name: firstName, email_address: email }),
-    });
-    if (!subRes.ok) {
-      logKitFailure("subscriber upsert", subRes);
-      return null;
-    }
-    const subJson = (await subRes.json().catch(() => null)) as
-      | { subscriber?: { id?: number } }
-      | null;
-    const subscriberId = subJson?.subscriber?.id;
-    if (typeof subscriberId !== "number") {
-      console.error("[aoc/waitlist] Kit subscriber response missing id.");
-      return null;
-    }
-
-    // 2. Apply the waitlist tag -> triggers the welcome automation.
-    const tagRes = await fetch(`${KIT_BASE}/tags/${tagId}/subscribers/${subscriberId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Kit-Api-Key": apiKey },
-      body: JSON.stringify({}),
-    });
-    if (!tagRes.ok) {
-      logKitFailure("tag apply", tagRes);
-      return null;
-    }
-
-    return subscriberId;
-  } catch (err) {
-    console.error("[aoc/waitlist] Kit sync threw:", err);
-    return null;
   }
 }
 
@@ -202,25 +137,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Could not join the waitlist. Please try again." }, { status: 500 });
   }
 
-  // The durable Supabase row is done -> respond NOW (user redirects immediately).
-  // Kit sync is best-effort and runs AFTER the response (Fluid Compute keeps the
-  // invocation alive). A Kit failure leaves kit_synced=false for the cron — no
-  // lead lost, and the user never waits on Kit's 2 round-trips.
-  const rowId = data.id;
-  after(async () => {
-    try {
-      const kitSubscriberId = await syncToKit(firstName, email);
-      if (kitSubscriberId !== null) {
-        const { error: updErr } = await sb
-          .from("aoc_waitlist")
-          .update({ kit_subscriber_id: kitSubscriberId, kit_synced: true })
-          .eq("id", rowId);
-        if (updErr) console.error("[aoc/waitlist] kit_synced update failed:", updErr);
-      }
-    } catch (err) {
-      console.error("[aoc/waitlist] background Kit sync failed:", err instanceof Error ? err.message : err);
-    }
-  });
-
+  // Kit sync is intentionally NOT done here — the request never touches Kit's API,
+  // so joining is instant. The durable row (kit_synced=false) is drained to Kit by
+  // the Vercel Cron (/api/aoc/reconcile, every 2 min). The welcome automation fires
+  // within ~2 min of signup; no lead is ever lost.
   return NextResponse.json({ ok: true });
 }
