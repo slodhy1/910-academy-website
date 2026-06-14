@@ -190,7 +190,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .compare-col.after .compare-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
 
 /* ========== SNEAK PEEK (locked modules) ========== */
-.peek-top { display: flex; align-items: flex-start; justify-content: flex-end; gap: var(--space-5); flex-wrap: wrap; margin-bottom: var(--space-6); }
+.peek-top { display: flex; align-items: flex-start; justify-content: center; gap: var(--space-5); flex-wrap: wrap; margin-bottom: var(--space-6); }
+/* Centered stacked heading for the sneak-peek section (matches the centered hero + countdown). */
+.peek-heading { text-align: center; text-transform: uppercase; letter-spacing: var(--tracking-tight); }
+.peek-heading .ph-lg { display: block; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 300; line-height: var(--leading-tight); margin-bottom: var(--space-4); }
+.peek-heading .ph-md { display: block; font-size: clamp(0.95rem, 2.1vw, 1.45rem); font-weight: 300; color: var(--fg-muted); line-height: 1.3; letter-spacing: 0.04em; }
+.peek-heading .ph-md + .ph-md { margin-top: var(--space-2); }
 .peek-pill { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); padding: 8px 16px; border-radius: var(--radius-pill); }
 .peek-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
 /* Continuous vertical marquee: a slow-moving wall of locked module thumbnails that
@@ -207,15 +212,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .peek-marquee:hover .peek-track { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) { .peek-track { animation: none !important; } }
 /* Video-thumbnail tiles: visible enough to recognize, blurred + locked so there's no access yet. */
-.peek-tile { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: #0f0f10; }
+.peek-tile { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: #0f0f10; cursor: pointer; transition: border-color 0.25s ease; }
+.peek-tile:hover { border-color: var(--accent-border); }
+.peek-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .peek-thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(5px) brightness(0.6) saturate(0.9); transform: scale(1.12); transition: filter 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth); }
 .peek-tile:hover .peek-thumb-img { filter: blur(3px) brightness(0.74) saturate(1); transform: scale(1.16); }
 .peek-tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,5,6,0.2), rgba(5,5,6,0.55)); pointer-events: none; }
 .peek-play { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.45); background: rgba(10,10,10,0.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
 .peek-tile:hover .peek-play { background: rgba(56,182,255,0.3); border-color: var(--accent); transform: translate(-50%, -50%) scale(1.08); }
 .peek-play svg { width: 24px; height: 24px; margin-left: 3px; fill: var(--fg); }
-.peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); background: rgba(0,0,0,0.55); border: 1px solid var(--accent-border-subtle); padding: 5px 9px; border-radius: var(--radius-pill); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-.peek-badge svg { width: 11px; height: 11px; }
+/* Icon-only lock chip (subtle): the word "Locked" was removed, leaving just the lock glyph. */
+.peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.82); background: rgba(0,0,0,0.42); border: 1px solid var(--border); padding: 6px; border-radius: 50%; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.peek-badge svg { width: 12px; height: 12px; }
 .peek-label { position: absolute; z-index: 3; left: var(--space-4); right: var(--space-4); bottom: var(--space-4); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; line-height: 1.3; text-transform: uppercase; color: var(--fg); text-shadow: 0 1px 10px rgba(0,0,0,0.95); }
 
 /* ========== FINAL CTA ========== */
@@ -262,6 +270,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .modal__msg { font-size: 0.85rem; min-height: 1em; color: var(--fg-muted); }
 .modal__msg.error { color: #ff6b6b; }
 .modal__note { margin-top: var(--space-3); font-size: 0.75rem; color: var(--fg-dim); text-align: center; }
+/* Coming-soon modal (opened from the module tiles) — reuses .modal/.modal__panel, centered content. */
+.modal__panel--center { text-align: center; }
+.peek-modal-lock { display: flex; justify-content: center; margin-bottom: var(--space-5); }
+.peek-modal-lock svg { width: 52px; height: 52px; color: var(--accent); }
+.peek-modal-date { font-size: clamp(2.4rem, 7vw, 3.4rem); font-weight: 300; letter-spacing: var(--tracking-tight); color: var(--fg); line-height: 1; margin: var(--space-2) 0 var(--space-6); }
+.modal__panel--center .aoc-cta { width: 100%; }
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
@@ -439,7 +453,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <div class="peek-top">
     <span class="peek-pill fadeup">Unlocks July 1</span>
   </div>
-  <h2 class="section-heading fadeup">120 modules. Locked.</h2>
+  <h2 class="peek-heading fadeup">
+    <span class="ph-lg">120 Modules</span>
+    <span class="ph-md">To Teach You the Complete A-Z On</span>
+    <span class="ph-md">How to Shoot Agents on Camera</span>
+  </h2>
 
   <!-- Tiles load real thumbnails from /public/aoc/modules/ (module-01.jpg … module-08.jpg),
        falling back to the placeholder if a file is missing. Blur + lock overlay stay.
@@ -449,27 +467,27 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <!-- column A scrolls up; tiles duplicated for a seamless loop -->
       <div class="peek-col">
         <div class="peek-track up">
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-01.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/coaching.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Secret to Make Agents Look Like Movie Stars</span></div>
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-02.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/jtv-x-910-Thumbnail-1-1024x576.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Make Videos That Actually Sell Houses</span></div>
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-03.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/knownthumbnail-2.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Hook Mistake That Instantly Kills Reach</span></div>
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-04.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnails-skool-3.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Viral Hook Mastery</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-01.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/coaching.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Secret to Make Agents Look Like Movie Stars</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-02.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/jtv-x-910-Thumbnail-1-1024x576.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Make Videos That Actually Sell Houses</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-03.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/knownthumbnail-2.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Hook Mistake That Instantly Kills Reach</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-04.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnails-skool-3.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Viral Hook Mastery</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-01.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/coaching.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Secret to Make Agents Look Like Movie Stars</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-02.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/jtv-x-910-Thumbnail-1-1024x576.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Make Videos That Actually Sell Houses</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-03.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/knownthumbnail-2.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Hook Mistake That Instantly Kills Reach</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-04.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnails-skool-3.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Viral Hook Mastery</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-01.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/coaching.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Secret to Make Agents Look Like Movie Stars</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-02.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/jtv-x-910-Thumbnail-1-1024x576.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Make Videos That Actually Sell Houses</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-03.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/knownthumbnail-2.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The #1 Hook Mistake That Instantly Kills Reach</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-04.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnails-skool-3.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Viral Hook Mastery</span></div>
         </div>
       </div>
       <!-- column B scrolls down -->
       <div class="peek-col">
         <div class="peek-track down">
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-05.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/DSC00038-Edit-2-1024x684.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The "Cut &amp; Paste" 910 Script System</span></div>
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-06.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/hero-bg.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The Science of Going Viral in 2026</span></div>
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-07.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Direct Top Agents</span></div>
-          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-08.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnail_logos.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Music Selection 101</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-05.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/DSC00038-Edit-2-1024x684.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The "Cut &amp; Paste" 910 Script System</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-06.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/hero-bg.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The Science of Going Viral in 2026</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-07.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Direct Top Agents</span></div>
-          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-08.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnail_logos.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Locked</span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Music Selection 101</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-05.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/DSC00038-Edit-2-1024x684.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The "Cut &amp; Paste" 910 Script System</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-06.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/hero-bg.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The Science of Going Viral in 2026</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-07.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Direct Top Agents</span></div>
+          <div class="peek-tile"><img class="peek-thumb-img" src="/aoc/modules/module-08.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnail_logos.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Music Selection 101</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-05.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/DSC00038-Edit-2-1024x684.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The "Cut &amp; Paste" 910 Script System</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-06.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/hero-bg.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">The Science of Going Viral in 2026</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-07.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/Watch-This-to-10X-Your-Real-Estate-Media-Sales-1.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">How to Direct Top Agents</span></div>
+          <div class="peek-tile" aria-hidden="true"><img class="peek-thumb-img" src="/aoc/modules/module-08.jpg" onerror="this.onerror=null;this.src='/images/aoc-thumbs/thumbnail_logos.webp'" alt="" loading="lazy" decoding="async"><span class="peek-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span><span class="peek-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span class="peek-label">Music Selection 101</span></div>
         </div>
       </div>
     </div>
@@ -500,6 +518,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <button type="submit" class="modal__submit" id="seatSubmit">Join the Waitlist</button>
       <p class="modal__msg" id="seatMsg" role="status" aria-live="polite"></p>
     </form>
+  </div>
+</div>
+
+<!-- ===================== MODULE "COMING SOON" MODAL ===================== -->
+<div class="modal" id="peekModal" aria-hidden="true">
+  <div class="modal__backdrop" data-peek-close aria-hidden="true"></div>
+  <div class="modal__panel modal__panel--center" role="dialog" aria-modal="true" aria-labelledby="peekTitle">
+    <button type="button" class="modal__close" data-peek-close aria-label="Close">&times;</button>
+    <div class="peek-modal-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+    <p class="modal__eyebrow">AOC</p>
+    <h2 class="modal__title" id="peekTitle">AOC is coming soon</h2>
+    <p class="peek-modal-date">7/1</p>
+    <button type="button" class="aoc-cta" id="peekJoin">Join the Waitlist</button>
   </div>
 </div>
 
@@ -575,6 +606,9 @@ var AOC_UTM = (function () {
   }
   function closeModal() { modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
 
+  // Expose the opener so other UI (the module "coming soon" modal) can trigger the same join flow.
+  window.__aocOpenSeat = openModal;
+
   document.querySelectorAll('[data-open-seat]').forEach(function (el) { el.addEventListener('click', openModal); });
   document.querySelectorAll('[data-seat-close]').forEach(function (el) { el.addEventListener('click', closeModal); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
@@ -593,6 +627,50 @@ var AOC_UTM = (function () {
       .then(function (res) { if (!res.ok) throw new Error('Request failed'); window.location.href = '/aoc/thanks'; })
       .catch(function () { msg.className = 'modal__msg error'; msg.textContent = 'Something went wrong. Please try again.'; btn.disabled = false; btn.textContent = 'Join the Waitlist'; if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} } });
   });
+})();
+
+// ========== MODULE TILE -> "COMING SOON" MODAL ==========
+// Any module tile opens a centered coming-soon modal. Its "Join the Waitlist" button
+// closes this modal and hands off to the same seat-modal join flow as the hero CTAs.
+(function () {
+  var modal = document.getElementById('peekModal');
+  if (!modal) return;
+  var lastFocus = null;
+
+  function openPeek(trigger) {
+    lastFocus = trigger || document.activeElement;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () { var j = document.getElementById('peekJoin'); if (j) j.focus(); });
+  }
+  function closePeek() {
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
+  }
+
+  // Real (non-duplicate) tiles become keyboard-focusable buttons; the looped duplicates stay click-only.
+  document.querySelectorAll('.peek-tile:not([aria-hidden="true"])').forEach(function (tile) {
+    tile.setAttribute('role', 'button');
+    tile.setAttribute('tabindex', '0');
+    tile.setAttribute('aria-label', 'AOC is coming soon — join the waitlist');
+    tile.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); openPeek(tile); }
+    });
+  });
+  // Delegate clicks so every tile (including the seamless-loop duplicates) opens the modal.
+  document.querySelectorAll('.peek-marquee').forEach(function (wrap) {
+    wrap.addEventListener('click', function (e) {
+      var tile = e.target.closest && e.target.closest('.peek-tile');
+      if (tile) openPeek(tile);
+    });
+  });
+
+  document.querySelectorAll('[data-peek-close]').forEach(function (el) { el.addEventListener('click', closePeek); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closePeek(); });
+
+  var join = document.getElementById('peekJoin');
+  if (join) join.addEventListener('click', function () { closePeek(); if (typeof window.__aocOpenSeat === 'function') window.__aocOpenSeat(); });
 })();
 
 // ========== COUNTDOWN (timezone-correct; updates header bar + final block) ==========
