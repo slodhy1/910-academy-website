@@ -18,6 +18,7 @@ import {
 import { RelativeTime } from "@/components/admin/relative-time";
 import { formatCents } from "@/lib/admin/format";
 import { GrantForm } from "./grant-form";
+import { ResendInviteButton } from "./resend-invite-button";
 import { RevokeButton } from "./revoke-button";
 import { AuditList, type AuditEntry } from "./audit-list";
 import { StripeCharges, StripeChargesSkeleton } from "./stripe-charges";
@@ -99,9 +100,17 @@ export default async function CustomerDetailPage({
               <CardTitle className="text-2xl">{fullName}</CardTitle>
               <p className="text-sm text-muted-foreground mt-1">{customer.email}</p>
             </div>
-            <Badge variant={customer.auth_user_id ? "default" : "secondary"}>
-              {customer.auth_user_id ? "Auth linked" : "Auth unlinked"}
-            </Badge>
+            <div className="flex flex-col items-end gap-2">
+              <Badge variant={customer.auth_user_id ? "default" : "secondary"}>
+                {customer.auth_user_id ? "Auth linked" : "Auth unlinked"}
+              </Badge>
+              {!customer.auth_user_id && (
+                <ResendInviteButton
+                  customerId={customer.id}
+                  customerEmail={customer.email}
+                />
+              )}
+            </div>
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
