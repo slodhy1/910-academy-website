@@ -27,7 +27,8 @@
 
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/logo-white.svg">
-<link rel="preload" as="image" href="/images/hero-bg.avif" type="image/avif" fetchpriority="high">
+<link rel="preload" as="image" href="/images/aoc-header.webp" media="(min-width: 769px)" fetchpriority="high">
+<link rel="preload" as="image" href="/images/aoc-header-sm.webp" media="(max-width: 768px)" fetchpriority="high">
 <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Cloudflare Turnstile (bot defense). Site key below is public; secret is
@@ -126,13 +127,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .section-cta-row { margin-top: var(--space-12); }
 
 /* ========== HERO (cinematic video) ========== */
-/* Poster image is the hero background — instant paint, and the only hero visual
-   on mobile (the heavy .mp4 is loaded only on larger screens, see hero JS).
-   AVIF (85KB) with a smaller WebP fallback; old browsers get the webp via the
-   plain url() line below. */
+/* Poster image is the hero background — paints instantly, then the hero JS swaps in
+   the matching .mp4 (lighter file on phones). Desktop gets the 1920w WebP; phones get
+   the lighter 960w WebP via the media query below. */
 .hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background-color: var(--bg-base); background-position: center; background-size: cover; background-repeat: no-repeat;
-  background-image: url(/images/hero-bg-sm.webp);
-  background-image: image-set(url(/images/hero-bg.avif) type("image/avif"), url(/images/hero-bg-sm.webp) type("image/webp")); }
+  background-image: url(/images/aoc-header.webp); }
+@media (max-width: 768px) { .hero { background-image: url(/images/aoc-header-sm.webp); } }
 .hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 /* Bottom of the scrim fades fully to the page bg so the video melts into the next section (no hard cut). */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -358,7 +358,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
   <video class="hero-bg-video" id="heroVideo" muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback>
-    <source data-src="/hero-bg.mp4" data-src-mobile="/hero-bg-mobile.mp4" type="video/mp4">
+    <source data-src="/aoc-header.mp4" data-src-mobile="/aoc-header-mobile.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim"></div>
   <div class="hero-content">
