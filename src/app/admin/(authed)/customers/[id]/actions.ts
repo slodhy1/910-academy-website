@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { logAdminAction } from "@/lib/admin/audit";
 import { sendAdminGrantNotify } from "@/lib/email/admin-grant-notify";
+import { sendAccountInvite } from "@/lib/email/account-invite";
 
 export type ActionResult =
   | { success: true; emailId?: string; emailError?: string }
@@ -135,4 +136,64 @@ export async function revokeProductAction(
 
   revalidatePath(`/admin/customers/${customerId}`);
   return { success: true };
+}
+
+type GrantTitleRow = { product: { title: string } | null };
+
+export async function resendAccountInviteAction(
+  customerId: string
+): Promise<ActionResult> {
+  const adminUser = await requireAdmin();
+  const sb = createAdminClient();
+
+  const { data: customer, error: cErr } = await sb
+    .from("customers")
+    .select("id, email, full_name, auth_user_id")
+    .eq("id", customerId)
+    .maybeSingle();
+  if (cErr || !customer) {
+    return { success: false, error: "Customer not found" };
+  }
+  if (customer.auth_user_id) {
+    return { success: false, error: "Customer already has a linked account" };
+  }
+
+  // Granted product titles for the email body.
+  const { data: grantRows } = await sb
+    .from("customer_products")
+    .select("product:products(title)")
+    .eq("customer_id", customerId);
+  const productTitles = ((grantRows as unknown as GrantTitleRow[] | null) ?? [])
+    .map((r) => r.product?.title)
+    .filter((t): t is string => Boolean(t));
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.910academy.com";
+  const signupLink = `${siteUrl}/account/sign-up?email=${encodeURIComponent(
+    customer.email
+  )}`;
+
+  const emailResult = await sendAccountInvite({
+    to: customer.email,
+    customerName: customer.full_name,
+    productTitles,
+    signupLink,
+  });
+
+  await logAdminAction(sb, {
+    adminUserId: adminUser.id,
+    adminEmail: adminUser.email!,
+    actionType: "resend_account_invite",
+    customerId,
+    metadata: {
+      customer_email: customer.email,
+      product_count: productTitles.length,
+      email_id: emailResult.success ? emailResult.id : null,
+      email_error: emailResult.success ? null : emailResult.error,
+    },
+  });
+
+  revalidatePath(`/admin/customers/${customerId}`);
+  return emailResult.success
+    ? { success: true, emailId: emailResult.id }
+    : { success: false, error: emailResult.error };
 }
