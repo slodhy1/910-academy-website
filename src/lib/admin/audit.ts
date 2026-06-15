@@ -10,7 +10,8 @@ export type AuditActionType =
   | "update_application"
   | "create_lead"
   | "update_lead"
-  | "add_lead_note";
+  | "add_lead_note"
+  | "resend_account_invite";
 
 export type AuditInput = {
   adminUserId: string;
