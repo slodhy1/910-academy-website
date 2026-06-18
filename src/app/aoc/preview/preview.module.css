@@ -1,27 +1,32 @@
 /* ============================================================================
-   Skool-style dark classroom shell for the AOC course preview.
-   Self-contained CSS Module so it renders identically regardless of the
-   marketing-site theme. The divergence from the landing page is intentional.
+   Course-preview classroom shell for AOC.
+   Skool-style LAYOUT (top bar + module-card grid + locked lesson list), but
+   themed to match the /aoc landing page: near-black #0a0a0a, glassy white-alpha
+   cards, Montserrat, and the 910 blue (#38B6FF) accent — not Skool's grays.
    Design-only: nothing here is wired to real data, auth, or playback.
    ============================================================================ */
 
 .page {
-  --bg: #1b1b1d;
-  --surface: #222225;
-  --surface-hover: #28282c;
-  --thumb-from: #2c2c31;
-  --thumb-to: #1e1e21;
+  --bg: #0a0a0a;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.05);
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
+  --border-accent: rgba(56, 182, 255, 0.35);
   --fg: #ffffff;
-  --muted: rgba(255, 255, 255, 0.56);
-  --dim: rgba(255, 255, 255, 0.38);
+  --muted: rgba(255, 255, 255, 0.7);
+  --dim: rgba(255, 255, 255, 0.4);
   --accent: #38b6ff;
+  --accent-hover: #5ac4ff;
+  --tracking-tight: -0.01em;
 
   min-height: 100vh;
-  background: var(--bg);
+  /* near-black with a soft blue glow at the top, echoing the landing hero */
+  background-color: var(--bg);
+  background-image: radial-gradient(900px 520px at 50% -8%, rgba(56, 182, 255, 0.07), transparent 70%);
+  background-repeat: no-repeat;
   color: var(--fg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -31,9 +36,9 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(27, 27, 29, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
 .topbarRow {
@@ -42,7 +47,7 @@
   gap: 16px;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 12px 20px;
+  padding: 14px 20px;
 }
 .brand {
   display: flex;
@@ -58,36 +63,8 @@
 .brandText {
   font-weight: 700;
   font-size: 16px;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
   white-space: nowrap;
-}
-.search {
-  flex: 1;
-  max-width: 440px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #161618;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 9px 12px;
-  color: var(--dim);
-}
-.search svg {
-  flex: none;
-}
-.searchInput {
-  flex: 1;
-  min-width: 0;
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--fg);
-  font: inherit;
-  font-size: 14px;
-}
-.searchInput::placeholder {
-  color: var(--dim);
 }
 .actions {
   display: flex;
@@ -96,91 +73,39 @@
   margin-left: auto;
   flex: none;
 }
-.iconBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  color: var(--muted);
-  background: transparent;
-  border: 1px solid transparent;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.iconBtn:hover {
-  color: var(--fg);
-  background: rgba(255, 255, 255, 0.05);
-}
 .avatar {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3a3a42, #232327);
+  background: linear-gradient(135deg, rgba(56, 182, 255, 0.25), rgba(255, 255, 255, 0.04));
   border: 1px solid var(--border-strong);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--muted);
+  color: var(--fg);
   font-weight: 700;
   font-size: 13px;
   flex: none;
-}
-
-/* nav tab strip (Skool-style) */
-.nav {
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-}
-.navInner {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 20px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.navInner::-webkit-scrollbar {
-  display: none;
-}
-.navTab {
-  position: relative;
-  padding: 14px 14px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--muted);
-  white-space: nowrap;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s ease;
-  cursor: default;
-}
-.navTab:hover {
-  color: var(--fg);
-}
-.navTabActive {
-  color: var(--fg);
-  border-bottom-color: var(--accent);
 }
 
 /* ===================== MAIN ===================== */
 .main {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 28px 20px 80px;
+  padding: 36px 20px 80px;
 }
 .classroomHead {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 .classroomTitle {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.1;
 }
 .classroomSub {
-  margin-top: 4px;
+  margin-top: 6px;
   color: var(--muted);
   font-size: 14px;
 }
@@ -214,9 +139,9 @@
 }
 .card:hover {
   transform: translateY(-3px);
-  border-color: var(--border-strong);
+  border-color: var(--border-accent);
   background: var(--surface-hover);
-  box-shadow: 0 16px 36px -18px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 18px 44px -20px rgba(0, 0, 0, 0.85);
 }
 .card:focus-visible {
   outline: 2px solid var(--accent);
@@ -231,7 +156,8 @@
   justify-content: center;
   padding: 18px;
   overflow: hidden;
-  background: radial-gradient(120% 120% at 50% 0%, var(--thumb-from), var(--thumb-to));
+  /* dark with a faint blue glow, matching the landing hero scrim */
+  background: radial-gradient(120% 130% at 50% -10%, rgba(56, 182, 255, 0.16), transparent 62%), #0c0c0f;
   border-bottom: 1px solid var(--border);
 }
 .cardWatermark {
@@ -246,13 +172,13 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  font-weight: 800;
+  font-weight: 300;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   font-size: clamp(18px, 2.4vw, 26px);
-  line-height: 1.12;
+  line-height: 1.14;
   color: var(--fg);
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
 }
 
 .cardBody {
@@ -289,7 +215,7 @@
 }
 .progressLabel {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--dim);
   flex: none;
 }
@@ -301,8 +227,8 @@
   gap: 6px;
   color: var(--muted);
   font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-weight: 500;
+  margin-bottom: 22px;
   transition: color 0.15s ease;
 }
 .back:hover {
@@ -319,13 +245,14 @@
   margin-bottom: 4px;
 }
 .moduleTitle {
-  font-size: clamp(22px, 3vw, 30px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.14;
 }
 .moduleSub {
-  margin-top: 6px;
+  margin-top: 8px;
   color: var(--muted);
   font-size: 14px;
 }
@@ -351,7 +278,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
   color: var(--dim);
   flex: none;
@@ -371,7 +298,7 @@
   font-variant-numeric: tabular-nums;
 }
 .lessonTitle {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--muted);
   font-size: 15px;
   line-height: 1.35;
 }
@@ -386,13 +313,6 @@
   border-radius: 999px;
   padding: 5px 10px;
   white-space: nowrap;
-}
-
-/* hide the visual search field on narrow screens (Skool collapses it too) */
-@media (max-width: 700px) {
-  .search {
-    display: none;
-  }
 }
 @media (max-width: 420px) {
   .comingSoon {

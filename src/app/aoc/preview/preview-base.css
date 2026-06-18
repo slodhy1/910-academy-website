@@ -1,7 +1,15 @@
-/* Route-scoped base reset for the course-preview shell.
+/* Route-scoped base reset + fonts for the course-preview shell.
    The root layout ships no global CSS, so the preview pages provide their own
    minimal reset here. This file is only bundled for /aoc/preview routes, so it
    does not affect the marketing site, admin, or account areas. */
+
+/* Self-hosted Montserrat (same faces the /aoc landing page uses) so the preview
+   matches the landing-page look rather than a system font. */
+@font-face { font-family: "Montserrat"; font-weight: 300; font-display: swap; src: url("/fonts/montserrat-300.woff2") format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 400; font-display: swap; src: url("/fonts/montserrat-400.woff2") format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 500; font-display: swap; src: url("/fonts/montserrat-500.woff2") format("woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 700; font-display: swap; src: url("/fonts/montserrat-700.woff2") format("woff2"); }
+
 *,
 *::before,
 *::after {
@@ -15,7 +23,7 @@ body {
 }
 
 body {
-  background: #1b1b1d;
+  background: #0a0a0a;
 }
 
 /* The CSS Module owns all spacing — strip default UA margins/bullets. */
