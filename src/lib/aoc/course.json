@@ -1,0 +1,810 @@
+{
+  "course": "Agent on Camera",
+  "modules": [
+    {
+      "number": 1,
+      "title": "Intro",
+      "lessonCount": 4,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "It's Not The Camera, It's The Creator"
+        },
+        {
+          "number": 2,
+          "title": "If You Want To Be Great, Choose To Be Great"
+        },
+        {
+          "number": 3,
+          "title": "Standing Out Is A Conscious Decision"
+        },
+        {
+          "number": 4,
+          "title": "Your Camera Can Take You Places Degrees Never Can"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Hooks",
+      "lessonCount": 17,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How To Write Hooks That Grab Attention"
+        },
+        {
+          "number": 2,
+          "title": "How Long Should Your Hook Be?"
+        },
+        {
+          "number": 3,
+          "title": "#1 Skill When Writing Hooks (Intuition)"
+        },
+        {
+          "number": 4,
+          "title": "Go With Your Intuition On The Hook"
+        },
+        {
+          "number": 5,
+          "title": "Always Shoot The Hook First (Energy)"
+        },
+        {
+          "number": 6,
+          "title": "Where Will The Captions Go?"
+        },
+        {
+          "number": 7,
+          "title": "Where To Shoot The Hook"
+        },
+        {
+          "number": 8,
+          "title": "What To Do If The Agent Has A Paragraph Long Hook"
+        },
+        {
+          "number": 9,
+          "title": "What To Do If An Agent Wants To Say Their Name And Address For The Hook"
+        },
+        {
+          "number": 10,
+          "title": "Basic Hooks Will Get You Nowhere"
+        },
+        {
+          "number": 11,
+          "title": "Never Say Welcome"
+        },
+        {
+          "number": 12,
+          "title": "The #1 Hook Mistake To Avoid (Copying People)"
+        },
+        {
+          "number": 13,
+          "title": "How To Think Outside The Box With Scripts"
+        },
+        {
+          "number": 14,
+          "title": "How To Pattern Interrupt The Scroll"
+        },
+        {
+          "number": 15,
+          "title": "Advanced Hooks: How To Storytell With Your Reels"
+        },
+        {
+          "number": 16,
+          "title": "How To Get Agents To Say A Risky Hook"
+        },
+        {
+          "number": 17,
+          "title": "How To Write Hooks For Regular Homes"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Middle Context",
+      "lessonCount": 3,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Middle Context - What"
+        },
+        {
+          "number": 2,
+          "title": "Do You Need It?"
+        },
+        {
+          "number": 3,
+          "title": "The Tactical Use Of The Rehook"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Call To Action",
+      "lessonCount": 3,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Call To Action"
+        },
+        {
+          "number": 2,
+          "title": "Every Video Needs Closure"
+        },
+        {
+          "number": 3,
+          "title": "A Call To Action That Works For Every Single Video"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Scripting Tips",
+      "lessonCount": 19,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Scripting Secret"
+        },
+        {
+          "number": 2,
+          "title": "Your Repeatable System For Writing Scripts"
+        },
+        {
+          "number": 3,
+          "title": "How To Write Scripts On The Spot"
+        },
+        {
+          "number": 4,
+          "title": "How To Script Without Chat GPT"
+        },
+        {
+          "number": 5,
+          "title": "Do You Need To Have A Script Ready Before The Shoot?"
+        },
+        {
+          "number": 6,
+          "title": "Who Comes Up With The Script, You Or The Agent?"
+        },
+        {
+          "number": 7,
+          "title": "Scripting Mindset: For You And With You"
+        },
+        {
+          "number": 8,
+          "title": "Soft Concept To Final Script"
+        },
+        {
+          "number": 9,
+          "title": "The Algorithm Is Right In Front Of You"
+        },
+        {
+          "number": 10,
+          "title": "Why You Should Always Be Sitting When Writing A Script"
+        },
+        {
+          "number": 11,
+          "title": "How To Avoid Over-Scripting: Keep Lines Short And Sweet"
+        },
+        {
+          "number": 12,
+          "title": "How To Have The Song Match The Script (Scripting Superpower)"
+        },
+        {
+          "number": 13,
+          "title": "The Viral Script Formula"
+        },
+        {
+          "number": 14,
+          "title": "Affluence Through Association"
+        },
+        {
+          "number": 15,
+          "title": "Script Off The Agents Personality"
+        },
+        {
+          "number": 16,
+          "title": "Know When To Walk Away From The Agent"
+        },
+        {
+          "number": 17,
+          "title": "What To Do If The Agent Already Has A Script That Sucks"
+        },
+        {
+          "number": 18,
+          "title": "Voiceovers Are Not Allowed"
+        },
+        {
+          "number": 19,
+          "title": "Do Not Press Record Until Script Is Completed"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Lenses & Camera Settings",
+      "lessonCount": 9,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "What Lenses To Use When Filming The Agent"
+        },
+        {
+          "number": 2,
+          "title": "When Do You Use 10mm"
+        },
+        {
+          "number": 3,
+          "title": "When To Use A 50mm"
+        },
+        {
+          "number": 4,
+          "title": "How To Shoot An Agent At 10mm"
+        },
+        {
+          "number": 5,
+          "title": "How To Shoot An Agent At 50mm"
+        },
+        {
+          "number": 6,
+          "title": "Using An ND Filter On 50mm Shots"
+        },
+        {
+          "number": 7,
+          "title": "Camera Settings For Shooting Agents On Camera"
+        },
+        {
+          "number": 8,
+          "title": "Auto Focus Or Manual Focus?"
+        },
+        {
+          "number": 9,
+          "title": "How To Keep Agents In Focus And Crisp At Low Apertures"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Lighting",
+      "lessonCount": 3,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How To Light The Agent Using Only Natural Light"
+        },
+        {
+          "number": 2,
+          "title": "How To Shoot An Agent Outside When It's Very Bright"
+        },
+        {
+          "number": 3,
+          "title": "Lighting Agents Face Secret: Using Your Hand"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Composition",
+      "lessonCount": 2,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Composition Tips For Shooting Agents On Camera"
+        },
+        {
+          "number": 2,
+          "title": "How To Shoot An Agent With Proper Foreground And Background"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Shooting The Agent",
+      "lessonCount": 11,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How And When To Shoot The Agent Walking"
+        },
+        {
+          "number": 2,
+          "title": "How And When To Shoot The Agent Standing"
+        },
+        {
+          "number": 3,
+          "title": "How And When To Shoot The Agent Sitting"
+        },
+        {
+          "number": 4,
+          "title": "The Kitchen Island (Call To Action Positioning)"
+        },
+        {
+          "number": 5,
+          "title": "Shooting Secret: Review Every Shot On Sight"
+        },
+        {
+          "number": 6,
+          "title": "How To Mark The Best Take"
+        },
+        {
+          "number": 7,
+          "title": "Determining Your Flight Path When Shooting Agents"
+        },
+        {
+          "number": 8,
+          "title": "How To Ninja Walk Backwards When Shooting Agents"
+        },
+        {
+          "number": 9,
+          "title": "Pro Tip: Eyes On The Back Of Your Head"
+        },
+        {
+          "number": 10,
+          "title": "How Your Wrists Effect The Composition"
+        },
+        {
+          "number": 11,
+          "title": "The Mistake Most Shooters Make When Shooting Agents In Motion"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Shooting Environment",
+      "lessonCount": 2,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Where Should The Agent Say Their Lines"
+        },
+        {
+          "number": 2,
+          "title": "Only Shoot The Fantasy World"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Body Language & Tonality",
+      "lessonCount": 7,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "What Should Agents Do With Their Hands?"
+        },
+        {
+          "number": 2,
+          "title": "How To Make Agents Look Like Movie Stars"
+        },
+        {
+          "number": 3,
+          "title": "Tonality Tips For Agents When Saying Their Lines"
+        },
+        {
+          "number": 4,
+          "title": "How To Help An Agent's Videos Stand Out From Other Agents"
+        },
+        {
+          "number": 5,
+          "title": "How To Coach A Monotoned Agent"
+        },
+        {
+          "number": 6,
+          "title": "What If The Agent Is Stiff On Camera?"
+        },
+        {
+          "number": 7,
+          "title": "What To Do If The Agent Has Low Energy On Camera"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Music Selection",
+      "lessonCount": 6,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Music Is As Important As The Hook"
+        },
+        {
+          "number": 2,
+          "title": "You Are DJ Khaled"
+        },
+        {
+          "number": 3,
+          "title": "Bad Songs Are The Equivalent To Shooting With Canon (Kidding)"
+        },
+        {
+          "number": 4,
+          "title": "How To Script With A Song In Mind"
+        },
+        {
+          "number": 5,
+          "title": "Choose The Song Before You Start Shooting"
+        },
+        {
+          "number": 6,
+          "title": "Shoot With The Song In Your Pocket"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Mindset",
+      "lessonCount": 1,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Imagine The Edit In Your Head"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Directing The Agent",
+      "lessonCount": 12,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Your Job Is To Be The Director"
+        },
+        {
+          "number": 2,
+          "title": "Name A Director"
+        },
+        {
+          "number": 3,
+          "title": "How To Be The Director"
+        },
+        {
+          "number": 4,
+          "title": "It's Your Job To Bring The Vibe"
+        },
+        {
+          "number": 5,
+          "title": "3, 2, 1 Action"
+        },
+        {
+          "number": 6,
+          "title": "How To Get Agents To View You As The Expert"
+        },
+        {
+          "number": 7,
+          "title": "How To Build Rapport With The Agent Before Shooting"
+        },
+        {
+          "number": 8,
+          "title": "How To Direct The Agent"
+        },
+        {
+          "number": 9,
+          "title": "How To Have Confidence When Directing An Agent"
+        },
+        {
+          "number": 10,
+          "title": "How To Coach The Agent: The Magic 4"
+        },
+        {
+          "number": 11,
+          "title": "How To Coach The Agent To Deliver Their Lines In 3 Takes Or Less"
+        },
+        {
+          "number": 12,
+          "title": "Never Say These Words: What Do You Want To Say?"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Working With Agents",
+      "lessonCount": 17,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How To Cast A Brand Vision For An Agent"
+        },
+        {
+          "number": 2,
+          "title": "The Importance Of Tonality"
+        },
+        {
+          "number": 3,
+          "title": "How To Keep Agents From Coming Across Cookie Cutter"
+        },
+        {
+          "number": 4,
+          "title": "How To Coach Agents On Tonality"
+        },
+        {
+          "number": 5,
+          "title": "The Importance Of Keeping Agents On Script"
+        },
+        {
+          "number": 6,
+          "title": "Working With Women Agents"
+        },
+        {
+          "number": 7,
+          "title": "Working With Male Agents"
+        },
+        {
+          "number": 8,
+          "title": "How To Deal With Luxury Agents"
+        },
+        {
+          "number": 9,
+          "title": "How To Work With Agents Who Think They Are Directors"
+        },
+        {
+          "number": 10,
+          "title": "Managing Expectations With Agents"
+        },
+        {
+          "number": 11,
+          "title": "How To Negotiate Your Creative Ideas With Agents"
+        },
+        {
+          "number": 12,
+          "title": "What To Do If An Agent Wants To Copy A Video Of A House That Is In A Different Price Range?"
+        },
+        {
+          "number": 13,
+          "title": "What To Do If An Agent Is In A Rush?"
+        },
+        {
+          "number": 14,
+          "title": "How To Be Efficient With Agents Who Are Short On Time"
+        },
+        {
+          "number": 15,
+          "title": "How Long Should A Regular Shoot Take"
+        },
+        {
+          "number": 16,
+          "title": "How Long Should An All-Out Shoot Take"
+        },
+        {
+          "number": 17,
+          "title": "Magic Line When Working With Agents"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "title": "Pre-Production",
+      "lessonCount": 4,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Walking The Property With The Agent"
+        },
+        {
+          "number": 2,
+          "title": "What To Tell An Agent Before The Shoot"
+        },
+        {
+          "number": 3,
+          "title": "How Long Should The Video Be?"
+        },
+        {
+          "number": 4,
+          "title": "Do Whatever It Takes To Make It Happen"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "title": "Agent Confidence",
+      "lessonCount": 6,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How To Make Agents Feel Confident On Camera"
+        },
+        {
+          "number": 2,
+          "title": "How To Get Agents To Look Confident On Camera"
+        },
+        {
+          "number": 3,
+          "title": "How To Coach A Nervous Or Awkward Agent On Camera"
+        },
+        {
+          "number": 4,
+          "title": "What Should Agents Wear"
+        },
+        {
+          "number": 5,
+          "title": "What To Tell An Agent If It's Their First Time On Camera"
+        },
+        {
+          "number": 6,
+          "title": "How To Help Shy Agents Deliver Their Lines"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "title": "Agent Experience",
+      "lessonCount": 1,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How To Make It An Enjoyable Experience For The Agent"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "title": "Audio",
+      "lessonCount": 5,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "How To Mic The Agent"
+        },
+        {
+          "number": 2,
+          "title": "How To Hook Up Your Mic To The Camera"
+        },
+        {
+          "number": 3,
+          "title": "How To Hook Up Mics To The Agent"
+        },
+        {
+          "number": 4,
+          "title": "How To Test Audio Levels Before Shooting"
+        },
+        {
+          "number": 5,
+          "title": "Always Put Your Ear Up To The Speaker After Each Take"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "title": "Collaborating With Agents",
+      "lessonCount": 6,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Should You Collab On This Reel?"
+        },
+        {
+          "number": 2,
+          "title": "Who Should Post The Collab"
+        },
+        {
+          "number": 3,
+          "title": "Best Thumbnail Practices"
+        },
+        {
+          "number": 4,
+          "title": "Best Caption Practices"
+        },
+        {
+          "number": 5,
+          "title": "How To Ask For The Collab"
+        },
+        {
+          "number": 6,
+          "title": "How To Get Agents To Let You Post The Collab"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "title": "Team Training",
+      "lessonCount": 9,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "From CEO To CEO"
+        },
+        {
+          "number": 2,
+          "title": "How To Train Team Members"
+        },
+        {
+          "number": 3,
+          "title": "The Team Member Ride Along"
+        },
+        {
+          "number": 4,
+          "title": "How To Introduce Client To A New Team Member"
+        },
+        {
+          "number": 5,
+          "title": "It's Very Important Your Trainee Does This"
+        },
+        {
+          "number": 6,
+          "title": "Can They Do It As Good As You?"
+        },
+        {
+          "number": 7,
+          "title": "Sending A Team Member Out Solo"
+        },
+        {
+          "number": 8,
+          "title": "What To Pay A Team Member"
+        },
+        {
+          "number": 9,
+          "title": "The Delegation Mindset (80%)"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "title": "Viral Mastery - The Science",
+      "lessonCount": 2,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Strong Opener"
+        },
+        {
+          "number": 2,
+          "title": "Most Important Attribute Of Virality Is Scripting"
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "title": "Scripting Deep Dive",
+      "lessonCount": 1,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Deep Dive On Scripting"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "title": "Breaking Down Viral Videos",
+      "lessonCount": 4,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Breaking Down Most Viral Videos"
+        },
+        {
+          "number": 2,
+          "title": "Script"
+        },
+        {
+          "number": 3,
+          "title": "Shots"
+        },
+        {
+          "number": 4,
+          "title": "How The Agent Is Shot"
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "title": "Case Studies",
+      "lessonCount": 3,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Hilary Musser Video"
+        },
+        {
+          "number": 2,
+          "title": "Colorado Video"
+        },
+        {
+          "number": 3,
+          "title": "Alex Goldstein \"Wow\" Video"
+        }
+      ]
+    }
+  ],
+  "totalModules": 25,
+  "totalLessons": 157
+}

@@ -1,0 +1,52 @@
+/* Route-scoped base reset for the course-preview shell.
+   The root layout ships no global CSS, so the preview pages provide their own
+   minimal reset here. This file is only bundled for /aoc/preview routes, so it
+   does not affect the marketing site, admin, or account areas. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #1b1b1d;
+}
+
+/* The CSS Module owns all spacing — strip default UA margins/bullets. */
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  font: inherit;
+}

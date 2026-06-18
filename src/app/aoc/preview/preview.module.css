@@ -1,0 +1,402 @@
+/* ============================================================================
+   Skool-style dark classroom shell for the AOC course preview.
+   Self-contained CSS Module so it renders identically regardless of the
+   marketing-site theme. The divergence from the landing page is intentional.
+   Design-only: nothing here is wired to real data, auth, or playback.
+   ============================================================================ */
+
+.page {
+  --bg: #1b1b1d;
+  --surface: #222225;
+  --surface-hover: #28282c;
+  --thumb-from: #2c2c31;
+  --thumb-to: #1e1e21;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --fg: #ffffff;
+  --muted: rgba(255, 255, 255, 0.56);
+  --dim: rgba(255, 255, 255, 0.38);
+  --accent: #38b6ff;
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===================== TOP BAR ===================== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(27, 27, 29, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.topbarRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 12px 20px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.brandLogo {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+.brandText {
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.search {
+  flex: 1;
+  max-width: 440px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #161618;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: var(--dim);
+}
+.search svg {
+  flex: none;
+}
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: 14px;
+}
+.searchInput::placeholder {
+  color: var(--dim);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex: none;
+}
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.iconBtn:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.05);
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3a3a42, #232327);
+  border: 1px solid var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+  flex: none;
+}
+
+/* nav tab strip (Skool-style) */
+.nav {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.navInner {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.navInner::-webkit-scrollbar {
+  display: none;
+}
+.navTab {
+  position: relative;
+  padding: 14px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease;
+  cursor: default;
+}
+.navTab:hover {
+  color: var(--fg);
+}
+.navTabActive {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+/* ===================== MAIN ===================== */
+.main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 20px 80px;
+}
+.classroomHead {
+  margin-bottom: 24px;
+}
+.classroomTitle {
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.classroomSub {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* responsive grid: 3 desktop / 2 tablet / 1 mobile */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================== MODULE CARD ===================== */
+.card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  color: inherit;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+  box-shadow: 0 16px 36px -18px rgba(0, 0, 0, 0.75);
+}
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cardThumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  overflow: hidden;
+  background: radial-gradient(120% 120% at 50% 0%, var(--thumb-from), var(--thumb-to));
+  border-bottom: 1px solid var(--border);
+}
+.cardWatermark {
+  position: absolute;
+  width: 76%;
+  max-width: 260px;
+  opacity: 0.08;
+  pointer-events: none;
+  user-select: none;
+}
+.cardThumbTitle {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: clamp(18px, 2.4vw, 26px);
+  line-height: 1.12;
+  color: var(--fg);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.cardBody {
+  padding: 16px 16px 18px;
+}
+.cardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.cardSub {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.progress {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progressTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%;
+  width: 0%; /* pinned at 0% — design-only, no progress tracking */
+  background: var(--accent);
+  border-radius: 999px;
+}
+.progressLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dim);
+  flex: none;
+}
+
+/* ===================== MODULE DETAIL ===================== */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  transition: color 0.15s ease;
+}
+.back:hover {
+  color: var(--accent);
+}
+.back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.moduleHeader {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.moduleTitle {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.moduleSub {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.lessons {
+  display: flex;
+  flex-direction: column;
+}
+.lessonRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 4px;
+  border-bottom: 1px solid var(--border);
+}
+.lessonRow:last-child {
+  border-bottom: none;
+}
+.lessonLock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  flex: none;
+}
+.lessonMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.lessonNum {
+  color: var(--dim);
+  font-size: 13px;
+  font-weight: 700;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.lessonTitle {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 15px;
+  line-height: 1.35;
+}
+.comingSoon {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+/* hide the visual search field on narrow screens (Skool collapses it too) */
+@media (max-width: 700px) {
+  .search {
+    display: none;
+  }
+}
+@media (max-width: 420px) {
+  .comingSoon {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
