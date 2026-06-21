@@ -10,7 +10,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const utmField = z.string().trim().max(200).optional();
 
 const BodySchema = z.object({
-  firstName: z.string().trim().min(1, "First name is required").max(200),
+  fullName: z.string().trim().min(1, "Full name is required").max(200),
   email: z
     .string()
     .trim()
@@ -107,7 +107,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 
-  const { firstName, email, utm } = parsed.data;
+  const { fullName, email, utm } = parsed.data;
+  // Store the whole value in full_name, but keep first_name = the first token so Kit
+  // email personalization greets by first name, not the entire name.
+  const firstName = fullName.split(/\s+/)[0] || fullName;
   // `source` is always populated; utm_source holds the raw param (may be null).
   const utmSource = utm.source ?? null;
   const source = utmSource || "aoc-waitlist";
@@ -117,6 +120,7 @@ export async function POST(req: Request) {
     .from("aoc_waitlist")
     .upsert(
       {
+        full_name: fullName,
         first_name: firstName,
         email,
         source,
