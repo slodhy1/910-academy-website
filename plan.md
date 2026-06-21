@@ -204,3 +204,52 @@ h. Kit failure simulated: row persists with `kit_synced = false`, user still see
 3. Single opt-in confirmed
 4. `KIT_TAG_ID_AOC_WAITLIST` value once the tag is created
 5. AOC placeholder logo: text lockup acceptable for v1, or is an asset coming
+
+---
+
+# Performance Optimization Pass (2026-06-21)
+
+**Goal:** mobile Safari load ~8s → LCP < 2.5s on `/aoc` and `/aoc/preview`.
+
+## Architecture reality (matters for the asks)
+- `/aoc` is a **static HTML file** (`public/aoc.html`), not React. `next/image`,
+  `next/dynamic`, and `next/font` cannot run there — but every *goal* is met with
+  vanilla equivalents (poster `<img>`, deferred `<script>`, `@font-face` + `swap`).
+  Staying static is itself an LCP win (no framework JS / hydration).
+- `/aoc/preview` **is** App Router (all server components, already next/image,
+  lazy grid, no video). Already near-optimal; the lever is the global image config.
+
+## Measured bottleneck (current)
+On mobile the hero JS **still downloads + plays the 1.1 MB video** (the skip only
+covers reduced-motion/save-data). Plus a 66 KB Turnstile script on every page view.
+The 40 KB poster is preloaded but competes with the video for bandwidth.
+
+## Fixes (one commit each)
+1. **next.config: `images.formats = ['image/avif','image/webp']`** — smaller files
+   from next/image on `/aoc/preview`. *(no JS-bundle change)*
+2. **Poster-first hero, no video on mobile** — poster becomes an explicit `<img>`
+   LCP element (responsive `srcset`/`sizes`, `fetchpriority="high"`, reserved 16:9
+   so no CLS). On ≤768px the video is **never attached** (poster only, optional
+   tap-to-play). Desktop attaches the source only after first paint. *(biggest win:
+   removes ~1.1 MB from the mobile critical path)*
+3. **Defer Turnstile to modal-open** — drop the `<head>` script; load it the first
+   time the waitlist modal opens. Removes 66 KB + its execution from initial load;
+   bot protection unchanged (loads when the form is actually used).
+
+## Out of scope / already done
+- Fonts already self-hosted with `display: swap` on both pages (the vanilla/CSS-module
+  equivalent of `next/font`) — no render-blocking font fetch. next/font on the React
+  page is cosmetic, skipped.
+- `/aoc/preview` already static + server components + next/image; grid stays lazy.
+- No add-to-calendar / heavy client component lives on either page (it's on
+  `/aoc/thanks`), so there's nothing to `next/dynamic` here.
+- Hero assets `aoc-header.mp4` (3.1 MB, +faststart) and `aoc-header.webp`/`-sm.webp`
+  posters are already compressed; swap to a smaller file trivially if one is provided.
+
+## Expected impact
+Mobile `/aoc` critical-path bytes: ~1.17 MB → ~0.04 MB (poster only) before any
+below-fold lazy loads. LCP element is the preloaded 40 KB poster → well under 2.5 s.
+`/aoc/preview` First Load JS unchanged (no client JS added); images served as avif.
+
+## Verify
+Production build (route static + First Load JS before/after), `tsc --noEmit`, lint.
