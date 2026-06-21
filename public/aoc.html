@@ -31,10 +31,10 @@
 <link rel="preload" as="image" href="/images/aoc-header-sm.webp" media="(max-width: 768px)" fetchpriority="high">
 <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
-<!-- Cloudflare Turnstile (bot defense). Site key below is public; secret is
-     TURNSTILE_SECRET_KEY in Vercel. Server fails open so real signups never break. -->
-<link rel="preconnect" href="https://challenges.cloudflare.com">
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<!-- Cloudflare Turnstile (bot defense). Site key is public; secret is TURNSTILE_SECRET_KEY
+     in Vercel. The 66KB script is lazy-loaded on first user interaction (see JS) so it
+     stays off the initial render path; dns-prefetch warms DNS for that deferred load. -->
+<link rel="dns-prefetch" href="https://challenges.cloudflare.com">
 <style>
   @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
   @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
@@ -635,6 +635,26 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   document.addEventListener('visibilitychange', function () { if (!document.hidden && attached) { tryPlay(); repaint(); } });
 })();
 
+// ========== TURNSTILE: lazy-load on first interaction (off the initial render path) ==========
+// Loads the 66KB Cloudflare script the first time the visitor interacts (scroll/tap/key),
+// which is always well before they open + fill the waitlist form — so the token is ready
+// at submit time, but the script never competes with first paint / LCP. Idempotent.
+window.__loadTurnstile = (function () {
+  var loaded = false;
+  var events = ['pointerdown', 'touchstart', 'keydown', 'scroll'];
+  function load() {
+    if (loaded) return;
+    loaded = true;
+    events.forEach(function (evt) { window.removeEventListener(evt, load); });
+    var s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  }
+  events.forEach(function (evt) { window.addEventListener(evt, load, { passive: true }); });
+  return load;
+})();
+
 // ========== UTM CAPTURE ==========
 var AOC_UTM = (function () {
   var params = new URLSearchParams(window.location.search);
@@ -652,6 +672,7 @@ var AOC_UTM = (function () {
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function openModal() {
+    if (window.__loadTurnstile) window.__loadTurnstile(); // ensure the bot-check is loading by submit time
     msg.className = 'modal__msg'; msg.textContent = '';
     btn.disabled = false; btn.textContent = 'Join the Waitlist';
     modal.setAttribute('aria-hidden', 'false');
