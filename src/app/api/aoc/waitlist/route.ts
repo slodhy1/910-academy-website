@@ -10,7 +10,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const utmField = z.string().trim().max(200).optional();
 
 const BodySchema = z.object({
-  fullName: z.string().trim().min(1, "Full name is required").max(200),
+  firstName: z.string().trim().min(1, "First name is required").max(200),
+  lastName: z.string().trim().min(1, "Last name is required").max(200),
   email: z
     .string()
     .trim()
@@ -107,10 +108,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 
-  const { fullName, email, utm } = parsed.data;
-  // Store the whole value in full_name, but keep first_name = the first token so Kit
-  // email personalization greets by first name, not the entire name.
-  const firstName = fullName.split(/\s+/)[0] || fullName;
+  const { firstName, lastName, email, utm } = parsed.data;
+  // first_name + last_name are stored separately; full_name = "First Last" is kept for
+  // continuity. Only first_name is sent to Kit (see reconcile) — last_name is internal.
+  const fullName = `${firstName} ${lastName}`.trim();
   // `source` is always populated; utm_source holds the raw param (may be null).
   const utmSource = utm.source ?? null;
   const source = utmSource || "aoc-waitlist";
@@ -120,8 +121,9 @@ export async function POST(req: Request) {
     .from("aoc_waitlist")
     .upsert(
       {
-        full_name: fullName,
         first_name: firstName,
+        last_name: lastName,
+        full_name: fullName,
         email,
         source,
         utm_source: utmSource,
