@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ============================================================
+     AOC LIVE · in-person ticket landing page
+     Structure cloned from /the-6ix. Dark theme, 910 blue (#38B6FF) accent.
+
+     >>> DRAFT COPY <<<
+     Every line wrapped in a "DRAFT ▸" comment is placeholder copy for Ryan
+     to finalize. Search this file for the string  DRAFT  to find them all.
+     Skeleton + structure are final; only the words change.
+
+     >>> CHECKOUT <<<
+     Paste the real Stripe link into  TICKET_CHECKOUT_URL  near the top of the
+     <script> block at the bottom of this file. No payment logic lives here —
+     the modal only collects details, then forwards the browser to that URL.
+     ============================================================ -->
+
+<!-- DRAFT ▸ page title -->
+<title>AOC LIVE · Agent on Camera In Person · July 11 · West Palm Beach, FL</title>
+<!-- DRAFT ▸ meta description -->
+<meta name="description" content="One day, in person in West Palm Beach. Hands-on Agent on Camera training, then the Kelsey Blevins documentary premiere. July 11, 2026. $499." />
+
+<!-- Social preview (DRAFT ▸ swap og:image once the poster art exists) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="910 Academy" />
+<meta property="og:url" content="https://www.910academy.com/aoc-live" />
+<meta property="og:title" content="AOC LIVE · Agent on Camera In Person · July 11" />
+<meta property="og:description" content="One day, in person in West Palm Beach. Hands-on Agent on Camera training, then the Kelsey Blevins documentary premiere." />
+<meta property="og:image" content="https://www.910academy.com/aoc-live/poster.png" />
+<meta property="og:image:alt" content="AOC LIVE · Agent on Camera In Person" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://www.910academy.com/aoc-live" />
+<meta name="twitter:title" content="AOC LIVE · Agent on Camera In Person · July 11" />
+<meta name="twitter:description" content="One day, in person in West Palm Beach. Hands-on Agent on Camera training, then the Kelsey Blevins documentary premiere." />
+<meta name="twitter:image" content="https://www.910academy.com/aoc-live/poster.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   AOC LIVE  ·  v1
+   Dark theme · 910 Academy blue (#38B6FF)
+   Structural lineage: /the-6ix
+   ============================================================ */
+
+:root {
+  --black: #000000;
+  --bg-deep: #050506;        /* deepest section bg (agenda) */
+  --bg-base: #0a0a0a;        /* base page bg / hero */
+  --bg-elevated: #0f0f10;    /* cards, modal panel */
+  --ink: #0c0c0d;
+
+  --white: #ffffff;
+  --grey-15: #d6d6d6;
+  --grey-30: #9a9a9a;
+  --grey-50: #4a4a4a;
+  --grey-70: #1f1f1f;
+  --grey-90: #111111;
+
+  /* 910 Academy blue — matches /aoc */
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-ink: #04131d;                       /* text on accent buttons */
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.05);
+  --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.14);
+
+  --hero-bg: var(--bg-base);
+  --hero-ink: var(--white);
+
+  --display: 'Archivo Black', sans-serif;
+  --body: 'Montserrat', sans-serif;
+  --serif: 'Instrument Serif', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --gutter: clamp(1.25rem, 2.5vw, 2.5rem);
+  --maxw: 1440px;
+
+  --nav-h: 64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg-base);
+  color: var(--white);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor (disabled on touch, see media query below) */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transition: transform 0.12s ease, opacity 0.2s ease;
+  mix-blend-mode: difference;
+}
+.cursor-dot { width: 6px; height: 6px; background: var(--accent); }
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(56, 182, 255, 0.6);
+  transition: transform 0.25s ease, opacity 0.2s ease, width 0.25s ease, height 0.25s ease;
+}
+.cursor-ring.is-hover {
+  width: 64px; height: 64px;
+  background: rgba(56, 182, 255, 0.08);
+  border-color: rgba(56, 182, 255, 0.9);
+}
+
+@media (hover: none), (pointer: coarse) {
+  html, body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+::selection { background: var(--accent); color: var(--black); }
+
+.section-label {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.numeral { font-family: var(--display); font-feature-settings: "tnum"; }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: none;
+  color: inherit;
+}
+@media (hover: none), (pointer: coarse) { button { cursor: pointer; } }
+
+/* ============================================================
+   STICKY TOP BAR — brand left, date + Get Tickets right
+   Transparent over hero, solid blur on scroll
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--gutter);
+  background: transparent;
+  color: var(--hero-ink);
+  transition: background 0.3s ease, color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+.nav.is-scrolled {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+}
+
+.nav__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: inherit;
+}
+.nav__logo {
+  width: 26px;
+  height: 19px;
+  display: inline-block;
+  color: inherit;
+}
+.nav__logo svg { width: 100%; height: 100%; display: block; }
+.nav__lockup {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: inherit;
+}
+
+.nav__right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: inherit;
+}
+.nav__dates {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+.nav__cta {
+  padding: 0.625rem 1.125rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 100px;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.nav__cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+@media (max-width: 720px) {
+  .nav__dates { display: none; }
+}
+@media (max-width: 480px) {
+  .nav__lockup { font-size: 0.6875rem; letter-spacing: 0.18em; }
+}
+
+/* ============================================================
+   HERO — styled text hero (default). Optional poster slot above:
+   drop a file at /public/aoc-live/poster.png and it renders; if the
+   file is missing the <img> removes itself (onerror) and the text
+   hero stands alone.
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--nav-h) + 4rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+}
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 32%, rgba(56, 182, 255, 0.12), transparent 70%),
+    var(--hero-bg);
+  z-index: -2;
+}
+.hero__grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8, <svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Optional poster image (self-removes if /aoc-live/poster.png is absent) */
+.hero__poster {
+  margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.hero__poster img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(82vw, 460px);
+  max-height: 46vh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.hero__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 56rem;
+  position: relative;
+  z-index: 2;
+}
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: clamp(0.6875rem, 0.85vw, 0.8125rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.hero__title {
+  font-family: var(--display);
+  font-size: clamp(3.5rem, 13vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 0 60px rgba(56, 182, 255, 0.25);
+}
+.hero__date {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: clamp(0.8125rem, 1.4vw, 1rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.hero__sub {
+  font-family: var(--body);
+  font-weight: 300;
+  font-size: clamp(1.0625rem, 1.8vw, 1.375rem);
+  line-height: 1.55;
+  color: var(--grey-15);
+  max-width: 44ch;
+}
+.hero__sub em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.hero__foot {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.15rem 3rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  transition: background 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 16px 44px var(--accent-glow);
+}
+.hero__cta::after {
+  content: "→";
+  font-weight: 700;
+  transform: translateY(0.5px);
+}
+.hero__cta:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.hero__strap {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+}
+
+@media (max-width: 700px) {
+  .hero { padding-top: calc(var(--nav-h) + 2.5rem); }
+}
+
+/* ============================================================
+   NARRATIVE — replaces the /the-6ix "nine cities" block
+   ============================================================ */
+.narrative {
+  background: var(--bg-base);
+  padding: clamp(6rem, 12vh, 9rem) var(--gutter);
+  position: relative;
+}
+.narrative__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.narrative__head {
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--white);
+  max-width: 18ch;
+}
+.narrative__head em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+.narrative__body {
+  font-family: var(--body);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.4vw, 1.1875rem);
+  line-height: 1.65;
+  color: var(--grey-30);
+  max-width: 52ch;
+}
+.narrative__body strong {
+  font-weight: 600;
+  color: var(--grey-15);
+}
+
+/* ============================================================
+   WHAT YOU GET — agenda grid
+   ============================================================ */
+.agenda {
+  background: var(--bg-deep);
+  padding: clamp(6rem, 12vh, 9rem) var(--gutter);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.agenda__inner { max-width: 1100px; margin: 0 auto; }
+.agenda__head {
+  text-align: center;
+  margin-bottom: clamp(3rem, 6vh, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.agenda__head h2 {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.agenda__head h2 em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+
+.agenda__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+.perk {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: clamp(1.75rem, 2.5vw, 2.25rem);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0));
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+.perk:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-border-subtle);
+  background: linear-gradient(180deg, rgba(56, 182, 255, 0.04), rgba(0, 0, 0, 0));
+}
+.perk__num {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.24em;
+  color: var(--accent);
+}
+.perk h3 {
+  margin-top: 1rem;
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  color: var(--white);
+}
+.perk p {
+  margin-top: 0.5rem;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--grey-30);
+}
+
+/* Premiere — full-width feature card */
+.perk--feature {
+  grid-column: 1 / -1;
+  border-color: var(--accent-border-subtle);
+  background: linear-gradient(110deg, rgba(56, 182, 255, 0.1), rgba(56, 182, 255, 0.01) 60%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+}
+.perk--feature .perk__time {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  line-height: 1;
+}
+.perk--feature h3 { margin-top: 0; font-size: clamp(1.0625rem, 1.6vw, 1.375rem); }
+.perk--feature .perk__copy { flex: 1 1 320px; }
+
+/* ============================================================
+   SCHEDULE strip
+   ============================================================ */
+.schedule {
+  background: var(--bg-base);
+  padding: clamp(3.5rem, 7vh, 5rem) var(--gutter);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.schedule__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.schedule__row {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 1.25rem clamp(1.25rem, 2.5vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+}
+.schedule__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  flex: none;
+}
+.schedule__time {
+  font-family: var(--display);
+  font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.schedule__label {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--grey-15);
+  text-transform: uppercase;
+}
+
+@media (max-width: 520px) {
+  .schedule__row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}
+
+/* ============================================================
+   TICKET — single card, no upsell
+   ============================================================ */
+.pricing {
+  background: var(--black);
+  padding: clamp(6rem, 12vh, 9rem) var(--gutter) clamp(5rem, 9vh, 7rem);
+  position: relative;
+  overflow: hidden;
+}
+.pricing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(56, 182, 255, 0.06), transparent 60%);
+  pointer-events: none;
+}
+.pricing__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.pricing__head {
+  text-align: center;
+  margin-bottom: clamp(3rem, 6vh, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.pricing__heading {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.pricing__heading em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.005em;
+}
+
+.tickets { display: flex; justify-content: center; }
+
+.ticket {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 16px;
+  padding: clamp(2.5rem, 4vw, 3.75rem) clamp(2.25rem, 3.5vw, 3.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 2.5vh, 2.25rem);
+  overflow: hidden;
+  border: 1px solid var(--accent-border-subtle);
+  background:
+    linear-gradient(180deg, rgba(56, 182, 255, 0.05), rgba(0, 0, 0, 0)),
+    var(--bg-elevated);
+  text-align: center;
+  align-items: center;
+}
+.ticket > * { position: relative; z-index: 1; }
+
+.ticket__meta {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.ticket__meta .sep {
+  width: 4px; height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.ticket__title {
+  font-family: var(--display);
+  font-size: clamp(1.875rem, 3.2vw, 2.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.ticket__price-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ticket__price-amounts {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+.ticket__price-was {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  color: var(--grey-50);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+}
+.ticket__price {
+  font-family: var(--display);
+  font-size: clamp(3rem, 5.5vw, 4rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.ticket__currency {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ticket__bullets {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 100%;
+  max-width: 36ch;
+  text-align: left;
+}
+.ticket__bullets li {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--grey-15);
+  padding-left: 1.5rem;
+  position: relative;
+}
+.ticket__bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 0.875rem;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.85;
+}
+
+.ticket__cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  border-radius: 100px;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  cursor: none;
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 14px 40px var(--accent-glow);
+}
+@media (hover: none), (pointer: coarse) { .ticket__cta { cursor: pointer; } }
+.ticket__cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.pricing__fine {
+  margin-top: clamp(2rem, 4vh, 2.5rem);
+  text-align: center;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  line-height: 1.7;
+  color: var(--grey-50);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  max-width: 64ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--black);
+  color: var(--grey-30);
+  padding: 4rem var(--gutter) 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.footer__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+}
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.footer__lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.footer__logo {
+  width: 24px; height: 18px;
+  display: inline-block;
+  color: var(--white);
+}
+.footer__logo svg { width: 100%; height: 100%; display: block; }
+.footer__strap {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--grey-30);
+  max-width: 32ch;
+  line-height: 1.5;
+}
+.footer h4 {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.footer ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.footer ul a {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--grey-30);
+  transition: color 0.2s ease;
+}
+.footer ul a:hover { color: var(--accent); }
+
+.footer__bottom {
+  max-width: var(--maxw);
+  margin: 4rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grey-50);
+}
+
+@media (max-width: 768px) {
+  .footer__inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .footer__inner { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+.reveal-up { opacity: 0; transform: translateY(40px); }
+.reveal-fade { opacity: 0; }
+
+.no-js .reveal-up,
+.no-js .reveal-fade {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal-up, .reveal-fade { opacity: 1 !important; transform: none !important; }
+}
+
+/* ============================================================
+   910 LOGO — reusable inline svg styling
+   ============================================================ */
+.logo910 svg polygon { fill: currentColor; }
+
+/* ============================================================
+   CHECKOUT MODAL — collects details, then forwards to Stripe
+   ============================================================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  cursor: auto;
+}
+.modal[aria-hidden="false"] { display: flex; }
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: clamp(1.75rem, 3.5vw, 2.5rem);
+  color: var(--white);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.85);
+}
+.modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--grey-15);
+  font-family: var(--display);
+  font-size: 1rem;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.modal__close:hover { background: rgba(255, 255, 255, 0.14); color: var(--white); }
+.modal__eyebrow {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.875rem;
+}
+.modal__title {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 0.625rem;
+}
+.modal__sub {
+  font-family: var(--body);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--grey-30);
+  margin-bottom: 1.75rem;
+}
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.modal__label {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--grey-30);
+}
+.modal__field input {
+  font: inherit;
+  font-family: var(--body);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.modal__field input:focus {
+  border-color: var(--accent-border);
+  background: rgba(255, 255, 255, 0.06);
+}
+.modal__field input::placeholder { color: var(--grey-50); }
+.modal__error {
+  font-family: var(--body);
+  font-size: 0.8125rem;
+  color: #ff6b6b;
+  padding: 0.625rem 0.875rem;
+  background: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+}
+.modal__submit {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 1.05rem 1.5rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 0 12px 34px var(--accent-glow);
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+.modal__submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+.modal__submit:disabled { opacity: 0.6; cursor: wait; }
+
+@media (max-width: 480px) {
+  .modal { padding: 0.75rem; }
+  .modal__panel { padding: 1.5rem 1.25rem; }
+}
+</style>
+</head>
+
+<body class="no-js">
+
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+
+<!-- ============================================================
+     STICKY TOP BAR
+     ============================================================ -->
+<nav class="nav" id="siteNav">
+  <a href="https://910academy.com" class="nav__left" aria-label="910 Academy">
+    <span class="nav__logo logo910" aria-hidden="true">
+      <svg viewBox="0 0 720 532.6" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0 372.28 0 532.6 504.38 161.08 504.38 0 0 372.28"/>
+        <polygon points="395.52 293.37 504.38 212.92 720 372.67 720 532.6 395.52 293.37"/>
+      </svg>
+    </span>
+    <!-- DRAFT ▸ brand label -->
+    <span class="nav__lockup">910 Academy</span>
+  </a>
+  <div class="nav__right">
+    <!-- DRAFT ▸ date · location -->
+    <span class="nav__dates">July 11 · West Palm Beach, FL</span>
+    <a href="#tickets" class="nav__cta" data-open-checkout data-hover>Get Tickets</a>
+  </div>
+</nav>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="hero__grain" aria-hidden="true"></div>
+
+  <!-- Optional poster. Drop /public/aoc-live/poster.png to show it; if the file
+       is missing this <img> removes itself and the text hero below stands alone.
+       NOTE: if the poster art already bakes in the "AOC LIVE" wordmark, hide the
+       .hero__title below to avoid duplicating it. -->
+  <div class="hero__poster" data-hero-poster>
+    <img
+      src="/aoc-live/poster.png"
+      alt="AOC LIVE · Agent on Camera In Person"
+      decoding="async"
+      fetchpriority="high"
+      onerror="this.closest('[data-hero-poster]').remove()"
+    />
+  </div>
+
+  <div class="hero__intro">
+    <!-- DRAFT ▸ eyebrow -->
+    <p class="hero__eyebrow">Agent on Camera · In Person</p>
+    <!-- DRAFT ▸ H1 -->
+    <h1 class="hero__title">AOC Live</h1>
+    <!-- DRAFT ▸ date / location line -->
+    <p class="hero__date">July 11, 2026 · West Palm Beach, FL</p>
+    <!-- DRAFT ▸ subhead -->
+    <p class="hero__sub">One day, in person. Hands-on Agent on Camera training — then the <em>Kelsey Blevins documentary premiere</em>.</p>
+
+    <div class="hero__foot">
+      <a href="#tickets" class="hero__cta" data-open-checkout data-hover>Get Tickets</a>
+      <!-- DRAFT ▸ price strap -->
+      <span class="hero__strap">One Day · In Person · $499</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     NARRATIVE  (replaces /the-6ix "nine cities")
+     ============================================================ -->
+<section class="narrative">
+  <div class="narrative__inner">
+    <!-- DRAFT ▸ section label -->
+    <p class="section-label reveal-up">Why in person</p>
+    <!-- DRAFT ▸ heading -->
+    <h2 class="narrative__head reveal-up">The course is free. <em>The room is everything.</em></h2>
+    <!-- DRAFT ▸ body -->
+    <p class="narrative__body reveal-up">
+      <strong>Agent on Camera releases July 1st — free for everyone.</strong>
+      This is the in-person experience to go deeper. Proximity is power: one day,
+      hands-on, in the room with the people who built it.
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     WHAT YOU GET — agenda grid
+     ============================================================ -->
+<section class="agenda">
+  <div class="agenda__inner">
+    <div class="agenda__head">
+      <p class="section-label reveal-up">What you get</p>
+      <!-- DRAFT ▸ heading -->
+      <h2 class="reveal-up">One day, <em>hands-on.</em></h2>
+    </div>
+
+    <div class="agenda__grid">
+      <!-- DRAFT ▸ agenda items 01–06 -->
+      <article class="perk reveal-up" data-hover>
+        <span class="perk__num">01</span>
+        <h3>Hands-on shooting experience</h3>
+      </article>
+
+      <article class="perk reveal-up" data-hover>
+        <span class="perk__num">02</span>
+        <h3>Professional scripting lesson</h3>
+      </article>
+
+      <article class="perk reveal-up" data-hover>
+        <span class="perk__num">03</span>
+        <h3>Live feedback session</h3>
+        <p>Your videos and hooks reviewed in the room.</p>
+      </article>
+
+      <article class="perk reveal-up" data-hover>
+        <span class="perk__num">04</span>
+        <h3>50mm shooting simulation</h3>
+        <p>Hands-on practice.</p>
+      </article>
+
+      <article class="perk reveal-up" data-hover>
+        <span class="perk__num">05</span>
+        <h3>Body language coaching</h3>
+        <p>Practice with a live model.</p>
+      </article>
+
+      <article class="perk reveal-up" data-hover>
+        <span class="perk__num">06</span>
+        <h3>Directing the agent</h3>
+        <p>Make any agent look confident on camera.</p>
+      </article>
+
+      <!-- DRAFT ▸ premiere (feature card) -->
+      <article class="perk perk--feature reveal-up" data-hover>
+        <span class="perk__time">8:00pm</span>
+        <div class="perk__copy">
+          <h3>The Kelsey Blevins documentary premiere</h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SCHEDULE strip
+     ============================================================ -->
+<section class="schedule">
+  <div class="schedule__inner">
+    <!-- DRAFT ▸ schedule lines -->
+    <div class="schedule__row reveal-up">
+      <span class="schedule__dot" aria-hidden="true"></span>
+      <span class="schedule__time">10:00am – 6:00pm</span>
+      <span class="schedule__label">Hands-on training</span>
+    </div>
+    <div class="schedule__row reveal-up">
+      <span class="schedule__dot" aria-hidden="true"></span>
+      <span class="schedule__time">8:00pm</span>
+      <span class="schedule__label">Documentary premiere</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     TICKET — single card, no upsell
+     ============================================================ -->
+<section class="pricing" id="tickets">
+  <div class="pricing__inner">
+    <div class="pricing__head">
+      <p class="section-label reveal-up">Tickets</p>
+      <!-- DRAFT ▸ heading -->
+      <h2 class="pricing__heading reveal-up">Get in the <em>room.</em></h2>
+    </div>
+
+    <div class="tickets">
+      <!-- DRAFT ▸ ticket card -->
+      <article class="ticket reveal-up">
+        <span class="ticket__meta">
+          <span>One Day · In Person</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span>July 11 · 2026</span>
+        </span>
+
+        <h3 class="ticket__title">AOC Live — In Person</h3>
+
+        <div class="ticket__price-row">
+          <div class="ticket__price-amounts">
+            <span class="ticket__price-was numeral">$910</span>
+            <span class="ticket__price numeral">$499</span>
+          </div>
+          <span class="ticket__currency">Academy price · Exclusive to 910 Academy students</span>
+        </div>
+
+        <ul class="ticket__bullets">
+          <li>Hands-on shooting experience + professional scripting lesson</li>
+          <li>Live feedback — your videos and hooks reviewed in the room</li>
+          <li>50mm shooting simulation + body language coaching with a live model</li>
+          <li>Directing the agent — make any agent look confident on camera</li>
+          <li>Kelsey Blevins documentary premiere</li>
+          <li>Limited seats</li>
+        </ul>
+
+        <a class="ticket__cta" href="#" data-open-checkout data-hover>
+          Get Tickets
+        </a>
+      </article>
+    </div>
+
+    <!-- DRAFT ▸ fine print -->
+    <p class="pricing__fine">
+      Limited seats · West Palm Beach, FL · Venue revealed to ticketholders before the event · Non-refundable
+    </p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <div class="footer__lockup">
+        <span class="footer__logo logo910" aria-hidden="true">
+          <svg viewBox="0 0 720 532.6" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="0 372.28 0 532.6 504.38 161.08 504.38 0 0 372.28"/>
+            <polygon points="395.52 293.37 504.38 212.92 720 372.67 720 532.6 395.52 293.37"/>
+          </svg>
+        </span>
+        <span>910 Academy</span>
+      </div>
+      <!-- DRAFT ▸ footer strap -->
+      <p class="footer__strap">
+        One day, in person. Agent on Camera, in the room.
+      </p>
+    </div>
+    <div>
+      <h4>Event</h4>
+      <ul>
+        <li><a href="#tickets">Tickets</a></li>
+        <li><a href="#tickets">Get Tickets</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Agent on Camera</h4>
+      <ul>
+        <li><a href="https://910academy.com/aoc">The Course</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>910 Academy</h4>
+      <ul>
+        <li><a href="https://910academy.com">Main Site</a></li>
+        <li><a href="https://910academy.com/coaching">Coaching</a></li>
+        <li><a href="https://910academy.com/about">About</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <span>© 2026 Studio 910 · West Palm Beach, FL</span>
+    <!-- DRAFT ▸ date line -->
+    <span>July 11 · 2026</span>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     CHECKOUT MODAL
+     Must live BEFORE the script tag below — the IIFE grabs these
+     elements with getElementById at startup.
+     ============================================================ -->
+<div class="modal" id="checkoutModal" aria-hidden="true">
+  <div class="modal__backdrop" data-checkout-close aria-hidden="true"></div>
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <button type="button" class="modal__close" data-checkout-close aria-label="Close">×</button>
+    <!-- DRAFT ▸ modal eyebrow -->
+    <p class="modal__eyebrow">AOC Live · July 11 · West Palm Beach</p>
+    <!-- DRAFT ▸ modal title -->
+    <h2 class="modal__title" id="checkoutTitle">Get Your Ticket</h2>
+    <!-- DRAFT ▸ modal sub -->
+    <p class="modal__sub">A few details before checkout. We'll forward you to Stripe right after.</p>
+
+    <form class="modal__form" id="checkoutForm" novalidate>
+      <label class="modal__field">
+        <span class="modal__label">Full name</span>
+        <input name="full_name" type="text" required autocomplete="name" maxlength="200" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Email</span>
+        <input name="email" type="email" required autocomplete="email" maxlength="320" />
+      </label>
+      <label class="modal__field">
+        <span class="modal__label">Phone</span>
+        <input name="phone" type="tel" required autocomplete="tel" maxlength="40" />
+      </label>
+
+      <div class="modal__error" id="checkoutError" role="alert" hidden></div>
+
+      <button type="submit" class="modal__submit" id="checkoutSubmit">Continue to Checkout</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.0.45/lenis.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ----------------------------------------------------------
+     >>> PASTE THE STRIPE CHECKOUT LINK HERE <<<
+     When this is empty the modal shows a friendly "coming soon"
+     message instead of forwarding. No payment logic lives here —
+     we only collect a few details, then send the browser to Stripe.
+     ---------------------------------------------------------- */
+  const TICKET_CHECKOUT_URL = "";
+
+  document.body.classList.remove('no-js');
+
+  // ---- Smooth scroll (Lenis) ----
+  let lenis;
+  if (window.Lenis) {
+    lenis = new window.Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', window.ScrollTrigger.update);
+      window.gsap.ticker.add((time) => lenis.raf(time * 1000));
+      window.gsap.ticker.lagSmoothing(0);
+    }
+  }
+
+  // ---- Custom cursor ----
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let dotX = 0, dotY = 0, ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+  function tickCursor() {
+    dotX += (mouseX - dotX) * 0.45;
+    dotY += (mouseY - dotY) * 0.45;
+    ringX += (mouseX - ringX) * 0.18;
+    ringY += (mouseY - ringY) * 0.18;
+    if (dot) dot.style.transform = `translate(${dotX - 3}px, ${dotY - 3}px)`;
+    if (ring) ring.style.transform = `translate(${ringX - 16}px, ${ringY - 16}px)`;
+    requestAnimationFrame(tickCursor);
+  }
+  tickCursor();
+  document.querySelectorAll('[data-hover], a, button, input').forEach(el => {
+    el.addEventListener('mouseenter', () => ring && ring.classList.add('is-hover'));
+    el.addEventListener('mouseleave', () => ring && ring.classList.remove('is-hover'));
+  });
+
+  // ---- Nav solidifies on scroll ----
+  const nav = document.getElementById('siteNav');
+  function onScroll() {
+    if (!nav) return;
+    const y = window.scrollY || document.documentElement.scrollTop;
+    nav.classList.toggle('is-scrolled', y > 24);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- Intro + scroll reveals ----
+  if (window.gsap) {
+    gsap.from('.hero__intro > *', {
+      opacity: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.08, delay: 0.1
+    });
+    if (window.ScrollTrigger) {
+      gsap.utils.toArray('.reveal-up').forEach(el => {
+        gsap.to(el, {
+          opacity: 1, x: 0, y: 0, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+        });
+      });
+    }
+  }
+
+  // ---- In-page anchor smooth scroll (for non-checkout links) ----
+  document.querySelectorAll('a[href^="#"]:not([data-open-checkout])').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      if (lenis) { lenis.scrollTo(target, { offset: -40 }); }
+      else { target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // ----------------------------------------------------------
+  // Checkout modal: collect name/email/phone, then forward to
+  // TICKET_CHECKOUT_URL. No backend, no payment handling here.
+  // ----------------------------------------------------------
+  const modal = document.getElementById('checkoutModal');
+  const form = document.getElementById('checkoutForm');
+  const errorBox = document.getElementById('checkoutError');
+  const submitBtn = document.getElementById('checkoutSubmit');
+  let lastFocused = null;
+
+  function showError(msg) {
+    if (!errorBox) return;
+    errorBox.textContent = msg;
+    errorBox.hidden = false;
+  }
+  function clearError() {
+    if (!errorBox) return;
+    errorBox.hidden = true;
+    errorBox.textContent = '';
+  }
+
+  function openCheckout() {
+    if (!modal) return;
+    lastFocused = document.activeElement;
+    clearError();
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Continue to Checkout'; }
+    if (form) form.reset();
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => {
+      const firstInput = form && form.querySelector('input');
+      if (firstInput) firstInput.focus();
+    });
+  }
+  function closeCheckout() {
+    if (!modal) return;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  document.querySelectorAll('[data-open-checkout]').forEach(el => {
+    el.addEventListener('click', (e) => { e.preventDefault(); openCheckout(); });
+  });
+  document.querySelectorAll('[data-checkout-close]').forEach(el => {
+    el.addEventListener('click', closeCheckout);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') closeCheckout();
+  });
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearError();
+
+      const data = new FormData(form);
+      const fullName = String(data.get('full_name') || '').trim();
+      const email = String(data.get('email') || '').trim();
+      const phone = String(data.get('phone') || '').trim();
+
+      if (!fullName || !email || !phone) {
+        showError('Please fill in your name, email, and phone.');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+
+      if (!TICKET_CHECKOUT_URL) {
+        // Stripe link not wired up yet — fail gracefully instead of a dead redirect.
+        showError('Checkout opens soon — please check back shortly.');
+        return;
+      }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Redirecting…'; }
+      // Forward in the same tab so mobile popup blockers don't strand the user.
+      window.location.href = TICKET_CHECKOUT_URL;
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>

@@ -17,6 +17,7 @@ const STATIC_PAGES = [
   "apply-claudio",
   "the-6ix",
   "aoc",
+  "aoc-live",
 ];
 
 // App-wide security headers. CSP is intentionally NOT set here: the static
