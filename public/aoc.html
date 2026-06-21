@@ -127,12 +127,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .section-cta-row { margin-top: var(--space-12); }
 
 /* ========== HERO (cinematic video) ========== */
-/* Poster image is the hero background — paints instantly, then the hero JS swaps in
-   the matching .mp4 (lighter file on phones). Desktop gets the 1920w WebP; phones get
-   the lighter 960w WebP via the media query below. */
-.hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background-color: var(--bg-base); background-position: center; background-size: cover; background-repeat: no-repeat;
-  background-image: url(/images/aoc-header.webp); }
-@media (max-width: 768px) { .hero { background-image: url(/images/aoc-header-sm.webp); } }
+/* The poster <img> below is the LCP element — it paints instantly (preloaded,
+   fetchpriority=high) and fills the hero. On desktop the video is attached after
+   first paint and layers on top; on phones the video is never loaded (poster only). */
+.hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background-color: var(--bg-base); }
+.hero-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
 .hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 /* Bottom of the scrim fades fully to the page bg so the video melts into the next section (no hard cut). */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -356,6 +355,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- ===================== HERO ===================== -->
 <header class="hero">
+  <!-- LCP element: preloaded poster (40KB on phones, 97KB desktop via media). Phones
+       stop here — the video below is only attached on desktop, after first paint. -->
+  <picture>
+    <source media="(max-width: 768px)" srcset="/images/aoc-header-sm.webp">
+    <img class="hero-poster" src="/images/aoc-header.webp" alt="" aria-hidden="true" fetchpriority="high" decoding="async" width="1920" height="1080">
+  </picture>
   <video class="hero-bg-video" id="heroVideo" muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback>
     <source data-src="/aoc-header.mp4" data-src-mobile="/aoc-header-mobile.mp4" type="video/mp4">
   </video>
@@ -569,50 +574,65 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 </div>
 
 <script>
-// ========== HERO VIDEO: autoplay (mobile gets a lighter file) + iOS fix ==========
-// The poster image paints instantly (hero .background). We then attach the video
-// source — a lighter 720p ~800KB file on phones, the full file on desktop — force
-// inline muted autoplay, and nudge a GPU repaint to defeat the iOS frozen-poster bug.
-// Skipped only on Save-Data / reduced-motion (poster stays, zero video bytes).
+// ========== HERO VIDEO: desktop-only, attached after first paint ==========
+// The poster <img> is the LCP element and paints instantly. On phones (<=768px) the
+// video is never loaded — poster only, with an optional tap-to-play. On desktop the
+// source is attached during idle time so it never competes with initial render/LCP.
+// Save-Data and reduced-motion keep the poster (zero video bytes).
 (function () {
   var v = document.getElementById('heroVideo');
   if (!v) return;
-  var conn = navigator.connection || {};
-  var allow =
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-    !conn.saveData;
-  if (!allow) return;
-
   v.muted = true; v.defaultMuted = true; v.playsInline = true;
-  function tryPlay() { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
 
-  // Force iOS to paint the current video frame (defeats the frozen-poster bug).
-  var kicked = false;
+  function tryPlay() { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  // Nudge a GPU repaint once playing (defeats the Safari frozen-first-frame bug).
   function repaint() {
     v.style.transform = 'translateZ(0) scale(1.0001)';
     requestAnimationFrame(function () { v.style.transform = 'translateZ(0)'; });
   }
   v.addEventListener('playing', repaint);
-  v.addEventListener('timeupdate', function () { if (!kicked) { kicked = true; repaint(); } });
 
-  // attach the source (lighter file on phones), deferred so it never blocks first paint
-  var source = v.querySelector('source[data-src]');
-  if (source && !source.src) {
-    var isMobile = window.matchMedia('(max-width: 768px)').matches;
-    source.src = (isMobile && source.getAttribute('data-src-mobile')) || source.getAttribute('data-src');
+  var attached = false;
+  function attach(useMobileFile) {
+    if (attached) { tryPlay(); return; }
+    attached = true;
+    var source = v.querySelector('source[data-src]');
+    if (source && !source.src) {
+      source.src = (useMobileFile && source.getAttribute('data-src-mobile')) || source.getAttribute('data-src');
+      v.load();
+    }
+    tryPlay();
+    ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (evt) {
+      v.addEventListener(evt, tryPlay, { once: true });
+    });
+    var tries = 0;
+    var iv = setInterval(function () { tries++; if (!v.paused || tries > 12) { clearInterval(iv); return; } tryPlay(); }, 250);
   }
-  v.load();
-  tryPlay();
 
-  ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (evt) {
-    v.addEventListener(evt, tryPlay, { once: true });
-  });
-  var tries = 0;
-  var iv = setInterval(function () { tries++; if (!v.paused || tries > 12) { clearInterval(iv); return; } tryPlay(); }, 250);
-  ['pointerdown', 'click', 'scroll'].forEach(function (evt) {
-    window.addEventListener(evt, function handler() { tryPlay(); repaint(); window.removeEventListener(evt, handler); }, { once: true, passive: true });
-  });
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) { tryPlay(); repaint(); } });
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  // Phones: poster only, never download the video. Optional tap-to-play on the hero
+  // (ignoring taps on the CTA / form controls).
+  if (isMobile) {
+    var hero = document.querySelector('.hero');
+    if (hero) {
+      hero.addEventListener('click', function onTap(e) {
+        if (e.target.closest('a, button, input, label, .cf-turnstile')) return;
+        hero.removeEventListener('click', onTap);
+        attach(true);
+      }, { passive: true });
+    }
+    return;
+  }
+
+  // Desktop: honor reduced-motion / Save-Data, else attach + autoplay when idle.
+  var conn = navigator.connection || {};
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData) return;
+  function go() { attach(false); }
+  if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
+  else setTimeout(go, 200);
+
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && attached) { tryPlay(); repaint(); } });
 })();
 
 // ========== UTM CAPTURE ==========
