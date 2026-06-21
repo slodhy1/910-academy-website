@@ -130,44 +130,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== HERO ========== */
 .hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background-color: var(--bg-base); }
-.hero-scrim { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(70% 60% at 50% 42%, rgba(56,182,255,0.12), transparent 72%); }
+/* Full-bleed event photo. Drop /aoc-live/hero.jpg to show it; if the file is
+   missing it self-removes (onerror) and the dark background-color above shows. */
+.hero-bg-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+/* Dark scrim keeps the white title, blue accents, and button legible over the
+   photo; doubles as a soft vignette on the plain dark fallback. */
+.hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.5) 42%, rgba(0,0,0,0.78) 100%),
+    radial-gradient(90% 80% at 50% 62%, rgba(56,182,255,0.12), transparent 70%); }
 .hero-content { position: relative; z-index: 2; max-width: 840px; width: 100%; margin: 0 auto; }
-/* Optional poster: drop /aoc-live/poster.png and it shows; if absent it self-removes. */
-.hero-poster-wrap { display: flex; justify-content: center; margin-bottom: var(--space-8); }
-.hero-poster-wrap img { width: auto; max-width: min(82vw, 440px); max-height: 42vh; object-fit: contain; }
-.hero-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
-.hero-headline { font-size: clamp(3rem, 13vw, 8rem); font-weight: 300; text-transform: uppercase; line-height: 0.95; letter-spacing: var(--tracking-tight); margin: var(--space-5) auto 0; text-shadow: 0 2px 40px rgba(0,0,0,0.5); }
+.hero-headline { font-size: clamp(3rem, 13vw, 8rem); font-weight: 300; text-transform: uppercase; line-height: 0.95; letter-spacing: var(--tracking-tight); margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.6); }
 .hero-date { margin-top: var(--space-6); font-size: clamp(0.8rem, 1.4vw, 1rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
-.hero-sub { margin: var(--space-6) auto 0; font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 300; color: var(--fg); max-width: 40ch; line-height: 1.5; }
 .hero-cta-row { margin-top: var(--space-10); display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
 .hero-strap { font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
-
-/* ========== WHY IN PERSON (narrative) ========== */
-.narrative { text-align: center; }
-.narrative-inner { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
-.narrative-body { font-size: clamp(1rem, 1.4vw, 1.2rem); font-weight: 300; color: var(--fg-muted); max-width: 54ch; line-height: 1.65; }
-.narrative-body strong { color: var(--fg); font-weight: 500; }
-
-/* ========== WHAT YOU GET (agenda grid) ========== */
-.agenda-head { text-align: center; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
-.perks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-top: var(--space-16); }
-.perk-card { padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)); transition: all 0.3s var(--ease-smooth); }
-.perk-card:hover { border-color: var(--accent-border-subtle); transform: translateY(-4px); box-shadow: 0 18px 50px rgba(0,0,0,0.4); }
-.perk-num { font-size: 1.5rem; font-weight: 300; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1; }
-.perk-title { font-size: 1.1rem; font-weight: 700; color: var(--fg); margin-top: var(--space-4); line-height: 1.3; }
-.perk-desc { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.55; margin-top: var(--space-2); }
-/* 8pm premiere: full-width feature card */
-.perk-card--feature { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-8); background: var(--accent-subtle); border-color: var(--accent-border-subtle); }
-.perk-time { font-size: clamp(2rem, 5vw, 3rem); font-weight: 300; color: var(--accent); line-height: 1; letter-spacing: var(--tracking-tight); }
-.perk-feature-copy { flex: 1 1 320px; }
-.perk-card--feature .perk-title { margin-top: 0; font-size: clamp(1.1rem, 2vw, 1.5rem); }
-
-/* ========== SCHEDULE strip ========== */
-.schedule-inner { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-4); }
-.schedule-row { display: flex; align-items: center; gap: var(--space-5); padding: var(--space-6) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)); }
-.schedule-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); flex: none; }
-.schedule-time { font-size: clamp(1.1rem, 2.2vw, 1.5rem); font-weight: 300; color: var(--accent); letter-spacing: var(--tracking-tight); white-space: nowrap; }
-.schedule-label { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); }
 
 /* ========== TICKET ========== */
 .pricing { text-align: center; }
@@ -179,11 +155,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
 .ticket-meta { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
 .ticket-title { font-size: clamp(1.6rem, 3.4vw, 2.4rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: 1.05; }
-.ticket-price-row { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
-.ticket-price-amounts { display: flex; align-items: baseline; gap: var(--space-4); }
-.ticket-was { font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 300; color: var(--fg-dim); text-decoration: line-through; }
+.ticket-price-row { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
 .ticket-now { font-size: clamp(3rem, 6vw, 4.2rem); font-weight: 300; color: var(--fg); line-height: 0.9; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
 .ticket-currency { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+/* Subtle scarcity accent (not a heavy banner) */
+.ticket-scarcity { margin-top: var(--space-1); display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); padding: 7px 14px; border-radius: var(--radius-pill); }
+.ticket-scarcity::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .ticket-bullets { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 38ch; margin: 0 auto; text-align: left; }
 .ticket-bullets li { position: relative; padding-left: var(--space-6); font-size: 0.95rem; color: var(--fg-muted); line-height: 1.5; }
 .ticket-bullets li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
@@ -226,20 +203,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .modal__submit:disabled { opacity: 0.6; cursor: wait; }
 
 /* ========== RESPONSIVE ========== */
-@media (max-width: 1024px) {
-  .perks-grid { grid-template-columns: repeat(2, 1fr); }
-}
 @media (max-width: 768px) {
   :root { --bar-h: 52px; }
   .nav { padding: env(safe-area-inset-top) 16px 0; gap: var(--space-3); }
   .nav__dates { display: none; }
   .section { padding: var(--space-20) 20px; }
   .hero { padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-12)) 20px var(--space-12); }
-  .perks-grid { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 520px) {
-  .schedule-row { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
   .footer-inner { grid-template-columns: 1fr; }
 }
 </style>
@@ -279,27 +251,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
      HERO
      ============================================================ -->
 <header class="hero">
+  <!-- Full-bleed event photo. Drop /public/aoc-live/hero.jpg to show it; if the
+       file is missing it self-removes (onerror) and the dark hero background shows. -->
+  <img class="hero-bg-photo" src="/aoc-live/hero.jpg" alt="" aria-hidden="true"
+       decoding="async" fetchpriority="high" onerror="this.remove()">
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
-
-    <!-- Optional poster. Drop /public/aoc-live/poster.png to show it; if the file
-         is missing this block removes itself and the text hero stands alone.
-         NOTE: if the poster art already bakes in the "AOC LIVE" wordmark, hide the
-         .hero-headline below to avoid duplicating it. -->
-    <div class="hero-poster-wrap" data-hero-poster>
-      <img src="/aoc-live/poster.png" alt="AOC LIVE · Agent on Camera In Person"
-           decoding="async" fetchpriority="high"
-           onerror="this.closest('[data-hero-poster]').remove()">
-    </div>
-
-    <!-- DRAFT: eyebrow -->
-    <p class="hero-eyebrow">Agent on Camera · In Person</p>
     <!-- DRAFT: H1 -->
     <h1 class="hero-headline">AOC Live</h1>
     <!-- DRAFT: date / location line -->
     <p class="hero-date">July 11, 2026 · West Palm Beach, FL</p>
-    <!-- DRAFT: subhead -->
-    <p class="hero-sub">One day, in person. Hands-on Agent on Camera training, then the <span class="em">Kelsey Blevins documentary premiere</span>.</p>
 
     <div class="hero-cta-row">
       <a href="#tickets" class="aoc-cta" data-open-checkout>Get Tickets
@@ -310,102 +271,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     </div>
   </div>
 </header>
-
-
-<!-- ============================================================
-     WHY IN PERSON  (narrative)
-     ============================================================ -->
-<section class="section narrative">
-  <div class="narrative-inner">
-    <!-- DRAFT: section label -->
-    <p class="section-label fadeup">Why in person</p>
-    <!-- DRAFT: heading -->
-    <h2 class="section-heading fadeup">The course is free. <span class="em">The room is everything.</span></h2>
-    <!-- DRAFT: body -->
-    <p class="narrative-body fadeup">
-      <strong>Agent on Camera releases July 1st, free for everyone.</strong>
-      This is the in-person experience to go deeper. Proximity is power: one day,
-      hands-on, in the room with the people who built it.
-    </p>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     WHAT YOU GET  (agenda grid + 8pm premiere feature)
-     ============================================================ -->
-<section class="section agenda">
-  <div class="agenda-head">
-    <p class="section-label fadeup">What you get</p>
-    <!-- DRAFT: heading -->
-    <h2 class="section-heading fadeup">One day, <span class="em">hands-on.</span></h2>
-  </div>
-
-  <div class="perks-grid">
-    <!-- DRAFT: agenda items 01-06 -->
-    <article class="perk-card fadeup">
-      <div class="perk-num">01</div>
-      <h3 class="perk-title">Hands-on shooting experience</h3>
-    </article>
-
-    <article class="perk-card fadeup">
-      <div class="perk-num">02</div>
-      <h3 class="perk-title">Professional scripting lesson</h3>
-    </article>
-
-    <article class="perk-card fadeup">
-      <div class="perk-num">03</div>
-      <h3 class="perk-title">Live feedback session</h3>
-      <p class="perk-desc">Your videos and hooks reviewed in the room.</p>
-    </article>
-
-    <article class="perk-card fadeup">
-      <div class="perk-num">04</div>
-      <h3 class="perk-title">50mm shooting simulation</h3>
-      <p class="perk-desc">Hands-on practice.</p>
-    </article>
-
-    <article class="perk-card fadeup">
-      <div class="perk-num">05</div>
-      <h3 class="perk-title">Body language coaching</h3>
-      <p class="perk-desc">Practice with a live model.</p>
-    </article>
-
-    <article class="perk-card fadeup">
-      <div class="perk-num">06</div>
-      <h3 class="perk-title">Directing the agent</h3>
-      <p class="perk-desc">Make any agent look confident on camera.</p>
-    </article>
-
-    <!-- DRAFT: premiere (feature card) -->
-    <article class="perk-card perk-card--feature fadeup">
-      <div class="perk-time">8:00pm</div>
-      <div class="perk-feature-copy">
-        <h3 class="perk-title">The Kelsey Blevins documentary premiere</h3>
-      </div>
-    </article>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     SCHEDULE strip
-     ============================================================ -->
-<section class="section schedule">
-  <div class="schedule-inner">
-    <!-- DRAFT: schedule lines -->
-    <div class="schedule-row fadeup">
-      <span class="schedule-dot" aria-hidden="true"></span>
-      <span class="schedule-time">10:00am to 6:00pm</span>
-      <span class="schedule-label">Hands-on training</span>
-    </div>
-    <div class="schedule-row fadeup">
-      <span class="schedule-dot" aria-hidden="true"></span>
-      <span class="schedule-time">8:00pm</span>
-      <span class="schedule-label">Documentary premiere</span>
-    </div>
-  </div>
-</section>
 
 
 <!-- ============================================================
@@ -426,11 +291,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <h3 class="ticket-title">AOC Live · In Person</h3>
 
       <div class="ticket-price-row">
-        <div class="ticket-price-amounts">
-          <span class="ticket-was">$910</span>
-          <span class="ticket-now">$499</span>
-        </div>
+        <span class="ticket-now">$499</span>
         <span class="ticket-currency">Academy price · Exclusive to 910 Academy students</span>
+        <!-- DRAFT: confirm the real seat cap -->
+        <span class="ticket-scarcity">Limited to 20 seats</span>
       </div>
 
       <ul class="ticket-bullets">
