@@ -157,10 +157,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .ticket-title { font-size: clamp(1.6rem, 3.4vw, 2.4rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: 1.05; }
 .ticket-price-row { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
 .ticket-now { font-size: clamp(3rem, 6vw, 4.2rem); font-weight: 300; color: var(--fg); line-height: 0.9; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
-.ticket-currency { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
-/* Subtle scarcity accent (not a heavy banner) */
-.ticket-scarcity { margin-top: var(--space-1); display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); padding: 7px 14px; border-radius: var(--radius-pill); }
-.ticket-scarcity::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .ticket-bullets { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 38ch; margin: 0 auto; text-align: left; }
 .ticket-bullets li { position: relative; padding-left: var(--space-6); font-size: 0.95rem; color: var(--fg-muted); line-height: 1.5; }
 .ticket-bullets li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
@@ -292,9 +288,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
       <div class="ticket-price-row">
         <span class="ticket-now">$499</span>
-        <span class="ticket-currency">Academy price · Exclusive to 910 Academy students</span>
-        <!-- DRAFT: confirm the real seat cap -->
-        <span class="ticket-scarcity">Limited to 20 seats</span>
       </div>
 
       <ul class="ticket-bullets">
