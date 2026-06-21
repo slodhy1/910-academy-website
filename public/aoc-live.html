@@ -130,9 +130,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 /* ========== HERO ========== */
 .hero { position: relative; min-height: 100vh; min-height: 100svh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-16)) var(--space-10) var(--space-20); background-color: var(--bg-base); }
-/* Full-bleed event photo. Drop /aoc-live/hero.jpg to show it; if the file is
-   missing it self-removes (onerror) and the dark background-color above shows. */
+/* Poster / LCP fallback (custom event photo, else the same still as /aoc). */
 .hero-bg-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; }
+/* Same hero video as /aoc, layered over the poster; deferred-attached on desktop. */
+.hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none; transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 /* Dark scrim keeps the white title, blue accents, and button legible over the
    photo; doubles as a soft vignette on the plain dark fallback. */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -247,10 +248,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
      HERO
      ============================================================ -->
 <header class="hero">
-  <!-- Full-bleed event photo. Drop /public/aoc-live/hero.jpg to show it; if the
-       file is missing it self-removes (onerror) and the dark hero background shows. -->
+  <!-- Poster / LCP fallback: the custom event photo at /public/aoc-live/hero.jpg if
+       it exists, otherwise the same hero still as /aoc. The video below plays over
+       it on desktop. -->
   <img class="hero-bg-photo" src="/aoc-live/hero.jpg" alt="" aria-hidden="true"
-       decoding="async" fetchpriority="high" onerror="this.remove()">
+       decoding="async" fetchpriority="high"
+       onerror="this.onerror=null; this.src='/images/aoc-header.webp'">
+  <!-- Same hero video as /aoc. Deferred-attached on desktop; poster-only on phones,
+       reduced-motion, and Save-Data (see the hero-video script below). -->
+  <video class="hero-bg-video" id="heroVideo" muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true">
+    <source data-src="/aoc-header.mp4" data-src-mobile="/aoc-header-mobile.mp4" type="video/mp4">
+  </video>
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
     <!-- DRAFT: H1 -->
@@ -488,6 +496,66 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); } });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   els.forEach(function (e) { obs.observe(e); });
+})();
+
+// ---- Hero background video (same asset as /aoc) ----
+// Poster paints instantly; the video is attached during idle time on desktop so it
+// never competes with first render. Phones stay on the poster (tap to play), and
+// reduced-motion / Save-Data keep the poster with zero video bytes.
+(function () {
+  var v = document.getElementById('heroVideo');
+  if (!v) return;
+  v.muted = true; v.defaultMuted = true; v.playsInline = true;
+
+  function tryPlay() { try { var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  // Nudge a GPU repaint once playing (defeats the Safari frozen-first-frame bug).
+  function repaint() {
+    v.style.transform = 'translateZ(0) scale(1.0001)';
+    requestAnimationFrame(function () { v.style.transform = 'translateZ(0)'; });
+  }
+  v.addEventListener('playing', repaint);
+
+  var attached = false;
+  function attach(useMobileFile) {
+    if (attached) { tryPlay(); return; }
+    attached = true;
+    var source = v.querySelector('source[data-src]');
+    if (source && !source.src) {
+      source.src = (useMobileFile && source.getAttribute('data-src-mobile')) || source.getAttribute('data-src');
+      v.load();
+    }
+    tryPlay();
+    ['loadeddata', 'canplay', 'canplaythrough'].forEach(function (evt) {
+      v.addEventListener(evt, tryPlay, { once: true });
+    });
+    var tries = 0;
+    var iv = setInterval(function () { tries++; if (!v.paused || tries > 12) { clearInterval(iv); return; } tryPlay(); }, 250);
+  }
+
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  // Phones: poster only, never download the video. Optional tap-to-play on the hero
+  // (ignoring taps on the CTA / form controls).
+  if (isMobile) {
+    var hero = document.querySelector('.hero');
+    if (hero) {
+      hero.addEventListener('click', function onTap(e) {
+        if (e.target.closest('a, button, input, label')) return;
+        hero.removeEventListener('click', onTap);
+        attach(true);
+      }, { passive: true });
+    }
+    return;
+  }
+
+  // Desktop: honor reduced-motion / Save-Data, else attach + autoplay when idle.
+  var conn = navigator.connection || {};
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData) return;
+  function go() { attach(false); }
+  if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
+  else setTimeout(go, 200);
+
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && attached) { tryPlay(); repaint(); } });
 })();
 </script>
 
