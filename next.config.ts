@@ -31,6 +31,11 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  // Serve next/image output as AVIF first, then WebP (smaller than the source PNGs
+  // on /aoc/preview). Phones download appropriately sized, modern formats.
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   outputFileTracingIncludes: {
     "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
     "src/app/api/claudio-application/route.ts": ["./emails/**/*.html"],
