@@ -160,6 +160,10 @@
   background: radial-gradient(120% 130% at 50% -10%, rgba(56, 182, 255, 0.16), transparent 62%), #0c0c0f;
   border-bottom: 1px solid var(--border);
 }
+/* real module thumbnail (next/image fill) — covers the 16:9 block */
+.cardThumbImg {
+  object-fit: cover;
+}
 .cardWatermark {
   position: absolute;
   width: 76%;
