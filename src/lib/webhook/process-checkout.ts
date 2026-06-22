@@ -6,8 +6,13 @@ import {
   type TicketType,
 } from "@/lib/email/the-6ix-intake-notify";
 import { sendThe6ixConfirm } from "@/lib/email/the-6ix-confirm";
+import { sendAocLiveConfirm } from "@/lib/email/aoc-live-confirm";
 
 const ACCESS_LINK = "https://www.910academy.com/account?purchase=success";
+
+// AOC Live (West Palm Beach, July 11) Stripe Payment Link id. Buyers of this link
+// get the in-person ticket confirmation email; it does NOT grant Academy access.
+const AOC_LIVE_PAYMENT_LINK_ID = "plink_1TlGHVBgZ35gA9jqh96iFbi0";
 
 export type ProcessResult = {
   success: boolean;
@@ -40,6 +45,11 @@ export async function processCheckoutCompleted(
   // this email, mark it paid and notify the team. Independent from the
   // products-table flow below; 6ix tickets don't grant Academy access.
   await reconcileThe6ixIntake(supabase, email);
+
+  // AOC Live ticket confirmation. Independent of the products grant flow below —
+  // AOC Live sells via a Stripe Payment Link and grants no Academy access. Matched
+  // by payment link id; a no-op for any other checkout.
+  await handleAocLiveTicket(session, email);
 
   let productSlug: string | undefined = session.metadata?.product_slug;
 
@@ -194,6 +204,35 @@ async function findAuthUserIdByEmail(
   return data.users.find(
     (u) => u.email?.toLowerCase() === email.toLowerCase()
   )?.id;
+}
+
+/**
+ * AOC Live · West Palm Beach, July 11 ticket confirmation.
+ *
+ * Fires only when the completed checkout came through the AOC Live Stripe Payment
+ * Link. Sends the buyer the in-person ticket confirmation email. No DB row exists
+ * for these (the landing page is static and forwards straight to Stripe), so the
+ * buyer name comes from Stripe's customer_details. A non-matching session no-ops.
+ */
+async function handleAocLiveTicket(
+  session: Stripe.Checkout.Session,
+  email: string
+): Promise<void> {
+  const linkId =
+    typeof session.payment_link === "string"
+      ? session.payment_link
+      : session.payment_link?.id;
+  if (linkId !== AOC_LIVE_PAYMENT_LINK_ID) return;
+
+  const result = await sendAocLiveConfirm({
+    to: email,
+    fullName: session.customer_details?.name ?? null,
+  });
+  if (!result.success) {
+    console.error("[aoc-live] buyer confirm failed:", result.error);
+  } else {
+    console.log(`[aoc-live] confirm sent to ${email} (session ${session.id})`);
+  }
 }
 
 /**
