@@ -58,6 +58,7 @@
 :root {
   --bg-deep: #050506; --bg-base: #0a0a0a; --bg-elevated: #0f0f10;
   --accent: #38B6FF; --accent-hover: #5ac4ff; --accent-ink: #04131d;
+  --live-dot: #FF3B30; /* recording dot — switch to blue/green here */
   --accent-glow: rgba(56, 182, 255, 0.15); --accent-subtle: rgba(56, 182, 255, 0.04);
   --accent-muted: rgba(56, 182, 255, 0.2); --accent-border: rgba(56, 182, 255, 0.4);
   --accent-border-subtle: rgba(56, 182, 255, 0.12);
@@ -141,10 +142,46 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.5) 42%, rgba(0,0,0,0.78) 100%),
     radial-gradient(90% 80% at 50% 62%, rgba(56,182,255,0.12), transparent 70%); }
 .hero-content { position: relative; z-index: 2; max-width: 840px; width: 100%; margin: 0 auto; }
-.hero-headline { font-size: clamp(3rem, 13vw, 8rem); font-weight: 300; text-transform: uppercase; line-height: 0.95; letter-spacing: var(--tracking-tight); margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.6); }
-.hero-date { margin-top: var(--space-6); font-size: clamp(0.8rem, 1.4vw, 1rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
-.hero-cta-row { margin-top: var(--space-10); display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
-.hero-strap { font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
+/* AOC logo above the title; self-removes if /aoc-live/aoc-logo.png is missing. */
+.hero-logo { display: block; width: auto; max-width: min(58vw, 260px); height: auto; margin: 0 auto var(--space-6); }
+/* Title is intentionally heavy (heaviest Montserrat weight) for this event page. */
+.hero-headline { font-size: clamp(3rem, 13vw, 8rem); font-weight: 700; text-transform: uppercase; line-height: 0.95; letter-spacing: var(--tracking-tight); margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.6); }
+/* Recording-style blinking dot at the top-right of "LIVE" (color via --live-dot). */
+.hero-live { position: relative; display: inline-block; }
+.live-dot { position: absolute; top: 0.12em; right: -0.52em; width: 0.16em; height: 0.16em; border-radius: 50%; background: var(--live-dot); box-shadow: 0 0 0.55em var(--live-dot); animation: liveBlink 1.2s ease-in-out infinite; }
+@keyframes liveBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
+@media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+.hero-subtitle { margin-top: var(--space-4); font-size: clamp(0.95rem, 2vw, 1.35rem); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); }
+.hero-date { margin-top: var(--space-5); font-size: clamp(0.8rem, 1.4vw, 1rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+.hero-cta-row { margin-top: var(--space-10); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+.hero-strap { font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
+
+/* ========== PRICE-ANCHOR PROOF ========== */
+.anchor { text-align: center; }
+.anchor-head { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+.soldout-list { list-style: none; max-width: 720px; margin: var(--space-16) auto 0; display: flex; flex-direction: column; border-top: 1px solid var(--border); text-align: left; }
+.soldout-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: var(--space-3) var(--space-6); padding: var(--space-4) var(--space-3); border-bottom: 1px solid var(--border); }
+.soldout-city { font-size: 1rem; font-weight: 500; letter-spacing: 0.01em; color: var(--fg); }
+.soldout-price { font-size: 0.95rem; font-weight: 700; color: var(--fg-muted); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+/* SOLD OUT badge: kept consistent + subtle across all rows (proof, not clutter). */
+.soldout-badge { justify-self: end; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-dim); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 4px 10px; white-space: nowrap; }
+.soldout-row--premium { background: linear-gradient(90deg, var(--accent-subtle), transparent 70%); }
+.soldout-row--premium .soldout-city { font-weight: 700; }
+.soldout-row--premium .soldout-price { color: var(--accent); }
+
+.compare-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); max-width: 760px; margin: var(--space-16) auto 0; }
+.compare-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); text-align: center; padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: rgba(255,255,255,0.015); }
+.compare-card-label { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); max-width: 18ch; }
+.compare-card-price { font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 700; color: var(--fg); line-height: 1; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
+/* Losing card: the old/regular price, dimmed + struck so $499 wins the eye. */
+.compare-card--lose { opacity: 0.85; }
+.compare-card--lose .compare-card-price { color: var(--fg-dim); font-weight: 300; text-decoration: line-through; text-decoration-color: var(--fg-ghost); }
+/* Winning card: blue accent, glow, ticket icon + CTA. */
+.compare-card--win { border-color: var(--accent-border-subtle); background: linear-gradient(180deg, rgba(56,182,255,0.09), rgba(255,255,255,0.01)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 70px -30px rgba(56,182,255,0.7); }
+.compare-card--win .compare-card-label { color: var(--accent); }
+.compare-card--win .aoc-cta { margin-top: var(--space-4); width: 100%; }
+.compare-ticket-icon { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); color: var(--accent); }
+.compare-ticket-icon svg { width: 24px; height: 24px; }
 
 /* ========== TICKET ========== */
 .pricing { text-align: center; }
@@ -206,7 +243,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav__dates { display: none; }
   .section { padding: var(--space-20) 20px; }
   .hero { padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-12)) 20px var(--space-12); }
+  /* Phones: poster only, never the background video. */
+  .hero-bg-video { display: none; }
   .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .compare-cards { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
   .footer-inner { grid-template-columns: 1fr; }
@@ -248,21 +290,24 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
      HERO
      ============================================================ -->
 <header class="hero">
-  <!-- Poster / LCP fallback: the custom event photo at /public/aoc-live/hero.jpg if
-       it exists, otherwise the same hero still as /aoc. The video below plays over
-       it on desktop. -->
-  <img class="hero-bg-photo" src="/aoc-live/hero.jpg" alt="" aria-hidden="true"
-       decoding="async" fetchpriority="high"
-       onerror="this.onerror=null; this.src='/images/aoc-header.webp'">
-  <!-- Same hero video as /aoc. Deferred-attached on desktop; poster-only on phones,
-       reduced-motion, and Save-Data (see the hero-video script below). -->
-  <video class="hero-bg-video" id="heroVideo" muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true">
-    <source data-src="/aoc-header.mp4" data-src-mobile="/aoc-header-mobile.mp4" type="video/mp4">
+  <!-- Background poster: Canada event still at /public/aoc-live/hero-poster.jpg. If it is
+       missing it self-removes (onerror) and the dark hero background shows through. -->
+  <img class="hero-bg-photo" src="/aoc-live/hero-poster.jpg" alt="" aria-hidden="true"
+       decoding="async" fetchpriority="high" onerror="this.remove()">
+  <!-- Looping muted background video (Canada event footage) at /public/aoc-live/hero.mp4.
+       Deferred-attached on desktop only; phones stay on the poster (script below). If
+       hero.mp4 is missing, the poster shows, then the dark background. -->
+  <video class="hero-bg-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true">
+    <source data-src="/aoc-live/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
-    <!-- DRAFT: H1 -->
-    <h1 class="hero-headline">AOC Live</h1>
+    <!-- AOC logo above the title; self-removes if /aoc-live/aoc-logo.png is missing. -->
+    <img class="hero-logo" src="/aoc-live/aoc-logo.png" alt="AOC" decoding="async" onerror="this.remove()">
+    <!-- DRAFT: H1 (the dot on LIVE is the recording indicator) -->
+    <h1 class="hero-headline">AOC <span class="hero-live">LIVE<span class="live-dot" aria-hidden="true"></span></span></h1>
+    <!-- DRAFT: in-person subtitle -->
+    <p class="hero-subtitle">In-Person Live Workshop</p>
     <!-- DRAFT: date / location line -->
     <p class="hero-date">July 11, 2026 · West Palm Beach, FL</p>
 
@@ -271,10 +316,58 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
       <!-- DRAFT: price strap -->
-      <span class="hero-strap">One Day · In Person · $499</span>
+      <span class="hero-strap">$499</span>
     </div>
   </div>
 </header>
+
+
+<!-- ============================================================
+     PRICE-ANCHOR PROOF  (sold-out tour + price comparison)
+     DRAFT: cities/prices are placeholders for Claudio/Ryan to confirm/trim.
+     ============================================================ -->
+<section class="section anchor">
+  <div class="anchor-head">
+    <!-- DRAFT: eyebrow -->
+    <p class="section-label fadeup">910 Workshop Tour</p>
+    <!-- DRAFT: heading -->
+    <h2 class="section-heading fadeup">Every city <span class="em">sold out.</span></h2>
+  </div>
+
+  <!-- DRAFT: past tour stops (Ryan to confirm/trim) -->
+  <ul class="soldout-list">
+    <li class="soldout-row fadeup"><span class="soldout-city">Atlanta</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Charlotte</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Nashville</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Austin</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Denver</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Salt Lake City</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Scottsdale</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Los Angeles</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">San Diego</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <li class="soldout-row fadeup"><span class="soldout-city">Toronto</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
+    <!-- DRAFT: premium anchor row -->
+    <li class="soldout-row soldout-row--premium fadeup"><span class="soldout-city">Palm Beach Ride-Along</span><span class="soldout-price">$3,000</span><span class="soldout-badge">Sold Out</span></li>
+  </ul>
+
+  <!-- DRAFT: price comparison (right card is the deal) -->
+  <div class="compare-cards">
+    <div class="compare-card compare-card--lose fadeup">
+      <p class="compare-card-label">910 Tour Pricing</p>
+      <p class="compare-card-price">$910</p>
+    </div>
+    <div class="compare-card compare-card--win fadeup">
+      <span class="compare-ticket-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M14 4v2M14 11v2M14 18v2"/></svg>
+      </span>
+      <p class="compare-card-label">910 Academy Graduate Pricing</p>
+      <p class="compare-card-price">$499</p>
+      <a href="#tickets" class="aoc-cta">Get Your Ticket
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
 
 
 <!-- ============================================================
@@ -498,9 +591,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   els.forEach(function (e) { obs.observe(e); });
 })();
 
-// ---- Hero background video (same asset as /aoc) ----
+// ---- Hero background video (Canada event footage) ----
 // Poster paints instantly; the video is attached during idle time on desktop so it
-// never competes with first render. Phones stay on the poster (tap to play), and
+// never competes with first render. Phones never load the video (poster only), and
 // reduced-motion / Save-Data keep the poster with zero video bytes.
 (function () {
   var v = document.getElementById('heroVideo');
@@ -532,21 +625,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     var iv = setInterval(function () { tries++; if (!v.paused || tries > 12) { clearInterval(iv); return; } tryPlay(); }, 250);
   }
 
-  var isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-  // Phones: poster only, never download the video. Optional tap-to-play on the hero
-  // (ignoring taps on the CTA / form controls).
-  if (isMobile) {
-    var hero = document.querySelector('.hero');
-    if (hero) {
-      hero.addEventListener('click', function onTap(e) {
-        if (e.target.closest('a, button, input, label')) return;
-        hero.removeEventListener('click', onTap);
-        attach(true);
-      }, { passive: true });
-    }
-    return;
-  }
+  // Phones: poster only — never download or play the background video.
+  if (window.matchMedia('(max-width: 768px)').matches) return;
 
   // Desktop: honor reduced-motion / Save-Data, else attach + autoplay when idle.
   var conn = navigator.connection || {};
