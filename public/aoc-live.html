@@ -295,11 +295,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <img class="hero-bg-photo" src="/aoc-live/hero-poster.jpg" alt="" aria-hidden="true"
        decoding="async" fetchpriority="high"
        onerror="this.onerror=null; this.src='/images/aoc-header.webp'">
-  <!-- Looping muted background video: same footage as /aoc (/aoc-header.mp4).
-       Deferred-attached on desktop only; phones stay on the poster (script below). If
-       the video is missing, the poster shows, then the dark background. -->
+  <!-- Looping muted background video: Toronto event footage (/aoc-live/toronto-hero.mp4,
+       1080p H.264, audio stripped). Deferred-attached on desktop only; phones stay on the
+       poster (script below). If the video is missing, the poster shows, then the dark bg. -->
   <video class="hero-bg-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true">
-    <source data-src="/aoc-header.mp4" type="video/mp4">
+    <source data-src="/aoc-live/toronto-hero.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
@@ -592,7 +592,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   els.forEach(function (e) { obs.observe(e); });
 })();
 
-// ---- Hero background video (same asset as /aoc) ----
+// ---- Hero background video (Toronto event footage) ----
 // Poster paints instantly; the video is attached during idle time on desktop so it
 // never competes with first render. Phones never load the video (poster only), and
 // reduced-motion / Save-Data keep the poster with zero video bytes.
