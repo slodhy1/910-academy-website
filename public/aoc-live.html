@@ -171,20 +171,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .soldout-buy { justify-self: end; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); border-radius: var(--radius-pill); padding: 6px 14px; white-space: nowrap; transition: background 0.2s ease, transform 0.2s ease; }
 .soldout-buy:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-.compare-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); max-width: 760px; margin: var(--space-16) auto 0; }
-.compare-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); text-align: center; padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: rgba(255,255,255,0.015); }
-.compare-card-label { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); max-width: 18ch; }
-.compare-card-price { font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 700; color: var(--fg); line-height: 1; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
-/* Losing card: the old/regular price, dimmed + struck so $499 wins the eye. */
-.compare-card--lose { opacity: 0.85; }
-.compare-card--lose .compare-card-price { color: var(--fg-dim); font-weight: 300; text-decoration: line-through; text-decoration-color: var(--fg-ghost); }
-/* Winning card: blue accent, glow, ticket icon + CTA. */
-.compare-card--win { border-color: var(--accent-border-subtle); background: linear-gradient(180deg, rgba(56,182,255,0.09), rgba(255,255,255,0.01)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 70px -30px rgba(56,182,255,0.7); }
-.compare-card--win .compare-card-label { color: var(--accent); }
-.compare-card--win .aoc-cta { margin-top: var(--space-4); width: 100%; }
-.compare-ticket-icon { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); color: var(--accent); }
-.compare-ticket-icon svg { width: 24px; height: 24px; }
-
 /* ========== TICKET ========== */
 .pricing { text-align: center; }
 .pricing-head { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
@@ -248,9 +234,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   /* Phones: poster only, never the background video. */
   .hero-bg-video { display: none; }
   .footer-inner { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-  .compare-cards { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
   .footer-inner { grid-template-columns: 1fr; }
@@ -361,24 +344,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <p class="section-label fadeup">Tickets</p>
     <!-- DRAFT: heading -->
     <h2 class="section-heading fadeup">Get in the <span class="em">room.</span></h2>
-  </div>
-
-  <!-- DRAFT: price comparison (moved from the tour section; right card is the deal) -->
-  <div class="compare-cards">
-    <div class="compare-card compare-card--lose fadeup">
-      <p class="compare-card-label">910 Tour Pricing</p>
-      <p class="compare-card-price">$910</p>
-    </div>
-    <div class="compare-card compare-card--win fadeup">
-      <span class="compare-ticket-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M14 4v2M14 11v2M14 18v2"/></svg>
-      </span>
-      <p class="compare-card-label">910 Academy Graduate Pricing</p>
-      <p class="compare-card-price">$499</p>
-      <a href="#" class="aoc-cta" data-open-checkout>Get Your Ticket
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </div>
   </div>
 
   <div class="tickets">
