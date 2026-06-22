@@ -219,9 +219,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .peek-tile:hover .peek-thumb-img { filter: blur(3px) brightness(0.74) saturate(1); transform: scale(1.16); }
 .peek-play { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.45); background: rgba(10,10,10,0.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
 .peek-tile:hover .peek-play { background: rgba(56,182,255,0.3); border-color: var(--accent); transform: translate(-50%, -50%) scale(1.08); }
-/* Parent (.peek-play) already flex-centers; nudge the triangle ~2px right so it
-   reads as optically centered (a triangle's visual weight sits left of center). */
-.peek-play svg { width: 24px; height: 24px; fill: var(--fg); transform: translateX(2px); }
+/* Align the triangle's visual center (its centroid, x=11.67 in the 24-unit viewBox)
+   with the circle center, not its bounding box. The centroid sits left of the bbox
+   center (13.5) because the base is the heavy side, so a small right nudge balances
+   it: translateX(0.5px) puts the centroid on center. */
+.peek-play svg { width: 24px; height: 24px; fill: var(--fg); transform: translateX(0.5px); }
 /* Icon-only lock chip (subtle): the word "Locked" was removed, leaving just the lock glyph. */
 .peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.82); background: rgba(0,0,0,0.42); border: 1px solid var(--border); padding: 6px; border-radius: 50%; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .peek-badge svg { width: 12px; height: 12px; }
