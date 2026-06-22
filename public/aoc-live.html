@@ -290,15 +290,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
      HERO
      ============================================================ -->
 <header class="hero">
-  <!-- Background poster: Canada event still at /public/aoc-live/hero-poster.jpg. If it is
-       missing it self-removes (onerror) and the dark hero background shows through. -->
+  <!-- Background poster: custom still at /public/aoc-live/hero-poster.jpg if present,
+       otherwise the same still as /aoc; if both are missing the dark hero bg shows. -->
   <img class="hero-bg-photo" src="/aoc-live/hero-poster.jpg" alt="" aria-hidden="true"
-       decoding="async" fetchpriority="high" onerror="this.remove()">
-  <!-- Looping muted background video (Canada event footage) at /public/aoc-live/hero.mp4.
+       decoding="async" fetchpriority="high"
+       onerror="this.onerror=null; this.src='/images/aoc-header.webp'">
+  <!-- Looping muted background video: same footage as /aoc (/aoc-header.mp4).
        Deferred-attached on desktop only; phones stay on the poster (script below). If
-       hero.mp4 is missing, the poster shows, then the dark background. -->
+       the video is missing, the poster shows, then the dark background. -->
   <video class="hero-bg-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true">
-    <source data-src="/aoc-live/hero.mp4" type="video/mp4">
+    <source data-src="/aoc-header.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
@@ -591,7 +592,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   els.forEach(function (e) { obs.observe(e); });
 })();
 
-// ---- Hero background video (Canada event footage) ----
+// ---- Hero background video (same asset as /aoc) ----
 // Poster paints instantly; the video is attached during idle time on desktop so it
 // never competes with first render. Phones never load the video (poster only), and
 // reduced-motion / Save-Data keep the poster with zero video bytes.
