@@ -148,13 +148,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-headline { font-size: clamp(3rem, 13vw, 8rem); font-weight: 700; text-transform: uppercase; line-height: 0.95; letter-spacing: var(--tracking-tight); margin: 0 auto; text-shadow: 0 2px 40px rgba(0,0,0,0.6); }
 /* Recording-style blinking dot at the top-right of "LIVE" (color via --live-dot). */
 .hero-live { position: relative; display: inline-block; }
-.live-dot { position: absolute; top: 0.12em; right: -0.52em; width: 0.16em; height: 0.16em; border-radius: 50%; background: var(--live-dot); box-shadow: 0 0 0.55em var(--live-dot); animation: liveBlink 1.2s ease-in-out infinite; }
+.live-dot { position: absolute; top: 0.12em; right: -0.2em; width: 0.16em; height: 0.16em; border-radius: 50%; background: var(--live-dot); box-shadow: 0 0 0.55em var(--live-dot); animation: liveBlink 1.2s ease-in-out infinite; }
 @keyframes liveBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
 @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
 .hero-subtitle { margin-top: var(--space-4); font-size: clamp(0.95rem, 2vw, 1.35rem); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); }
 .hero-date { margin-top: var(--space-5); font-size: clamp(0.8rem, 1.4vw, 1rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
 .hero-cta-row { margin-top: var(--space-10); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
-.hero-strap { font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
 
 /* ========== PRICE-ANCHOR PROOF ========== */
 .anchor { text-align: center; }
@@ -168,6 +167,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .soldout-row--premium { background: linear-gradient(90deg, var(--accent-subtle), transparent 70%); }
 .soldout-row--premium .soldout-city { font-weight: 700; }
 .soldout-row--premium .soldout-price { color: var(--accent); }
+/* Available row: a small accent Buy Now button in place of the Sold Out badge. */
+.soldout-buy { justify-self: end; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); border-radius: var(--radius-pill); padding: 6px 14px; white-space: nowrap; transition: background 0.2s ease, transform 0.2s ease; }
+.soldout-buy:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
 .compare-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); max-width: 760px; margin: var(--space-16) auto 0; }
 .compare-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); text-align: center; padding: var(--space-10) var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: rgba(255,255,255,0.015); }
@@ -192,7 +194,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 20px 60px -30px rgba(56,182,255,0.6);
   display: flex; flex-direction: column; align-items: center; gap: var(--space-6); }
 .ticket-meta { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
-.ticket-title { font-size: clamp(1.6rem, 3.4vw, 2.4rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: 1.05; }
+.ticket-title { font-size: clamp(1.15rem, 4.4vw, 2.3rem); font-weight: 300; text-transform: uppercase; letter-spacing: var(--tracking-tight); line-height: 1.05; white-space: nowrap; }
 .ticket-price-row { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
 .ticket-now { font-size: clamp(3rem, 6vw, 4.2rem); font-weight: 300; color: var(--fg); line-height: 0.9; letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
 .ticket-bullets { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 38ch; margin: 0 auto; text-align: left; }
@@ -316,8 +318,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <a href="#tickets" class="aoc-cta" data-open-checkout>Get Tickets
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <!-- DRAFT: price strap -->
-      <span class="hero-strap">$499</span>
     </div>
   </div>
 </header>
@@ -347,27 +347,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <li class="soldout-row fadeup"><span class="soldout-city">Los Angeles</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
     <li class="soldout-row fadeup"><span class="soldout-city">San Diego</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
     <li class="soldout-row fadeup"><span class="soldout-city">Toronto</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
-    <!-- DRAFT: premium anchor row -->
-    <li class="soldout-row soldout-row--premium fadeup"><span class="soldout-city">Palm Beach Ride-Along</span><span class="soldout-price">$3,000</span><span class="soldout-badge">Sold Out</span></li>
+    <!-- DRAFT: graduate pricing — available, Buy Now instead of a Sold Out badge -->
+    <li class="soldout-row soldout-row--premium fadeup"><span class="soldout-city">910 Academy Graduate Pricing</span><span class="soldout-price">$499</span><a href="#" class="soldout-buy" data-open-checkout>Buy Now</a></li>
   </ul>
-
-  <!-- DRAFT: price comparison (right card is the deal) -->
-  <div class="compare-cards">
-    <div class="compare-card compare-card--lose fadeup">
-      <p class="compare-card-label">910 Tour Pricing</p>
-      <p class="compare-card-price">$910</p>
-    </div>
-    <div class="compare-card compare-card--win fadeup">
-      <span class="compare-ticket-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M14 4v2M14 11v2M14 18v2"/></svg>
-      </span>
-      <p class="compare-card-label">910 Academy Graduate Pricing</p>
-      <p class="compare-card-price">$499</p>
-      <a href="#tickets" class="aoc-cta">Get Your Ticket
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </div>
-  </div>
 </section>
 
 
@@ -379,6 +361,24 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <p class="section-label fadeup">Tickets</p>
     <!-- DRAFT: heading -->
     <h2 class="section-heading fadeup">Get in the <span class="em">room.</span></h2>
+  </div>
+
+  <!-- DRAFT: price comparison (moved from the tour section; right card is the deal) -->
+  <div class="compare-cards">
+    <div class="compare-card compare-card--lose fadeup">
+      <p class="compare-card-label">910 Tour Pricing</p>
+      <p class="compare-card-price">$910</p>
+    </div>
+    <div class="compare-card compare-card--win fadeup">
+      <span class="compare-ticket-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M14 4v2M14 11v2M14 18v2"/></svg>
+      </span>
+      <p class="compare-card-label">910 Academy Graduate Pricing</p>
+      <p class="compare-card-price">$499</p>
+      <a href="#" class="aoc-cta" data-open-checkout>Get Your Ticket
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
 
   <div class="tickets">
@@ -409,7 +409,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
   <!-- DRAFT: fine print -->
   <p class="pricing-fine fadeup">
-    Limited seats · West Palm Beach, FL · Venue revealed to ticketholders before the event · Non-refundable
+    Limited seats · West Palm Beach, FL · Non-refundable
   </p>
 </section>
 
