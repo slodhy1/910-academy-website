@@ -331,7 +331,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <li class="soldout-row fadeup"><span class="soldout-city">San Diego</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
     <li class="soldout-row fadeup"><span class="soldout-city">Toronto</span><span class="soldout-price">$910</span><span class="soldout-badge">Sold Out</span></li>
     <!-- DRAFT: graduate pricing — available, Buy Now instead of a Sold Out badge -->
-    <li class="soldout-row soldout-row--premium fadeup"><span class="soldout-city">Skool Students &amp; 910 Tour Graduates</span><span class="soldout-price">$499</span><a href="#" class="soldout-buy" data-open-checkout>Buy Now</a></li>
+    <li class="soldout-row soldout-row--premium fadeup"><span class="soldout-city">West Palm Beach</span><span class="soldout-price">$499</span><a href="#" class="soldout-buy" data-open-checkout>Buy Now</a></li>
   </ul>
 </section>
 
@@ -374,7 +374,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
   <!-- DRAFT: fine print -->
   <p class="pricing-fine fadeup">
-    Limited seats · West Palm Beach, FL · Non-refundable
+    Limited time offer for Skool students and 910 tour graduates<br>
+    West Palm Beach · Non-refundable
   </p>
 </section>
 
@@ -479,7 +480,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
      message instead of forwarding. No payment logic lives here:
      we only collect a few details, then send the browser to Stripe.
      ---------------------------------------------------------- */
-  const TICKET_CHECKOUT_URL = "";
+  const TICKET_CHECKOUT_URL = "https://buy.stripe.com/6oU00igFU52K1hDc515Rm1N";
 
   // ---- Checkout modal: collect name/email/phone, then forward. ----
   const modal = document.getElementById('checkoutModal');
