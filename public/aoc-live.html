@@ -523,7 +523,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   });
 
   if (form) {
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
       clearError();
 
@@ -542,6 +542,23 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       }
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Redirecting...'; }
+
+      // Best-effort: save the lead (name/email/phone) so we keep full contact info
+      // for follow-ups. Never block the sale — if it fails or stalls (>4s), forward
+      // anyway; the Stripe webhook still confirms + notifies using Stripe's details.
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(function () { ctrl.abort(); }, 4000);
+        await fetch('/api/aoc-live-intake', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full_name: fullName, email: email, phone: phone }),
+          signal: ctrl.signal,
+          keepalive: true,
+        });
+        clearTimeout(t);
+      } catch (err) { /* ignore — never block checkout */ }
+
       // Forward in the same tab so mobile popup blockers don't strand the user.
       window.location.href = TICKET_CHECKOUT_URL;
     });

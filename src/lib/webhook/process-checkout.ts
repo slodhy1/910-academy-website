@@ -7,6 +7,7 @@ import {
 } from "@/lib/email/the-6ix-intake-notify";
 import { sendThe6ixConfirm } from "@/lib/email/the-6ix-confirm";
 import { sendAocLiveConfirm } from "@/lib/email/aoc-live-confirm";
+import { sendAocLiveIntakeNotify } from "@/lib/email/aoc-live-intake-notify";
 
 const ACCESS_LINK = "https://www.910academy.com/account?purchase=success";
 
@@ -49,7 +50,7 @@ export async function processCheckoutCompleted(
   // AOC Live ticket confirmation. Independent of the products grant flow below —
   // AOC Live sells via a Stripe Payment Link and grants no Academy access. Matched
   // by payment link id; a no-op for any other checkout.
-  await handleAocLiveTicket(session, email);
+  await handleAocLiveTicket(supabase, session, email);
 
   let productSlug: string | undefined = session.metadata?.product_slug;
 
@@ -215,6 +216,7 @@ async function findAuthUserIdByEmail(
  * buyer name comes from Stripe's customer_details. A non-matching session no-ops.
  */
 async function handleAocLiveTicket(
+  supabase: ReturnType<typeof createAdminClient>,
   session: Stripe.Checkout.Session,
   email: string
 ): Promise<void> {
@@ -224,14 +226,62 @@ async function handleAocLiveTicket(
       : session.payment_link?.id;
   if (linkId !== AOC_LIVE_PAYMENT_LINK_ID) return;
 
-  const result = await sendAocLiveConfirm({
-    to: email,
-    fullName: session.customer_details?.name ?? null,
-  });
-  if (!result.success) {
-    console.error("[aoc-live] buyer confirm failed:", result.error);
-  } else {
-    console.log(`[aoc-live] confirm sent to ${email} (session ${session.id})`);
+  const normalizedEmail = email.toLowerCase();
+
+  // Most recent intake row for this email (saved by the modal before checkout).
+  // Gives us the phone the buyer typed + a dedup guard against duplicate webhook
+  // deliveries. Missing table / lookup error degrades to "no row" (still sends).
+  const { data: rows, error: lookupErr } = await supabase
+    .from("aoc_live_intake")
+    .select("id, full_name, phone, purchased_at")
+    .eq("email", normalizedEmail)
+    .order("created_at", { ascending: false })
+    .limit(1);
+  if (lookupErr) console.error("[aoc-live] intake lookup failed:", lookupErr);
+
+  const row = rows && rows.length ? rows[0] : null;
+
+  // Dedup: an already-purchased most-recent row means we've handled this buyer —
+  // a duplicate delivery. Skip so we don't double-send.
+  if (row?.purchased_at) {
+    console.log(`[aoc-live] duplicate delivery for ${normalizedEmail}, skipping`);
+    return;
+  }
+
+  // Claim the row (gated on purchased_at null) so a concurrent delivery can't
+  // double-send. If the claim affects no rows, another delivery beat us — skip.
+  if (row) {
+    const { data: claimed, error: claimErr } = await supabase
+      .from("aoc_live_intake")
+      .update({ purchased_at: new Date().toISOString() })
+      .eq("id", row.id)
+      .is("purchased_at", null)
+      .select("id");
+    if (claimErr) console.error("[aoc-live] mark purchased failed:", claimErr);
+    if (!claimed || claimed.length === 0) {
+      console.log(`[aoc-live] row already claimed for ${normalizedEmail}, skipping`);
+      return;
+    }
+  }
+
+  // Prefer the intake row's data (has phone); fall back to Stripe's customer details
+  // (e.g. buyer hit Stripe with a different email than the one in the modal).
+  const fullName = row?.full_name || session.customer_details?.name || "";
+  const phone = row?.phone || session.customer_details?.phone || "";
+
+  const [confirm, notify] = await Promise.all([
+    sendAocLiveConfirm({ to: email, fullName }),
+    sendAocLiveIntakeNotify({
+      fullName,
+      email: normalizedEmail,
+      phone,
+      amountCents: session.amount_total ?? null,
+    }),
+  ]);
+  if (!confirm.success) console.error("[aoc-live] buyer confirm failed:", confirm.error);
+  if (!notify.success) console.error("[aoc-live] team notify failed:", notify.error);
+  if (confirm.success && notify.success) {
+    console.log(`[aoc-live] sold to ${normalizedEmail} (session ${session.id})`);
   }
 }
 
