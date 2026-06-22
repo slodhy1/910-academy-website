@@ -268,6 +268,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .modal__eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-3); }
 .modal__title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 300; line-height: 1.05; letter-spacing: var(--tracking-tight); text-transform: uppercase; margin-bottom: var(--space-3); }
 .modal__sub { font-size: 0.9rem; line-height: 1.5; color: var(--fg-muted); margin-bottom: var(--space-6); }
+.modal__sub--center { text-align: center; }
 .modal__form { display: flex; flex-direction: column; gap: var(--space-4); }
 .modal__field { display: flex; flex-direction: column; gap: var(--space-2); }
 .modal__label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
@@ -557,7 +558,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <button type="button" class="modal__close" data-seat-close aria-label="Close">&times;</button>
     <p class="modal__eyebrow">AOC</p>
     <h2 class="modal__title" id="seatTitle">Join the waitlist</h2>
-    <p class="modal__sub">Drop your name and email. You'll be first in line the moment AOC drops July 1.</p>
+    <p class="modal__sub modal__sub--center">Drop your name and email below and we'll notify you the moment doors open on July 1, plus send you updates along the way.</p>
     <form class="modal__form" id="seatForm" novalidate>
       <label class="modal__field"><span class="modal__label">First name</span><input id="seatFirstName" name="firstName" type="text" autocomplete="given-name" placeholder="First name" required></label>
       <label class="modal__field"><span class="modal__label">Last name</span><input id="seatLastName" name="lastName" type="text" autocomplete="family-name" placeholder="Last name" required></label>
