@@ -219,10 +219,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .peek-tile:hover .peek-thumb-img { filter: blur(3px) brightness(0.74) saturate(1); transform: scale(1.16); }
 .peek-play { position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 66px; height: 66px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.45); background: rgba(10,10,10,0.35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
 .peek-tile:hover .peek-play { background: rgba(56,182,255,0.3); border-color: var(--accent); transform: translate(-50%, -50%) scale(1.08); }
-.peek-play svg { width: 24px; height: 24px; margin-left: 3px; fill: var(--fg); }
+/* Parent (.peek-play) already flex-centers; nudge the triangle ~2px right so it
+   reads as optically centered (a triangle's visual weight sits left of center). */
+.peek-play svg { width: 24px; height: 24px; fill: var(--fg); transform: translateX(2px); }
 /* Icon-only lock chip (subtle): the word "Locked" was removed, leaving just the lock glyph. */
 .peek-badge { position: absolute; z-index: 3; top: var(--space-3); right: var(--space-3); display: inline-flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.82); background: rgba(0,0,0,0.42); border: 1px solid var(--border); padding: 6px; border-radius: 50%; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .peek-badge svg { width: 12px; height: 12px; }
+/* Module title, bottom-left of each tile. Clamps to ~2 lines (wrap then ellipsis);
+   sits below the top-right lock so the two never overlap. Right edge stops short of
+   the lock column for safety. */
+.peek-desc { position: absolute; z-index: 3; left: var(--space-3); right: var(--space-8); bottom: var(--space-3); margin: 0;
+  font-size: 11px; font-weight: 500; line-height: 1.35; letter-spacing: 0.01em; text-align: left;
+  color: rgba(255,255,255,0.82); text-shadow: 0 1px 6px rgba(0,0,0,0.75);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
+  overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
 
 /* ========== FINAL CTA ========== */
 .final { position: relative; z-index: 2; text-align: center; padding: var(--space-24) var(--space-10) var(--space-32); overflow: hidden; }
@@ -334,7 +344,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <div class="countbar" id="countbar">
   <div class="countbar-left">
     <span class="countbar-dot"></span>
-    <span class="countbar-label">AOC drops July 1 · 10:00 PM ET</span>
+    <span class="countbar-label">AOC drops July 1 · 8:00 PM ET</span>
   </div>
   <div class="countbar-timer">
     <div class="countbar-clock">
@@ -379,7 +389,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- ===================== COUNTDOWN TIMER ===================== -->
 <section class="timer-section" id="timerblock">
-  <p class="timer-date fadeup">July 1, 2026 · 10:00 PM ET</p>
+  <p class="timer-date fadeup">July 1, 2026 · 8:00 PM ET</p>
   <h2 class="timer-headline fadeup">It'll be worth the wait.</h2>
   <div class="timer-clock fadeup">
     <div class="tc-unit"><div class="tc-num js-cd-days">00</div><div class="tc-lbl">Days</div></div>
@@ -458,9 +468,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <span class="peek-pill fadeup">Unlocks July 1</span>
   </div>
   <h2 class="peek-heading fadeup">
-    <span class="ph-lg">120 Modules</span>
-    <span class="ph-md">To Teach You the Complete A-Z On</span>
-    <span class="ph-md">How to Shoot Agents on Camera</span>
+    <span class="ph-lg">120+ Training Videos</span>
+    <span class="ph-md">Across 25 Modules</span>
+    <span class="ph-md">The Complete A-Z On How to Shoot Agents on Camera</span>
   </h2>
 
   <!-- Tiles load real thumbnails from /public/aoc/modules/ (module-01.jpg … module-08.jpg),
@@ -753,7 +763,7 @@ var AOC_UTM = (function () {
 
 // ========== COUNTDOWN (timezone-correct; updates header bar + final block) ==========
 (function () {
-  var TARGET = Date.parse('2026-07-02T02:00:00Z'); // July 1, 2026, 10:00 PM ET (EDT = UTC-4)
+  var TARGET = Date.parse('2026-07-02T00:00:00Z'); // July 1, 2026, 8:00 PM ET (EDT = UTC-4)
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function setAll(sel, val) { document.querySelectorAll(sel).forEach(function (el) { el.textContent = val; }); }
   var timer;
@@ -777,6 +787,66 @@ var AOC_UTM = (function () {
   }
   tick();
   timer = setInterval(tick, 1000);
+})();
+
+// ========== MODULE TILE DESCRIPTIONS ==========
+// Each tile shows its module title bottom-left. Tiles are split odd modules in one
+// marquee column / even in the other (and duplicated for the seamless loop), so we
+// key by the thumbnail slug -> module number rather than DOM order.
+(function () {
+  var MODULE_DESC = {
+    1: 'Intro: The Game is About to Change',
+    2: 'Hooks - The Art of Hacking Attention',
+    3: 'Middle Context & Re-Hooks',
+    4: "How to Make CTA's That Convert",
+    5: 'Scripting 101',
+    6: 'AOC Lens & Camera Settings',
+    7: 'AOC Lighting Secrets',
+    8: 'Composition Tips for Shooting Agents on Camera',
+    9: 'How to Shoot The Agent',
+    10: 'Navigating The Shooting Environment',
+    11: 'Body Language & Tonality Mastery',
+    12: 'The Art of Song Selection',
+    13: 'AOC Mindset - Turning Your Vision into Reality',
+    14: 'You Are The Director, or Becoming The Director',
+    15: 'How to Work With Agents So They Give You Creative Power',
+    16: 'AOC Pre-Production Roadmap',
+    17: 'How to Make Agents Feel Confident on Camera',
+    18: 'Creating an Agent Experience that Keeps Them Coming Back',
+    19: 'AOC Audio Engineering Secrets',
+    20: 'The Post - How to Collab With Agents',
+    21: 'How to Train Your Team Members to Shoot Agents on Camera',
+    22: 'The Science of Virality',
+    23: 'AOC Scripting Secrets [Deep Dive]',
+    24: 'Breaking Down Viral Frameworks',
+    25: 'Proven Agent on Camera Viral Case Study Breakdown'
+  };
+  // thumbnail slug -> module number (matches the order tiles are authored in)
+  var SLUG_MODULE = {
+    'intro': 1, 'hooks': 2, 'middle-context': 3, 'call-to-action': 4, 'scripting-tips': 5,
+    'lenses-and-camera-settings': 6, 'lighting': 7, 'composition': 8, 'shooting-the-agent': 9,
+    'shooting-environment': 10, 'body-language-and-tonality': 11, 'music-selection': 12,
+    'mindset': 13, 'directing-the-agent': 14, 'working-with-agents': 15, 'pre-production': 16,
+    'agent-confidence': 17, 'agent-experience': 18, 'audio': 19, 'collaborating-with-agents': 20,
+    'team-training': 21, 'viral-mastery-the-science': 22, 'scripting-deep-dive': 23,
+    'breaking-down-viral-videos': 24, 'case-studies': 25
+  };
+  function slugFromSrc(src) {
+    var file = (src || '').split('/').pop() || '';
+    return file.replace(/\.(webp|png|jpe?g)$/i, '');
+  }
+  document.querySelectorAll('.peek-tile').forEach(function (tile) {
+    if (tile.querySelector('.peek-desc')) return;
+    var img = tile.querySelector('.peek-thumb-img');
+    if (!img) return;
+    var mod = SLUG_MODULE[slugFromSrc(img.getAttribute('src'))];
+    var text = mod && MODULE_DESC[mod];
+    if (!text) return;
+    var span = document.createElement('span');
+    span.className = 'peek-desc';
+    span.textContent = text;
+    tile.appendChild(span);
+  });
 })();
 
 // ========== SCROLL REVEAL ==========
