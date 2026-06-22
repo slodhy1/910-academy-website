@@ -348,7 +348,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 <div class="countbar" id="countbar">
   <div class="countbar-left">
     <span class="countbar-dot"></span>
-    <span class="countbar-label">AOC drops July 1 · 8:00 PM ET</span>
+    <span class="countbar-label">AOC drops July 1 · 10:00 PM ET</span>
   </div>
   <div class="countbar-timer">
     <div class="countbar-clock">
@@ -393,7 +393,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 <!-- ===================== COUNTDOWN TIMER ===================== -->
 <section class="timer-section" id="timerblock">
-  <p class="timer-date fadeup">July 1, 2026 · 8:00 PM ET</p>
+  <p class="timer-date fadeup">July 1, 2026 · 10:00 PM ET</p>
   <h2 class="timer-headline fadeup">It'll be worth the wait.</h2>
   <div class="timer-clock fadeup">
     <div class="tc-unit"><div class="tc-num js-cd-days">00</div><div class="tc-lbl">Days</div></div>
@@ -766,7 +766,7 @@ var AOC_UTM = (function () {
 
 // ========== COUNTDOWN (timezone-correct; updates header bar + final block) ==========
 (function () {
-  var TARGET = Date.parse('2026-07-02T00:00:00Z'); // July 1, 2026, 8:00 PM ET (EDT = UTC-4)
+  var TARGET = Date.parse('2026-07-02T02:00:00Z'); // July 1, 2026, 10:00 PM ET (EDT = UTC-4)
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function setAll(sel, val) { document.querySelectorAll(sel).forEach(function (el) { el.textContent = val; }); }
   var timer;
