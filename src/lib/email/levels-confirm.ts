@@ -3,7 +3,7 @@ import path from "node:path";
 import { Resend } from "resend";
 
 const REPLY_TO = "academy@studio910pb.com";
-const SUBJECT = "You're in · The Three Levels · Free Live Training, July 1";
+const SUBJECT = "You're in! The 3 Levels of Real Estate Media Mastery";
 
 // Loaded at module init. The template is bundled with the /api/aoc-event/register
 // route via outputFileTracingIncludes ("./emails/**/*.html") in next.config.ts.
@@ -41,6 +41,9 @@ export async function sendLevelsConfirm(
       replyTo: REPLY_TO,
       subject: SUBJECT,
       html,
+      // Native "unsubscribe" in Gmail/Apple Mail -> emails the team, who removes them
+      // from the list manually (matches the footer unsubscribe link).
+      headers: { "List-Unsubscribe": "<mailto:academy@studio910pb.com?subject=Unsubscribe>" },
     });
     if (error) {
       console.error("[levels-confirm] Resend error:", error);
