@@ -143,6 +143,6 @@ export async function POST(req: Request) {
 
   // Kit sync is intentionally NOT done here — the request never touches Kit's API,
   // so registering is instant. The durable row (kit_synced=false) is drained to Kit by
-  // the Vercel Cron (/api/aoc-event/reconcile, every 2 min) with KIT_TAG_ID_AOC_FREE_EVENT.
+  // the Vercel Cron (/api/aoc-event/reconcile, every 2 min) with KIT_TAG_ID_AOC_FREE_LIVE.
   return NextResponse.json({ ok: true });
 }

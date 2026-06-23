@@ -17,7 +17,7 @@ function safeEqual(a: string, b: string): boolean {
 /**
  * Vercel Cron: drains the /three-levels free-event registration -> Kit backlog
  * (aoc_event_registrations rows with kit_synced = false), applying the free-event
- * tag (KIT_TAG_ID_AOC_FREE_EVENT) so the reminder sequence targets registrants
+ * tag (KIT_TAG_ID_AOC_FREE_LIVE) so the reminder sequence targets registrants
  * separately from the waitlist. Vercel Cron sends `Authorization: Bearer <CRON_SECRET>`
  * automatically when CRON_SECRET is set, so we gate on it.
  *
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
   try {
     const summary = await reconcileKit({
       table: "aoc_event_registrations",
-      tagId: process.env.KIT_TAG_ID_AOC_FREE_EVENT,
+      tagId: process.env.KIT_TAG_ID_AOC_FREE_LIVE,
       limit: 200,
       deadlineMs: 50_000,
     });

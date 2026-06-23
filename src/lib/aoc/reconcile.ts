@@ -12,7 +12,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * Both tables share the same drainable shape (id, first_name, email, kit_subscriber_id,
  * kit_synced). Defaults target the waitlist so existing callers are unchanged:
  *   - GET /api/aoc/reconcile        -> aoc_waitlist            + KIT_TAG_ID_AOC_WAITLIST
- *   - GET /api/aoc-event/reconcile  -> aoc_event_registrations + KIT_TAG_ID_AOC_FREE_EVENT
+ *   - GET /api/aoc-event/reconcile  -> aoc_event_registrations + KIT_TAG_ID_AOC_FREE_LIVE
  * KIT_API_KEY is shared.
  */
 
