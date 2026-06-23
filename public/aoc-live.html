@@ -234,8 +234,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .nav__dates { display: none; }
   .section { padding: var(--space-20) 20px; }
   .hero { padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-12)) 20px var(--space-12); }
-  /* Phones: poster only, never the background video. */
-  .hero-bg-video { display: none; }
   .footer-inner { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 520px) {
@@ -283,11 +281,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   <img class="hero-bg-photo" src="/aoc-live/hero-poster.jpg" alt="" aria-hidden="true"
        decoding="async" fetchpriority="high"
        onerror="this.onerror=null; this.src='/images/aoc-header.webp'">
-  <!-- Looping muted background video: Toronto event footage (/aoc-live/toronto-hero.mp4,
-       1080p H.264, audio stripped). Deferred-attached on desktop only; phones stay on the
-       poster (script below). If the video is missing, the poster shows, then the dark bg. -->
+  <!-- Looping muted background video: Toronto event footage. Desktop loads the 1080p
+       toronto-hero.mp4; phones load the smaller 720p toronto-hero-mobile.mp4. Deferred-
+       attached on idle (muted + playsinline autoplay). If the video is missing, the
+       poster shows, then the dark bg. -->
   <video class="hero-bg-video" id="heroVideo" autoplay muted loop playsinline webkit-playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true">
-    <source data-src="/aoc-live/toronto-hero.mp4" type="video/mp4">
+    <source data-src="/aoc-live/toronto-hero.mp4" data-src-mobile="/aoc-live/toronto-hero-mobile.mp4" type="video/mp4">
   </video>
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
@@ -612,13 +611,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     var iv = setInterval(function () { tries++; if (!v.paused || tries > 12) { clearInterval(iv); return; } tryPlay(); }, 250);
   }
 
-  // Phones: poster only — never download or play the background video.
-  if (window.matchMedia('(max-width: 768px)').matches) return;
-
-  // Desktop: honor reduced-motion / Save-Data, else attach + autoplay when idle.
+  // Honor reduced-motion / Save-Data on any device — poster only, zero video bytes.
   var conn = navigator.connection || {};
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData) return;
-  function go() { attach(false); }
+
+  // Attach + autoplay when idle. Phones load the smaller mobile cut; desktop the full
+  // file. iOS allows muted, inline (playsinline) autoplay without a tap.
+  var useMobile = window.matchMedia('(max-width: 768px)').matches;
+  function go() { attach(useMobile); }
   if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
   else setTimeout(go, 200);
 
