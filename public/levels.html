@@ -85,8 +85,8 @@ img { max-width: 100%; display: block; }
 .eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-6); }
 .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-/* Header bumped ~20% vs prior sizes. */
-.hero-headline { font-size: clamp(1.75rem, 7.4vw, 4.2rem); font-weight: 700; text-transform: uppercase; line-height: 1.06; letter-spacing: var(--tracking-tight); }
+/* Sized so each forced line ("THE THREE LEVELS" is the longest) stays on one line -> exactly 3 lines. */
+.hero-headline { font-size: clamp(1.6rem, 5.5vw, 3.1rem); font-weight: 700; text-transform: uppercase; line-height: 1.08; letter-spacing: var(--tracking-tight); }
 .hero-headline .em { color: var(--accent); }
 .hero-detail { margin-top: var(--space-6); font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); }
 
@@ -117,7 +117,6 @@ img { max-width: 100%; display: block; }
 .signup-submit:disabled { opacity: 0.6; cursor: wait; }
 .signup-msg { font-size: 0.85rem; min-height: 1em; color: var(--fg-muted); text-align: center; }
 .signup-msg.error { color: #ff6b6b; }
-.signup-fine { margin-top: var(--space-3); font-size: 11px; color: var(--fg-dim); text-align: center; line-height: 1.6; }
 
 /* ===== SECTIONS ===== */
 .section { position: relative; z-index: 2; padding: clamp(56px, 9vw, 104px) var(--space-5); border-top: 1px solid var(--border); }
@@ -201,12 +200,11 @@ img { max-width: 100%; display: block; }
         <!-- SMS consent: required to sign up (checked client-side) -->
         <label class="consent">
           <input type="checkbox" id="signupConsent" name="consent" required>
-          <span class="consent-text">By checking this box, you agree to receive recurring automated marketing texts from 910 Academy at the number provided. Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.</span>
+          <span class="consent-text">By checking this box, you agree to receive marketing texts and emails from 910 Academy. Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.</span>
         </label>
         <button type="submit" class="signup-submit" id="signupSubmit">Sign Up Now</button>
         <p class="signup-msg" id="signupMsg" role="status" aria-live="polite"></p>
       </form>
-      <p class="signup-fine">By registering for this event you agree to receive email and/or text reminders of the event and other resources to help you grow your real estate media business.</p>
     </div>
 
     <!-- Countdown, below the opt-in section (desktop only) -->
