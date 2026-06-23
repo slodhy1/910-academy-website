@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- DRAFT (title/description/OG copy — Ryan/Claudio to finalize) -->
+<title>The Three Levels of Real Estate Media Mastery · Free Live Training · July 1</title>
+<meta name="description" content="A free live training on Zoom. Whether you want your first client, your first 10K month, or 100K+ months — there are three levels, and we'll teach you the one you're on. July 1, 2026, 8:00 PM ET.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:url" content="https://910academy.com/three-levels">
+<meta property="og:title" content="The Three Levels of Real Estate Media Mastery · Free Live Training">
+<meta property="og:description" content="Free live training on Zoom, July 1. Get your first client, hit your first 10K month, or scale to 100K+ months.">
+<!-- DRAFT: reusing the AOC share image until a dedicated /three-levels OG image exists -->
+<meta property="og:image" content="https://910academy.com/images/aoc-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="The Three Levels of Real Estate Media Mastery">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Three Levels of Real Estate Media Mastery · Free Live Training">
+<meta name="twitter:description" content="Free live training on Zoom, July 1. Get your first client, hit your first 10K month, or scale to 100K+ months.">
+<meta name="twitter:image" content="https://910academy.com/images/aoc-og.jpg">
+
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 500; font-display: swap; src: url('/fonts/montserrat-500.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 700; font-display: swap; src: url('/fonts/montserrat-700.woff2') format('woff2'); }
+</style>
+<style>
+/* ===== DESIGN TOKENS (canonical 910academy.com system) ===== */
+:root {
+  --bg-deep: #050506; --bg-base: #0a0a0a; --bg-elevated: #0f0f10;
+  --accent: #38B6FF; --accent-hover: #5ac4ff; --accent-ink: #04131d;
+  --accent-glow: rgba(56, 182, 255, 0.15); --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2); --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --fg: #FFFFFF; --fg-muted: rgba(255, 255, 255, 0.7); --fg-dim: rgba(255, 255, 255, 0.4); --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08); --border-hover: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(20px); --glass-blur-heavy: blur(30px); --glass-saturate: saturate(180%);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
+  --radius-sm: 8px; --radius-md: 16px; --radius-lg: 20px; --radius-xl: 24px; --radius-pill: 100px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif; --leading-tight: 1.1em; --leading-normal: 1.4em; --tracking-tight: -0.05px;
+  --bar-h: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
+/* Static radial-gradient glow — same look as the orbs on /aoc, zero GPU blur cost on mobile. No video. */
+body { background: radial-gradient(640px circle at 12% -8%, rgba(56,182,255,0.08), transparent 60%), radial-gradient(820px circle at 90% 12%, rgba(56,182,255,0.05), transparent 55%), var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ===== PRIMARY CTA (shared) ===== */
+.aoc-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 18px 44px; border: none; cursor: pointer; border-radius: var(--radius-pill); transition: transform 0.25s ease, background 0.25s ease; }
+.aoc-cta:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.aoc-cta svg { width: 16px; height: 16px; }
+
+/* ===== STICKY NAV ===== */
+.nav { position: fixed; top: 0; left: 0; width: 100%; height: calc(var(--bar-h) + env(safe-area-inset-top)); z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding: env(safe-area-inset-top) calc(var(--space-8) + env(safe-area-inset-right)) 0 calc(var(--space-8) + env(safe-area-inset-left));
+  background: linear-gradient(90deg, rgba(56,182,255,0.10), rgba(10,10,10,0.85) 55%);
+  backdrop-filter: var(--glass-blur-heavy); -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-bottom: 1px solid var(--accent-border-subtle); }
+.nav__left { display: flex; align-items: center; gap: var(--space-3); min-width: 0; color: var(--fg); }
+.nav__logo { width: 24px; height: 18px; display: inline-block; color: var(--fg); flex: none; }
+.nav__logo svg { width: 100%; height: 100%; display: block; }
+.nav__lockup { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg); white-space: nowrap; }
+.nav__cta { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 9px 18px; border-radius: var(--radius-pill); transition: all 0.2s ease; white-space: nowrap; }
+.nav__cta:hover { background: var(--accent-hover); }
+
+/* ===== HERO (opt-in lives here, inline, above the fold) ===== */
+.hero { position: relative; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-12)) var(--space-5) var(--space-16); display: flex; justify-content: center; }
+.hero-inner { position: relative; z-index: 2; width: 100%; max-width: 600px; text-align: center; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-5); }
+.hero-headline { font-size: clamp(2rem, 7.5vw, 3.4rem); font-weight: 700; text-transform: uppercase; line-height: 1.04; letter-spacing: var(--tracking-tight); margin: 0 auto; max-width: 18ch; }
+.hero-sub { margin: var(--space-5) auto 0; font-size: clamp(0.98rem, 2.4vw, 1.18rem); font-weight: 300; color: var(--fg-muted); max-width: 42ch; line-height: 1.55; }
+.hero-detail { margin: var(--space-5) auto 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+
+/* ===== INLINE SIGN-UP CARD ===== */
+.signup { margin: var(--space-8) auto 0; width: 100%; max-width: 440px; text-align: left;
+  background: rgba(255,255,255,0.045); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: clamp(1.4rem, 4vw, 1.9rem); box-shadow: 0 24px 70px -30px rgba(0,0,0,0.8); }
+.signup-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+.field-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
+.field-label .opt { color: var(--fg-dim); font-weight: 500; letter-spacing: 0.06em; }
+.field input { font-family: var(--font); font-weight: 400; font-size: 16px; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--fg); outline: none; transition: border-color 0.2s ease, background 0.2s ease; width: 100%; }
+.field input:focus { border-color: var(--accent-border); background: rgba(255,255,255,0.06); }
+.field input::placeholder { color: var(--fg-dim); }
+.signup-submit { margin-top: var(--space-2); width: 100%; font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 16px 24px; border: none; cursor: pointer; border-radius: var(--radius-pill); box-shadow: 0 12px 34px var(--accent-glow); transition: all 0.25s ease; }
+.signup-submit:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+.signup-submit:disabled { opacity: 0.6; cursor: wait; }
+.signup-msg { font-size: 0.85rem; min-height: 1em; color: var(--fg-muted); text-align: center; }
+.signup-msg.error { color: #ff6b6b; }
+.signup-fine { margin-top: var(--space-2); font-size: 11px; color: var(--fg-dim); text-align: center; line-height: 1.5; }
+
+/* ===== SECTIONS ===== */
+.section { position: relative; z-index: 2; padding: var(--space-20) var(--space-5); }
+.section-head { max-width: 720px; margin: 0 auto; text-align: center; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
+.section-heading { font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 300; text-transform: uppercase; line-height: 1.05; letter-spacing: var(--tracking-tight); }
+.section-heading .em { color: var(--accent); }
+
+/* ===== THREE LEVELS ===== */
+.levels-grid { max-width: 1080px; margin: var(--space-16) auto 0; display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+.level-card { border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(180deg, rgba(56,182,255,0.05), rgba(255,255,255,0.012)); padding: clamp(1.6rem, 4vw, 2.2rem); display: flex; flex-direction: column; gap: var(--space-5); }
+.level-num { font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+.level-title { font-size: clamp(1.25rem, 3vw, 1.6rem); font-weight: 700; text-transform: uppercase; line-height: 1.1; letter-spacing: var(--tracking-tight); }
+.level-block { display: flex; flex-direction: column; gap: var(--space-2); }
+.level-block-label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
+.level-block-text { font-size: 0.95rem; font-weight: 300; color: var(--fg-muted); line-height: 1.55; }
+
+/* ===== WHAT TO EXPECT ===== */
+.expect { text-align: center; }
+.expect-list { max-width: 640px; margin: var(--space-12) auto 0; display: flex; flex-direction: column; gap: var(--space-4); }
+.expect-item { font-size: 1.05rem; font-weight: 300; color: var(--fg-muted); }
+.expect-item b { color: var(--fg); font-weight: 700; }
+
+/* ===== SECOND CTA ===== */
+.cta2 { text-align: center; }
+.cta2 .aoc-cta { margin-top: var(--space-8); }
+
+/* ===== FOOTER ===== */
+.footer { position: relative; z-index: 2; margin-top: auto; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10) calc(var(--space-12) + env(safe-area-inset-bottom)); text-align: center; }
+.footer-copy { font-size: 12px; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.footer-copy a { color: var(--fg-dim); text-decoration: underline; text-underline-offset: 2px; }
+.footer-copy a:hover { color: var(--accent); }
+
+/* ===== DESKTOP ===== */
+@media (min-width: 769px) {
+  .hero { padding-left: var(--space-10); padding-right: var(--space-10); }
+  .levels-grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+  .level-card { gap: var(--space-6); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<!-- ===================== STICKY NAV ===================== -->
+<nav class="nav">
+  <a href="https://910academy.com" class="nav__left" aria-label="910 Academy">
+    <span class="nav__logo" aria-hidden="true">
+      <svg viewBox="0 0 720 532.6" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0 372.28 0 532.6 504.38 161.08 504.38 0 0 372.28" fill="currentColor"/>
+        <polygon points="395.52 293.37 504.38 212.92 720 372.67 720 532.6 395.52 293.37" fill="currentColor"/>
+      </svg>
+    </span>
+    <span class="nav__lockup">910 Academy</span>
+  </a>
+  <a href="#register" class="nav__cta">Save My Spot</a>
+</nav>
+
+<!-- ===================== HERO + INLINE OPT-IN ===================== -->
+<header class="hero" id="register">
+  <div class="hero-inner">
+    <!-- DRAFT (eyebrow) -->
+    <p class="eyebrow">Free Live Training · July 1</p>
+    <!-- DRAFT (headline — Ryan/Claudio) -->
+    <h1 class="hero-headline">The Three Levels of Real Estate Media Mastery</h1>
+    <!-- DRAFT (sub-headline — Ryan/Claudio) -->
+    <p class="hero-sub">Whether you want to get your first client, hit your first 10K month, or scale to 100K+ months, we'll teach you the best strategies to make it happen.</p>
+    <!-- DRAFT (detail line) -->
+    <p class="hero-detail">July 1, 2026 · 8:00 PM ET · Live on Zoom · Free</p>
+
+    <!-- Inline opt-in. No popup, no toggle — register right here. -->
+    <div class="signup">
+      <form class="signup-form" id="signupForm" novalidate>
+        <label class="field">
+          <span class="field-label">First name</span>
+          <input id="signupFirstName" name="firstName" type="text" autocomplete="given-name" placeholder="First name" required>
+        </label>
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input id="signupEmail" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
+        </label>
+        <label class="field">
+          <span class="field-label">Phone <span class="opt">(optional)</span></span>
+          <input id="signupPhone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555" maxlength="40">
+        </label>
+        <!-- honeypot: hidden from humans, bots fill it -> server rejects -->
+        <input id="signupWebsite" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+        <button type="submit" class="signup-submit" id="signupSubmit">Save My Free Spot</button>
+        <p class="signup-msg" id="signupMsg" role="status" aria-live="polite"></p>
+      </form>
+      <p class="signup-fine">Free to attend. We'll email you the Zoom link and a reminder before we go live.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== THE THREE LEVELS ===================== -->
+<section class="section levels">
+  <div class="section-head">
+    <!-- DRAFT (section heading) -->
+    <h2 class="section-heading">There Are Three <span class="em">Levels.</span></h2>
+  </div>
+  <!-- DRAFT: every level's title / "Where you're stuck" / "What you'll learn" is placeholder copy. Claudio/Ryan write the real lines. -->
+  <div class="levels-grid">
+    <article class="level-card">
+      <p class="level-num">Level 1</p>
+      <h3 class="level-title">Get Your First Client</h3>
+      <div class="level-block">
+        <span class="level-block-label">Where you're stuck</span>
+        <!-- DRAFT -->
+        <p class="level-block-text">You have the camera and the drive, but no paying client yet — and you're not sure how to land the first one.</p>
+      </div>
+      <div class="level-block">
+        <span class="level-block-label">What you'll learn</span>
+        <!-- DRAFT -->
+        <p class="level-block-text">How to package your offer, reach out, and book your first real estate media client with confidence.</p>
+      </div>
+    </article>
+    <article class="level-card">
+      <p class="level-num">Level 2</p>
+      <h3 class="level-title">Your First 10K Month</h3>
+      <div class="level-block">
+        <span class="level-block-label">Where you're stuck</span>
+        <!-- DRAFT -->
+        <p class="level-block-text">You're booking jobs but the income is inconsistent — you can't seem to break past the same ceiling each month.</p>
+      </div>
+      <div class="level-block">
+        <span class="level-block-label">What you'll learn</span>
+        <!-- DRAFT -->
+        <p class="level-block-text">The pricing, packaging, and pipeline that turn one-off shoots into a reliable five-figure month.</p>
+      </div>
+    </article>
+    <article class="level-card">
+      <p class="level-num">Level 3</p>
+      <h3 class="level-title">Mastery: 100K+ Months</h3>
+      <div class="level-block">
+        <span class="level-block-label">Where you're stuck</span>
+        <!-- DRAFT -->
+        <p class="level-block-text">You're maxed out on your own time and can't scale past it without sacrificing quality or burning out.</p>
+      </div>
+      <div class="level-block">
+        <span class="level-block-label">What you'll learn</span>
+        <!-- DRAFT -->
+        <p class="level-block-text">How to build the team, systems, and brand that scale you to six-figure months and beyond.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== WHAT TO EXPECT ===================== -->
+<section class="section expect">
+  <div class="section-head">
+    <p class="section-label">What to expect</p>
+    <!-- DRAFT (heading) -->
+    <h2 class="section-heading">A free, live <span class="em">session.</span></h2>
+  </div>
+  <div class="expect-list">
+    <!-- DRAFT (expect lines) -->
+    <p class="expect-item"><b>Free</b> — no cost, nothing to buy to attend.</p>
+    <p class="expect-item"><b>Live on Zoom</b> — come with questions; we'll teach in real time.</p>
+    <p class="expect-item"><b>July 1, 2026 · 8:00 PM ET</b> — block the time now.</p>
+    <p class="expect-item"><b>~60–90 minutes</b> — focused, no fluff.</p>
+  </div>
+</section>
+
+<!-- ===================== SECOND CTA ===================== -->
+<section class="section cta2">
+  <div class="section-head">
+    <!-- DRAFT (heading) -->
+    <h2 class="section-heading">Save your <span class="em">free spot.</span></h2>
+  </div>
+  <a href="#register" class="aoc-cta">Save My Free Spot
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <p class="footer-copy">&copy; 2026 910 Academy &nbsp;·&nbsp; Questions? <a href="mailto:academy@studio910pb.com">academy@studio910pb.com</a></p>
+</footer>
+
+<script>
+(function () {
+  // UTM capture (same shape as /aoc) — forwarded to the API, stored on the row.
+  var EVENT_UTM = (function () {
+    var params = new URLSearchParams(window.location.search);
+    function get(k) { var v = params.get(k); return v ? v.trim().slice(0, 200) : undefined; }
+    return { source: get('utm_source'), medium: get('utm_medium'), campaign: get('utm_campaign'), content: get('utm_content'), term: get('utm_term') };
+  })();
+
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var form = document.getElementById('signupForm');
+  var btn = document.getElementById('signupSubmit');
+  var msg = document.getElementById('signupMsg');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg.className = 'signup-msg'; msg.textContent = '';
+    var firstName = form.firstName.value.trim();
+    var email = form.email.value.trim();
+    var phone = form.phone.value.trim();
+    // First name + email required; phone is optional (never block a registration on it).
+    if (!firstName) { msg.className = 'signup-msg error'; msg.textContent = 'Please enter your first name.'; return; }
+    if (!EMAIL_RE.test(email)) { msg.className = 'signup-msg error'; msg.textContent = 'Please enter a valid email.'; return; }
+    btn.disabled = true; btn.textContent = 'Saving...';
+    fetch('/api/aoc-event/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName: firstName, email: email, phone: phone, website: (form.website ? form.website.value : ''), utm: EVENT_UTM })
+    })
+      .then(function (res) { if (!res.ok) throw new Error('Request failed'); window.location.href = '/three-levels/thanks'; })
+      .catch(function () { msg.className = 'signup-msg error'; msg.textContent = 'Something went wrong. Please try again.'; btn.disabled = false; btn.textContent = 'Save My Free Spot'; });
+  });
+})();
+</script>
+
+</body>
+</html>

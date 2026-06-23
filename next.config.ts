@@ -18,6 +18,7 @@ const STATIC_PAGES = [
   "the-6ix",
   "aoc",
   "aoc-live",
+  "three-levels",
 ];
 
 // App-wide security headers. CSP is intentionally NOT set here: the static
@@ -66,6 +67,8 @@ const nextConfig: NextConfig = {
       { source: "/products/910-sales-system", destination: "/products/910-sales-system.html" },
       // AOC waitlist thank-you page (nested static page)
       { source: "/aoc/thanks", destination: "/aoc/thanks.html" },
+      // Free live-event (/three-levels) confirmation page (nested static page)
+      { source: "/three-levels/thanks", destination: "/three-levels/thanks.html" },
     ];
   },
 };

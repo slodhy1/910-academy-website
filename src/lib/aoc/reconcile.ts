@@ -1,16 +1,19 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * AOC waitlist -> Kit reconciliation.
+ * AOC -> Kit reconciliation (shared by the waitlist and the free-event registration).
  *
- * Sweeps aoc_waitlist rows that the signup route couldn't sync to Kit
+ * Sweeps rows in `table` that the signup route couldn't sync to Kit
  * (kit_synced = false) and finishes the job: create/upsert the subscriber,
- * apply the waitlist tag, then flip kit_synced = true. Each Kit call uses
- * exponential backoff and honors a 429 Retry-After. A row that still fails is
- * left for the next run.
+ * apply `tagId`, then flip kit_synced = true. Each Kit call uses exponential
+ * backoff and honors a 429 Retry-After. A row that still fails is left for the
+ * next run.
  *
- * Used by the Vercel Cron route GET /api/aoc/reconcile.
- * Secrets read from env only: KIT_API_KEY, KIT_TAG_ID_AOC_WAITLIST.
+ * Both tables share the same drainable shape (id, first_name, email, kit_subscriber_id,
+ * kit_synced). Defaults target the waitlist so existing callers are unchanged:
+ *   - GET /api/aoc/reconcile        -> aoc_waitlist            + KIT_TAG_ID_AOC_WAITLIST
+ *   - GET /api/aoc-event/reconcile  -> aoc_event_registrations + KIT_TAG_ID_AOC_FREE_EVENT
+ * KIT_API_KEY is shared.
  */
 
 const KIT_BASE = "https://api.kit.com/v4";
@@ -73,17 +76,21 @@ export interface ReconcileResult {
  * Whatever isn't reached stays kit_synced=false for the next run — nothing lost.
  */
 export async function reconcileKit(
-  { limit = 200, deadlineMs = 50_000 }: { limit?: number; deadlineMs?: number } = {}
+  {
+    table = "aoc_waitlist",
+    tagId = process.env.KIT_TAG_ID_AOC_WAITLIST,
+    limit = 200,
+    deadlineMs = 50_000,
+  }: { table?: string; tagId?: string; limit?: number; deadlineMs?: number } = {}
 ): Promise<ReconcileResult> {
   const apiKey = process.env.KIT_API_KEY;
-  const tagId = process.env.KIT_TAG_ID_AOC_WAITLIST;
   if (!apiKey || !tagId) {
-    throw new Error("Kit env missing (KIT_API_KEY / KIT_TAG_ID_AOC_WAITLIST)");
+    throw new Error("Kit env missing (KIT_API_KEY / tag id)");
   }
 
   const sb = createAdminClient();
   const { data: rows, error } = await sb
-    .from("aoc_waitlist")
+    .from(table)
     .select("id, first_name, email")
     .eq("kit_synced", false)
     .order("created_at", { ascending: true })
@@ -109,7 +116,7 @@ export async function reconcileKit(
       await withBackoff(() => kitPost(apiKey, `/tags/${tagId}/subscribers/${subscriberId}`, {}));
 
       const { error: updErr } = await sb
-        .from("aoc_waitlist")
+        .from(table)
         .update({ kit_subscriber_id: subscriberId, kit_synced: true })
         .eq("id", row.id);
       if (updErr) throw new Error(`Supabase update failed: ${updErr.message}`);

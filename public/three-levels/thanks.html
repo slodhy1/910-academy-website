@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- DRAFT (title/description copy — Ryan/Claudio) -->
+<title>You're registered · The Three Levels · 910 Academy</title>
+<meta name="description" content="You're registered for The Three Levels of Real Estate Media Mastery — free, live on Zoom, July 1 at 8:00 PM ET.">
+<meta name="robots" content="noindex">
+
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Self-hosted "add-to-calendar-button" web component (vendored from npm add-to-calendar-button@2.14.0, no-pro build).
+     Same-origin (no third-party CDN); async+defer so it never blocks paint. Self-registers the
+     <add-to-calendar-button> element used below. The config <script> at the end of <body> fills in
+     the Zoom URL (ZOOM_EVENT_URL) before the element is interacted with. -->
+<script src="/vendor/add-to-calendar-button.js" async defer></script>
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 500; font-display: swap; src: url('/fonts/montserrat-500.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 700; font-display: swap; src: url('/fonts/montserrat-700.woff2') format('woff2'); }
+</style>
+<style>
+/* ===== DESIGN TOKENS (canonical 910academy.com system) ===== */
+:root {
+  --bg-base: #0a0a0a;
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-ink: #04131d;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+  --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+  --radius-pill: 100px;
+  --radius-xl: 24px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
+body { background: radial-gradient(620px circle at 12% -5%, rgba(56, 182, 255, 0.06), transparent 60%), radial-gradient(820px circle at 92% 28%, rgba(56, 182, 255, 0.045), transparent 55%), var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* ===== THANKS CONTENT ===== */
+.thanks { position: relative; z-index: 2; flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 128px var(--space-10) var(--space-16); }
+.thanks-inner { max-width: 760px; width: 100%; }
+.thanks-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-6); }
+.thanks-title { font-size: clamp(1.6rem, 6vw, 3.4rem); font-weight: 300; text-transform: uppercase; line-height: 1.08; letter-spacing: var(--tracking-tight); margin-bottom: var(--space-8); }
+.thanks-body { font-size: 1.05rem; font-weight: 300; color: var(--fg-muted); line-height: 1.7; max-width: 560px; margin: 0 auto; }
+
+/* ===== LIVE EVENT BLOCK (glass card + accent CTA) ===== */
+.thanks-event { margin-top: var(--space-8); border-radius: var(--radius-xl); border: 1px solid var(--border); background: rgba(255, 255, 255, 0.045); padding: var(--space-10) var(--space-8); text-align: center; }
+.thanks-event-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-3); }
+.thanks-event-line { font-size: 1.05rem; font-weight: 300; color: var(--fg); margin-bottom: var(--space-6); }
+/* Visible "Join on Zoom" pill — href filled from ZOOM_EVENT_URL. Hidden until a URL exists. */
+.zoom-link { display: none; margin: 0 auto var(--space-6); width: fit-content; font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 16px 40px; border-radius: var(--radius-pill); box-shadow: 0 12px 34px var(--accent-glow); transition: all 0.25s ease; }
+.zoom-link:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.zoom-soon { font-size: 0.92rem; font-weight: 400; color: var(--fg-dim); margin-bottom: var(--space-6); }
+/* Native multi-calendar button (add-to-calendar-button web component). It styles its own
+   blue pill via the --btn-* vars on the element; here we just center it and reserve height
+   so there's no layout shift while the script upgrades the element. */
+.thanks-event add-to-calendar-button { display: inline-block; min-height: 54px; --font: var(--font); }
+
+/* ===== FOOTER (minimal, standalone) ===== */
+.footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10); text-align: center; }
+.footer-copy { font-size: 12px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
+.footer-copy a { color: var(--fg-dim); text-decoration: underline; text-underline-offset: 2px; }
+.footer-copy a:hover { color: var(--accent); }
+
+@media (max-width: 768px) {
+  .thanks { padding: 104px 20px var(--space-12); }
+  .footer { padding: 48px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Confirmation -->
+<main class="thanks">
+  <div class="thanks-inner">
+    <!-- DRAFT (eyebrow/title/body copy — Ryan/Claudio) -->
+    <p class="thanks-eyebrow">910 Academy Live</p>
+    <h1 class="thanks-title">You're registered.</h1>
+    <p class="thanks-body">You're in for <strong>The Three Levels of Real Estate Media Mastery</strong> — free, live on Zoom, <strong>July 1, 2026 at 8:00 PM ET</strong>. Add it to your calendar below so you don't miss it. We'll also email you the link and a reminder before we go live.</p>
+
+    <!-- Live event card: Zoom link + add-to-calendar -->
+    <div class="thanks-event">
+      <p class="thanks-event-eyebrow">The live session</p>
+      <p class="thanks-event-line">July 1, 2026 · 8:00 PM ET · Live on Zoom</p>
+
+      <!-- Visible Zoom link (filled from ZOOM_EVENT_URL). Falls back to "coming soon" text. -->
+      <a id="zoomLink" class="zoom-link" href="#" target="_blank" rel="noopener">Join on Zoom</a>
+      <p id="zoomSoon" class="zoom-soon">The Zoom link is on its way to your inbox — we'll also send a reminder before we start.</p>
+
+      <!-- Native multi-calendar picker: Apple / Google / iCal / Outlook.com / Microsoft365 / Yahoo.
+           listStyle="modal" -> one tap on mobile opens the chooser. lightMode="dark" matches the site;
+           the --btn-* overrides make it the same blue pill as the hero CTA.
+           July 1, 2026, 8:00 PM ET, ~90 min. location/description get the Zoom URL via the script below. -->
+      <add-to-calendar-button
+        id="atcb"
+        name="910 Academy Live: The Three Levels of Real Estate Media Mastery"
+        startDate="2026-07-01"
+        startTime="20:00"
+        endTime="21:30"
+        timeZone="America/New_York"
+        location="Live on Zoom — link emailed before the event"
+        description="910 Academy Live: The Three Levels of Real Estate Media Mastery. Free live training on Zoom."
+        options="['Apple','Google','iCal','Outlook.com','Microsoft365','Yahoo']"
+        listStyle="modal"
+        label="Add to Calendar"
+        lightMode="dark"
+        size="4"
+        styleDark="--btn-background: #38B6FF; --btn-text: #04131d; --btn-shadow: 0 14px 40px rgba(56,182,255,0.15); --btn-hover-background: #5ac4ff; --btn-hover-text: #04131d; --btn-hover-shadow: 0 18px 50px rgba(56,182,255,0.3); --btn-border: transparent; --btn-border-width: 0; --btn-border-radius: 100px; --btn-font-weight: 700; --btn-padding-x: 40px; --btn-padding-y: 16px; --font: 'Montserrat', sans-serif;"
+      ></add-to-calendar-button>
+    </div>
+  </div>
+</main>
+
+<!-- Footer (minimal, standalone) -->
+<footer class="footer">
+  <p class="footer-copy">&copy; 2026 910 Academy &nbsp;·&nbsp; Questions? <a href="mailto:academy@studio910pb.com">academy@studio910pb.com</a></p>
+</footer>
+
+<script>
+(function () {
+  // Paste the Zoom registration/join URL here. While empty, the page shows a
+  // "link is on its way" note and the calendar event uses a placeholder location.
+  var ZOOM_EVENT_URL = "";
+
+  // Runs synchronously at parse time (this script is after the element, before the
+  // async add-to-calendar script finishes loading), so the attributes are set before
+  // the element upgrades / is interacted with.
+  if (ZOOM_EVENT_URL) {
+    var link = document.getElementById('zoomLink');
+    var soon = document.getElementById('zoomSoon');
+    if (link) { link.href = ZOOM_EVENT_URL; link.style.display = 'inline-block'; }
+    if (soon) { soon.style.display = 'none'; }
+
+    var atcb = document.getElementById('atcb');
+    if (atcb) {
+      atcb.setAttribute('location', ZOOM_EVENT_URL);
+      atcb.setAttribute(
+        'description',
+        '910 Academy Live: The Three Levels of Real Estate Media Mastery. Free live training on Zoom.[br][br]Join on Zoom: [url]' + ZOOM_EVENT_URL + '|Join the Zoom meeting[/url]'
+      );
+    }
+  }
+})();
+</script>
+
+</body>
+</html>
