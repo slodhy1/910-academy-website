@@ -588,10 +588,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 </div>
 
 <script>
-// ========== HERO VIDEO: desktop-only, attached after first paint ==========
-// The poster <img> is the LCP element and paints instantly. On phones (<=768px) the
-// video is never loaded — poster only, with an optional tap-to-play. On desktop the
-// source is attached during idle time so it never competes with initial render/LCP.
+// ========== HERO VIDEO: deferred autoplay, attached a few seconds after first paint ==========
+// The poster <img> is the LCP element and paints instantly. The video source is attached
+// ~2.5s later (then on idle) so it never competes with initial render/LCP, and autoplays
+// on its own — no tap needed. Phones load the smaller mobile cut; desktop the full file.
 // Save-Data and reduced-motion keep the poster (zero video bytes).
 (function () {
   var v = document.getElementById('heroVideo');
@@ -623,28 +623,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     var iv = setInterval(function () { tries++; if (!v.paused || tries > 12) { clearInterval(iv); return; } tryPlay(); }, 250);
   }
 
-  var isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-  // Phones: poster only, never download the video. Optional tap-to-play on the hero
-  // (ignoring taps on the CTA / form controls).
-  if (isMobile) {
-    var hero = document.querySelector('.hero');
-    if (hero) {
-      hero.addEventListener('click', function onTap(e) {
-        if (e.target.closest('a, button, input, label, .cf-turnstile')) return;
-        hero.removeEventListener('click', onTap);
-        attach(true);
-      }, { passive: true });
-    }
-    return;
-  }
-
-  // Desktop: honor reduced-motion / Save-Data, else attach + autoplay when idle.
+  // Honor reduced-motion / Save-Data on any device — poster only, zero video bytes.
   var conn = navigator.connection || {};
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData) return;
-  function go() { attach(false); }
-  if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
-  else setTimeout(go, 200);
+
+  // Keep first paint fast (poster only), then load + autoplay the video a few seconds
+  // later on its own — no tap needed. Phones load the smaller mobile cut; desktop the
+  // full file. iOS allows muted, inline (playsinline) autoplay without a gesture.
+  var useMobile = window.matchMedia('(max-width: 768px)').matches;
+  function go() { attach(useMobile); }
+  setTimeout(function () {
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
+    else go();
+  }, 2500);
 
   document.addEventListener('visibilitychange', function () { if (!document.hidden && attached) { tryPlay(); repaint(); } });
 })();

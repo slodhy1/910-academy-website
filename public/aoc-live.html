@@ -615,12 +615,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   var conn = navigator.connection || {};
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData) return;
 
-  // Attach + autoplay when idle. Phones load the smaller mobile cut; desktop the full
-  // file. iOS allows muted, inline (playsinline) autoplay without a tap.
+  // Keep first paint fast (poster only), then load + autoplay the video a few seconds
+  // later on its own — no tap needed. Phones load the smaller mobile cut; desktop the
+  // full file. iOS allows muted, inline (playsinline) autoplay without a gesture.
   var useMobile = window.matchMedia('(max-width: 768px)').matches;
   function go() { attach(useMobile); }
-  if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
-  else setTimeout(go, 200);
+  setTimeout(function () {
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1500 });
+    else go();
+  }, 2500);
 
   document.addEventListener('visibilitychange', function () { if (!document.hidden && attached) { tryPlay(); repaint(); } });
 })();
