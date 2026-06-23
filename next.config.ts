@@ -41,6 +41,8 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "src/app/api/stripe-webhook/route.ts": ["./emails/**/*.html"],
     "src/app/api/claudio-application/route.ts": ["./emails/**/*.html"],
+    // /levels free-event confirmation email template (read at runtime by levels-confirm.ts)
+    "src/app/api/aoc-event/register/route.ts": ["./emails/**/*.html"],
     // Note: admin grant notify inlines its template directly (parens/brackets
     // in the route-group path break the glob matcher, so a trace include here
     // would silently match nothing).

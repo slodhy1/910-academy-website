@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendLevelsConfirm } from "@/lib/email/levels-confirm";
 
 export const runtime = "nodejs";
 
@@ -120,8 +121,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Could not register. Please try again." }, { status: 500 });
   }
 
-  // Kit sync is intentionally NOT done here — the request never touches Kit's API,
-  // so registering is instant. The durable row (kit_synced=false) is drained to Kit by
-  // the Vercel Cron (/api/aoc-event/reconcile, every 2 min) with KIT_TAG_ID_AOC_FREE_LIVE.
+  // Confirmation email goes out AFTER the response (no added latency to the submit).
+  // Best-effort: a Resend failure never affects the registration — the durable row is
+  // saved and Kit sync runs via the cron. Kit sync itself is NOT done here (instant signup).
+  after(async () => {
+    const emailResult = await sendLevelsConfirm({ to: email, firstName });
+    if (!emailResult.success) {
+      console.error("[aoc-event/register] confirmation email failed:", emailResult.error);
+    }
+  });
+
+  // The durable row (kit_synced=false) is drained to Kit by the Vercel Cron
+  // (/api/aoc-event/reconcile, every 2 min) with KIT_TAG_ID_AOC_FREE_LIVE.
   return NextResponse.json({ ok: true });
 }
