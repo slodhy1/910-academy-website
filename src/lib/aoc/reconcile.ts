@@ -79,9 +79,10 @@ export async function reconcileKit(
   {
     table = "aoc_waitlist",
     tagId = process.env.KIT_TAG_ID_AOC_WAITLIST,
+    phoneFieldKey = null,
     limit = 200,
     deadlineMs = 50_000,
-  }: { table?: string; tagId?: string; limit?: number; deadlineMs?: number } = {}
+  }: { table?: string; tagId?: string; phoneFieldKey?: string | null; limit?: number; deadlineMs?: number } = {}
 ): Promise<ReconcileResult> {
   const apiKey = process.env.KIT_API_KEY;
   if (!apiKey || !tagId) {
@@ -89,25 +90,34 @@ export async function reconcileKit(
   }
 
   const sb = createAdminClient();
-  const { data: rows, error } = await sb
+  // The event table also carries a phone column to push into a Kit custom field; the
+  // waitlist table has no phone column, so only select it when a phone key is configured.
+  const selectCols = phoneFieldKey ? "id, first_name, email, phone" : "id, first_name, email";
+  const { data, error } = await sb
     .from(table)
-    .select("id, first_name, email")
+    .select(selectCols)
     .eq("kit_synced", false)
     .order("created_at", { ascending: true })
     .limit(limit);
 
   if (error) throw new Error(`Supabase select failed: ${error.message}`);
 
+  // `select(selectCols)` uses a runtime-built string, so supabase's literal-type parser
+  // can't infer the row shape — cast through unknown to the columns we actually selected.
+  const rows = (data ?? []) as unknown as Array<{ id: string; first_name: string; email: string; phone?: string | null }>;
   const result: ReconcileResult = { processed: 0, synced: 0, failed: 0, rateLimited: false };
   const startedAt = Date.now();
 
-  for (const row of rows ?? []) {
+  for (const row of rows) {
     if (Date.now() - startedAt >= deadlineMs) break; // stay under maxDuration
     result.processed++;
     try {
-      // create / upsert subscriber (Kit returns the existing one on duplicate email)
+      // create / upsert subscriber (Kit returns the existing one on duplicate email).
+      // When a phone field key is configured, push the row's phone into that Kit custom field.
+      const subBody: Record<string, unknown> = { first_name: row.first_name, email_address: row.email };
+      if (phoneFieldKey && row.phone) subBody.fields = { [phoneFieldKey]: row.phone };
       const sub = (await withBackoff(() =>
-        kitPost(apiKey, "/subscribers", { first_name: row.first_name, email_address: row.email })
+        kitPost(apiKey, "/subscribers", subBody)
       )) as { subscriber?: { id?: number } };
       const subscriberId = sub?.subscriber?.id;
       if (typeof subscriberId !== "number") throw new Error("Kit subscriber response missing id");

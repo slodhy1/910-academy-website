@@ -35,6 +35,8 @@ export async function GET(req: Request) {
     const summary = await reconcileKit({
       table: "aoc_event_registrations",
       tagId: process.env.KIT_TAG_ID_AOC_FREE_LIVE,
+      // Push each registrant's phone into the Kit "Phone" custom field (key: phone).
+      phoneFieldKey: "phone",
       limit: 200,
       deadlineMs: 50_000,
     });
