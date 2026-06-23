@@ -57,12 +57,12 @@
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 html, body { overflow-x: hidden; max-width: 100%; -webkit-text-size-adjust: 100%; }
 /* Static radial-gradient glow — same look as the orbs on /aoc, zero GPU blur cost on mobile. No video. */
-body { background: radial-gradient(640px circle at 12% -8%, rgba(56,182,255,0.08), transparent 60%), radial-gradient(820px circle at 90% 12%, rgba(56,182,255,0.05), transparent 55%), var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
+body { background: radial-gradient(640px circle at 12% -8%, rgba(56,182,255,0.08), transparent 60%), radial-gradient(820px circle at 90% 10%, rgba(56,182,255,0.05), transparent 55%), var(--bg-base); color: var(--fg); font-family: var(--font); font-weight: 400; line-height: var(--leading-normal); min-height: 100vh; display: flex; flex-direction: column; }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
 /* ===== PRIMARY CTA (shared) ===== */
-.aoc-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 18px 44px; border: none; cursor: pointer; border-radius: var(--radius-pill); transition: transform 0.25s ease, background 0.25s ease; }
+.aoc-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 18px 44px; border: none; cursor: pointer; border-radius: var(--radius-pill); box-shadow: 0 12px 34px var(--accent-glow); transition: transform 0.25s ease, background 0.25s ease; }
 .aoc-cta:hover { background: var(--accent-hover); transform: translateY(-2px); }
 .aoc-cta svg { width: 16px; height: 16px; }
 
@@ -80,18 +80,31 @@ img { max-width: 100%; display: block; }
 .nav__cta { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 9px 18px; border-radius: var(--radius-pill); transition: all 0.2s ease; white-space: nowrap; }
 .nav__cta:hover { background: var(--accent-hover); }
 
-/* ===== HERO (opt-in lives here, inline, above the fold) ===== */
-.hero { position: relative; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-12)) var(--space-5) var(--space-16); display: flex; justify-content: center; }
-.hero-inner { position: relative; z-index: 2; width: 100%; max-width: 600px; text-align: center; }
-.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-5); }
-.hero-headline { font-size: clamp(2rem, 7.5vw, 3.4rem); font-weight: 700; text-transform: uppercase; line-height: 1.04; letter-spacing: var(--tracking-tight); margin: 0 auto; max-width: 18ch; }
-.hero-sub { margin: var(--space-5) auto 0; font-size: clamp(0.98rem, 2.4vw, 1.18rem); font-weight: 300; color: var(--fg-muted); max-width: 42ch; line-height: 1.55; }
-.hero-detail { margin: var(--space-5) auto 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+/* ===== HERO ===== */
+.hero { position: relative; padding: calc(var(--bar-h) + env(safe-area-inset-top) + var(--space-10)) var(--space-5) var(--space-16); display: flex; justify-content: center; }
+.hero-grid { position: relative; z-index: 2; width: 100%; max-width: 1120px; display: grid; grid-template-columns: 1fr; gap: var(--space-10); align-items: center; }
+.hero-copy { text-align: center; }
+.eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 11px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-5); }
+.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.hero-headline { font-size: clamp(2rem, 7vw, 3.6rem); font-weight: 700; text-transform: uppercase; line-height: 1.03; letter-spacing: var(--tracking-tight); margin: 0 auto; max-width: 18ch; }
+.hero-headline .em { color: var(--accent); }
+.hero-sub { margin: var(--space-5) auto 0; font-size: clamp(1rem, 2.4vw, 1.2rem); font-weight: 300; color: var(--fg-muted); max-width: 46ch; line-height: 1.55; }
+.hero-detail { margin: var(--space-6) auto 0; font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); }
 
-/* ===== INLINE SIGN-UP CARD ===== */
-.signup { margin: var(--space-8) auto 0; width: 100%; max-width: 440px; text-align: left;
-  background: rgba(255,255,255,0.045); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: clamp(1.4rem, 4vw, 1.9rem); box-shadow: 0 24px 70px -30px rgba(0,0,0,0.8); }
+/* Countdown */
+.countdown { margin: var(--space-6) auto 0; display: inline-flex; align-items: flex-start; gap: var(--space-3); }
+.cd-seg { display: flex; flex-direction: column; align-items: center; min-width: 56px; padding: var(--space-3) var(--space-2); border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(255,255,255,0.03); font-variant-numeric: tabular-nums; }
+.cd-seg b { font-size: 1.5rem; font-weight: 700; color: var(--fg); line-height: 1; }
+.cd-seg span { margin-top: 6px; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-dim); }
+
+/* Inline sign-up card */
+.signup { width: 100%; max-width: 440px; margin: 0 auto; text-align: left;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border-hover); border-radius: var(--radius-lg);
+  padding: clamp(1.4rem, 4vw, 2rem); box-shadow: 0 30px 80px -30px rgba(0,0,0,0.85); }
+.signup-head { text-align: center; margin-bottom: var(--space-5); }
+.signup-title { font-size: 1.05rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.signup-sub { margin-top: var(--space-2); font-size: 0.85rem; font-weight: 300; color: var(--fg-muted); }
 .signup-form { display: flex; flex-direction: column; gap: var(--space-4); }
 .field { display: flex; flex-direction: column; gap: var(--space-2); }
 .field-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
@@ -104,33 +117,66 @@ img { max-width: 100%; display: block; }
 .signup-submit:disabled { opacity: 0.6; cursor: wait; }
 .signup-msg { font-size: 0.85rem; min-height: 1em; color: var(--fg-muted); text-align: center; }
 .signup-msg.error { color: #ff6b6b; }
-.signup-fine { margin-top: var(--space-2); font-size: 11px; color: var(--fg-dim); text-align: center; line-height: 1.5; }
+.signup-fine { margin-top: var(--space-1); font-size: 11px; color: var(--fg-dim); text-align: center; line-height: 1.5; }
 
-/* ===== SECTIONS ===== */
-.section { position: relative; z-index: 2; padding: var(--space-20) var(--space-5); }
-.section-head { max-width: 720px; margin: 0 auto; text-align: center; }
+/* ===== SECTIONS (visual rhythm: hairline divider + alternating bands) ===== */
+.section { position: relative; z-index: 2; padding: clamp(56px, 9vw, 104px) var(--space-5); border-top: 1px solid var(--border); }
+.section.tint { background: var(--accent-subtle); border-top: 1px solid var(--accent-border-subtle); }
+.section.elevated { background: rgba(255,255,255,0.02); }
+.section-head { max-width: 760px; margin: 0 auto; text-align: center; }
 .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-4); }
-.section-heading { font-size: clamp(1.8rem, 6vw, 3rem); font-weight: 300; text-transform: uppercase; line-height: 1.05; letter-spacing: var(--tracking-tight); }
+.section-heading { font-size: clamp(1.8rem, 5.6vw, 2.9rem); font-weight: 300; text-transform: uppercase; line-height: 1.06; letter-spacing: var(--tracking-tight); }
 .section-heading .em { color: var(--accent); }
+.section-intro { max-width: 56ch; margin: var(--space-5) auto 0; font-size: 1rem; font-weight: 300; color: var(--fg-muted); line-height: 1.6; }
 
 /* ===== THREE LEVELS ===== */
 .levels-grid { max-width: 1080px; margin: var(--space-16) auto 0; display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
-.level-card { border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(180deg, rgba(56,182,255,0.05), rgba(255,255,255,0.012)); padding: clamp(1.6rem, 4vw, 2.2rem); display: flex; flex-direction: column; gap: var(--space-5); }
+.level-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius-lg); background: linear-gradient(180deg, rgba(56,182,255,0.05), rgba(255,255,255,0.012)); padding: clamp(1.6rem, 4vw, 2.2rem); display: flex; flex-direction: column; gap: var(--space-5); }
 .level-num { font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
-.level-title { font-size: clamp(1.25rem, 3vw, 1.6rem); font-weight: 700; text-transform: uppercase; line-height: 1.1; letter-spacing: var(--tracking-tight); }
+.level-title { font-size: clamp(1.25rem, 3vw, 1.55rem); font-weight: 700; text-transform: uppercase; line-height: 1.1; letter-spacing: var(--tracking-tight); }
+.level-divider { height: 1px; background: var(--border); }
 .level-block { display: flex; flex-direction: column; gap: var(--space-2); }
 .level-block-label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
 .level-block-text { font-size: 0.95rem; font-weight: 300; color: var(--fg-muted); line-height: 1.55; }
 
-/* ===== WHAT TO EXPECT ===== */
-.expect { text-align: center; }
-.expect-list { max-width: 640px; margin: var(--space-12) auto 0; display: flex; flex-direction: column; gap: var(--space-4); }
-.expect-item { font-size: 1.05rem; font-weight: 300; color: var(--fg-muted); }
-.expect-item b { color: var(--fg); font-weight: 700; }
+/* ===== WHAT YOU'LL LEARN (curiosity bullets) ===== */
+.learn-list { max-width: 680px; margin: var(--space-12) auto 0; display: flex; flex-direction: column; gap: var(--space-4); }
+.learn-item { display: flex; align-items: flex-start; gap: var(--space-4); text-align: left; }
+.learn-item .tick { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); display: flex; align-items: center; justify-content: center; color: var(--accent); margin-top: 2px; }
+.learn-item .tick svg { width: 14px; height: 14px; }
+.learn-item p { font-size: 1.02rem; font-weight: 300; color: var(--fg); line-height: 1.5; }
+.learn-item p b { font-weight: 700; }
 
-/* ===== SECOND CTA ===== */
-.cta2 { text-align: center; }
-.cta2 .aoc-cta { margin-top: var(--space-8); }
+/* ===== WHAT TO EXPECT (icon tiles) ===== */
+.expect-tiles { max-width: 1000px; margin: var(--space-12) auto 0; display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+.tile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-3); padding: var(--space-8) var(--space-5); border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.025); }
+.tile-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); display: flex; align-items: center; justify-content: center; color: var(--accent); }
+.tile-icon svg { width: 20px; height: 20px; }
+.tile b { font-size: 0.95rem; font-weight: 700; }
+.tile span { font-size: 0.82rem; font-weight: 300; color: var(--fg-muted); line-height: 1.4; }
+
+/* ===== HOST / AUTHORITY ===== */
+.host { max-width: 780px; margin: var(--space-12) auto 0; display: flex; flex-direction: column; align-items: center; gap: var(--space-6); text-align: center; }
+.host-avatar { width: 96px; height: 96px; border-radius: 50%; flex: none; background: linear-gradient(180deg, rgba(56,182,255,0.25), rgba(56,182,255,0.05)); border: 1px solid var(--accent-border); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; color: var(--fg); object-fit: cover; }
+.host-name { font-size: 1.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+.host-role { margin-top: var(--space-1); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+.host-bio { margin-top: var(--space-4); font-size: 1rem; font-weight: 300; color: var(--fg-muted); line-height: 1.65; max-width: 54ch; }
+
+/* ===== SOCIAL PROOF ===== */
+.proof-grid { max-width: 1080px; margin: var(--space-12) auto 0; display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+.quote { border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.025); padding: var(--space-8); text-align: left; display: flex; flex-direction: column; gap: var(--space-5); }
+.quote-stars { color: var(--accent); letter-spacing: 0.2em; font-size: 0.9rem; }
+.quote-text { font-size: 1rem; font-weight: 300; color: var(--fg); line-height: 1.6; }
+.quote-by { font-size: 0.85rem; font-weight: 700; color: var(--fg-muted); }
+.quote-by span { display: block; font-weight: 300; color: var(--fg-dim); margin-top: 2px; }
+.proof-stat { max-width: 760px; margin: var(--space-12) auto 0; text-align: center; }
+.proof-stat b { color: var(--accent); }
+
+/* ===== FINAL CTA BAND ===== */
+.final { text-align: center; }
+.final .section-heading { margin-bottom: var(--space-5); }
+.final-detail { font-size: 12px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-8); }
+.final .aoc-cta { margin: 0 auto; }
 
 /* ===== FOOTER ===== */
 .footer { position: relative; z-index: 2; margin-top: auto; border-top: 1px solid var(--border); padding: var(--space-12) var(--space-10) calc(var(--space-12) + env(safe-area-inset-bottom)); text-align: center; }
@@ -139,12 +185,21 @@ img { max-width: 100%; display: block; }
 .footer-copy a:hover { color: var(--accent); }
 
 /* ===== DESKTOP ===== */
-@media (min-width: 769px) {
+@media (min-width: 900px) {
   .hero { padding-left: var(--space-10); padding-right: var(--space-10); }
+  .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: var(--space-16); }
+  .hero-copy { text-align: left; }
+  .hero-headline { margin-left: 0; }
+  .eyebrow { margin-left: 0; }
+  .countdown { margin-left: 0; }
+  .signup { margin: 0; }
   .levels-grid { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
-  .level-card { gap: var(--space-6); }
+  .expect-tiles { grid-template-columns: repeat(4, 1fr); }
+  .proof-grid { grid-template-columns: repeat(3, 1fr); }
+  .host { flex-direction: row; text-align: left; align-items: center; gap: var(--space-10); }
+  .host-text { display: flex; flex-direction: column; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .eyebrow .dot { animation: none; } }
 </style>
 </head>
 <body>
@@ -165,18 +220,33 @@ img { max-width: 100%; display: block; }
 
 <!-- ===================== HERO + INLINE OPT-IN ===================== -->
 <header class="hero" id="register">
-  <div class="hero-inner">
-    <!-- DRAFT (eyebrow) -->
-    <p class="eyebrow">Free Live Training · July 1</p>
-    <!-- DRAFT (headline — Ryan/Claudio) -->
-    <h1 class="hero-headline">The Three Levels of Real Estate Media Mastery</h1>
-    <!-- DRAFT (sub-headline — Ryan/Claudio) -->
-    <p class="hero-sub">Whether you want to get your first client, hit your first 10K month, or scale to 100K+ months, we'll teach you the best strategies to make it happen.</p>
-    <!-- DRAFT (detail line) -->
-    <p class="hero-detail">July 1, 2026 · 8:00 PM ET · Live on Zoom · Free</p>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <!-- DRAFT (eyebrow) -->
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Free Live Training · July 1</p>
+      <!-- DRAFT (headline — Ryan/Claudio) -->
+      <h1 class="hero-headline">The Three Levels of Real Estate Media <span class="em">Mastery</span></h1>
+      <!-- DRAFT (sub-headline — Ryan/Claudio) -->
+      <p class="hero-sub">Whether you want to get your first client, hit your first 10K month, or scale to 100K+ months, we'll teach you the exact strategies to make it happen — live, in one session.</p>
+      <!-- DRAFT (detail line) -->
+      <p class="hero-detail">July 1, 2026 · 8:00 PM ET · Live on Zoom · Free</p>
+
+      <!-- Countdown (urgency) -->
+      <div class="countdown" aria-label="Time until the training">
+        <div class="cd-seg"><b class="js-cd-days">00</b><span>Days</span></div>
+        <div class="cd-seg"><b class="js-cd-hours">00</b><span>Hrs</span></div>
+        <div class="cd-seg"><b class="js-cd-mins">00</b><span>Min</span></div>
+        <div class="cd-seg"><b class="js-cd-secs">00</b><span>Sec</span></div>
+      </div>
+    </div>
 
     <!-- Inline opt-in. No popup, no toggle — register right here. -->
     <div class="signup">
+      <div class="signup-head">
+        <p class="signup-title">Save My Free Spot</p>
+        <!-- DRAFT -->
+        <p class="signup-sub">Reserve your seat — it's free.</p>
+      </div>
       <form class="signup-form" id="signupForm" novalidate>
         <label class="field">
           <span class="field-label">First name</span>
@@ -195,22 +265,26 @@ img { max-width: 100%; display: block; }
         <button type="submit" class="signup-submit" id="signupSubmit">Save My Free Spot</button>
         <p class="signup-msg" id="signupMsg" role="status" aria-live="polite"></p>
       </form>
-      <p class="signup-fine">Free to attend. We'll email you the Zoom link and a reminder before we go live.</p>
+      <!-- DRAFT -->
+      <p class="signup-fine">Free to attend · We'll email the Zoom link &amp; a reminder · Can't make it live? Register and we'll send the replay.</p>
     </div>
   </div>
 </header>
 
 <!-- ===================== THE THREE LEVELS ===================== -->
-<section class="section levels">
+<section class="section">
   <div class="section-head">
-    <!-- DRAFT (section heading) -->
+    <p class="section-label">The Game Has Levels</p>
+    <!-- DRAFT (section heading + intro) -->
     <h2 class="section-heading">There Are Three <span class="em">Levels.</span></h2>
+    <p class="section-intro">Everyone shooting real estate media is on one of three levels. This training meets you on yours — and shows you the move that gets you to the next one.</p>
   </div>
   <!-- DRAFT: every level's title / "Where you're stuck" / "What you'll learn" is placeholder copy. Claudio/Ryan write the real lines. -->
   <div class="levels-grid">
     <article class="level-card">
       <p class="level-num">Level 1</p>
       <h3 class="level-title">Get Your First Client</h3>
+      <div class="level-divider"></div>
       <div class="level-block">
         <span class="level-block-label">Where you're stuck</span>
         <!-- DRAFT -->
@@ -225,6 +299,7 @@ img { max-width: 100%; display: block; }
     <article class="level-card">
       <p class="level-num">Level 2</p>
       <h3 class="level-title">Your First 10K Month</h3>
+      <div class="level-divider"></div>
       <div class="level-block">
         <span class="level-block-label">Where you're stuck</span>
         <!-- DRAFT -->
@@ -239,6 +314,7 @@ img { max-width: 100%; display: block; }
     <article class="level-card">
       <p class="level-num">Level 3</p>
       <h3 class="level-title">Mastery: 100K+ Months</h3>
+      <div class="level-divider"></div>
       <div class="level-block">
         <span class="level-block-label">Where you're stuck</span>
         <!-- DRAFT -->
@@ -253,28 +329,117 @@ img { max-width: 100%; display: block; }
   </div>
 </section>
 
+<!-- ===================== WHAT YOU'LL LEARN ===================== -->
+<section class="section elevated">
+  <div class="section-head">
+    <p class="section-label">What you'll walk away with</p>
+    <!-- DRAFT (heading) -->
+    <h2 class="section-heading">Leave with a <span class="em">plan</span>, not just notes.</h2>
+  </div>
+  <!-- DRAFT: curiosity bullets — Claudio/Ryan to finalize -->
+  <div class="learn-list">
+    <div class="learn-item">
+      <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+      <p><b>The exact level you're on</b> — and the single highest-leverage move to reach the next one.</p>
+    </div>
+    <div class="learn-item">
+      <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+      <p><b>How top real estate creators price and package</b> so clients say yes without haggling.</p>
+    </div>
+    <div class="learn-item">
+      <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg></span>
+      <p><b>The system that turns one-off shoots into recurring income</b> — so your calendar stays full.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== WHAT TO EXPECT ===================== -->
-<section class="section expect">
+<section class="section tint">
   <div class="section-head">
     <p class="section-label">What to expect</p>
     <!-- DRAFT (heading) -->
     <h2 class="section-heading">A free, live <span class="em">session.</span></h2>
   </div>
-  <div class="expect-list">
-    <!-- DRAFT (expect lines) -->
-    <p class="expect-item"><b>Free</b> — no cost, nothing to buy to attend.</p>
-    <p class="expect-item"><b>Live on Zoom</b> — come with questions; we'll teach in real time.</p>
-    <p class="expect-item"><b>July 1, 2026 · 8:00 PM ET</b> — block the time now.</p>
-    <p class="expect-item"><b>~60–90 minutes</b> — focused, no fluff.</p>
+  <!-- DRAFT (expect tiles) -->
+  <div class="expect-tiles">
+    <div class="tile">
+      <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></span>
+      <b>100% Free</b>
+      <span>No cost, nothing to buy to attend.</span>
+    </div>
+    <div class="tile">
+      <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8Z"/></svg></span>
+      <b>Live on Zoom</b>
+      <span>Come with questions — taught in real time.</span>
+    </div>
+    <div class="tile">
+      <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+      <b>July 1 · 8:00 PM ET</b>
+      <span>Block the time now.</span>
+    </div>
+    <div class="tile">
+      <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <b>~60–90 Minutes</b>
+      <span>Focused, no fluff.</span>
+    </div>
   </div>
 </section>
 
-<!-- ===================== SECOND CTA ===================== -->
-<section class="section cta2">
+<!-- ===================== YOUR HOST ===================== -->
+<section class="section">
+  <div class="section-head">
+    <p class="section-label">Your host</p>
+    <!-- DRAFT (heading) -->
+    <h2 class="section-heading">Taught by <span class="em">910 Academy.</span></h2>
+  </div>
+  <!-- DRAFT: replace the initials avatar with a real photo (e.g. /three-levels/host.jpg) and write Claudio's real bio + credentials. -->
+  <div class="host">
+    <div class="host-avatar" aria-hidden="true">CR</div>
+    <div class="host-text">
+      <p class="host-name">Claudio Rivera</p>
+      <p class="host-role">Founder · 910 Academy</p>
+      <!-- DRAFT bio -->
+      <p class="host-bio">Claudio has built a career and a brand around real estate media — and trained creators at every level to do the same. In this session he breaks down the exact playbook behind getting clients, scaling income, and reaching mastery.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOCIAL PROOF ===================== -->
+<section class="section elevated">
+  <div class="section-head">
+    <p class="section-label">Proof</p>
+    <!-- DRAFT (heading) -->
+    <h2 class="section-heading">People who did the <span class="em">work.</span></h2>
+  </div>
+  <!-- DRAFT: swap in real testimonials (name, role, result) and a real registered/attended count before launch. -->
+  <div class="proof-grid">
+    <figure class="quote">
+      <div class="quote-stars" aria-hidden="true">★★★★★</div>
+      <blockquote class="quote-text">"DRAFT — short, specific result in the student's own words. e.g. 'Landed my first $1,500 client two weeks after applying this.'"</blockquote>
+      <figcaption class="quote-by">First L.<span>Real estate creator</span></figcaption>
+    </figure>
+    <figure class="quote">
+      <div class="quote-stars" aria-hidden="true">★★★★★</div>
+      <blockquote class="quote-text">"DRAFT — a transformation quote that maps to a level. e.g. 'Went from inconsistent gigs to my first 10K month.'"</blockquote>
+      <figcaption class="quote-by">First L.<span>Media business owner</span></figcaption>
+    </figure>
+    <figure class="quote">
+      <div class="quote-stars" aria-hidden="true">★★★★★</div>
+      <blockquote class="quote-text">"DRAFT — a credibility quote about the teaching. e.g. 'Claudio gives away more in one session than most charge for.'"</blockquote>
+      <figcaption class="quote-by">First L.<span>Agency founder</span></figcaption>
+    </figure>
+  </div>
+  <!-- DRAFT stat -->
+  <p class="proof-stat section-intro"><b>Hundreds of creators</b> have trained with 910 Academy. Add your name to the next free session.</p>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section class="section tint final">
   <div class="section-head">
     <!-- DRAFT (heading) -->
     <h2 class="section-heading">Save your <span class="em">free spot.</span></h2>
   </div>
+  <p class="final-detail">July 1, 2026 · 8:00 PM ET · Live on Zoom · Free</p>
   <a href="#register" class="aoc-cta">Save My Free Spot
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
   </a>
@@ -298,26 +463,50 @@ img { max-width: 100%; display: block; }
   var form = document.getElementById('signupForm');
   var btn = document.getElementById('signupSubmit');
   var msg = document.getElementById('signupMsg');
-  if (!form) return;
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    msg.className = 'signup-msg'; msg.textContent = '';
-    var firstName = form.firstName.value.trim();
-    var email = form.email.value.trim();
-    var phone = form.phone.value.trim();
-    // First name + email required; phone is optional (never block a registration on it).
-    if (!firstName) { msg.className = 'signup-msg error'; msg.textContent = 'Please enter your first name.'; return; }
-    if (!EMAIL_RE.test(email)) { msg.className = 'signup-msg error'; msg.textContent = 'Please enter a valid email.'; return; }
-    btn.disabled = true; btn.textContent = 'Saving...';
-    fetch('/api/aoc-event/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ firstName: firstName, email: email, phone: phone, website: (form.website ? form.website.value : ''), utm: EVENT_UTM })
-    })
-      .then(function (res) { if (!res.ok) throw new Error('Request failed'); window.location.href = '/three-levels/thanks'; })
-      .catch(function () { msg.className = 'signup-msg error'; msg.textContent = 'Something went wrong. Please try again.'; btn.disabled = false; btn.textContent = 'Save My Free Spot'; });
-  });
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      msg.className = 'signup-msg'; msg.textContent = '';
+      var firstName = form.firstName.value.trim();
+      var email = form.email.value.trim();
+      var phone = form.phone.value.trim();
+      // First name + email required; phone is optional (never block a registration on it).
+      if (!firstName) { msg.className = 'signup-msg error'; msg.textContent = 'Please enter your first name.'; return; }
+      if (!EMAIL_RE.test(email)) { msg.className = 'signup-msg error'; msg.textContent = 'Please enter a valid email.'; return; }
+      btn.disabled = true; btn.textContent = 'Saving...';
+      fetch('/api/aoc-event/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName: firstName, email: email, phone: phone, website: (form.website ? form.website.value : ''), utm: EVENT_UTM })
+      })
+        .then(function (res) { if (!res.ok) throw new Error('Request failed'); window.location.href = '/three-levels/thanks'; })
+        .catch(function () { msg.className = 'signup-msg error'; msg.textContent = 'Something went wrong. Please try again.'; btn.disabled = false; btn.textContent = 'Save My Free Spot'; });
+    });
+  }
+
+  // Countdown to July 1, 2026, 8:00 PM ET (EDT = UTC-4 in July).
+  (function () {
+    var TARGET = Date.parse('2026-07-02T00:00:00Z');
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function setAll(sel, val) { document.querySelectorAll(sel).forEach(function (el) { el.textContent = val; }); }
+    var timer;
+    function tick() {
+      var diff = TARGET - Date.now();
+      if (diff <= 0) {
+        setAll('.js-cd-days', '00'); setAll('.js-cd-hours', '00'); setAll('.js-cd-mins', '00'); setAll('.js-cd-secs', '00');
+        if (timer) clearInterval(timer);
+        return;
+      }
+      var secs = Math.floor(diff / 1000);
+      var days = Math.floor(secs / 86400); secs -= days * 86400;
+      var hrs = Math.floor(secs / 3600); secs -= hrs * 3600;
+      var mins = Math.floor(secs / 60); secs -= mins * 60;
+      setAll('.js-cd-days', pad(days)); setAll('.js-cd-hours', pad(hrs)); setAll('.js-cd-mins', pad(mins)); setAll('.js-cd-secs', pad(secs));
+    }
+    tick();
+    timer = setInterval(tick, 1000);
+  })();
 })();
 </script>
 
