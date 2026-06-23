@@ -57,24 +57,11 @@ function isAllowedOrigin(req: Request): boolean {
   return false;
 }
 
-// Cloudflare Turnstile (bot defense). Skips when TURNSTILE_SECRET_KEY is unset
-// (honeypot + origin still apply). Fails OPEN on a Turnstile outage so a real
-// registration spike is never lost to a third-party failure.
-async function verifyTurnstile(token: string, ip: string | null): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true;
-  try {
-    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ secret, response: token, ...(ip ? { remoteip: ip } : {}) }),
-    });
-    const data = (await res.json().catch(() => ({ success: false }))) as { success?: boolean };
-    return data.success === true;
-  } catch {
-    return true; // Turnstile unreachable -> don't block real users
-  }
-}
+// NOTE: no Cloudflare Turnstile here. The /three-levels page intentionally ships
+// without a Turnstile widget (clean hero), so the form sends no token. Because
+// TURNSTILE_SECRET_KEY is set globally for the waitlist, verifying a token here
+// would ALWAYS fail and silently reject every registration. Bot defense for this
+// endpoint is the origin allowlist + honeypot below.
 
 export async function POST(req: Request) {
   // Reject naive cross-origin/bot POSTs. Return a fake 200 so bots don't learn.
@@ -93,14 +80,6 @@ export async function POST(req: Request) {
   // Honeypot: the hidden `website` field is invisible to humans; bots fill it.
   if (raw && typeof raw === "object" && String((raw as Record<string, unknown>).website ?? "").trim() !== "") {
     console.warn("[aoc-event/register] rejected: honeypot tripped");
-    return NextResponse.json({ ok: true });
-  }
-
-  // Cloudflare Turnstile (no-op until TURNSTILE_SECRET_KEY is set).
-  const turnstileToken = String((raw as Record<string, unknown>)?.turnstileToken ?? "");
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
-  if (!(await verifyTurnstile(turnstileToken, ip))) {
-    console.warn("[aoc-event/register] rejected: turnstile failed");
     return NextResponse.json({ ok: true });
   }
 
