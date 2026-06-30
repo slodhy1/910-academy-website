@@ -2140,7 +2140,29 @@ img, video, iframe { max-width: 100%; height: auto; }
   <div class="particle down"></div><div class="particle up"></div><div class="particle down"></div>
 </div>
 
-<!-- Nav removed for AOC purchase landing page -->
+<!-- ============================================================
+     ANNOUNCEMENT BAR  (fixed, stacked above the glass nav)
+     EDIT THE ONE LINE BELOW to change the launch/offer message.
+     TODO: future IP-based geolocation / currency switching. For now the
+     offer/price is a SINGLE hardcoded display value — do NOT build multi-currency.
+     ============================================================ -->
+<style>
+  :root{ --annc-h: 38px; }
+  .aoc-annc{ position:fixed; top:0; left:0; right:0; z-index:1002; height:var(--annc-h);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    background:#dc2626; color:#fff; padding:0 16px; }
+  .aoc-annc-text{ font-family:'Montserrat',sans-serif; font-size:12px; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase; margin:0; line-height:1; }
+  .aoc-annc-text .sep{ opacity:.55; margin:0 .5em; }
+  @media (max-width:768px){
+    :root{ --annc-h: 34px; }
+    .aoc-annc-text{ font-size:10.5px; letter-spacing:.05em; }
+  }
+</style>
+<div class="aoc-annc" role="region" aria-label="Announcement">
+  <!-- EDIT THIS LINE (single source of truth for the announcement) -->
+  <p class="aoc-annc-text">LAUNCHING JULY 1<span class="sep">&middot;</span>[OFFER LINE &mdash; PLACEHOLDER]</p>
+</div>
 
 <!-- Hero -->
 <section class="hero">
