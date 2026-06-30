@@ -2800,6 +2800,119 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <hr class="section-divider">
 
+<!-- ============================================================
+     DEVICE-SWITCHER SHOWCASE  (replaces "Meet Your Allies")
+     Mobile|Desktop toggle + 3 content tabs (Skool / IG / Training).
+     Screens are intentionally BLANK (black) placeholders until the
+     device-specific screen-recordings are supplied.
+     TODO assets (one per tab PER device, 6 total, supplied later):
+       desktop: /aoc/showcase/desktop-skool.mp4 | desktop-ig.mp4 | desktop-training.mp4
+       mobile:  /aoc/showcase/mobile-skool.mp4  | mobile-ig.mp4  | mobile-training.mp4
+     When assets land, replace each .aoc-dv-screen placeholder with:
+       <video src="..." muted loop playsinline preload="metadata" poster="..."></video>
+     ============================================================ -->
+<style>
+  .aoc-device{ text-align:center; }
+  .aoc-device .section-label, .aoc-device .section-heading, .aoc-device .section-sub{ text-align:center; }
+  .aoc-device .section-sub{ margin-left:auto; margin-right:auto; }
+  .aoc-dv-toggle{ display:inline-flex; gap:4px; padding:4px; margin:0 auto var(--space-10);
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:999px; }
+  .aoc-dv-toggle button{ font-family:'Montserrat',sans-serif; font-size:12px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--fg-muted); padding:8px 22px; border-radius:999px; transition:background .2s ease,color .2s ease; }
+  .aoc-dv-toggle button.active{ background:#fff; color:#000; }
+  .aoc-dv-stage{ min-height:420px; display:flex; align-items:center; justify-content:center; }
+  .aoc-device[data-device="desktop"] .aoc-dv-phone{ display:none; }
+  .aoc-device[data-device="mobile"] .aoc-dv-laptop{ display:none; }
+  .aoc-dv-laptop{ width:min(720px,100%); margin:0 auto; }
+  .aoc-dv-laptop .aoc-dv-bezel{ background:#151517; border:2px solid rgba(255,255,255,.12); border-radius:14px; padding:12px;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.85); }
+  .aoc-dv-laptop .aoc-dv-screen{ aspect-ratio:16/10; border-radius:6px; }
+  .aoc-dv-laptop .aoc-dv-base{ height:14px; width:118%; margin-left:-9%; background:linear-gradient(#2c2c30,#141416);
+    border-radius:0 0 16px 16px; position:relative; }
+  .aoc-dv-laptop .aoc-dv-base::after{ content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:90px; height:7px; background:rgba(0,0,0,.55); border-radius:0 0 7px 7px; }
+  .aoc-dv-phone{ width:min(290px,78%); margin:0 auto; }
+  .aoc-dv-phone .aoc-dv-bezel{ position:relative; background:#151517; border:2px solid rgba(255,255,255,.14);
+    border-radius:40px; padding:10px; box-shadow:0 40px 90px -30px rgba(0,0,0,.85); }
+  .aoc-dv-phone .aoc-dv-notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:120px; height:22px; background:#000; border-radius:0 0 16px 16px; z-index:3; }
+  .aoc-dv-phone .aoc-dv-screen{ aspect-ratio:9/19; border-radius:30px; }
+  .aoc-dv-screen{ background:#000; overflow:hidden; position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+  .aoc-dv-screen-title{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:14px; letter-spacing:.03em; color:#fff; padding:0 18px; text-align:center; }
+  .aoc-dv-screen-note{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent); }
+  .aoc-dv-tabs{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px 10px; margin-top:var(--space-10); }
+  .aoc-dv-tabs button{ font-family:'Montserrat',sans-serif; font-size:12px; font-weight:600; letter-spacing:.03em; color:var(--fg-muted);
+    padding:10px 18px; border:1px solid rgba(255,255,255,.12); border-radius:999px; transition:background .2s ease,color .2s ease,border-color .2s ease; }
+  .aoc-dv-tabs button:hover{ color:#fff; }
+  .aoc-dv-tabs button.active{ color:#fff; border-color:var(--accent-border); background:var(--accent-subtle); }
+  @media (max-width:768px){ .aoc-dv-stage{ min-height:360px; } .aoc-dv-laptop{ width:100%; } }
+</style>
+<section class="section aoc-device" id="device-showcase" data-device="desktop" data-tab="skool">
+  <div class="reveal-left">
+    <p class="section-label">INSIDE THE PLATFORM</p>
+    <h2 class="section-heading">[PLACEHOLDER &mdash; LEARN ANYWHERE]</h2>
+    <p class="section-sub">[PLACEHOLDER &mdash; one line on accessing the course, the community, and the training on any device.]</p>
+  </div>
+
+  <div class="aoc-dv-toggle reveal" role="group" aria-label="Device">
+    <button type="button" data-device-opt="mobile">Mobile</button>
+    <button type="button" data-device-opt="desktop" class="active">Desktop</button>
+  </div>
+
+  <div class="aoc-dv-stage reveal">
+    <!-- LAPTOP frame -->
+    <div class="aoc-dv-laptop">
+      <div class="aoc-dv-bezel">
+        <div class="aoc-dv-screen">
+          <span class="aoc-dv-screen-title">Skool course modules</span>
+          <span class="aoc-dv-screen-note">Recording asset</span>
+        </div>
+      </div>
+      <div class="aoc-dv-base"></div>
+    </div>
+    <!-- PHONE frame -->
+    <div class="aoc-dv-phone">
+      <div class="aoc-dv-bezel">
+        <div class="aoc-dv-notch"></div>
+        <div class="aoc-dv-screen">
+          <span class="aoc-dv-screen-title">Skool course modules</span>
+          <span class="aoc-dv-screen-note">Recording asset</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aoc-dv-tabs reveal" role="group" aria-label="Showcase content">
+    <button type="button" data-tab-opt="skool" class="active">Skool Course</button>
+    <button type="button" data-tab-opt="ig">Instantly Find New Partners</button>
+    <button type="button" data-tab-opt="training">Training Assets</button>
+  </div>
+</section>
+<script>
+(function(){
+  var root = document.getElementById('device-showcase');
+  if(!root) return;
+  var TABS = { skool:'Skool course modules', ig:'Instantly find new partners', training:'Inside a training' };
+  var device='desktop', tab='skool';
+  var devBtns = root.querySelectorAll('[data-device-opt]');
+  var tabBtns = root.querySelectorAll('[data-tab-opt]');
+  var titles  = root.querySelectorAll('.aoc-dv-screen-title');
+  function apply(){
+    root.setAttribute('data-device', device);
+    root.setAttribute('data-tab', tab);
+    devBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-device-opt')===device); });
+    tabBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab-opt')===tab); });
+    titles.forEach(function(t){ t.textContent = TABS[tab]; });
+  }
+  devBtns.forEach(function(b){ b.addEventListener('click', function(){ device=b.getAttribute('data-device-opt'); apply(); }); });
+  tabBtns.forEach(function(b){ b.addEventListener('click', function(){ tab=b.getAttribute('data-tab-opt'); apply(); }); });
+  apply();
+})();
+</script>
+
+<hr class="section-divider">
+
 <!-- Real Results / Video Testimonials -->
 <section class="section" id="results">
   <div class="reveal-left">
@@ -2821,23 +2934,6 @@ img, video, iframe { max-width: 100%; height: auto; }
       </div>
       <h3 class="video-title">How This 20-Year-Old Makes $20K/Month Filming Real Estate</h3>
       <p class="video-desc">Justin was making $18 an hour as a customer service rep while grinding through college full-time just six months ago. Today, he's making over $20,000 a month filming real estate. We flew him out to Sedona, Arizona to shoot a property he calls his favorite house of all time. Cooking at sunrise on a luxury estate, off-roading through red rock country, and jumping out of helicopters. This is the exact mindset and skill shift that separates people stuck at $18 an hour from people who build real freedom with a camera.</p>
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider">
-
-<!-- Meet Your Allies / Community -->
-<section class="section" id="community">
-  <div class="community-layout">
-    <div class="community-text reveal-left">
-      <p class="section-label">THE COMMUNITY</p>
-      <h2 class="section-heading">Meet Your Allies</h2>
-      <p class="section-sub">Once you become an official member, you will gain access to our Inner Circle Group Chat, where you can network with 200+ real estate media professionals from all over the world.</p>
-      <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="community-cta">Sign Up Now</a>
-    </div>
-    <div class="community-image reveal">
-      <img src="/images/910-Academy-Hero-1-1024x575.webp" alt="910 Academy Inner Circle" width="1024" height="575" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
