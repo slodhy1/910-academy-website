@@ -2975,30 +2975,47 @@ img, video, iframe { max-width: 100%; height: auto; }
 <hr class="section-divider">
 
 <!-- ============================================================
-     WHY THIS WORKS  (short economics explainer — reuses .audience-grid cards)
-     Copy is [PLACEHOLDER]; bracket text only sketches the intended point.
+     WHY THIS WORKS  (problem -> you -> outcome flow; middle step highlighted)
+     Copy from client narrative (agent has a high-commission listing + limited
+     reach -> your media expands reach -> property sells, you both get paid).
      ============================================================ -->
-<section class="section" id="why-this-works">
+<style>
+  .aoc-why-flow{ display:flex; align-items:stretch; justify-content:center; gap:var(--space-4); }
+  .aoc-why-step{ flex:1; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    border-radius:var(--radius-lg); padding:var(--space-8); }
+  .aoc-why-step--key{ border-color:var(--accent-border); background:var(--accent-subtle); box-shadow:0 0 44px -12px var(--accent-glow); }
+  .aoc-why-step-num{ display:block; font-size:1.4rem; font-weight:700; color:var(--accent); margin-bottom:var(--space-4); }
+  .aoc-why-step-title{ font-size:1.15rem; font-weight:700; color:var(--fg); margin-bottom:var(--space-3); }
+  .aoc-why-step-desc{ font-size:.95rem; color:var(--fg-muted); line-height:var(--leading-normal); }
+  .aoc-why-arrow{ display:flex; align-items:center; color:var(--accent); font-size:1.8rem; font-weight:300; }
+  @media (max-width:860px){
+    .aoc-why-flow{ flex-direction:column; }
+    .aoc-why-arrow{ justify-content:center; transform:rotate(90deg); padding:var(--space-2) 0; }
+  }
+</style>
+<section class="section aoc-why" id="why-this-works">
   <div class="reveal-left">
     <p class="section-label">WHY THIS WORKS</p>
-    <h2 class="section-heading">[PLACEHOLDER &mdash; WHY THIS WORKS]</h2>
-    <p class="section-sub">[PLACEHOLDER &mdash; one-line thesis on the economics for real estate agents.]</p>
+    <h2 class="section-heading">They Sell. You Get Paid.</h2>
+    <p class="section-sub">Every agent has a listing worth a fortune in commission &mdash; and an audience that stops at their own network. That&rsquo;s the gap you fill.</p>
   </div>
-  <div class="audience-grid">
-    <div class="audience-card reveal">
-      <div class="audience-number">01</div>
-      <h3 class="audience-title">[PLACEHOLDER]</h3>
-      <p class="audience-desc">[PLACEHOLDER &mdash; agents earn large commissions on every sale.]</p>
+  <div class="aoc-why-flow">
+    <div class="aoc-why-step reveal">
+      <span class="aoc-why-step-num">01</span>
+      <h3 class="aoc-why-step-title">The Problem</h3>
+      <p class="aoc-why-step-desc">An agent has a property they can earn a serious commission on &mdash; but their reach is limited to their own network.</p>
     </div>
-    <div class="audience-card reveal" style="transition-delay:0.1s;">
-      <div class="audience-number">02</div>
-      <h3 class="audience-title">[PLACEHOLDER]</h3>
-      <p class="audience-desc">[PLACEHOLDER &mdash; standout media wins more, and bigger, listings.]</p>
+    <div class="aoc-why-arrow" aria-hidden="true">&rarr;</div>
+    <div class="aoc-why-step aoc-why-step--key reveal" style="transition-delay:.1s;">
+      <span class="aoc-why-step-num">02</span>
+      <h3 class="aoc-why-step-title">Where You Come In</h3>
+      <p class="aoc-why-step-desc">Your media pushes that listing in front of hundreds of thousands &mdash; even millions &mdash; of the right people.</p>
     </div>
-    <div class="audience-card reveal" style="transition-delay:0.2s;">
-      <div class="audience-number">03</div>
-      <h3 class="audience-title">[PLACEHOLDER]</h3>
-      <p class="audience-desc">[PLACEHOLDER &mdash; so agents happily invest in the media that helps them win.]</p>
+    <div class="aoc-why-arrow" aria-hidden="true">&rarr;</div>
+    <div class="aoc-why-step reveal" style="transition-delay:.2s;">
+      <span class="aoc-why-step-num">03</span>
+      <h3 class="aoc-why-step-title">The Outcome</h3>
+      <p class="aoc-why-step-desc">The property sells, the agent wins, and you get paid for making it happen.</p>
     </div>
   </div>
 </section>
