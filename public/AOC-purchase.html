@@ -2940,6 +2940,66 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <hr class="section-divider">
 
+<!-- ============================================================
+     STATS / CASE-STUDY  (aspirational inversion of Peterson's debt chart)
+     ALL NUMBERS ARE [PLACEHOLDER] — Claudio to provide the real figure.
+     To enable the count-up animation later, set data-count-to="1800000000"
+     (digits only), data-prefix="$", data-suffix="+" on .aoc-bigstat-num.
+     ============================================================ -->
+<style>
+  .aoc-stats{ text-align:center; }
+  .aoc-stats .section-label, .aoc-stats .section-heading{ text-align:center; }
+  .aoc-stats-hero{ display:flex; flex-direction:column; align-items:center; gap:var(--space-8); margin-bottom:var(--space-12); }
+  .aoc-bigstat{ display:flex; flex-direction:column; gap:var(--space-3); }
+  .aoc-bigstat-num{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:clamp(3rem,9vw,7rem); line-height:1; color:var(--accent); letter-spacing:-.02em; }
+  .aoc-bigstat-cap{ font-size:1rem; color:var(--fg-muted); max-width:540px; margin:0 auto; line-height:var(--leading-normal); }
+  .aoc-bars{ display:flex; align-items:flex-end; justify-content:center; gap:14px; height:120px; }
+  .aoc-bars span{ width:46px; height:var(--h); background:linear-gradient(180deg,var(--accent),rgba(56,182,255,.22)); border-radius:6px 6px 0 0; }
+  .aoc-stat-tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-6); max-width:840px; margin:0 auto var(--space-12); }
+  .aoc-stat-tile{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius-lg); padding:var(--space-8) var(--space-6); }
+  .aoc-stat-tile-num{ display:block; font-size:2.2rem; font-weight:700; color:var(--fg); }
+  .aoc-stat-tile-lbl{ display:block; margin-top:var(--space-2); font-size:.85rem; color:var(--fg-muted); letter-spacing:.02em; }
+  .aoc-stats-kicker{ font-family:'Montserrat',sans-serif; font-weight:300; text-transform:uppercase; letter-spacing:.04em; font-size:clamp(1.3rem,3vw,2.1rem); color:var(--fg); max-width:680px; margin:0 auto; }
+  @media (max-width:768px){ .aoc-stat-tiles{ grid-template-columns:1fr; } .aoc-bars{ height:90px; } .aoc-bars span{ width:34px; } }
+</style>
+<section class="section aoc-stats" id="opportunity">
+  <div class="reveal-left">
+    <p class="section-label">THE OPPORTUNITY</p>
+    <h2 class="section-heading">[PLACEHOLDER &mdash; THE NUMBERS]</h2>
+  </div>
+  <div class="aoc-stats-hero reveal">
+    <div class="aoc-bigstat">
+      <span class="aoc-bigstat-num" data-count-to="" data-prefix="$" data-suffix="+">$XXX,XXX,XXX+</span>
+      <span class="aoc-bigstat-cap">[PLACEHOLDER &mdash; in real estate sold by agents using Claudio&rsquo;s media. Claudio to provide estimate.]</span>
+    </div>
+    <div class="aoc-bars" aria-hidden="true">
+      <span style="--h:38%"></span><span style="--h:58%"></span><span style="--h:76%"></span><span style="--h:100%"></span>
+    </div>
+  </div>
+  <div class="aoc-stat-tiles reveal">
+    <div class="aoc-stat-tile"><span class="aoc-stat-tile-num">[ # ]</span><span class="aoc-stat-tile-lbl">[PLACEHOLDER METRIC]</span></div>
+    <div class="aoc-stat-tile"><span class="aoc-stat-tile-num">[ # ]</span><span class="aoc-stat-tile-lbl">[PLACEHOLDER METRIC]</span></div>
+    <div class="aoc-stat-tile"><span class="aoc-stat-tile-num">[ # ]</span><span class="aoc-stat-tile-lbl">[PLACEHOLDER METRIC]</span></div>
+  </div>
+  <p class="aoc-stats-kicker reveal">The money's here. The question is, are you?</p>
+</section>
+<script>
+(function(){
+  document.querySelectorAll('.aoc-bigstat-num[data-count-to]').forEach(function(el){
+    var target = parseFloat(el.getAttribute('data-count-to'));
+    if(!isFinite(target) || target<=0) return; // placeholder -> leave text untouched
+    var pre = el.getAttribute('data-prefix')||'', suf = el.getAttribute('data-suffix')||'', done=false;
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting && !done){ done=true; run(); io.disconnect(); } }); }, {threshold:.4});
+    io.observe(el);
+    function run(){ var start=null, dur=1600; requestAnimationFrame(function step(ts){ if(!start)start=ts;
+      var p=Math.min((ts-start)/dur,1), v=Math.floor(target*(1-Math.pow(1-p,3)));
+      el.textContent = pre + v.toLocaleString('en-US') + suf; if(p<1) requestAnimationFrame(step); }); }
+  });
+})();
+</script>
+
+<hr class="section-divider">
+
 <!-- Value Stack + Pricing -->
 <section class="section" id="pricing">
   <div class="reveal-left">
