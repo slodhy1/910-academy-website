@@ -2141,39 +2141,15 @@ img, video, iframe { max-width: 100%; height: auto; }
 </div>
 
 <!-- ============================================================
-     ANNOUNCEMENT BAR  (fixed, stacked above the glass nav)
-     EDIT THE ONE LINE BELOW to change the launch/offer message.
-     TODO: future IP-based geolocation / currency switching. For now the
-     offer/price is a SINGLE hardcoded display value — do NOT build multi-currency.
-     ============================================================ -->
-<style>
-  :root{ --annc-h: 38px; }
-  .aoc-annc{ position:fixed; top:0; left:0; right:0; z-index:1002; height:var(--annc-h);
-    display:flex; align-items:center; justify-content:center; text-align:center;
-    background:#38B6FF; color:#0a0a0a; padding:0 16px; }
-  .aoc-annc-text{ font-family:'Montserrat',sans-serif; font-size:12px; font-weight:600;
-    letter-spacing:.1em; text-transform:uppercase; margin:0; line-height:1; }
-  .aoc-annc-text .sep{ opacity:.55; margin:0 .5em; }
-  @media (max-width:768px){
-    :root{ --annc-h: 34px; }
-    .aoc-annc-text{ font-size:10.5px; letter-spacing:.05em; }
-  }
-</style>
-<div class="aoc-annc" role="region" aria-label="Announcement">
-  <!-- EDIT THIS LINE (single source of truth for the announcement) -->
-  <p class="aoc-annc-text">LAUNCHING JULY 1<span class="sep">&middot;</span>[OFFER LINE &mdash; PLACEHOLDER]</p>
-</div>
-
-<!-- ============================================================
      LIQUID GLASS NAV  (fixed, stacked under the announcement bar)
      Transparent over the hero -> frosted glass once scrolled.
      910 logo left, "Sign Up Now" right (same Skool target as all CTAs).
      ============================================================ -->
 <style>
   :root{ --nav-h: 64px; }
-  html{ scroll-padding-top: calc(var(--annc-h) + var(--nav-h) + 8px); }
-  .glass-nav{ position:fixed; top:var(--annc-h); left:0; right:0; z-index:1001; height:var(--nav-h);
-    display:flex; align-items:center; background:transparent; border-bottom:1px solid transparent;
+  html{ scroll-padding-top: calc(var(--nav-h) + 8px); }
+  .glass-nav{ position:fixed; top:0; left:0; right:0; z-index:1001; height:var(--nav-h);
+    display:flex; align-items:center; background:transparent; border-bottom:1px solid rgba(255,255,255,.10);
     transition:background .3s ease, border-color .3s ease, -webkit-backdrop-filter .3s ease, backdrop-filter .3s ease; }
   .glass-nav.scrolled{ background:rgba(10,10,10,.72);
     -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
@@ -2185,8 +2161,8 @@ img, video, iframe { max-width: 100%; height: auto; }
     display:flex; align-items:center; justify-content:space-between; }
   .glass-nav-logo{ display:flex; align-items:center; }
   .glass-nav-logo img{ height:30px; width:auto; display:block; }
-  .glass-nav-cta{ display:inline-block; font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700;
-    letter-spacing:.12em; text-transform:uppercase; color:#000; background:#fff; padding:11px 26px;
+  .glass-nav-cta{ display:inline-block; font-family:'Montserrat',sans-serif; font-size:11.5px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:#000; background:#fff; padding:10px 25px;
     border-radius:8px; transition:background .25s ease, color .25s ease, transform .25s ease; }
   .glass-nav-cta:hover{ background:#38B6FF; color:#fff; transform:translateY(-1px); }
   @media (max-width:768px){
