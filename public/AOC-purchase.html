@@ -2124,6 +2124,26 @@ img, video, iframe { max-width: 100%; height: auto; }
   /* center the Meet Claudio bio too */
   .aoc-claudio .claudio-bio{ text-align:center; margin-left:auto; margin-right:auto; }
 </style>
+<style>
+  /* ===== AOC purchase — mobile optimization pass ===== */
+  html, body{ max-width:100%; overflow-x:hidden; }
+  @media (max-width:768px){
+    /* AGENT ON CAMERA is the single hero headline — keep it large on mobile
+       (a legacy rule shrank .hero-line-1 assuming it was a small line) */
+    .hero h1 .hero-line-1{ font-size:clamp(2.1rem,10vw,3.4rem) !important; line-height:1.08 !important; letter-spacing:.04em !important; }
+    .aoc-hero-logo{ width:min(120px,40vw); }
+    /* keep footer/content clear of the fixed floating promo */
+    .footer{ padding-bottom:120px !important; }
+    /* device showcase spacing when stacked */
+    .aoc-device .aoc-dv-wrap{ gap:var(--space-8) !important; }
+    /* promo: a touch tighter, never overflow */
+    .aoc-promo{ gap:10px !important; }
+  }
+  @media (max-width:480px){
+    .hero h1 .hero-line-1{ font-size:clamp(1.9rem,11vw,2.8rem) !important; }
+    .footer{ padding-bottom:110px !important; }
+  }
+</style>
 </head>
 <body>
 
