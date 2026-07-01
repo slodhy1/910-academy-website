@@ -222,6 +222,37 @@
     },
     {
       "number": 6,
+      "title": "Music Selection",
+      "lessonCount": 6,
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Music Is As Important As The Hook"
+        },
+        {
+          "number": 2,
+          "title": "You Are DJ Khaled"
+        },
+        {
+          "number": 3,
+          "title": "Bad Songs Are The Equivalent To Shooting With Canon (Kidding)"
+        },
+        {
+          "number": 4,
+          "title": "How To Script With A Song In Mind"
+        },
+        {
+          "number": 5,
+          "title": "Choose The Song Before You Start Shooting"
+        },
+        {
+          "number": 6,
+          "title": "Shoot With The Song In Your Pocket"
+        }
+      ]
+    },
+    {
+      "number": 7,
       "title": "Lenses & Camera Settings",
       "lessonCount": 9,
       "lessons": [
@@ -264,7 +295,7 @@
       ]
     },
     {
-      "number": 7,
+      "number": 8,
       "title": "Lighting",
       "lessonCount": 3,
       "lessons": [
@@ -283,7 +314,7 @@
       ]
     },
     {
-      "number": 8,
+      "number": 9,
       "title": "Composition",
       "lessonCount": 2,
       "lessons": [
@@ -298,7 +329,7 @@
       ]
     },
     {
-      "number": 9,
+      "number": 10,
       "title": "Shooting The Agent",
       "lessonCount": 11,
       "lessons": [
@@ -349,7 +380,7 @@
       ]
     },
     {
-      "number": 10,
+      "number": 11,
       "title": "Shooting Environment",
       "lessonCount": 2,
       "lessons": [
@@ -364,7 +395,7 @@
       ]
     },
     {
-      "number": 11,
+      "number": 12,
       "title": "Body Language & Tonality",
       "lessonCount": 7,
       "lessons": [
@@ -399,49 +430,7 @@
       ]
     },
     {
-      "number": 12,
-      "title": "Music Selection",
-      "lessonCount": 6,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Music Is As Important As The Hook"
-        },
-        {
-          "number": 2,
-          "title": "You Are DJ Khaled"
-        },
-        {
-          "number": 3,
-          "title": "Bad Songs Are The Equivalent To Shooting With Canon (Kidding)"
-        },
-        {
-          "number": 4,
-          "title": "How To Script With A Song In Mind"
-        },
-        {
-          "number": 5,
-          "title": "Choose The Song Before You Start Shooting"
-        },
-        {
-          "number": 6,
-          "title": "Shoot With The Song In Your Pocket"
-        }
-      ]
-    },
-    {
       "number": 13,
-      "title": "Mindset",
-      "lessonCount": 1,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Imagine The Edit In Your Head"
-        }
-      ]
-    },
-    {
-      "number": 14,
       "title": "Directing The Agent",
       "lessonCount": 12,
       "lessons": [
@@ -496,7 +485,7 @@
       ]
     },
     {
-      "number": 15,
+      "number": 14,
       "title": "Working With Agents",
       "lessonCount": 17,
       "lessons": [
@@ -571,99 +560,7 @@
       ]
     },
     {
-      "number": 16,
-      "title": "Pre-Production",
-      "lessonCount": 4,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Walking The Property With The Agent"
-        },
-        {
-          "number": 2,
-          "title": "What To Tell An Agent Before The Shoot"
-        },
-        {
-          "number": 3,
-          "title": "How Long Should The Video Be?"
-        },
-        {
-          "number": 4,
-          "title": "Do Whatever It Takes To Make It Happen"
-        }
-      ]
-    },
-    {
-      "number": 17,
-      "title": "Agent Confidence",
-      "lessonCount": 6,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "How To Make Agents Feel Confident On Camera"
-        },
-        {
-          "number": 2,
-          "title": "How To Get Agents To Look Confident On Camera"
-        },
-        {
-          "number": 3,
-          "title": "How To Coach A Nervous Or Awkward Agent On Camera"
-        },
-        {
-          "number": 4,
-          "title": "What Should Agents Wear"
-        },
-        {
-          "number": 5,
-          "title": "What To Tell An Agent If It's Their First Time On Camera"
-        },
-        {
-          "number": 6,
-          "title": "How To Help Shy Agents Deliver Their Lines"
-        }
-      ]
-    },
-    {
-      "number": 18,
-      "title": "Agent Experience",
-      "lessonCount": 1,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "How To Make It An Enjoyable Experience For The Agent"
-        }
-      ]
-    },
-    {
-      "number": 19,
-      "title": "Audio",
-      "lessonCount": 5,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "How To Mic The Agent"
-        },
-        {
-          "number": 2,
-          "title": "How To Hook Up Your Mic To The Camera"
-        },
-        {
-          "number": 3,
-          "title": "How To Hook Up Mics To The Agent"
-        },
-        {
-          "number": 4,
-          "title": "How To Test Audio Levels Before Shooting"
-        },
-        {
-          "number": 5,
-          "title": "Always Put Your Ear Up To The Speaker After Each Take"
-        }
-      ]
-    },
-    {
-      "number": 20,
+      "number": 15,
       "title": "Collaborating With Agents",
       "lessonCount": 6,
       "lessons": [
@@ -694,117 +591,33 @@
       ]
     },
     {
-      "number": 21,
-      "title": "Team Training",
-      "lessonCount": 9,
+      "number": 16,
+      "title": "Audio",
+      "lessonCount": 5,
       "lessons": [
         {
           "number": 1,
-          "title": "From CEO To CEO"
+          "title": "How To Mic The Agent"
         },
         {
           "number": 2,
-          "title": "How To Train Team Members"
+          "title": "How To Hook Up Your Mic To The Camera"
         },
         {
           "number": 3,
-          "title": "The Team Member Ride Along"
+          "title": "How To Hook Up Mics To The Agent"
         },
         {
           "number": 4,
-          "title": "How To Introduce Client To A New Team Member"
+          "title": "How To Test Audio Levels Before Shooting"
         },
         {
           "number": 5,
-          "title": "It's Very Important Your Trainee Does This"
-        },
-        {
-          "number": 6,
-          "title": "Can They Do It As Good As You?"
-        },
-        {
-          "number": 7,
-          "title": "Sending A Team Member Out Solo"
-        },
-        {
-          "number": 8,
-          "title": "What To Pay A Team Member"
-        },
-        {
-          "number": 9,
-          "title": "The Delegation Mindset (80%)"
-        }
-      ]
-    },
-    {
-      "number": 22,
-      "title": "Viral Mastery - The Science",
-      "lessonCount": 2,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Strong Opener"
-        },
-        {
-          "number": 2,
-          "title": "Most Important Attribute Of Virality Is Scripting"
-        }
-      ]
-    },
-    {
-      "number": 23,
-      "title": "Scripting Deep Dive",
-      "lessonCount": 1,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Deep Dive On Scripting"
-        }
-      ]
-    },
-    {
-      "number": 24,
-      "title": "Breaking Down Viral Videos",
-      "lessonCount": 4,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Breaking Down Most Viral Videos"
-        },
-        {
-          "number": 2,
-          "title": "Script"
-        },
-        {
-          "number": 3,
-          "title": "Shots"
-        },
-        {
-          "number": 4,
-          "title": "How The Agent Is Shot"
-        }
-      ]
-    },
-    {
-      "number": 25,
-      "title": "Case Studies",
-      "lessonCount": 3,
-      "lessons": [
-        {
-          "number": 1,
-          "title": "Hilary Musser Video"
-        },
-        {
-          "number": 2,
-          "title": "Colorado Video"
-        },
-        {
-          "number": 3,
-          "title": "Alex Goldstein \"Wow\" Video"
+          "title": "Always Put Your Ear Up To The Speaker After Each Take"
         }
       ]
     }
   ],
-  "totalModules": 25,
-  "totalLessons": 157
+  "totalModules": 16,
+  "totalLessons": 104
 }
