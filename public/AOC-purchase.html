@@ -2804,14 +2804,11 @@ img, video, iframe { max-width: 100%; height: auto; }
   .aoc-dv-stage{ min-height:380px; display:flex; align-items:center; justify-content:center; }
   .aoc-device[data-device="desktop"] .aoc-dv-phone{ display:none; }
   .aoc-device[data-device="mobile"] .aoc-dv-laptop{ display:none; }
-  .aoc-dv-laptop{ width:100%; max-width:520px; margin:0 auto; }
-  .aoc-dv-laptop .aoc-dv-bezel{ background:#151517; border:2px solid rgba(255,255,255,.12); border-radius:14px; padding:12px;
-    box-shadow:0 40px 90px -30px rgba(0,0,0,.85); }
-  .aoc-dv-laptop .aoc-dv-screen{ aspect-ratio:16/10; border-radius:6px; }
-  .aoc-dv-laptop .aoc-dv-base{ height:14px; width:118%; margin-left:-9%; background:linear-gradient(#2c2c30,#141416);
-    border-radius:0 0 16px 16px; position:relative; }
-  .aoc-dv-laptop .aoc-dv-base::after{ content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
-    width:90px; height:7px; background:rgba(0,0,0,.55); border-radius:0 0 7px 7px; }
+  .aoc-dv-laptop{ width:100%; max-width:640px; margin:0 auto; }
+  .aoc-dv-mac{ position:relative; width:100%; }
+  .aoc-dv-macimg{ position:relative; width:100%; display:block; z-index:2; pointer-events:none; }
+  /* screen sits BEHIND the PNG, aligned to the transparent cutout (measured from macbook.png) */
+  .aoc-dv-mac .aoc-dv-screen{ position:absolute; z-index:1; left:10.21%; top:13.22%; width:79.56%; height:75.77%; }
   .aoc-dv-phone{ width:min(240px,70%); margin:0 auto; }
   .aoc-dv-phone .aoc-dv-bezel{ position:relative; background:#151517; border:2px solid rgba(255,255,255,.14);
     border-radius:40px; padding:10px; box-shadow:0 40px 90px -30px rgba(0,0,0,.85); }
@@ -2845,15 +2842,15 @@ img, video, iframe { max-width: 100%; height: auto; }
     </div>
     <div class="aoc-dv-right reveal">
       <div class="aoc-dv-stage">
-        <!-- LAPTOP frame (TODO: replace with real MacBook PNG) -->
+        <!-- LAPTOP frame — real MacBook PNG; content shows through the transparent screen cutout -->
         <div class="aoc-dv-laptop">
-          <div class="aoc-dv-bezel">
+          <div class="aoc-dv-mac">
             <div class="aoc-dv-screen">
               <span class="aoc-dv-screen-title">Skool course modules</span>
               <span class="aoc-dv-screen-note">Recording asset</span>
             </div>
+            <img class="aoc-dv-macimg" src="/aoc/showcase/macbook.png" alt="" decoding="async" loading="lazy">
           </div>
-          <div class="aoc-dv-base"></div>
         </div>
         <!-- PHONE frame (TODO: replace with real iPhone PNG) -->
         <div class="aoc-dv-phone">
