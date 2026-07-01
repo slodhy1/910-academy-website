@@ -2954,16 +2954,22 @@ img, video, iframe { max-width: 100%; height: auto; }
 <hr class="section-divider">
 
 <!-- ============================================================
-     WHY THIS WORKS  (problem -> you -> outcome flow; middle step highlighted)
-     Copy from client narrative (agent has a high-commission listing + limited
-     reach -> your media expands reach -> property sells, you both get paid).
+     WHY THIS WORKS  (centered; thesis headline + problem/you/outcome flow)
+     Icons replace numbers: X (problem) / play (you) / cash (outcome), transparent gray.
      ============================================================ -->
 <style>
+  .aoc-why{ text-align:center; }
+  .aoc-why .section-label{ text-align:center; }
+  .aoc-why-headline{ font-family:'Montserrat',sans-serif; font-weight:400; text-transform:none; text-align:center;
+    font-size:clamp(1.7rem,3.6vw,2.8rem); line-height:1.3; letter-spacing:-.01em; color:var(--fg); max-width:840px; margin:0 auto var(--space-12); }
+  .aoc-why-headline em{ font-style:italic; }
+  .aoc-why-headline strong{ font-weight:700; }
   .aoc-why-flow{ display:flex; align-items:stretch; justify-content:center; gap:var(--space-4); }
-  .aoc-why-step{ flex:1; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+  .aoc-why-step{ flex:1; text-align:center; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
     border-radius:var(--radius-lg); padding:var(--space-8); }
   .aoc-why-step--key{ border-color:var(--accent-border); background:var(--accent-subtle); box-shadow:0 0 44px -12px var(--accent-glow); }
-  .aoc-why-step-num{ display:block; font-size:1.4rem; font-weight:700; color:var(--accent); margin-bottom:var(--space-4); }
+  .aoc-why-step-icon{ width:46px; height:46px; margin:0 auto var(--space-4); color:rgba(255,255,255,.34); }
+  .aoc-why-step-icon svg{ width:100%; height:100%; display:block; }
   .aoc-why-step-title{ font-size:1.15rem; font-weight:700; color:var(--fg); margin-bottom:var(--space-3); }
   .aoc-why-step-desc{ font-size:.95rem; color:var(--fg-muted); line-height:var(--leading-normal); }
   .aoc-why-arrow{ display:flex; align-items:center; color:var(--accent); font-size:1.8rem; font-weight:300; }
@@ -2973,28 +2979,25 @@ img, video, iframe { max-width: 100%; height: auto; }
   }
 </style>
 <section class="section aoc-why" id="why-this-works">
-  <div class="reveal-left">
-    <p class="section-label">WHY THIS WORKS</p>
-    <h2 class="section-heading">They Sell. You Get Paid.</h2>
-    <p class="section-sub">Every agent has a listing worth a fortune in commission &mdash; and an audience that stops at their own network. That&rsquo;s the gap you fill.</p>
-  </div>
+  <p class="section-label reveal">WHY THIS WORKS</p>
+  <h2 class="aoc-why-headline reveal">Agents all over the country are looking for more ways to sell houses <em>easier</em> <strong>every single day</strong>.</h2>
   <div class="aoc-why-flow">
     <div class="aoc-why-step reveal">
-      <span class="aoc-why-step-num">01</span>
+      <div class="aoc-why-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div>
       <h3 class="aoc-why-step-title">The Problem</h3>
       <p class="aoc-why-step-desc">An agent has a property they can earn a serious commission on &mdash; but their reach is limited to their own network.</p>
     </div>
     <div class="aoc-why-arrow" aria-hidden="true">&rarr;</div>
     <div class="aoc-why-step aoc-why-step--key reveal" style="transition-delay:.1s;">
-      <span class="aoc-why-step-num">02</span>
+      <div class="aoc-why-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M10.5 8.5l5 3.5-5 3.5z" fill="currentColor" stroke="none"/></svg></div>
       <h3 class="aoc-why-step-title">Where You Come In</h3>
       <p class="aoc-why-step-desc">Your media pushes that listing in front of hundreds of thousands &mdash; even millions &mdash; of the right people.</p>
     </div>
     <div class="aoc-why-arrow" aria-hidden="true">&rarr;</div>
     <div class="aoc-why-step reveal" style="transition-delay:.2s;">
-      <span class="aoc-why-step-num">03</span>
+      <div class="aoc-why-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg></div>
       <h3 class="aoc-why-step-title">The Outcome</h3>
-      <p class="aoc-why-step-desc">The property sells, the agent wins, and you get paid for making it happen.</p>
+      <p class="aoc-why-step-desc">The property sells, the realtor gets a commission, and comes right back to you for more business.</p>
     </div>
   </div>
 </section>
