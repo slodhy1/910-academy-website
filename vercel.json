@@ -16,7 +16,8 @@
     { "source": "/products/:slug", "destination": "/maintenance" }
   ],
   "redirects": [
-    { "source": "/aoc-purchase", "destination": "/AOC-purchase", "permanent": false },
+    { "source": "/aoc-purchase", "destination": "/aoc/join", "permanent": false },
+    { "source": "/AOC-purchase", "destination": "/aoc/join", "permanent": false },
     { "source": "/affiliate-links", "destination": "/gear", "permanent": true },
     { "source": "/skool", "destination": "/", "permanent": true },
     { "source": "/products/build-your-instagram", "destination": "/products/instagram-masterclass", "permanent": true },

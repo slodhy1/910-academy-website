@@ -19,7 +19,6 @@ const STATIC_PAGES = [
   "aoc",
   "aoc-live",
   "levels",
-  "AOC-purchase",
 ];
 
 // App-wide security headers. CSP is intentionally NOT set here: the static
@@ -60,8 +59,6 @@ const nextConfig: NextConfig = {
         source: `/${p}`,
         destination: `/${p}.html`,
       })),
-      // lowercase alias so /aoc-purchase also works (uppercase handled by STATIC_PAGES)
-      { source: "/aoc-purchase", destination: "/AOC-purchase.html" },
       // allowed product pages (others are gated by vercel.json maintenance rewrite in prod)
       { source: "/products/lucid-horizon-workshop", destination: "/products/lucid-horizon-workshop.html" },
       { source: "/products/known-productions-workshop", destination: "/products/known-productions-workshop.html" },
@@ -72,6 +69,7 @@ const nextConfig: NextConfig = {
       { source: "/products/910-sales-system", destination: "/products/910-sales-system.html" },
       // AOC waitlist thank-you page (nested static page)
       { source: "/aoc/thanks", destination: "/aoc/thanks.html" },
+      { source: "/aoc/join", destination: "/aoc/join.html" },
       // Free live-event (/levels) confirmation page (nested static page)
       { source: "/levels/thanks", destination: "/levels/thanks.html" },
     ];
