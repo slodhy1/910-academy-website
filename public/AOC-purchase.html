@@ -2232,6 +2232,237 @@ img, video, iframe { max-width: 100%; height: auto; }
   </div>
 </section>
 
+<!-- What's Inside Agent on Camera -->
+<style>
+  .aoc-hero-logo{ width:min(150px,42vw); height:auto; display:block; margin:0 auto var(--space-6); opacity:0; animation:fadeUp 0.8s var(--ease-out) 0.2s forwards; }
+  /* AOC purchase hero — uniformly centered + evenly spaced logo / headline / button */
+  .hero-content{ display:flex; flex-direction:column; align-items:center; text-align:center; margin-left:auto; margin-right:auto; gap:var(--space-6); }
+  .hero-content > .aoc-hero-logo{ margin:0; }
+  .hero h1{ width:100%; text-align:center; margin:0; }
+  .hero h1 .hero-line-1{ font-weight:800; font-size:clamp(2.1rem,4.2vw,4.4rem); letter-spacing:0.08em; color:#fff; }
+
+  /* ===== Agent on Camera — 3D coverflow ===== */
+  .aoc-cf{ position:relative; width:100%; height:320px; margin-top:var(--space-10); perspective:1600px; overflow:hidden; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
+  .aoc-cf-stage{ position:absolute; inset:0; transform-style:preserve-3d; }
+  .aoc-cf .aoc-mod{ position:absolute; top:50%; left:50%; width:510px; margin:0; cursor:pointer; opacity:0;
+    transform:translate(-50%,-50%); transform-origin:center center;
+    transition:transform .6s cubic-bezier(.22,.61,.36,1), opacity .6s ease, filter .6s ease;
+    will-change:transform,opacity,filter; }
+  .aoc-cf .aoc-mod-thumb{ aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#0f0f0f;
+    border:1px solid rgba(255,255,255,.10); box-shadow:0 34px 70px -24px rgba(0,0,0,.85);
+    transition:border-color .3s ease, box-shadow .3s ease, filter .3s ease, transform .3s ease; }
+  .aoc-cf .aoc-mod.is-active .aoc-mod-thumb{ box-shadow:0 0 44px -6px rgba(56,182,255,.4), 0 34px 70px -24px rgba(0,0,0,.85); border-color:rgba(56,182,255,.45); }
+  .aoc-cf .aoc-mod:hover .aoc-mod-thumb{ border-color:rgba(56,182,255,.9); box-shadow:0 0 0 2px rgba(56,182,255,.55), 0 40px 80px -22px rgba(0,0,0,.9); filter:brightness(1.12); transform:scale(1.03); }
+  .aoc-cf .aoc-mod-thumb img{ width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+  .aoc-mod-num{ color:#38B6FF; margin-right:8px; }
+  .aoc-cf-caption{ text-align:center; margin-top:8px; min-height:1.3em; font-family:Montserrat,sans-serif;
+    font-size:15px; font-weight:600; letter-spacing:.03em; color:var(--fg); }
+  .aoc-cf-nav{ position:absolute; top:50%; transform:translateY(-50%); z-index:300;
+    width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.45); color:#fff; font-size:24px; line-height:1; cursor:pointer; padding:0;
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, border-color .2s ease; }
+  .aoc-cf-nav:hover{ background:rgba(0,0,0,.72); border-color:rgba(255,255,255,.4); }
+  .aoc-cf-nav.prev{ left:max(16px, calc(50% - 620px)); }
+  .aoc-cf-nav.next{ right:max(16px, calc(50% - 620px)); }
+  @media (max-width:768px){
+    .aoc-cf{ height:230px; perspective:1100px; }
+    .aoc-cf .aoc-mod{ width:330px; }
+    .aoc-cf-nav{ width:40px; height:40px; font-size:20px; }
+    .aoc-cf-nav.prev{ left:8px; } .aoc-cf-nav.next{ right:8px; }
+  }
+  @media (prefers-reduced-motion:reduce){ .aoc-cf .aoc-mod{ transition:opacity .3s ease; } }
+</style>
+<section class="section" id="aoc-whats-inside">
+  <div class="reveal-left">
+    <p class="section-label">THE COURSE</p>
+    <h2 class="section-heading">20 Powerful Modules</h2>
+    <p class="section-sub">100+ training videos. The complete system for shooting agents on camera.</p>
+  </div>
+  <div class="aoc-cf" id="aocCoverflow">
+    <button class="aoc-cf-nav prev" type="button" aria-label="Previous module">&lsaquo;</button>
+    <div class="aoc-cf-stage">
+      <div class="aoc-mod" data-num="01" data-name="Intro">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/intro.webp" alt="Intro module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="02" data-name="Hooks">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/hooks.webp" alt="Hooks module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="03" data-name="Middle Context">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/middle-context.webp" alt="Middle Context module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="04" data-name="Call To Action">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/call-to-action.webp" alt="Call To Action module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="05" data-name="Scripting Tips">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/scripting-tips.webp" alt="Scripting Tips module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="06" data-name="Lenses &amp; Camera Settings">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/lenses-and-camera-settings.webp" alt="Lenses &amp; Camera Settings module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="07" data-name="Lighting">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/lighting.webp" alt="Lighting module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="08" data-name="Composition">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/composition.webp" alt="Composition module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="09" data-name="Shooting The Agent">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/shooting-the-agent.webp" alt="Shooting The Agent module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="10" data-name="Shooting Environment">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/shooting-environment.webp" alt="Shooting Environment module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="11" data-name="Body Language &amp; Tonality">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/body-language-and-tonality.webp" alt="Body Language &amp; Tonality module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="12" data-name="Music Selection">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/music-selection.webp" alt="Music Selection module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="13" data-name="Mindset">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/mindset.webp" alt="Mindset module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="14" data-name="Directing The Agent">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/directing-the-agent.webp" alt="Directing The Agent module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="15" data-name="Working With Agents">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/working-with-agents.webp" alt="Working With Agents module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="16" data-name="Pre-Production">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/pre-production.webp" alt="Pre-Production module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="17" data-name="Agent Confidence">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/agent-confidence.webp" alt="Agent Confidence module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="18" data-name="Agent Experience">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/agent-experience.webp" alt="Agent Experience module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="19" data-name="Audio">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/audio.webp" alt="Audio module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="20" data-name="Collaborating With Agents">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/collaborating-with-agents.webp" alt="Collaborating With Agents module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="21" data-name="Team Training">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/team-training.webp" alt="Team Training module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="22" data-name="Viral Mastery - The Science">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/viral-mastery-the-science.webp" alt="Viral Mastery - The Science module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="23" data-name="Scripting Deep Dive">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/scripting-deep-dive.webp" alt="Scripting Deep Dive module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="24" data-name="Breaking Down Viral Videos">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/breaking-down-viral-videos.webp" alt="Breaking Down Viral Videos module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="25" data-name="Case Studies">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/case-studies.webp" alt="Case Studies module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+    </div>
+    <button class="aoc-cf-nav next" type="button" aria-label="Next module">&rsaquo;</button>
+  </div>
+  <p class="aoc-cf-caption" id="aocCaption"></p>
+</section>
+<script>
+(function(){
+  var root = document.getElementById('aocCoverflow');
+  if (!root) return;
+  var stage = root.querySelector('.aoc-cf-stage');
+  var cards = Array.prototype.slice.call(stage.querySelectorAll('.aoc-mod'));
+  var caption = document.getElementById('aocCaption');
+  var n = cards.length;
+  if (!n) return;
+  var active = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function params(){
+    if (window.innerWidth < 768) return { spacing:150, rot:38, depth:180, scaleStep:0.16, win:3 };
+    return { spacing:258, rot:44, depth:250, scaleStep:0.12, win:4 };
+  }
+  function circDiff(i){
+    var d = i - active;
+    if (d >  n/2) d -= n;
+    if (d < -n/2) d += n;
+    return d;
+  }
+  function render(){
+    var p = params();
+    cards.forEach(function(card, i){
+      var d = circDiff(i);
+      var ad = Math.abs(d);
+      if (ad > p.win){
+        card.style.opacity = '0';
+        card.style.pointerEvents = 'none';
+        card.style.zIndex = '0';
+        card.style.transform = 'translate(-50%,-50%) translateX(' + ((d>0?1:-1) * p.spacing*(p.win+1)) + 'px) scale(0.55)';
+        card.classList.remove('is-active');
+        return;
+      }
+      var sign = d === 0 ? 0 : (d > 0 ? 1 : -1);
+      var x = d * p.spacing;
+      var z = -ad * p.depth;
+      var rot = -sign * p.rot;
+      var scale = Math.max(0.6, 1 - ad * p.scaleStep);
+      var blur = ad === 0 ? 0 : Math.min(6, 1.4 + ad * 1.3);
+      card.style.opacity = ad === 0 ? '1' : (ad === 1 ? '0.92' : (ad === 2 ? '0.78' : '0.6'));
+      card.style.pointerEvents = 'auto';
+      card.style.zIndex = String(100 - ad);
+      card.style.filter = blur ? ('blur(' + blur + 'px) brightness(' + (1 - ad*0.1) + ')') : 'none';
+      card.style.transform =
+        'translate(-50%,-50%) translateX(' + x + 'px) rotateY(' + rot + 'deg) translateZ(' + z + 'px) scale(' + scale + ')';
+      card.classList.toggle('is-active', ad === 0);
+    });
+    if (caption){
+      var a = cards[active];
+      caption.textContent = 'Module ';
+      var ns = document.createElement('span');
+      ns.style.color = '#38B6FF';
+      ns.textContent = a.getAttribute('data-num');
+      caption.appendChild(ns);
+    }
+  }
+
+  function go(dir){ active = (active + dir + n) % n; render(); }
+  function goTo(i){ active = ((i % n) + n) % n; render(); }
+
+  var prev = root.querySelector('.aoc-cf-nav.prev');
+  var next = root.querySelector('.aoc-cf-nav.next');
+  if (prev) prev.addEventListener('click', function(){ go(-1); bump(); });
+  if (next) next.addEventListener('click', function(){ go(1); bump(); });
+
+  cards.forEach(function(card, i){
+    card.addEventListener('click', function(){ if (i !== active){ goTo(i); bump(); } });
+  });
+
+  // drag / swipe
+  var dragging=false, startX=0, moved=false;
+  root.addEventListener('pointerdown', function(e){ dragging=true; moved=false; startX=e.clientX; stopAuto(); });
+  window.addEventListener('pointermove', function(e){ if(dragging && Math.abs(e.clientX-startX) > 8) moved=true; });
+  window.addEventListener('pointerup', function(e){
+    if(!dragging) return; dragging=false;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 45) go(dx < 0 ? 1 : -1);
+    bump();
+  });
+  // swallow the click that follows a drag so it doesn't also re-center
+  root.addEventListener('click', function(e){ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } }, true);
+
+  // autoplay loop
+  var timer=null;
+  function startAuto(){ if (reduce) return; stopAuto(); timer = setInterval(function(){ go(1); }, 2800); }
+  function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+  function bump(){ stopAuto(); if(!reduce) setTimeout(startAuto, 4500); }
+  root.addEventListener('mouseenter', stopAuto);
+  root.addEventListener('mouseleave', startAuto);
+
+  render();
+  startAuto();
+  window.addEventListener('resize', render);
+  window.addEventListener('load', render);
+})();
+</script>
+
+<hr class="section-divider">
+
 <!-- ============================================================
      DEVICE-SWITCHER SHOWCASE  (2-col: controls/tabs LEFT, device preview RIGHT)
      Mobile|Desktop toggle + 3 content tabs (Skool / IG / Training).
@@ -2492,237 +2723,6 @@ END SOFT-DELETE -->
     </div>
   </div>
 </section>
-
-<hr class="section-divider">
-
-<!-- What's Inside Agent on Camera -->
-<style>
-  .aoc-hero-logo{ width:min(150px,42vw); height:auto; display:block; margin:0 auto var(--space-6); opacity:0; animation:fadeUp 0.8s var(--ease-out) 0.2s forwards; }
-  /* AOC purchase hero — uniformly centered + evenly spaced logo / headline / button */
-  .hero-content{ display:flex; flex-direction:column; align-items:center; text-align:center; margin-left:auto; margin-right:auto; gap:var(--space-6); }
-  .hero-content > .aoc-hero-logo{ margin:0; }
-  .hero h1{ width:100%; text-align:center; margin:0; }
-  .hero h1 .hero-line-1{ font-weight:800; font-size:clamp(2.1rem,4.2vw,4.4rem); letter-spacing:0.08em; color:#fff; }
-
-  /* ===== Agent on Camera — 3D coverflow ===== */
-  .aoc-cf{ position:relative; width:100%; height:320px; margin-top:var(--space-10); perspective:1600px; overflow:hidden; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
-  .aoc-cf-stage{ position:absolute; inset:0; transform-style:preserve-3d; }
-  .aoc-cf .aoc-mod{ position:absolute; top:50%; left:50%; width:510px; margin:0; cursor:pointer; opacity:0;
-    transform:translate(-50%,-50%); transform-origin:center center;
-    transition:transform .6s cubic-bezier(.22,.61,.36,1), opacity .6s ease, filter .6s ease;
-    will-change:transform,opacity,filter; }
-  .aoc-cf .aoc-mod-thumb{ aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#0f0f0f;
-    border:1px solid rgba(255,255,255,.10); box-shadow:0 34px 70px -24px rgba(0,0,0,.85);
-    transition:border-color .3s ease, box-shadow .3s ease, filter .3s ease, transform .3s ease; }
-  .aoc-cf .aoc-mod.is-active .aoc-mod-thumb{ box-shadow:0 0 44px -6px rgba(56,182,255,.4), 0 34px 70px -24px rgba(0,0,0,.85); border-color:rgba(56,182,255,.45); }
-  .aoc-cf .aoc-mod:hover .aoc-mod-thumb{ border-color:rgba(56,182,255,.9); box-shadow:0 0 0 2px rgba(56,182,255,.55), 0 40px 80px -22px rgba(0,0,0,.9); filter:brightness(1.12); transform:scale(1.03); }
-  .aoc-cf .aoc-mod-thumb img{ width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
-  .aoc-mod-num{ color:#38B6FF; margin-right:8px; }
-  .aoc-cf-caption{ text-align:center; margin-top:8px; min-height:1.3em; font-family:Montserrat,sans-serif;
-    font-size:15px; font-weight:600; letter-spacing:.03em; color:var(--fg); }
-  .aoc-cf-nav{ position:absolute; top:50%; transform:translateY(-50%); z-index:300;
-    width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.18);
-    background:rgba(0,0,0,.45); color:#fff; font-size:24px; line-height:1; cursor:pointer; padding:0;
-    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center;
-    transition:background .2s ease, border-color .2s ease; }
-  .aoc-cf-nav:hover{ background:rgba(0,0,0,.72); border-color:rgba(255,255,255,.4); }
-  .aoc-cf-nav.prev{ left:max(16px, calc(50% - 620px)); }
-  .aoc-cf-nav.next{ right:max(16px, calc(50% - 620px)); }
-  @media (max-width:768px){
-    .aoc-cf{ height:230px; perspective:1100px; }
-    .aoc-cf .aoc-mod{ width:330px; }
-    .aoc-cf-nav{ width:40px; height:40px; font-size:20px; }
-    .aoc-cf-nav.prev{ left:8px; } .aoc-cf-nav.next{ right:8px; }
-  }
-  @media (prefers-reduced-motion:reduce){ .aoc-cf .aoc-mod{ transition:opacity .3s ease; } }
-</style>
-<section class="section" id="aoc-whats-inside">
-  <div class="reveal-left">
-    <p class="section-label">THE COURSE</p>
-    <h2 class="section-heading">20 Powerful Modules</h2>
-    <p class="section-sub">100+ training videos. The complete system for shooting agents on camera.</p>
-  </div>
-  <div class="aoc-cf" id="aocCoverflow">
-    <button class="aoc-cf-nav prev" type="button" aria-label="Previous module">&lsaquo;</button>
-    <div class="aoc-cf-stage">
-      <div class="aoc-mod" data-num="01" data-name="Intro">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/intro.webp" alt="Intro module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="02" data-name="Hooks">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/hooks.webp" alt="Hooks module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="03" data-name="Middle Context">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/middle-context.webp" alt="Middle Context module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="04" data-name="Call To Action">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/call-to-action.webp" alt="Call To Action module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="05" data-name="Scripting Tips">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/scripting-tips.webp" alt="Scripting Tips module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="06" data-name="Lenses &amp; Camera Settings">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/lenses-and-camera-settings.webp" alt="Lenses &amp; Camera Settings module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="07" data-name="Lighting">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/lighting.webp" alt="Lighting module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="08" data-name="Composition">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/composition.webp" alt="Composition module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="09" data-name="Shooting The Agent">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/shooting-the-agent.webp" alt="Shooting The Agent module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="10" data-name="Shooting Environment">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/shooting-environment.webp" alt="Shooting Environment module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="11" data-name="Body Language &amp; Tonality">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/body-language-and-tonality.webp" alt="Body Language &amp; Tonality module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="12" data-name="Music Selection">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/music-selection.webp" alt="Music Selection module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="13" data-name="Mindset">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/mindset.webp" alt="Mindset module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="14" data-name="Directing The Agent">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/directing-the-agent.webp" alt="Directing The Agent module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="15" data-name="Working With Agents">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/working-with-agents.webp" alt="Working With Agents module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="16" data-name="Pre-Production">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/pre-production.webp" alt="Pre-Production module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="17" data-name="Agent Confidence">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/agent-confidence.webp" alt="Agent Confidence module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="18" data-name="Agent Experience">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/agent-experience.webp" alt="Agent Experience module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="19" data-name="Audio">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/audio.webp" alt="Audio module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="20" data-name="Collaborating With Agents">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/collaborating-with-agents.webp" alt="Collaborating With Agents module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="21" data-name="Team Training">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/team-training.webp" alt="Team Training module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="22" data-name="Viral Mastery - The Science">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/viral-mastery-the-science.webp" alt="Viral Mastery - The Science module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="23" data-name="Scripting Deep Dive">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/scripting-deep-dive.webp" alt="Scripting Deep Dive module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="24" data-name="Breaking Down Viral Videos">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/breaking-down-viral-videos.webp" alt="Breaking Down Viral Videos module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-      <div class="aoc-mod" data-num="25" data-name="Case Studies">
-        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/case-studies.webp" alt="Case Studies module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
-      </div>
-    </div>
-    <button class="aoc-cf-nav next" type="button" aria-label="Next module">&rsaquo;</button>
-  </div>
-  <p class="aoc-cf-caption" id="aocCaption"></p>
-</section>
-<script>
-(function(){
-  var root = document.getElementById('aocCoverflow');
-  if (!root) return;
-  var stage = root.querySelector('.aoc-cf-stage');
-  var cards = Array.prototype.slice.call(stage.querySelectorAll('.aoc-mod'));
-  var caption = document.getElementById('aocCaption');
-  var n = cards.length;
-  if (!n) return;
-  var active = 0;
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function params(){
-    if (window.innerWidth < 768) return { spacing:150, rot:38, depth:180, scaleStep:0.16, win:3 };
-    return { spacing:258, rot:44, depth:250, scaleStep:0.12, win:4 };
-  }
-  function circDiff(i){
-    var d = i - active;
-    if (d >  n/2) d -= n;
-    if (d < -n/2) d += n;
-    return d;
-  }
-  function render(){
-    var p = params();
-    cards.forEach(function(card, i){
-      var d = circDiff(i);
-      var ad = Math.abs(d);
-      if (ad > p.win){
-        card.style.opacity = '0';
-        card.style.pointerEvents = 'none';
-        card.style.zIndex = '0';
-        card.style.transform = 'translate(-50%,-50%) translateX(' + ((d>0?1:-1) * p.spacing*(p.win+1)) + 'px) scale(0.55)';
-        card.classList.remove('is-active');
-        return;
-      }
-      var sign = d === 0 ? 0 : (d > 0 ? 1 : -1);
-      var x = d * p.spacing;
-      var z = -ad * p.depth;
-      var rot = -sign * p.rot;
-      var scale = Math.max(0.6, 1 - ad * p.scaleStep);
-      var blur = ad === 0 ? 0 : Math.min(6, 1.4 + ad * 1.3);
-      card.style.opacity = ad === 0 ? '1' : (ad === 1 ? '0.92' : (ad === 2 ? '0.78' : '0.6'));
-      card.style.pointerEvents = 'auto';
-      card.style.zIndex = String(100 - ad);
-      card.style.filter = blur ? ('blur(' + blur + 'px) brightness(' + (1 - ad*0.1) + ')') : 'none';
-      card.style.transform =
-        'translate(-50%,-50%) translateX(' + x + 'px) rotateY(' + rot + 'deg) translateZ(' + z + 'px) scale(' + scale + ')';
-      card.classList.toggle('is-active', ad === 0);
-    });
-    if (caption){
-      var a = cards[active];
-      caption.textContent = 'Module ';
-      var ns = document.createElement('span');
-      ns.style.color = '#38B6FF';
-      ns.textContent = a.getAttribute('data-num');
-      caption.appendChild(ns);
-    }
-  }
-
-  function go(dir){ active = (active + dir + n) % n; render(); }
-  function goTo(i){ active = ((i % n) + n) % n; render(); }
-
-  var prev = root.querySelector('.aoc-cf-nav.prev');
-  var next = root.querySelector('.aoc-cf-nav.next');
-  if (prev) prev.addEventListener('click', function(){ go(-1); bump(); });
-  if (next) next.addEventListener('click', function(){ go(1); bump(); });
-
-  cards.forEach(function(card, i){
-    card.addEventListener('click', function(){ if (i !== active){ goTo(i); bump(); } });
-  });
-
-  // drag / swipe
-  var dragging=false, startX=0, moved=false;
-  root.addEventListener('pointerdown', function(e){ dragging=true; moved=false; startX=e.clientX; stopAuto(); });
-  window.addEventListener('pointermove', function(e){ if(dragging && Math.abs(e.clientX-startX) > 8) moved=true; });
-  window.addEventListener('pointerup', function(e){
-    if(!dragging) return; dragging=false;
-    var dx = e.clientX - startX;
-    if (Math.abs(dx) > 45) go(dx < 0 ? 1 : -1);
-    bump();
-  });
-  // swallow the click that follows a drag so it doesn't also re-center
-  root.addEventListener('click', function(e){ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } }, true);
-
-  // autoplay loop
-  var timer=null;
-  function startAuto(){ if (reduce) return; stopAuto(); timer = setInterval(function(){ go(1); }, 2800); }
-  function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
-  function bump(){ stopAuto(); if(!reduce) setTimeout(startAuto, 4500); }
-  root.addEventListener('mouseenter', stopAuto);
-  root.addEventListener('mouseleave', startAuto);
-
-  render();
-  startAuto();
-  window.addEventListener('resize', render);
-  window.addEventListener('load', render);
-})();
-</script>
 
 <hr class="section-divider">
 
