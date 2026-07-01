@@ -358,7 +358,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   padding: var(--space-32) var(--space-10) var(--space-20);
   z-index: 2;
   overflow: hidden;
-  background: #000;
+  background: #000 url('/images/aoc-header.webp') center/cover no-repeat;
 }
 .hero-bg-video {
   position: absolute;
@@ -369,7 +369,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   object-fit: cover;
   z-index: 0;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity .8s ease;
 }
+.hero-bg-video.ready { opacity: 1; }
 .hero-overlay {
   position: absolute;
   top: 0;
@@ -2148,7 +2151,6 @@ img, video, iframe { max-width: 100%; height: auto; }
   /* ===== AOC purchase — mobile PERFORMANCE (iOS Safari) ===== */
   @media (max-width:768px){
     /* Hero: static poster image instead of a video (iOS autoplay video = black/slow) */
-    .hero-bg-video{ display:none !important; }
     .hero{ background:#000 url('/images/aoc-header-sm.webp') center/cover no-repeat !important; }
     /* Drop GPU-heavy decoration */
     .particles, .bg-orbs{ display:none !important; }
@@ -2253,11 +2255,17 @@ img, video, iframe { max-width: 100%; height: auto; }
     var v=document.getElementById('heroVid'); if(!v) return;
     var src=v.querySelector('source'); if(!src) return;
     var mob=(window.matchMedia && window.matchMedia('(max-width:768px)').matches);
-    if (mob) return; // mobile uses a static poster background (see CSS); no video for speed + reliability
-    src.setAttribute('src', src.getAttribute('data-src'));
-    v.load();
-    var play=function(){ var p=v.play(); if(p && p.catch) p.catch(function(){}); };
-    if(v.readyState>=2) play(); else v.addEventListener('loadeddata', play, {once:true});
+    function start(){
+      src.setAttribute('src', (mob && src.getAttribute('data-src-mobile')) ? src.getAttribute('data-src-mobile') : src.getAttribute('data-src'));
+      v.load();
+      var done=false;
+      var go=function(){ if(done) return; done=true; v.classList.add('ready'); var p=v.play(); if(p && p.catch) p.catch(function(){}); };
+      if(v.readyState>=3) go();
+      else { v.addEventListener('canplay', go, {once:true}); v.addEventListener('loadeddata', go, {once:true}); }
+    }
+    // Paint the page (poster) first, then load + play the video a moment later
+    if (document.readyState==='complete') setTimeout(start, 500);
+    else window.addEventListener('load', function(){ setTimeout(start, 500); });
   })();
   </script>
   <div class="hero-overlay"></div>
@@ -3095,7 +3103,7 @@ END SOFT-DELETE -->
   @keyframes aocPromoGlow{ 0%,100%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 14px 1px rgba(56,182,255,.15); }
     50%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 24px 5px rgba(56,182,255,.30); } }
   @media (prefers-reduced-motion:reduce){ .aoc-promo.show{ animation:none; } }
-  .aoc-promo-price{ display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.05; justify-self:start; }
+  .aoc-promo-price{ display:flex; flex-direction:row; align-items:baseline; gap:6px; justify-self:start; }
   .aoc-promo-nowrow{ display:flex; align-items:baseline; gap:4px; }
   .aoc-promo-was{ font-family:'Montserrat',sans-serif; font-size:1rem; color:var(--fg-dim); text-decoration:line-through; }
   .aoc-promo-now{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.9rem; color:#fff; letter-spacing:-.01em; }
@@ -3103,7 +3111,7 @@ END SOFT-DELETE -->
   .aoc-promo-mid{ display:flex; flex-direction:column; align-items:center; gap:7px; margin:0; text-align:center; }
   .aoc-promo-title{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.95rem; letter-spacing:.18em; text-transform:uppercase; color:#fff; }
   .aoc-promo-badge{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
-    color:#0a0a0a; background:var(--accent); padding:6px 14px; border-radius:8px; align-self:stretch; text-align:center; }
+    color:#0a0a0a; background:var(--accent); padding:6px 14px; border-radius:8px; align-self:center; text-align:center; }
   .aoc-promo-cta{ justify-self:end; display:inline-block; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:.12em;
     text-transform:uppercase; color:#000; background:#fff; padding:14px 30px; border-radius:12px; white-space:nowrap;
     transition:background .25s ease,color .25s ease,transform .25s ease; }
