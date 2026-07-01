@@ -2061,11 +2061,11 @@ img, video, iframe { max-width: 100%; height: auto; }
 
   /* Value stack, wrap long rows */
   .value-stack { padding: 32px 20px !important; }
-  .value-row { flex-wrap: wrap !important; gap: 6px 10px !important; align-items: flex-start !important; }
+  .value-row { flex-wrap: nowrap !important; gap: 10px !important; align-items: baseline !important; }
   .value-leader { display: none !important; }
-  .value-name { flex: 1 1 100% !important; min-width: 0 !important; order: 2; }
-  .value-check { order: 1; }
-  .value-price { flex: 0 0 auto !important; order: 3; font-weight: 700; margin-left: 30px; }
+  .value-name { flex: 1 1 auto !important; min-width: 0 !important; order: 2; }
+  .value-check { order: 1; flex: 0 0 auto !important; }
+  .value-price { flex: 0 0 auto !important; order: 3; font-weight: 700; margin-left: auto !important; white-space: nowrap; }
   .value-final-price { font-size: 3rem !important; }
 
   /* Footer stacking */
@@ -2229,14 +2229,26 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <!-- Hero -->
 <section class="hero">
-  <video autoplay muted loop playsinline preload="metadata" class="hero-bg-video" poster="/images/aoc-header.webp">
-    <source src="/aoc-header.mp4" type="video/mp4">
+  <video muted loop playsinline webkit-playsinline preload="none" class="hero-bg-video" id="heroVid" poster="/images/aoc-header.webp">
+    <source data-src="/aoc-header.mp4" data-src-mobile="/aoc-header-mobile.mp4" type="video/mp4">
   </video>
+  <script>
+  (function(){
+    var v=document.getElementById('heroVid'); if(!v) return;
+    var src=v.querySelector('source'); if(!src) return;
+    var mob=(window.matchMedia && window.matchMedia('(max-width:768px)').matches);
+    src.setAttribute('src', (mob && src.getAttribute('data-src-mobile')) ? src.getAttribute('data-src-mobile') : src.getAttribute('data-src'));
+    v.load();
+    var play=function(){ var p=v.play(); if(p && p.catch) p.catch(function(){}); };
+    if(v.readyState>=2) play(); else v.addEventListener('loadeddata', play, {once:true});
+  })();
+  </script>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <img class="aoc-hero-logo" src="/aoc/brand/aoc-white.svg" alt="AOC — Agent on Camera" width="280" height="147" decoding="async">
     <h1>
-      <div class="hero-line hero-line-1">AGENT ON CAMERA</div>
+      <div class="hero-line hero-line-1">AGENT ON</div>
+      <div class="hero-line hero-line-1">CAMERA</div>
     </h1>
     <div style="display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:0;opacity:0;animation:fadeUp 0.8s var(--ease-out) 1s forwards;">
       <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="hero-cta" style="margin-top:0;opacity:1;animation:none;">Sign Up Now</a>
@@ -3064,7 +3076,8 @@ END SOFT-DELETE -->
   @keyframes aocPromoGlow{ 0%,100%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 14px 1px rgba(56,182,255,.15); }
     50%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 24px 5px rgba(56,182,255,.30); } }
   @media (prefers-reduced-motion:reduce){ .aoc-promo.show{ animation:none; } }
-  .aoc-promo-price{ display:flex; align-items:baseline; gap:8px; }
+  .aoc-promo-price{ display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.05; }
+  .aoc-promo-nowrow{ display:flex; align-items:baseline; gap:4px; }
   .aoc-promo-was{ font-family:'Montserrat',sans-serif; font-size:1rem; color:var(--fg-dim); text-decoration:line-through; }
   .aoc-promo-now{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.9rem; color:#fff; letter-spacing:-.01em; }
   .aoc-promo-cur{ font-family:'Montserrat',sans-serif; font-size:.78rem; font-weight:600; color:var(--fg-muted); }
@@ -3078,7 +3091,7 @@ END SOFT-DELETE -->
   .aoc-promo-cta:hover{ background:var(--accent); color:#fff; transform:translateY(-1px); }
   @media (max-width:768px){
     .aoc-promo{ gap:12px; padding:10px 12px; bottom:12px; border-radius:16px; }
-    .aoc-promo-now{ font-size:1.4rem; } .aoc-promo-was{ display:none; }
+    .aoc-promo-now{ font-size:1.4rem; } .aoc-promo-was{ font-size:.8rem; }
     .aoc-promo-title{ font-size:.68rem; letter-spacing:.1em; } .aoc-promo-badge{ font-size:.62rem; padding:4px 8px; }
     .aoc-promo-cta{ padding:11px 16px; font-size:11px; letter-spacing:.05em; }
   }
@@ -3086,8 +3099,7 @@ END SOFT-DELETE -->
 <div class="aoc-promo" id="aocPromo" role="region" aria-label="Launch Day Special offer">
   <div class="aoc-promo-price">
     <span class="aoc-promo-was">$910</span>
-    <span class="aoc-promo-now">$710</span>
-    <span class="aoc-promo-cur">USD</span>
+    <span class="aoc-promo-nowrow"><span class="aoc-promo-now">$710</span><span class="aoc-promo-cur">USD</span></span>
   </div>
   <div class="aoc-promo-mid">
     <span class="aoc-promo-title">Launch Day Special</span>
