@@ -3123,20 +3123,23 @@ END SOFT-DELETE -->
      ============================================================ -->
 <style>
   .aoc-promo{ position:fixed; left:50%; bottom:20px; transform:translate(-50%,180%); z-index:1000;
-    width:min(940px, calc(100% - 32px)); display:flex; align-items:center; gap:var(--space-6);
-    padding:14px 16px 14px 26px; background:rgba(15,15,17,.55);
+    width:min(720px, calc(100% - 32px)); display:flex; align-items:center; justify-content:center; gap:var(--space-5);
+    padding:12px 18px; background:rgba(15,15,17,.55);
     -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);
     border:1px solid rgba(255,255,255,.14); border-radius:22px; box-shadow:0 22px 60px -18px rgba(0,0,0,.8);
     opacity:0; transition:transform .55s cubic-bezier(.22,.61,.36,1), opacity .5s ease; }
-  .aoc-promo.show{ transform:translate(-50%,0); opacity:1; }
+  .aoc-promo.show{ transform:translate(-50%,0); opacity:1; animation:aocPromoGlow 2.8s ease-in-out infinite; }
+  @keyframes aocPromoGlow{ 0%,100%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 22px 2px rgba(56,182,255,.22); }
+    50%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 50px 12px rgba(56,182,255,.5); } }
+  @media (prefers-reduced-motion:reduce){ .aoc-promo.show{ animation:none; } }
   .aoc-promo-price{ display:flex; align-items:baseline; gap:8px; }
   .aoc-promo-was{ font-family:'Montserrat',sans-serif; font-size:1rem; color:var(--fg-dim); text-decoration:line-through; }
   .aoc-promo-now{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.9rem; color:#fff; letter-spacing:-.01em; }
   .aoc-promo-cur{ font-family:'Montserrat',sans-serif; font-size:.78rem; font-weight:600; color:var(--fg-muted); }
-  .aoc-promo-mid{ display:flex; flex-direction:column; align-items:center; gap:7px; margin:0 auto; text-align:center; }
+  .aoc-promo-mid{ display:flex; flex-direction:column; align-items:center; gap:7px; margin:0; text-align:center; }
   .aoc-promo-title{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.95rem; letter-spacing:.18em; text-transform:uppercase; color:#fff; }
   .aoc-promo-badge{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
-    color:#0a0a0a; background:var(--accent); padding:6px 14px; border-radius:8px; }
+    color:#0a0a0a; background:var(--accent); padding:6px 14px; border-radius:8px; align-self:stretch; text-align:center; }
   .aoc-promo-cta{ display:inline-block; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:.12em;
     text-transform:uppercase; color:#000; background:#fff; padding:14px 30px; border-radius:12px; white-space:nowrap;
     transition:background .25s ease,color .25s ease,transform .25s ease; }
@@ -3156,7 +3159,7 @@ END SOFT-DELETE -->
   </div>
   <div class="aoc-promo-mid">
     <span class="aoc-promo-title">Launch Day Special</span>
-    <span class="aoc-promo-badge">$200 OFF</span>
+    <span class="aoc-promo-badge">$200 OFF TODAY ONLY</span>
   </div>
   <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="aoc-promo-cta">Sign Up Now</a>
 </div>
