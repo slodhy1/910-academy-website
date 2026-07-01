@@ -3098,6 +3098,69 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <hr class="section-divider">
 
+<!-- ============================================================
+     LAUNCH DAY SPECIAL — floating liquid-glass promo
+     Appears (slides up) once you scroll past the hero, then stays.
+     Offer: $200 off -> $710 USD (was $910). CTA -> Skool. Values hardcoded.
+     ============================================================ -->
+<style>
+  .aoc-promo{ position:fixed; left:50%; bottom:20px; transform:translate(-50%,180%); z-index:1000;
+    width:min(940px, calc(100% - 32px)); display:flex; align-items:center; gap:var(--space-6);
+    padding:14px 16px 14px 26px; background:rgba(15,15,17,.55);
+    -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);
+    border:1px solid rgba(255,255,255,.14); border-radius:22px; box-shadow:0 22px 60px -18px rgba(0,0,0,.8);
+    opacity:0; transition:transform .55s cubic-bezier(.22,.61,.36,1), opacity .5s ease; }
+  .aoc-promo.show{ transform:translate(-50%,0); opacity:1; }
+  .aoc-promo-price{ display:flex; align-items:baseline; gap:8px; }
+  .aoc-promo-was{ font-family:'Montserrat',sans-serif; font-size:1rem; color:var(--fg-dim); text-decoration:line-through; }
+  .aoc-promo-now{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.9rem; color:#fff; letter-spacing:-.01em; }
+  .aoc-promo-cur{ font-family:'Montserrat',sans-serif; font-size:.78rem; font-weight:600; color:var(--fg-muted); }
+  .aoc-promo-mid{ display:flex; flex-direction:column; align-items:center; gap:7px; margin:0 auto; text-align:center; }
+  .aoc-promo-title{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.95rem; letter-spacing:.18em; text-transform:uppercase; color:#fff; }
+  .aoc-promo-badge{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:#0a0a0a; background:var(--accent); padding:6px 14px; border-radius:8px; }
+  .aoc-promo-cta{ display:inline-block; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:.12em;
+    text-transform:uppercase; color:#000; background:#fff; padding:14px 30px; border-radius:12px; white-space:nowrap;
+    transition:background .25s ease,color .25s ease,transform .25s ease; }
+  .aoc-promo-cta:hover{ background:var(--accent); color:#fff; transform:translateY(-1px); }
+  @media (max-width:768px){
+    .aoc-promo{ gap:12px; padding:10px 12px; bottom:12px; border-radius:16px; }
+    .aoc-promo-now{ font-size:1.4rem; } .aoc-promo-was{ display:none; }
+    .aoc-promo-title{ font-size:.68rem; letter-spacing:.1em; } .aoc-promo-badge{ font-size:.62rem; padding:4px 8px; }
+    .aoc-promo-cta{ padding:11px 16px; font-size:11px; letter-spacing:.05em; }
+  }
+</style>
+<div class="aoc-promo" id="aocPromo" role="region" aria-label="Launch Day Special offer">
+  <div class="aoc-promo-price">
+    <span class="aoc-promo-was">$910</span>
+    <span class="aoc-promo-now">$710</span>
+    <span class="aoc-promo-cur">USD</span>
+  </div>
+  <div class="aoc-promo-mid">
+    <span class="aoc-promo-title">Launch Day Special</span>
+    <span class="aoc-promo-badge">$200 OFF</span>
+  </div>
+  <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="aoc-promo-cta">Sign Up Now</a>
+</div>
+<script>
+(function(){
+  var promo = document.getElementById('aocPromo');
+  var hero = document.querySelector('.hero');
+  if(!promo || !hero) return;
+  var ticking = false;
+  function onScroll(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      promo.classList.toggle('show', window.scrollY > (hero.offsetHeight - 90));
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+})();
+</script>
+
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-logo">
