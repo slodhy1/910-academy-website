@@ -60,6 +60,8 @@ const nextConfig: NextConfig = {
         source: `/${p}`,
         destination: `/${p}.html`,
       })),
+      // lowercase alias so /aoc-purchase also works (uppercase handled by STATIC_PAGES)
+      { source: "/aoc-purchase", destination: "/AOC-purchase.html" },
       // allowed product pages (others are gated by vercel.json maintenance rewrite in prod)
       { source: "/products/lucid-horizon-workshop", destination: "/products/lucid-horizon-workshop.html" },
       { source: "/products/known-productions-workshop", destination: "/products/known-productions-workshop.html" },
