@@ -1991,7 +1991,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     gap: 12px !important;
     align-items: stretch !important;
     width: 100% !important;
-    margin-top: 32px !important;
+    margin-top: 0 !important;
     padding: 0 !important;
   }
   .hero-content > div[style*="display:flex"] > a,
@@ -3090,10 +3090,12 @@ END SOFT-DELETE -->
     transition:background .25s ease,color .25s ease,transform .25s ease; }
   .aoc-promo-cta:hover{ background:var(--accent); color:#fff; transform:translateY(-1px); }
   @media (max-width:768px){
-    .aoc-promo{ gap:12px; padding:10px 12px; bottom:12px; border-radius:16px; }
-    .aoc-promo-now{ font-size:1.4rem; } .aoc-promo-was{ font-size:.8rem; }
-    .aoc-promo-title{ font-size:.68rem; letter-spacing:.1em; } .aoc-promo-badge{ font-size:.62rem; padding:4px 8px; }
-    .aoc-promo-cta{ padding:11px 16px; font-size:11px; letter-spacing:.05em; }
+    .aoc-promo{ gap:10px; padding:8px 10px; bottom:12px; border-radius:16px; }
+    .aoc-promo-was{ font-size:.72rem; } .aoc-promo-now{ font-size:1.2rem; } .aoc-promo-cur{ font-size:.62rem; }
+    .aoc-promo-mid{ align-items:center; gap:5px; }
+    .aoc-promo-title{ font-size:.6rem; letter-spacing:.08em; }
+    .aoc-promo-badge{ align-self:center; font-size:.56rem; padding:4px 9px; }
+    .aoc-promo-cta{ padding:9px 13px; font-size:10px; letter-spacing:.04em; }
   }
 </style>
 <div class="aoc-promo" id="aocPromo" role="region" aria-label="Launch Day Special offer">
