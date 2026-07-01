@@ -2237,8 +2237,8 @@ img, video, iframe { max-width: 100%; height: auto; }
      Mobile|Desktop toggle + 3 content tabs (Skool / IG / Training).
      Screens are BLANK (black) "Recording asset" placeholders for now.
      TODO assets (one per tab PER device, 6 total, supplied later):
-       desktop: /aoc/showcase/desktop-aoc.mp4 | desktop-skool.mp4 | desktop-ig.mp4 | desktop-training.mp4
-       mobile:  /aoc/showcase/mobile-aoc.mp4 | mobile-skool.mp4 | mobile-ig.mp4 | mobile-training.mp4
+       desktop: /aoc/showcase/desktop-aoc.mp4 | desktop-skool.mp4 | desktop-ig.mp4
+       mobile:  /aoc/showcase/mobile-aoc.mp4 | mobile-skool.mp4 | mobile-ig.mp4
      TODO frames: swap the CSS .aoc-dv-laptop/.aoc-dv-phone for real MacBook /
        iPhone PNGs once supplied (position .aoc-dv-screen over each PNG's screen
        cutout). When recordings land, replace .aoc-dv-screen contents with:
@@ -2294,9 +2294,8 @@ img, video, iframe { max-width: 100%; height: auto; }
       </div>
       <div class="aoc-dv-tabs" role="group" aria-label="Showcase content">
         <button type="button" data-tab-opt="aoc" class="active">Agent On Camera</button>
-        <button type="button" data-tab-opt="skool">Skool Course</button>
+        <button type="button" data-tab-opt="skool">910 Academy Skool Course</button>
         <button type="button" data-tab-opt="ig">World Class Networking</button>
-        <button type="button" data-tab-opt="training">Training Assets</button>
       </div>
     </div>
     <div class="aoc-dv-right reveal">
@@ -2329,7 +2328,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 (function(){
   var root = document.getElementById('device-showcase');
   if(!root) return;
-  var TABS = { aoc:'Inside Agent On Camera', skool:'Skool course modules', ig:'World class networking', training:'Inside a training' };
+  var TABS = { aoc:'Inside Agent On Camera', skool:'910 Academy Skool Course', ig:'World class networking' };
   var device='desktop', tab='aoc';
   var devBtns = root.querySelectorAll('[data-device-opt]');
   var tabBtns = root.querySelectorAll('[data-tab-opt]');
