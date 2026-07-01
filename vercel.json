@@ -5,7 +5,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/aoc-purchase", "destination": "/AOC-purchase.html" },
     { "source": "/products/lucid-horizon-workshop", "destination": "/products/lucid-horizon-workshop.html" },
     { "source": "/products/known-productions-workshop", "destination": "/products/known-productions-workshop.html" },
     { "source": "/products/jt-visuals-workshop", "destination": "/products/jt-visuals-workshop.html" },
@@ -17,6 +16,7 @@
     { "source": "/products/:slug", "destination": "/maintenance" }
   ],
   "redirects": [
+    { "source": "/aoc-purchase", "destination": "/AOC-purchase", "permanent": false },
     { "source": "/affiliate-links", "destination": "/gear", "permanent": true },
     { "source": "/skool", "destination": "/", "permanent": true },
     { "source": "/products/build-your-instagram", "destination": "/products/instagram-masterclass", "permanent": true },
