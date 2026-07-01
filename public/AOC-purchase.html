@@ -2475,6 +2475,9 @@ img, video, iframe { max-width: 100%; height: auto; }
 
   render();
   startAuto();
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(es){ es.forEach(function(e){ e.isIntersecting ? startAuto() : stopAuto(); }); }, { threshold: 0.15 }).observe(root);
+  }
   window.addEventListener('resize', render);
   window.addEventListener('load', render);
 })();
@@ -3059,8 +3062,7 @@ END SOFT-DELETE -->
 
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
-      <p class="value-final-price"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.12em;">$910</s>$710</p>
-      <p class="value-final-badge" style="display:inline-block;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:#0a0a0a;background:var(--accent);padding:6px 16px;border-radius:8px;margin:var(--space-2) auto var(--space-4);">$200 OFF &middot; Today Only</p>
+      <p class="value-final-price"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</p>
       <p class="value-final-sub">910 Academy is a yearly membership, your membership will automatically renew unless you cancel.</p>
     </div>
 
@@ -3084,7 +3086,7 @@ END SOFT-DELETE -->
      ============================================================ -->
 <style>
   .aoc-promo{ position:fixed; left:50%; bottom:20px; transform:translate(-50%,180%); z-index:1000;
-    width:min(940px, calc(100% - 32px)); display:flex; align-items:center; justify-content:space-between; gap:var(--space-5);
+    width:min(940px, calc(100% - 32px)); display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:var(--space-5);
     padding:12px 18px; background:rgba(15,15,17,.55);
     -webkit-backdrop-filter:blur(24px) saturate(160%); backdrop-filter:blur(24px) saturate(160%);
     border:1px solid rgba(255,255,255,.14); border-radius:22px; box-shadow:0 22px 60px -18px rgba(0,0,0,.8);
@@ -3093,7 +3095,7 @@ END SOFT-DELETE -->
   @keyframes aocPromoGlow{ 0%,100%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 14px 1px rgba(56,182,255,.15); }
     50%{ box-shadow:0 22px 60px -18px rgba(0,0,0,.8), 0 0 24px 5px rgba(56,182,255,.30); } }
   @media (prefers-reduced-motion:reduce){ .aoc-promo.show{ animation:none; } }
-  .aoc-promo-price{ display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.05; }
+  .aoc-promo-price{ display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.05; justify-self:start; }
   .aoc-promo-nowrow{ display:flex; align-items:baseline; gap:4px; }
   .aoc-promo-was{ font-family:'Montserrat',sans-serif; font-size:1rem; color:var(--fg-dim); text-decoration:line-through; }
   .aoc-promo-now{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.9rem; color:#fff; letter-spacing:-.01em; }
@@ -3102,7 +3104,7 @@ END SOFT-DELETE -->
   .aoc-promo-title{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.95rem; letter-spacing:.18em; text-transform:uppercase; color:#fff; }
   .aoc-promo-badge{ font-family:'Montserrat',sans-serif; font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
     color:#0a0a0a; background:var(--accent); padding:6px 14px; border-radius:8px; align-self:stretch; text-align:center; }
-  .aoc-promo-cta{ display:inline-block; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:.12em;
+  .aoc-promo-cta{ justify-self:end; display:inline-block; font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px; letter-spacing:.12em;
     text-transform:uppercase; color:#000; background:#fff; padding:14px 30px; border-radius:12px; white-space:nowrap;
     transition:background .25s ease,color .25s ease,transform .25s ease; }
   .aoc-promo-cta:hover{ background:var(--accent); color:#fff; transform:translateY(-1px); }
