@@ -2144,6 +2144,22 @@ img, video, iframe { max-width: 100%; height: auto; }
     .footer{ padding-bottom:110px !important; }
   }
 </style>
+<style>
+  /* ===== AOC purchase — mobile PERFORMANCE (iOS Safari) ===== */
+  @media (max-width:768px){
+    /* Hero: static poster image instead of a video (iOS autoplay video = black/slow) */
+    .hero-bg-video{ display:none !important; }
+    .hero{ background:#000 url('/images/aoc-header-sm.webp') center/cover no-repeat !important; }
+    /* Drop GPU-heavy decoration */
+    .particles, .bg-orbs{ display:none !important; }
+    /* backdrop-filter is a major iOS perf killer — disable it everywhere on mobile */
+    *, *::before, *::after{ -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+    /* solid fallbacks for the few elements that relied on the blur */
+    .glass-nav.scrolled{ background:rgba(10,10,10,.92) !important; }
+    .aoc-promo{ background:rgba(15,15,17,.96) !important; }
+    .aoc-cf-nav{ background:rgba(0,0,0,.6) !important; }
+  }
+</style>
 </head>
 <body>
 
@@ -2237,7 +2253,8 @@ img, video, iframe { max-width: 100%; height: auto; }
     var v=document.getElementById('heroVid'); if(!v) return;
     var src=v.querySelector('source'); if(!src) return;
     var mob=(window.matchMedia && window.matchMedia('(max-width:768px)').matches);
-    src.setAttribute('src', (mob && src.getAttribute('data-src-mobile')) ? src.getAttribute('data-src-mobile') : src.getAttribute('data-src'));
+    if (mob) return; // mobile uses a static poster background (see CSS); no video for speed + reliability
+    src.setAttribute('src', src.getAttribute('data-src'));
     v.load();
     var play=function(){ var p=v.play(); if(p && p.catch) p.catch(function(){}); };
     if(v.readyState>=2) play(); else v.addEventListener('loadeddata', play, {once:true});
@@ -2404,11 +2421,11 @@ img, video, iframe { max-width: 100%; height: auto; }
       var z = -ad * p.depth;
       var rot = -sign * p.rot;
       var scale = Math.max(0.6, 1 - ad * p.scaleStep);
-      var blur = ad === 0 ? 0 : Math.min(6, 1.4 + ad * 1.3);
+      var blur = (ad === 0 || window.innerWidth <= 768) ? 0 : Math.min(6, 1.4 + ad * 1.3);
       card.style.opacity = ad === 0 ? '1' : (ad === 1 ? '0.92' : (ad === 2 ? '0.78' : '0.6'));
       card.style.pointerEvents = 'auto';
       card.style.zIndex = String(100 - ad);
-      card.style.filter = blur ? ('blur(' + blur + 'px) brightness(' + (1 - ad*0.1) + ')') : 'none';
+      card.style.filter = blur ? ('blur(' + blur + 'px) brightness(' + (1 - ad*0.1) + ')') : (ad ? 'brightness(' + (1 - ad*0.12) + ')' : 'none');
       card.style.transform =
         'translate(-50%,-50%) translateX(' + x + 'px) rotateY(' + rot + 'deg) translateZ(' + z + 'px) scale(' + scale + ')';
       card.classList.toggle('is-active', ad === 0);
