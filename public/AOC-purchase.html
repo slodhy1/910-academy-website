@@ -2495,15 +2495,10 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <!-- ============================================================
      DEVICE-SWITCHER SHOWCASE  (2-col: controls/tabs LEFT, device preview RIGHT)
-     Mobile|Desktop toggle + 3 content tabs (Skool / IG / Training).
-     Screens are BLANK (black) "Recording asset" placeholders for now.
-     TODO assets (one per tab PER device, 6 total, supplied later):
-       desktop: /aoc/showcase/desktop-aoc.mp4 | desktop-skool.mp4 | desktop-ig.mp4
-       mobile:  /aoc/showcase/mobile-aoc.mp4 | mobile-skool.mp4 | mobile-ig.mp4
-     TODO frames: swap the CSS .aoc-dv-laptop/.aoc-dv-phone for real MacBook /
-       iPhone PNGs once supplied (position .aoc-dv-screen over each PNG's screen
-       cutout). When recordings land, replace .aoc-dv-screen contents with:
-       <video src="..." muted loop playsinline preload="metadata" poster="..."></video>
+     Mobile|Desktop toggle + 3 tabs (Agent On Camera / 910 Academy Skool Course / World Class Networking).
+     Each (device,tab) has a compressed preview video in /aoc/showcase/:
+       desktop-{aoc,skool,networking}.mp4  |  mobile-{aoc,skool,networking}.mp4  (+ .jpg posters)
+     Videos load on demand and only play while the section is in view.
      ============================================================ -->
 <style>
   .aoc-device .aoc-dv-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-16); align-items:center; }
@@ -2526,7 +2521,6 @@ img, video, iframe { max-width: 100%; height: auto; }
   .aoc-dv-laptop{ width:100%; max-width:640px; margin:0 auto; }
   .aoc-dv-mac{ position:relative; width:100%; }
   .aoc-dv-macimg{ position:relative; width:100%; display:block; z-index:2; pointer-events:none; }
-  /* screen sits BEHIND the PNG, aligned to the transparent cutout (measured from macbook.png) */
   .aoc-dv-mac .aoc-dv-screen{ position:absolute; z-index:1; left:10.21%; top:13.22%; width:79.56%; height:75.77%; }
   .aoc-dv-phone{ width:min(240px,70%); margin:0 auto; }
   .aoc-dv-phone .aoc-dv-bezel{ position:relative; background:#151517; border:2px solid rgba(255,255,255,.14);
@@ -2534,10 +2528,8 @@ img, video, iframe { max-width: 100%; height: auto; }
   .aoc-dv-phone .aoc-dv-notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%);
     width:110px; height:20px; background:#000; border-radius:0 0 16px 16px; z-index:3; }
   .aoc-dv-phone .aoc-dv-screen{ aspect-ratio:9/19; border-radius:30px; }
-  .aoc-dv-screen{ background:#000; overflow:hidden; position:relative;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
-  .aoc-dv-screen-title{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:14px; letter-spacing:.03em; color:#fff; padding:0 18px; text-align:center; }
-  .aoc-dv-screen-note{ font-family:'Montserrat',sans-serif; font-weight:600; font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent); }
+  .aoc-dv-screen{ background:#000; overflow:hidden; position:relative; }
+  .aoc-dv-video{ width:100%; height:100%; object-fit:cover; display:block; }
   @media (max-width:860px){
     .aoc-device .aoc-dv-wrap{ grid-template-columns:1fr; gap:var(--space-10); }
     .aoc-dv-stage{ min-height:340px; }
@@ -2556,28 +2548,26 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="aoc-dv-tabs" role="group" aria-label="Showcase content">
         <button type="button" data-tab-opt="aoc" class="active">Agent On Camera</button>
         <button type="button" data-tab-opt="skool">910 Academy Skool Course</button>
-        <button type="button" data-tab-opt="ig">World Class Networking</button>
+        <button type="button" data-tab-opt="networking">World Class Networking</button>
       </div>
     </div>
     <div class="aoc-dv-right reveal">
       <div class="aoc-dv-stage">
-        <!-- LAPTOP frame — real MacBook PNG; content shows through the transparent screen cutout -->
+        <!-- LAPTOP frame — MacBook PNG; video shows through the transparent screen cutout -->
         <div class="aoc-dv-laptop">
           <div class="aoc-dv-mac">
             <div class="aoc-dv-screen">
-              <span class="aoc-dv-screen-title">Inside Agent On Camera</span>
-              <span class="aoc-dv-screen-note">Recording asset</span>
+              <video class="aoc-dv-video" id="dvVidDesktop" muted loop playsinline webkit-playsinline preload="none" poster="/aoc/showcase/desktop-aoc.jpg"></video>
             </div>
             <img class="aoc-dv-macimg" src="/aoc/showcase/macbook.png" alt="" decoding="async" loading="lazy">
           </div>
         </div>
-        <!-- PHONE frame (TODO: replace with real iPhone PNG) -->
+        <!-- PHONE frame (CSS) -->
         <div class="aoc-dv-phone">
           <div class="aoc-dv-bezel">
             <div class="aoc-dv-notch"></div>
             <div class="aoc-dv-screen">
-              <span class="aoc-dv-screen-title">Inside Agent On Camera</span>
-              <span class="aoc-dv-screen-note">Recording asset</span>
+              <video class="aoc-dv-video" id="dvVidPhone" muted loop playsinline webkit-playsinline preload="none" poster="/aoc/showcase/mobile-aoc.jpg"></video>
             </div>
           </div>
         </div>
@@ -2589,21 +2579,38 @@ img, video, iframe { max-width: 100%; height: auto; }
 (function(){
   var root = document.getElementById('device-showcase');
   if(!root) return;
-  var TABS = { aoc:'Inside Agent On Camera', skool:'910 Academy Skool Course', ig:'World class networking' };
-  var device='desktop', tab='aoc';
+  var device='desktop', tab='aoc', inView=false;
   var devBtns = root.querySelectorAll('[data-device-opt]');
   var tabBtns = root.querySelectorAll('[data-tab-opt]');
-  var titles  = root.querySelectorAll('.aoc-dv-screen-title');
+  var vidD = document.getElementById('dvVidDesktop');
+  var vidP = document.getElementById('dvVidPhone');
+  function cur(){ return device==='desktop' ? vidD : vidP; }
+  function syncVideo(){
+    var v = cur(); if(!v) return;
+    var base = '/aoc/showcase/' + (device==='desktop'?'desktop':'mobile') + '-' + tab;
+    if (v.getAttribute('data-key') !== base){
+      v.setAttribute('data-key', base);
+      v.setAttribute('poster', base + '.jpg');
+      v.setAttribute('src', base + '.mp4');
+      v.load();
+    }
+    var other = device==='desktop' ? vidP : vidD;
+    if (other) other.pause();
+    if (inView){ var p=v.play(); if(p && p.catch) p.catch(function(){}); }
+  }
   function apply(){
     root.setAttribute('data-device', device);
     root.setAttribute('data-tab', tab);
     devBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-device-opt')===device); });
     tabBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab-opt')===tab); });
-    titles.forEach(function(t){ t.textContent = TABS[tab]; });
+    syncVideo();
   }
   devBtns.forEach(function(b){ b.addEventListener('click', function(){ device=b.getAttribute('data-device-opt'); apply(); }); });
   tabBtns.forEach(function(b){ b.addEventListener('click', function(){ tab=b.getAttribute('data-tab-opt'); apply(); }); });
   apply();
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ es.forEach(function(e){ inView = e.isIntersecting; if(inView){ syncVideo(); } else { if(vidD)vidD.pause(); if(vidP)vidP.pause(); } }); }, { threshold: 0.25 }).observe(root);
+  } else { inView = true; syncVideo(); }
 })();
 </script>
 
