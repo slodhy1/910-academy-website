@@ -2111,6 +2111,19 @@ img, video, iframe { max-width: 100%; height: auto; }
 }
 
 </style>
+<style>
+  /* ===== Center all text page-wide (eyebrows, headings, subtext, cards) ===== */
+  .section-label, .section-heading, .section-sub{ text-align:center; }
+  .section-sub{ margin-left:auto; margin-right:auto; }
+  .course-card, .audience-card, .perk-card{ text-align:center; }
+  /* keep the device-switcher's left column left-aligned (intentional 2-col) */
+  .aoc-device .aoc-dv-left .section-label,
+  .aoc-device .aoc-dv-left .section-heading,
+  .aoc-device .aoc-dv-left .section-sub{ text-align:left; }
+  .aoc-device .aoc-dv-left .section-sub{ margin-left:0; }
+  /* center the Meet Claudio bio too */
+  .aoc-claudio .claudio-bio{ text-align:center; margin-left:auto; margin-right:auto; }
+</style>
 </head>
 <body>
 
