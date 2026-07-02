@@ -2278,6 +2278,29 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div style="display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:0;opacity:0;animation:fadeUp 0.8s var(--ease-out) 1s forwards;">
       <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="hero-cta" style="margin-top:0;opacity:1;animation:none;">Sign Up Now</a>
     </div>
+    <!-- Hero deal countdown (resets daily to midnight America/New_York) -->
+    <style>
+      .hero-timer{ display:flex; align-items:center; justify-content:center; gap:10px; opacity:0;
+        font-family:'Montserrat',sans-serif; font-size:.8rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--fg-muted);
+        animation:fadeUp 0.8s var(--ease-out) 1.15s forwards; }
+      .hero-timer .deal-timer{ color:var(--accent); font-weight:700; letter-spacing:.06em; font-variant-numeric:tabular-nums; }
+      @media (max-width:768px){ .hero-timer{ font-size:.72rem; letter-spacing:.1em; gap:8px; } }
+    </style>
+    <div class="hero-timer">Deal ends in <span class="deal-timer" id="dealTimer">--:--:--</span></div>
+    <script>
+    (function(){
+      var el = document.getElementById('dealTimer'); if(!el) return;
+      function left(){
+        var p = new Intl.DateTimeFormat('en-US', { timeZone:'America/New_York', hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' }).formatToParts(new Date());
+        var o = {}; p.forEach(function(x){ o[x.type] = x.value; });
+        var h = (parseInt(o.hour,10)||0)%24, m = parseInt(o.minute,10)||0, sec = parseInt(o.second,10)||0;
+        return 86400 - (h*3600 + m*60 + sec);
+      }
+      function pad(n){ return (n<10?'0':'')+n; }
+      function tick(){ var t = left(); if(t<0) t=0; el.textContent = pad(Math.floor(t/3600))+':'+pad(Math.floor((t%3600)/60))+':'+pad(t%60); }
+      tick(); setInterval(tick, 1000);
+    })();
+    </script>
   </div>
   <div class="scroll-indicator" id="scrollArrow">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
