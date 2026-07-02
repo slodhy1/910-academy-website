@@ -242,7 +242,21 @@ html.is-expired .bonus-expired-el { display: block; }
 .glow-cta:hover { box-shadow: 0 0 0 1px rgba(56,182,255,0.75), 0 0 30px rgba(56,182,255,0.7), 0 0 60px rgba(56,182,255,0.45); }
 @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 0 1px rgba(56,182,255,0.45), 0 0 18px rgba(56,182,255,0.45), 0 0 38px rgba(56,182,255,0.22); } 50% { box-shadow: 0 0 0 1px rgba(56,182,255,0.65), 0 0 30px rgba(56,182,255,0.7), 0 0 60px rgba(56,182,255,0.4); } }
 
-@media (prefers-reduced-motion: reduce) { .promo-live, .glow-cta { animation: none; } }
+/* ===== SCROLL CUE (below hero video) ===== */
+.scroll-cue { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; margin-top: var(--space-8); color: var(--fg-dim); transition: color 0.2s ease; }
+.scroll-cue span { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+.scroll-cue svg { width: 24px; height: 24px; animation: scrollBounce 2s ease-in-out infinite; }
+.scroll-cue:hover { color: var(--accent); }
+@keyframes scrollBounce { 0%, 100% { transform: translateY(0); opacity: 0.55; } 50% { transform: translateY(6px); opacity: 1; } }
+
+/* ===== SUBTLE SECTION BANDS (full-bleed gradient washes, very subtle) ===== */
+.wrap { scroll-margin-top: 80px; }
+.band-soft, .band-accent { position: relative; z-index: 0; }
+.band-soft::before, .band-accent::before { content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; }
+.band-soft::before { background: linear-gradient(180deg, rgba(255,255,255,0.022), rgba(255,255,255,0.006) 55%, transparent); }
+.band-accent::before { background: radial-gradient(85% 70% at 50% 30%, rgba(56,182,255,0.07), rgba(56,182,255,0.02) 55%, transparent 75%); }
+
+@media (prefers-reduced-motion: reduce) { .promo-live, .glow-cta, .scroll-cue svg { animation: none; } }
 
 @media (max-width: 640px) {
   .wrap { padding: 40px 16px; }
@@ -274,12 +288,16 @@ html.is-expired .bonus-expired-el { display: block; }
     <div class="video-embed">
       <video src="/aoc/aoc-ai-tutorial.mp4" playsinline preload="none" controls poster="/aoc/aoc-ai-tutorial-poster.jpg"></video>
     </div>
+    <a class="scroll-cue" href="#prompts" aria-label="Scroll down">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </a>
   </section>
 
   <div class="divider"></div>
 
   <!-- ============ PROMPTS & ASSETS ============ -->
-  <section class="wrap">
+  <section class="wrap band-soft" id="prompts">
     <!-- The prompts (verbatim, copy-paste assets) -->
     <div class="prompts">
       <h2 class="prompts-heading">The Prompts</h2>
@@ -321,7 +339,7 @@ html.is-expired .bonus-expired-el { display: block; }
   <div class="divider"></div>
 
   <!-- ============ BONUS TRAINING (the expiring one, with the timer) ============ -->
-  <section class="wrap">
+  <section class="wrap band-soft">
 
     <!-- LIVE state -->
     <p class="section-label bonus-live-el">Bonus Training</p>
@@ -368,7 +386,7 @@ html.is-expired .bonus-expired-el { display: block; }
   <div class="divider"></div>
 
   <!-- ============ AGENT ON CAMERA PROMO (page end) ============ -->
-  <section class="wrap">
+  <section class="wrap band-accent">
     <p class="section-label accent">Limited Time Sale</p>
     <h2 class="aoc-promo-title">Agent On Camera<br>x 910 Academy Skool</h2>
     <div class="aoc-price">
@@ -402,7 +420,7 @@ html.is-expired .bonus-expired-el { display: block; }
   <div class="modal">
     <button class="modal-close" type="button" data-close aria-label="Close">&times;</button>
     <h3 class="modal-title">Download the Assets</h3>
-    <p class="modal-sub">Enter your details and we'll unlock the download.</p>
+    <p class="modal-sub">Enter your details to download the assets.</p>
     <form class="modal-form" id="gateForm" novalidate>
       <input type="text" name="first_name" placeholder="First name" autocomplete="given-name" required>
       <input type="email" name="email" placeholder="Email" autocomplete="email" required>
