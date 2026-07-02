@@ -145,7 +145,7 @@ body::before {
   border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border);
   background: #000; box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(56,182,255,0.04);
 }
-.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-embed iframe, .video-embed video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: contain; background: #000; }
 
 /* ===== PROMPTS ===== */
 .prompts { margin-top: var(--space-16); text-align: left; }
@@ -232,13 +232,29 @@ html.is-expired .bonus-expired-el { display: block; }
   <section class="wrap">
     <p class="section-label accent">Free Training</p>
     <h1 class="hero-title">Wondering how you can make<br>this viral reel?</h1>
-    <p class="hero-sub">Copy the exact prompts below.</p>
+    <p class="hero-sub">Watch the tutorial, then grab the prompts below.</p>
 
     <!-- Vertical 9:16 preview (aoc-higgsfield.mp4). Muted autoplay loop = silent 8s demo; controls to scrub/unmute. -->
     <div class="video-vertical">
       <video src="/aoc/aoc-higgsfield.mp4" muted loop autoplay playsinline preload="metadata" controls></video>
     </div>
+  </section>
 
+  <div class="divider"></div>
+
+  <!-- ============ TUTORIAL (the actual step-by-step video) ============ -->
+  <section class="wrap">
+    <p class="section-label accent">Step by Step</p>
+    <h2 class="bonus-title">The Full Tutorial</h2>
+    <div class="video-embed">
+      <video src="/aoc/aoc-ai-tutorial.mp4" playsinline preload="none" controls poster="/aoc/aoc-ai-tutorial-poster.jpg"></video>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ============ PROMPTS & ASSETS ============ -->
+  <section class="wrap">
     <!-- The prompts (verbatim, copy-paste assets) -->
     <div class="prompts">
       <h2 class="prompts-heading">And Here Are the Prompts</h2>
@@ -252,7 +268,7 @@ html.is-expired .bonus-expired-el { display: block; }
           <span class="prompt-tool">Nano Banana Pro Prompt</span>
           <button class="prompt-copy" type="button">Copy</button>
         </div>
-        <p class="prompt-body">Replace the text on the black flag so it reads: [YOUR TEXT]. Keep everything else in the image exactly the same. Match the original typography: bold condensed all-caps sans-serif lettering in the same off-white/cream color, breaking the text into lines that fill the flag the way the original does. Include all punctuation exactly as written. The text must follow the flag's fabric as it waves in the wind: warp, curve, and perspective-distort the letters along the same folds, ripples, and angle as the original, with matching shadows in the creases, so it looks screen-printed on the fabric, not overlaid digitally. Preserve the two climbers, the tower structure, the red beacon light, and the water background untouched.</p>
+        <p class="prompt-body">Replace the text on the black flag so it reads: [YOUR TEXT] keep everything else in the image exactly the same. Match the original typography: bold condensed all-caps sans-serif lettering in the same off-white/cream color, breaking the text into lines that fill the flag the way the original does. Include all punctuation exactly as written. The text must follow the flag's fabric as it waves in the wind: warp, curve, and perspective-distort the letters along the same folds, ripples, and angle as the original, with matching shadows in the creases, so it looks screen-printed on the fabric, not overlaid digitally. Preserve the two climbers, the tower structure, the red beacon light, and the water background untouched.</p>
         <p class="prompt-hint">Run this on the image named FRAME from the assets folder to replace the text on the flag.</p>
       </div>
 
