@@ -31,6 +31,9 @@
 <script>
   var EXPIRY = "2026-07-04T00:00:00-04:00";
   window.__FT_TARGET__ = Date.parse(EXPIRY);
+  /* No-FOUC gate: decide state before the body paints, so an expired
+     visitor never flashes the video/countdown. */
+  if (Date.now() >= window.__FT_TARGET__) document.documentElement.classList.add('is-expired');
 </script>
 
 <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -174,6 +177,11 @@ body::before {
 .ft-cta:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
 .ft-cta-note { font-size: 0.95rem; color: var(--fg-dim); margin-top: var(--space-4); }
 
+/* ===== EXPIRY GATE (bonus training) ===== */
+.bonus-expired-el { display: none; }
+html.is-expired .bonus-live-el { display: none; }
+html.is-expired .bonus-expired-el { display: block; }
+
 /* ===== FOOTER (ported) ===== */
 .footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
 .footer-logo img { height: 28px; margin: 0 auto var(--space-8); opacity: 0.7; }
@@ -242,29 +250,43 @@ body::before {
 
   <!-- ============ BONUS TRAINING (the expiring one, with the timer) ============ -->
   <section class="wrap">
-    <p class="section-label">Bonus Training</p>
+
+    <!-- LIVE state -->
+    <p class="section-label bonus-live-el">Bonus Training</p>
     <!-- PLACEHOLDER header -->
-    <h2 class="bonus-title">Your Free Bonus Training</h2>
+    <h2 class="bonus-title bonus-live-el">Your Free Bonus Training</h2>
 
-    <!-- Vimeo bonus training (pulled from Skool). Press-to-play, no autoplay. -->
-    <div class="video-embed">
-      <iframe
-        src="https://player.vimeo.com/video/1164998439?h=258b8faaea&badge=0&autopause=0&player_id=0&app_id=58479"
-        title="910 Academy Bonus Training"
-        allow="autoplay; fullscreen; picture-in-picture"
-        allowfullscreen loading="lazy"></iframe>
-    </div>
+    <div class="bonus-live-el">
+      <!-- Vimeo bonus training (pulled from Skool). data-src (no src) so it never loads
+           after expiry; JS promotes it to src only while live. Press-to-play, no autoplay. -->
+      <div class="video-embed">
+        <iframe
+          data-src="https://player.vimeo.com/video/1164998439?h=258b8faaea&badge=0&autopause=0&player_id=0&app_id=58479"
+          title="910 Academy Bonus Training"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
 
-    <!-- Small subtext: what this training specifically is (PLACEHOLDER) -->
-    <p class="bonus-note">A full breakdown of our AI editing workflow for real estate video.</p>
+      <!-- Small subtext: what this training specifically is (PLACEHOLDER) -->
+      <p class="bonus-note">A full breakdown of our AI editing workflow for real estate video.</p>
 
-    <div class="ft-timer-wrap">
-      <div class="hero-timer">
-        <span class="deal-label">Training expires in</span>
-        <span class="deal-timer" id="ftTimer">--:--:--</span>
+      <div class="ft-timer-wrap">
+        <div class="hero-timer">
+          <span class="deal-label">Training expires in</span>
+          <span class="deal-timer" id="ftTimer">--:--:--</span>
+        </div>
       </div>
     </div>
 
+    <!-- EXPIRED state (shown after EXPIRY; the video is never rendered here) -->
+    <div class="bonus-expired-el">
+      <p class="section-label">Bonus Training</p>
+      <!-- PLACEHOLDER expired copy -->
+      <h2 class="bonus-title">This Free Training Has Closed</h2>
+      <p class="bonus-note">Join 910 Academy to get this training back, plus everything else inside.</p>
+    </div>
+
+    <!-- CTA (shown in both states) -->
     <div class="ft-cta-wrap">
       <a class="ft-cta" href="https://www.skool.com/910-academy/about?ref=301e640acfa44e85b6a6a11761baaf6d" target="_blank" rel="noopener noreferrer">Join 910 Academy</a>
       <!-- PLACEHOLDER framing line -->
@@ -291,20 +313,34 @@ body::before {
 <script>
 (function () {
   var TARGET = window.__FT_TARGET__;
+  if (!TARGET) return;
   var el = document.getElementById('ftTimer');
-  if (!el || !TARGET) return;
+  var iframe = document.querySelector('.video-embed iframe'); // the Vimeo bonus training
+  var ticker = null;
+
+  function expire() {
+    if (iframe) iframe.removeAttribute('src');            // stop + unload the video
+    document.documentElement.classList.add('is-expired'); // CSS swaps to the closed state
+    if (ticker) { clearInterval(ticker); ticker = null; }
+  }
+
+  // On load: if already past the deadline, never load the video.
+  if (Date.now() >= TARGET) { expire(); return; }
+  // Live: promote the deferred src so the video loads and plays.
+  if (iframe && iframe.dataset.src) iframe.src = iframe.dataset.src;
+
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function tick() {
     var diff = TARGET - Date.now();
-    if (diff <= 0) { el.textContent = '00:00:00'; return; }
+    if (diff <= 0) { if (el) el.textContent = '00:00:00'; expire(); return; } // hits zero -> gate
     var s = Math.floor(diff / 1000);
     var h = Math.floor(s / 3600);
     var m = Math.floor((s % 3600) / 60);
     var sec = s % 60;
-    el.textContent = pad(h) + ':' + pad(m) + ':' + pad(sec);
+    if (el) el.textContent = pad(h) + ':' + pad(m) + ':' + pad(sec);
   }
   tick();
-  setInterval(tick, 1000);
+  ticker = setInterval(tick, 1000);
 })();
 
 /* Copy-to-clipboard for the prompt cards */
