@@ -3076,6 +3076,16 @@ END SOFT-DELETE -->
       <span><s>$7,518</s></span>
     </div>
 
+    <style>
+      .aoc-today-only{ display:block; width:fit-content; margin:var(--space-2) auto var(--space-6);
+        font-family:'Montserrat',sans-serif; font-weight:700; font-size:.9rem; letter-spacing:.2em; text-transform:uppercase;
+        color:#0a0a0a; background:var(--accent); padding:9px 24px; border-radius:10px;
+        animation:aocTodayPulse 2.2s ease-in-out infinite; }
+      @keyframes aocTodayPulse{ 0%,100%{ box-shadow:0 0 8px 1px rgba(56,182,255,.35); } 50%{ box-shadow:0 0 22px 6px rgba(56,182,255,.7); } }
+      @media (prefers-reduced-motion:reduce){ .aoc-today-only{ animation:none; box-shadow:0 0 14px 3px rgba(56,182,255,.5); } }
+    </style>
+    <div class="aoc-today-only">Today Only</div>
+
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
       <p class="value-final-price"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</p>
