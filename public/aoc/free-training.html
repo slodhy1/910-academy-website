@@ -208,11 +208,31 @@ html.is-expired .bonus-expired-el { display: block; }
 .aoc-price-now { font-size: clamp(2.6rem, 7vw, 3.6rem); font-weight: 800; color: var(--accent); letter-spacing: 0.02em; line-height: 1; }
 .aoc-badge { display: inline-block; margin-top: var(--space-5); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(56,182,255,0.4); border-radius: 100px; padding: 8px 18px; }
 
+.prompts-important { color: var(--accent); font-weight: 700; }
+
+/* ===== MODALS (shared) ===== */
+.modal-overlay { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.modal-overlay.open { display: flex; }
+.modal { position: relative; width: 100%; max-width: 460px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-8); box-shadow: 0 40px 120px rgba(0,0,0,0.6); text-align: center; }
+.modal-close { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: var(--fg-dim); font-size: 22px; line-height: 1; background: none; transition: all 0.2s ease; }
+.modal-close:hover { color: #fff; background: rgba(255,255,255,0.06); }
+.modal-title { font-size: 1.4rem; font-weight: 700; line-height: 1.2; margin-bottom: var(--space-3); }
+.modal-sub { font-size: 0.95rem; color: var(--fg-muted); line-height: 1.5; margin-bottom: var(--space-6); }
+.modal .ft-cta { display: block; width: 100%; text-align: center; }
+.modal-form { display: flex; flex-direction: column; gap: var(--space-3); text-align: left; }
+.modal-form input[type=text], .modal-form input[type=email], .modal-form input[type=tel] { width: 100%; padding: 13px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); font-family: var(--font); font-size: 0.95rem; }
+.modal-form input:focus { outline: none; border-color: var(--accent); }
+.modal-form input::placeholder { color: var(--fg-dim); }
+.modal-consent { display: flex; gap: 10px; align-items: flex-start; font-size: 0.75rem; color: var(--fg-dim); line-height: 1.45; margin-top: 6px; text-align: left; }
+.modal-consent input { margin-top: 2px; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent); }
+.modal-error { color: #ff7676; font-size: 0.82rem; min-height: 1.1em; margin: 2px 0 0; }
+
 @media (max-width: 640px) {
   .wrap { padding: 40px 16px; }
   .ft-cta { padding: 15px 30px; font-size: 12px; }
   .prompt-card { padding: var(--space-5); }
   .footer { padding: var(--space-12) var(--space-6); }
+  .modal { padding: var(--space-6); }
 }
 </style>
 </head>
@@ -228,24 +248,12 @@ html.is-expired .bonus-expired-el { display: block; }
 
 <main class="page">
 
-  <!-- ============ HERO: Empire State Building recreation (Instagram hook) ============ -->
+  <!-- ============ HERO (tutorial video) ============ -->
   <section class="wrap">
-    <p class="section-label accent">Free Training</p>
-    <h1 class="hero-title">Wondering how you can make<br>this viral reel?</h1>
+    <h1 class="hero-title">How to make the<br>viral empire state flag Reel</h1>
     <p class="hero-sub">Watch the tutorial, then grab the prompts below.</p>
 
-    <!-- Vertical 9:16 preview (aoc-higgsfield.mp4). Muted autoplay loop = silent 8s demo; controls to scrub/unmute. -->
-    <div class="video-vertical">
-      <video src="/aoc/aoc-higgsfield.mp4" muted loop autoplay playsinline preload="metadata" controls></video>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ============ TUTORIAL (the actual step-by-step video) ============ -->
-  <section class="wrap">
-    <p class="section-label accent">Step by Step</p>
-    <h2 class="bonus-title">The Full Tutorial</h2>
+    <!-- The actual step-by-step tutorial (horizontal 16:9). Poster + preload=none. -->
     <div class="video-embed">
       <video src="/aoc/aoc-ai-tutorial.mp4" playsinline preload="none" controls poster="/aoc/aoc-ai-tutorial-poster.jpg"></video>
     </div>
@@ -257,10 +265,10 @@ html.is-expired .bonus-expired-el { display: block; }
   <section class="wrap">
     <!-- The prompts (verbatim, copy-paste assets) -->
     <div class="prompts">
-      <h2 class="prompts-heading">And Here Are the Prompts</h2>
-      <p class="prompts-note">These prompts need an image and a video. Download both from the assets folder, then follow the note under each prompt.</p>
+      <h2 class="prompts-heading">The prompts</h2>
+      <p class="prompts-note"><span class="prompts-important">IMPORTANT:</span> These prompts need an image and video download. Tap the button below to download the assets, then follow the note under each prompt.</p>
       <div class="assets-cta-wrap">
-        <a class="assets-cta" href="https://www.dropbox.com/scl/fo/lf89tgqmw20nmaij43yq6/ABUI9MfDaMfox0P8YcI5sYg?rlkey=yxf4d8zl9f1mrnwe8yl31eflv&st=7k7u4q7x&e=1&dl=0" target="_blank" rel="noopener noreferrer">Download the Assets</a>
+        <button type="button" class="assets-cta" data-gate>Download the Assets</button>
       </div>
 
       <div class="prompt-card">
@@ -362,6 +370,36 @@ html.is-expired .bonus-expired-el { display: block; }
   <p class="footer-disclaimer">Some links on this page are affiliate links, and a small commission may be earned through them at no additional cost to you.</p>
 </footer>
 
+<!-- ===== MODAL: asset-download lead gate ===== -->
+<div class="modal-overlay" id="gateModal" role="dialog" aria-modal="true" aria-label="Download the assets">
+  <div class="modal">
+    <button class="modal-close" type="button" data-close aria-label="Close">&times;</button>
+    <h3 class="modal-title">Download the assets</h3>
+    <p class="modal-sub">Enter your details and we'll unlock the download.</p>
+    <form class="modal-form" id="gateForm" novalidate>
+      <input type="text" name="first_name" placeholder="First name" autocomplete="given-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="phone" placeholder="Phone number" autocomplete="tel" required>
+      <label class="modal-consent">
+        <input type="checkbox" name="consent" required>
+        <span>By checking this box, you agree to receive marketing texts and emails from 910 Academy. Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.</span>
+      </label>
+      <p class="modal-error" id="gateError" role="alert"></p>
+      <button type="submit" class="ft-cta" id="gateSubmit">Download the Assets</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== MODAL: 10-second Skool promo ===== -->
+<div class="modal-overlay" id="promoModal" role="dialog" aria-modal="true" aria-label="Join 910 Academy">
+  <div class="modal">
+    <button class="modal-close" type="button" data-close aria-label="Close">&times;</button>
+    <h3 class="modal-title">Want to learn how to edit like the pros?</h3>
+    <p class="modal-sub">Join our Skool to get trainings on AI editing, viral captions, and so much more.</p>
+    <a class="ft-cta" href="https://www.skool.com/910-academy/about?ref=301e640acfa44e85b6a6a11761baaf6d" target="_blank" rel="noopener noreferrer" data-close>Join 910 Academy</a>
+  </div>
+</div>
+
 <!-- ===== Countdown (ticks to the fixed EXPIRY; same deadline for everyone) ===== -->
 <script>
 (function () {
@@ -414,6 +452,70 @@ html.is-expired .bonus-expired-el { display: block; }
       }
     });
   });
+})();
+</script>
+
+<!-- ===== Modals: asset-download gate + 10s promo ===== -->
+<script>
+(function () {
+  var DROPBOX_URL = "https://www.dropbox.com/scl/fo/lf89tgqmw20nmaij43yq6/ABUI9MfDaMfox0P8YcI5sYg?rlkey=yxf4d8zl9f1mrnwe8yl31eflv&st=7k7u4q7x&e=1&dl=0";
+  function openModal(id) { var m = document.getElementById(id); if (m) m.classList.add('open'); }
+  function closeModal(m) { if (m) m.classList.remove('open'); }
+
+  // Close wiring: backdrop click, X / any [data-close], Esc
+  document.querySelectorAll('.modal-overlay').forEach(function (ov) {
+    ov.addEventListener('click', function (e) { if (e.target === ov) closeModal(ov); });
+    ov.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', function () { closeModal(ov); }); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.open').forEach(function (m) { closeModal(m); }); }
+  });
+
+  // Download gate: intercept the assets button(s)
+  document.querySelectorAll('[data-gate]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) { e.preventDefault(); openModal('gateModal'); });
+  });
+
+  var form = document.getElementById('gateForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var err = document.getElementById('gateError');
+      var fn = form.first_name.value.trim();
+      var email = form.email.value.trim();
+      var phone = form.phone.value.trim();
+      var consent = form.consent.checked;
+      if (!fn) { err.textContent = 'Please enter your first name.'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email.'; return; }
+      if (!phone) { err.textContent = 'Please enter your phone number.'; return; }
+      if (!consent) { err.textContent = 'Please agree to continue.'; return; }
+      err.textContent = '';
+      // Save the lead in the background; never block the download on it.
+      try {
+        fetch('/api/aoc/free-training-lead', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ first_name: fn, email: email, phone: phone, consent: true }),
+          keepalive: true
+        }).catch(function () {});
+      } catch (_) {}
+      // Open the download synchronously (within the click gesture) so it isn't popup-blocked.
+      window.open(DROPBOX_URL, '_blank', 'noopener');
+      closeModal(document.getElementById('gateModal'));
+      form.reset();
+    });
+  }
+
+  // 10-second Skool promo (once per session)
+  try {
+    if (!sessionStorage.getItem('ft_promo_seen')) {
+      setTimeout(function () {
+        openModal('promoModal');
+        try { sessionStorage.setItem('ft_promo_seen', '1'); } catch (_) {}
+      }, 10000);
+    }
+  } catch (_) {
+    setTimeout(function () { openModal('promoModal'); }, 10000);
+  }
 })();
 </script>
 
