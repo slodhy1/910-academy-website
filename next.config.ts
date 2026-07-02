@@ -70,6 +70,8 @@ const nextConfig: NextConfig = {
       // AOC waitlist thank-you page (nested static page)
       { source: "/aoc/thanks", destination: "/aoc/thanks.html" },
       { source: "/aoc/join", destination: "/aoc/join.html" },
+      // 24-hour expiring free-training funnel (prod serves via cleanUrls)
+      { source: "/aoc/free-training", destination: "/aoc/free-training.html" },
       // Free live-event (/levels) confirmation page (nested static page)
       { source: "/levels/thanks", destination: "/levels/thanks.html" },
     ];
