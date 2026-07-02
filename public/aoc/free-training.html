@@ -227,14 +227,32 @@ html.is-expired .bonus-expired-el { display: block; }
 .modal-consent input { margin-top: 2px; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent); }
 .modal-error { color: #ff7676; font-size: 0.82rem; min-height: 1.1em; margin: 2px 0 0; }
 
-/* ===== POPUP (Agent on Camera promo) ===== */
+/* ===== POPUP (Agent on Camera promo), refined ===== */
 .modal { max-height: 90vh; overflow-y: auto; }
-.modal-promo { max-width: 500px; }
-.modal-title-lg { font-size: clamp(1.2rem, 3vw, 1.55rem); line-height: 1.25; }
-.modal-img { display: block; width: auto; height: auto; max-width: 100%; max-height: 190px; margin: var(--space-4) auto var(--space-5); border-radius: 12px; border: 1px solid var(--border); }
-.promo-live { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-2); animation: blink 1.1s ease-in-out infinite; }
-.modal-promo .aoc-price { margin-top: var(--space-2); margin-bottom: var(--space-5); }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+.modal-promo {
+  max-width: 480px;
+  background: radial-gradient(130% 55% at 50% 0%, rgba(56,182,255,0.09), transparent 62%), var(--bg-elevated);
+  border: 1px solid rgba(56,182,255,0.14);
+}
+.modal-title-lg { font-size: clamp(1.2rem, 3vw, 1.55rem); line-height: 1.28; margin-bottom: 0; }
+.modal-img {
+  display: block; width: auto; height: auto; max-width: 100%; max-height: 200px;
+  margin: var(--space-6) auto var(--space-5);
+  border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+}
+.promo-live {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 var(--space-4);
+}
+.live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex-shrink: 0; animation: livePulse 1.5s ease-out infinite; }
+@keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(56,182,255,0.55); } 70% { box-shadow: 0 0 0 9px rgba(56,182,255,0); } 100% { box-shadow: 0 0 0 0 rgba(56,182,255,0); } }
+.promo-price { display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; column-gap: 14px; row-gap: 4px; margin: 0 0 var(--space-6); }
+.promo-price-old { font-size: 1.5rem; font-weight: 600; color: var(--fg-dim); text-decoration: line-through; }
+.promo-price-now { font-size: clamp(2.8rem, 9vw, 3.6rem); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.01em; }
+.promo-price-tag { width: 100%; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted); }
+.modal-cta { box-shadow: 0 0 32px rgba(56,182,255,0.34), 0 10px 30px rgba(0,0,0,0.45); }
+.modal-cta:hover { box-shadow: 0 0 44px rgba(56,182,255,0.5), 0 10px 30px rgba(0,0,0,0.45); }
 
 /* ===== MID-PAGE CTA (Learn to edit like the pros) ===== */
 .mini-cta-title { font-size: clamp(1.9rem, 4.6vw, 2.9rem); font-weight: 700; font-style: italic; line-height: 1.12; letter-spacing: var(--tracking-tight); color: var(--fg); }
@@ -251,12 +269,13 @@ html.is-expired .bonus-expired-el { display: block; }
 
 /* ===== SUBTLE SECTION BANDS (full-bleed gradient washes, very subtle) ===== */
 .wrap { scroll-margin-top: 80px; }
-.band-soft, .band-accent { position: relative; z-index: 0; }
-.band-soft::before, .band-accent::before { content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; }
+.band-soft, .band-accent, .band-cta { position: relative; z-index: 0; }
+.band-soft::before, .band-accent::before, .band-cta::before { content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; }
 .band-soft::before { background: linear-gradient(180deg, rgba(255,255,255,0.022), rgba(255,255,255,0.006) 55%, transparent); }
 .band-accent::before { background: radial-gradient(85% 70% at 50% 30%, rgba(56,182,255,0.07), rgba(56,182,255,0.02) 55%, transparent 75%); }
+.band-cta::before { background: radial-gradient(55% 92% at 50% 50%, rgba(56,182,255,0.10), transparent 72%); }
 
-@media (prefers-reduced-motion: reduce) { .promo-live, .glow-cta, .scroll-cue svg { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .live-dot, .glow-cta, .scroll-cue svg { animation: none; } }
 
 @media (max-width: 640px) {
   .wrap { padding: 40px 16px; }
@@ -329,7 +348,7 @@ html.is-expired .bonus-expired-el { display: block; }
   <div class="divider"></div>
 
   <!-- ============ MID-PAGE CTA: Learn to edit like the pros ============ -->
-  <section class="wrap">
+  <section class="wrap band-cta">
     <h2 class="mini-cta-title">Learn to Edit Like the Pros</h2>
     <div class="ft-cta-wrap">
       <a class="ft-cta glow-cta" href="https://www.skool.com/910-academy/about?ref=301e640acfa44e85b6a6a11761baaf6d" target="_blank" rel="noopener noreferrer">Join 910 Academy</a>
@@ -440,13 +459,14 @@ html.is-expired .bonus-expired-el { display: block; }
   <div class="modal modal-promo">
     <button class="modal-close" type="button" data-close aria-label="Close">&times;</button>
     <h3 class="modal-title modal-title-lg">Do You Want to Learn the Industry's Best-Kept Secrets to Growing Your Real Estate Media Business?</h3>
-    <img class="modal-img" src="/aoc/aoc-popup.jpeg" alt="Agent on Camera" width="1600" height="900" decoding="async">
-    <p class="promo-live">Agent on Camera is now live</p>
-    <div class="aoc-price">
-      <span class="aoc-price-old">$910</span>
-      <span class="aoc-price-now">$710</span>
+    <img class="modal-img" src="/aoc/aoc-popup.jpeg" alt="What's inside Agent On Camera" width="1600" height="900" decoding="async">
+    <p class="promo-live"><span class="live-dot"></span>Agent On Camera is now live</p>
+    <div class="promo-price">
+      <span class="promo-price-old">$910</span>
+      <span class="promo-price-now">$710</span>
+      <span class="promo-price-tag">Today only</span>
     </div>
-    <a class="ft-cta" href="/aoc/join" data-close>Get Agent on Camera</a>
+    <a class="ft-cta modal-cta" href="/aoc/join" data-close>Get Agent on Camera</a>
   </div>
 </div>
 
