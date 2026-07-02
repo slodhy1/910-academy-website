@@ -25,11 +25,12 @@
      FREE-TRAINING EXPIRY (bonus training). EDIT THIS ONE LINE ONLY.
      ISO-8601 with an explicit timezone offset = one absolute instant, so
      every visitor counts down to the SAME deadline regardless of their
-     local timezone. New York is on daylight time (EDT = UTC-4) in July,
-     so midnight Eastern at the start of Fri Jul 4, 2026 is -04:00.
+     local timezone. New York is on daylight time (EDT = UTC-4) in July.
+     Set to 12:00 PM (noon) Eastern on Fri Jul 4, 2026 = -04:00
+     (roughly a 48-hour window; reads about 46 hours at deploy time).
      ================================================================== -->
 <script>
-  var EXPIRY = "2026-07-04T00:00:00-04:00";
+  var EXPIRY = "2026-07-04T12:00:00-04:00";
   window.__FT_TARGET__ = Date.parse(EXPIRY);
   /* No-FOUC gate: decide state before the body paints, so an expired
      visitor never flashes the video/countdown. */
@@ -191,6 +192,7 @@ html.is-expired .bonus-expired-el { display: block; }
 .footer-copy { font-size: 13px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.04em; }
 .footer-credit-link { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 2px; transition: color 0.2s ease; }
 .footer-credit-link:hover { color: var(--accent); }
+.footer-disclaimer { font-size: 11px; font-weight: 400; color: var(--fg-ghost); letter-spacing: 0.02em; line-height: 1.5; max-width: 460px; margin: var(--space-5) auto 0; }
 
 @media (max-width: 640px) {
   .wrap { padding: 40px 16px; }
@@ -306,6 +308,7 @@ html.is-expired .bonus-expired-el { display: block; }
     <a href="https://www.facebook.com/groups/415895414544196/" target="_blank" rel="noopener noreferrer">Facebook</a>
   </div>
   <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved. <span aria-hidden="true">&middot;</span> Built by <a class="footer-credit-link" href="https://instagram.com/slodhy" target="_blank" rel="noopener noreferrer">@slodhy</a></p>
+  <p class="footer-disclaimer">Some links on this page are affiliate links, and a small commission may be earned through them at no additional cost to you.</p>
 </footer>
 
 <!-- ===== Countdown (ticks to the fixed EXPIRY; same deadline for everyone) ===== -->
