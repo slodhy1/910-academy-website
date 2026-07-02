@@ -237,7 +237,7 @@ html.is-expired .bonus-expired-el { display: block; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
 /* ===== MID-PAGE CTA (Learn to edit like the pros) ===== */
-.mini-cta-title { font-size: clamp(1.1rem, 2.6vw, 1.5rem); font-weight: 700; line-height: 1.2; color: var(--fg); }
+.mini-cta-title { font-size: clamp(1.9rem, 4.6vw, 2.9rem); font-weight: 700; font-style: italic; line-height: 1.12; letter-spacing: var(--tracking-tight); color: var(--fg); }
 .glow-cta { box-shadow: 0 0 0 1px rgba(56,182,255,0.5), 0 0 22px rgba(56,182,255,0.55), 0 0 46px rgba(56,182,255,0.3); animation: glowPulse 2.4s ease-in-out infinite; }
 .glow-cta:hover { box-shadow: 0 0 0 1px rgba(56,182,255,0.75), 0 0 30px rgba(56,182,255,0.7), 0 0 60px rgba(56,182,255,0.45); }
 @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 0 1px rgba(56,182,255,0.45), 0 0 18px rgba(56,182,255,0.45), 0 0 38px rgba(56,182,255,0.22); } 50% { box-shadow: 0 0 0 1px rgba(56,182,255,0.65), 0 0 30px rgba(56,182,255,0.7), 0 0 60px rgba(56,182,255,0.4); } }
@@ -267,7 +267,7 @@ html.is-expired .bonus-expired-el { display: block; }
 
   <!-- ============ HERO (tutorial video) ============ -->
   <section class="wrap">
-    <h1 class="hero-title">How to make the<br>viral empire state flag Reel</h1>
+    <h1 class="hero-title">How to Make the<br>Viral Empire State Flag Reel</h1>
     <p class="hero-sub">Watch the tutorial, then grab the prompts below.</p>
 
     <!-- The actual step-by-step tutorial (horizontal 16:9). Poster + preload=none. -->
@@ -282,7 +282,7 @@ html.is-expired .bonus-expired-el { display: block; }
   <section class="wrap">
     <!-- The prompts (verbatim, copy-paste assets) -->
     <div class="prompts">
-      <h2 class="prompts-heading">The prompts</h2>
+      <h2 class="prompts-heading">The Prompts</h2>
       <p class="prompts-note"><span class="prompts-important">IMPORTANT:</span> These prompts need an image and video download. Tap the button below to download the assets, then follow the note under each prompt.</p>
       <div class="assets-cta-wrap">
         <button type="button" class="assets-cta" data-gate>Download the Assets</button>
@@ -312,7 +312,7 @@ html.is-expired .bonus-expired-el { display: block; }
 
   <!-- ============ MID-PAGE CTA: Learn to edit like the pros ============ -->
   <section class="wrap">
-    <h2 class="mini-cta-title">Learn to edit like the pros</h2>
+    <h2 class="mini-cta-title">Learn to Edit Like the Pros</h2>
     <div class="ft-cta-wrap">
       <a class="ft-cta glow-cta" href="https://www.skool.com/910-academy/about?ref=301e640acfa44e85b6a6a11761baaf6d" target="_blank" rel="noopener noreferrer">Join 910 Academy</a>
     </div>
@@ -325,7 +325,7 @@ html.is-expired .bonus-expired-el { display: block; }
 
     <!-- LIVE state -->
     <p class="section-label bonus-live-el">Bonus Training</p>
-    <h2 class="bonus-title bonus-live-el">Sneak peek inside 910 Academy</h2>
+    <h2 class="bonus-title bonus-live-el">Sneak Peek Inside 910 Academy</h2>
 
     <div class="bonus-live-el">
       <!-- Vimeo bonus training (pulled from Skool). data-src (no src) so it never loads
@@ -370,7 +370,7 @@ html.is-expired .bonus-expired-el { display: block; }
   <!-- ============ AGENT ON CAMERA PROMO (page end) ============ -->
   <section class="wrap">
     <p class="section-label accent">Limited Time Sale</p>
-    <h2 class="aoc-promo-title">Agent on Camera x 910 Academy Skool</h2>
+    <h2 class="aoc-promo-title">Agent On Camera<br>x 910 Academy Skool</h2>
     <div class="aoc-price">
       <span class="aoc-price-old">$910</span>
       <span class="aoc-price-now">$710</span>
@@ -401,7 +401,7 @@ html.is-expired .bonus-expired-el { display: block; }
 <div class="modal-overlay" id="gateModal" role="dialog" aria-modal="true" aria-label="Download the assets">
   <div class="modal">
     <button class="modal-close" type="button" data-close aria-label="Close">&times;</button>
-    <h3 class="modal-title">Download the assets</h3>
+    <h3 class="modal-title">Download the Assets</h3>
     <p class="modal-sub">Enter your details and we'll unlock the download.</p>
     <form class="modal-form" id="gateForm" novalidate>
       <input type="text" name="first_name" placeholder="First name" autocomplete="given-name" required>
@@ -421,7 +421,7 @@ html.is-expired .bonus-expired-el { display: block; }
 <div class="modal-overlay" id="promoModal" role="dialog" aria-modal="true" aria-label="Agent on Camera">
   <div class="modal modal-promo">
     <button class="modal-close" type="button" data-close aria-label="Close">&times;</button>
-    <h3 class="modal-title modal-title-lg">Do you want to learn the industry's best-kept secrets to growing your real estate media business?</h3>
+    <h3 class="modal-title modal-title-lg">Do You Want to Learn the Industry's Best-Kept Secrets to Growing Your Real Estate Media Business?</h3>
     <img class="modal-img" src="/aoc/aoc-popup.jpeg" alt="Agent on Camera" width="1600" height="900" decoding="async">
     <p class="promo-live">Agent on Camera is now live</p>
     <div class="aoc-price">
@@ -537,17 +537,8 @@ html.is-expired .bonus-expired-el { display: block; }
     });
   }
 
-  // 10-second Skool promo (once per session)
-  try {
-    if (!sessionStorage.getItem('ft_promo_seen')) {
-      setTimeout(function () {
-        openModal('promoModal');
-        try { sessionStorage.setItem('ft_promo_seen', '1'); } catch (_) {}
-      }, 10000);
-    }
-  } catch (_) {
-    setTimeout(function () { openModal('promoModal'); }, 10000);
-  }
+  // 10-second Agent on Camera promo (fires on every page load)
+  setTimeout(function () { openModal('promoModal'); }, 10000);
 })();
 </script>
 
