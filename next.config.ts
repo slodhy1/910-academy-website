@@ -72,6 +72,8 @@ const nextConfig: NextConfig = {
       { source: "/aoc/join", destination: "/aoc/join.html" },
       // 24-hour expiring free-training funnel (prod serves via cleanUrls)
       { source: "/aoc/free-training", destination: "/aoc/free-training.html" },
+      // Affiliate duplicate of the AOC landing page (Skool CTAs carry the affiliate ref)
+      { source: "/aoc/join-aff", destination: "/aoc/join-aff.html" },
       // Free live-event (/levels) confirmation page (nested static page)
       { source: "/levels/thanks", destination: "/levels/thanks.html" },
     ];
