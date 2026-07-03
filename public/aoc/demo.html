@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent On Camera Demo</title>
+
+<!-- =========================================================================
+     DEAL END: the "Deal ends in" countdown expires at this exact time.
+     Set to tonight at 12:00 AM (midnight) Eastern. EDIT THIS ONE LINE.
+     (July = EDT = UTC-4. In winter use -05:00 for EST.)
+     ========================================================================= -->
+<script>
+  var DEAL_END = "2026-07-04T00:00:00-04:00"; // tonight, midnight Eastern
+  window.__DEAL_END__ = Date.parse(DEAL_END);
+</script>
+
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.910academy.com/aoc/demo">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:title" content="Agent On Camera Demo">
+<meta property="og:description" content="Watch the Agent On Camera demo, then join.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agent On Camera Demo">
+<meta name="description" content="Watch the Agent On Camera demo, then join.">
+
+<link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 500; font-display: swap; src: url('/fonts/montserrat-500.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 700; font-display: swap; src: url('/fonts/montserrat-700.woff2') format('woff2'); }
+</style>
+
+<style>
+:root {
+  --bg-base: #0a0a0a;
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --border: rgba(255, 255, 255, 0.08);
+  --font: 'Montserrat', sans-serif;
+  --radius-lg: 20px;
+  --radius-pill: 100px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  min-height: 100vh;
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: 1.4;
+  overflow-x: hidden;
+  position: relative;
+}
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* Ambient accent glows */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+}
+body::before { top: -20%; left: -10%; width: 55vw; height: 55vw; background: rgba(56, 182, 255, 0.10); }
+body::after  { bottom: -25%; right: -10%; width: 55vw; height: 55vw; background: rgba(56, 182, 255, 0.06); }
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 64px 24px 80px;
+  text-align: center;
+}
+
+/* Brand mark */
+.brand {
+  height: 34px;
+  width: auto;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 0.05s forwards;
+}
+
+/* Headline */
+.headline {
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 14ch;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 0.15s forwards;
+}
+
+/* Video */
+.video-wrap {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(56, 182, 255, 0.12) 0%, transparent 62%),
+    linear-gradient(160deg, #141418 0%, #0a0a0c 60%, #050507 100%);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 0.25s forwards;
+}
+.video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.video-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--fg-dim);
+}
+.video-placeholder .play-ring {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1px solid rgba(56, 182, 255, 0.35);
+  background: rgba(56, 182, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.video-placeholder .play-ring svg { width: 26px; height: 26px; margin-left: 4px; fill: var(--accent); }
+.video-placeholder span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Glowing Join button */
+.join-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 60px;
+  font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #000;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  transition: transform 0.25s var(--ease-smooth), background 0.25s var(--ease-smooth);
+  animation: joinGlow 2.4s ease-in-out infinite, fadeUp 0.8s var(--ease-out) 0.35s backwards;
+}
+.join-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-3px) scale(1.02);
+}
+@keyframes joinGlow {
+  0%, 100% { box-shadow: 0 0 24px 2px rgba(56, 182, 255, 0.45), 0 10px 44px rgba(56, 182, 255, 0.28); }
+  50%      { box-shadow: 0 0 48px 10px rgba(56, 182, 255, 0.85), 0 12px 64px rgba(56, 182, 255, 0.5); }
+}
+
+/* Countdown */
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 0.45s forwards;
+}
+.timer .deal-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.timer .deal-timer {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .wrap { gap: 32px; padding: 48px 20px 64px; }
+  .join-btn { width: 100%; padding: 20px 32px; }
+  .timer .deal-label { font-size: 0.74rem; letter-spacing: 0.18em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  .brand, .headline, .video-wrap, .join-btn, .timer { opacity: 1 !important; }
+}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <img class="brand" src="/logo-white.svg" alt="910 Academy">
+
+    <h1 class="headline">Agent On Camera Demo</h1>
+
+    <!-- ================= VIDEO ================================================
+         Drop your horizontal (16:9) demo video in below. Replace the
+         .video-placeholder block with the commented <video> tag and set the src.
+         ====================================================================== -->
+    <div class="video-wrap">
+      <!--
+      <video controls playsinline poster="/aoc/aoc-demo-poster.jpg">
+        <source src="/aoc/aoc-demo.mp4" type="video/mp4">
+      </video>
+      -->
+      <div class="video-placeholder">
+        <span class="play-ring">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span>Video coming soon</span>
+      </div>
+    </div>
+
+    <a href="/aoc/join" class="join-btn">Join Agent On Camera</a>
+
+    <div class="timer">
+      <span class="deal-label">Deal Ends In</span>
+      <span class="deal-timer" id="dealTimer">--:--:--</span>
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    var el = document.getElementById('dealTimer');
+    var TARGET = window.__DEAL_END__;
+    if (!el || !TARGET) return;
+    function pad(n){ return (n < 10 ? '0' : '') + n; }
+    var timer = null;
+    function tick(){
+      var t = Math.floor((TARGET - Date.now()) / 1000);
+      if (t <= 0) {
+        el.textContent = '00:00:00';
+        if (timer) { clearInterval(timer); timer = null; }
+        return;
+      }
+      el.textContent = pad(Math.floor(t / 3600)) + ':' + pad(Math.floor((t % 3600) / 60)) + ':' + pad(t % 60);
+    }
+    tick();
+    timer = setInterval(tick, 1000);
+  })();
+  </script>
+</body>
+</html>
