@@ -37,6 +37,17 @@
   if (Date.now() >= window.__FT_TARGET__) document.documentElement.classList.add('is-expired');
 </script>
 
+<!-- ===== $200-off AOC sale ends here; the AOC price flips to $910. EDIT THIS ONE LINE. ===== -->
+<script>
+  var SALE_END = "2026-07-03T01:00:00-04:00"; // 1:00 AM Eastern (EDT = UTC-4)
+  window.__SALE_END__ = Date.parse(SALE_END);
+  (function(){
+    function over(){ document.documentElement.classList.add('sale-over'); }
+    if (Date.now() >= window.__SALE_END__) return over();
+    var si = setInterval(function(){ if (Date.now() >= window.__SALE_END__){ over(); clearInterval(si); } }, 1000);
+  })();
+</script>
+
 <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -182,6 +193,12 @@ body::before {
 .bonus-expired-el { display: none; }
 html.is-expired .bonus-live-el { display: none; }
 html.is-expired .bonus-expired-el { display: block; }
+
+/* ===== $200-OFF SALE GATE (AOC price flips to $910 at 1 AM ET) ===== */
+.price-nosale { display: none; }
+html.sale-over .price-sale { display: none; }
+html.sale-over .price-nosale { display: inline; }
+html.sale-over .aoc-badge, html.sale-over .promo-price-tag { display: none; }
 
 /* ===== FOOTER (ported) ===== */
 .footer { position: relative; z-index: 2; border-top: 1px solid var(--border); padding: var(--space-16) var(--space-10); text-align: center; }
@@ -406,11 +423,12 @@ html.is-expired .bonus-expired-el { display: block; }
 
   <!-- ============ AGENT ON CAMERA PROMO (page end) ============ -->
   <section class="wrap band-accent">
-    <p class="section-label accent">Limited Time Sale</p>
+    <p class="section-label accent price-sale">Limited Time Sale</p>
     <h2 class="aoc-promo-title">Agent On Camera<br>x 910 Academy Skool</h2>
     <div class="aoc-price">
-      <span class="aoc-price-old">$910</span>
-      <span class="aoc-price-now">$710</span>
+      <span class="aoc-price-old price-sale">$910</span>
+      <span class="aoc-price-now price-sale">$710</span>
+      <span class="aoc-price-now price-nosale">$910</span>
     </div>
     <span class="aoc-badge">$710 today only</span>
     <div class="ft-cta-wrap">
@@ -462,8 +480,9 @@ html.is-expired .bonus-expired-el { display: block; }
     <img class="modal-img" src="/aoc/aoc-popup.jpeg" alt="What's inside Agent On Camera" width="1600" height="900" decoding="async">
     <p class="promo-live"><span class="live-dot"></span>Agent On Camera is now live</p>
     <div class="promo-price">
-      <span class="promo-price-old">$910</span>
-      <span class="promo-price-now">$710</span>
+      <span class="promo-price-old price-sale">$910</span>
+      <span class="promo-price-now price-sale">$710</span>
+      <span class="promo-price-now price-nosale">$910</span>
       <span class="promo-price-tag">Today only</span>
     </div>
     <a class="ft-cta modal-cta" href="/aoc/join-ai" data-close>Get Agent on Camera</a>

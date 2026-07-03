@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent On Camera</title>
+<!-- ===== LAUNCH SALE END: the $200-off sale ends here; the page auto-flips to the
+     non-sale state ($910, no countdown, no promo bar). EDIT THIS ONE LINE. ===== -->
+<script>
+  var SALE_END = "2026-07-03T01:00:00-04:00"; // 1:00 AM Eastern (EDT = UTC-4)
+  window.__SALE_END__ = Date.parse(SALE_END);
+  (function(){
+    function over(){ document.documentElement.classList.add('sale-over'); }
+    if (Date.now() >= window.__SALE_END__) return over();
+    var si = setInterval(function(){ if (Date.now() >= window.__SALE_END__){ over(); clearInterval(si); } }, 1000);
+  })();
+</script>
+<style>
+  .price-nosale { display: none; }
+  html.sale-over .hero-timer,
+  html.sale-over .aoc-today-only,
+  html.sale-over .aoc-promo { display: none !important; }
+  html.sale-over .price-sale { display: none; }
+  html.sale-over .price-nosale { display: inline; }
+</style>
 <link rel="preload" as="image" href="/images/hero-bg.webp">
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/logo-white.svg">
@@ -2289,16 +2308,17 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="hero-timer"><span class="deal-label">Deal ends in</span><span class="deal-timer" id="dealTimer">--:--:--</span></div>
     <script>
     (function(){
-      var el = document.getElementById('dealTimer'); if(!el) return;
-      function left(){
-        var p = new Intl.DateTimeFormat('en-US', { timeZone:'America/New_York', hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' }).formatToParts(new Date());
-        var o = {}; p.forEach(function(x){ o[x.type] = x.value; });
-        var h = (parseInt(o.hour,10)||0)%24, m = parseInt(o.minute,10)||0, sec = parseInt(o.second,10)||0;
-        return 86400 - (h*3600 + m*60 + sec);
-      }
+      var el = document.getElementById('dealTimer');
+      var TARGET = window.__SALE_END__;
+      if(!el || !TARGET) return;
       function pad(n){ return (n<10?'0':'')+n; }
-      function tick(){ var t = left(); if(t<0) t=0; el.textContent = pad(Math.floor(t/3600))+':'+pad(Math.floor((t%3600)/60))+':'+pad(t%60); }
-      tick(); setInterval(tick, 1000);
+      var timer = null;
+      function tick(){
+        var t = Math.floor((TARGET - Date.now())/1000);
+        if(t <= 0){ el.textContent = '00:00:00'; document.documentElement.classList.add('sale-over'); if(timer){ clearInterval(timer); timer = null; } return; }
+        el.textContent = pad(Math.floor(t/3600))+':'+pad(Math.floor((t%3600)/60))+':'+pad(t%60);
+      }
+      tick(); timer = setInterval(tick, 1000);
     })();
     </script>
   </div>
@@ -3110,7 +3130,7 @@ END SOFT-DELETE -->
 
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
-      <p class="value-final-price"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</p>
+      <p class="value-final-price"><span class="price-sale"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</span><span class="price-nosale">$910</span></p>
       <p class="value-final-sub">910 Academy is a yearly membership, your membership will automatically renew unless you cancel.</p>
     </div>
 
