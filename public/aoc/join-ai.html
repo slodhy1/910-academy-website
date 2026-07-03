@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent On Camera</title>
 <meta name="robots" content="noindex,follow">
-<!-- ===== LAUNCH SALE END: the $200-off sale ends here; the page auto-flips to the
-     non-sale state ($910, no countdown, no promo bar). EDIT THIS ONE LINE. ===== -->
+<!-- ===== TIMER END: at this time the "Deal ends in" countdown just disappears.
+     The $200-off sale STAYS ($710, badges, promo bar all remain). EDIT THIS ONE LINE. ===== -->
 <script>
   var SALE_END = "2026-07-03T01:00:00-04:00"; // 1:00 AM Eastern (EDT = UTC-4)
   window.__SALE_END__ = Date.parse(SALE_END);
@@ -17,12 +17,8 @@
   })();
 </script>
 <style>
-  .price-nosale { display: none; }
-  html.sale-over .hero-timer,
-  html.sale-over .aoc-today-only,
-  html.sale-over .aoc-promo { display: none !important; }
-  html.sale-over .price-sale { display: none; }
-  html.sale-over .price-nosale { display: inline; }
+  /* At SALE_END the "Deal ends in" countdown disappears. The $200-off sale stays. */
+  html.sale-over .hero-timer { display: none !important; }
 </style>
 <link rel="preload" as="image" href="/images/hero-bg.webp">
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
@@ -3131,7 +3127,7 @@ END SOFT-DELETE -->
 
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
-      <p class="value-final-price"><span class="price-sale"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</span><span class="price-nosale">$910</span></p>
+      <p class="value-final-price"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</p>
       <p class="value-final-sub">910 Academy is a yearly membership, your membership will automatically renew unless you cancel.</p>
     </div>
 
