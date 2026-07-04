@@ -249,8 +249,23 @@ body[data-state="postbook"] #whatis { display: block; }
 
   <!-- ======================= STATE 4 — POST-BOOKING ======================== -->
   <section id="s-postbook">
-    <!-- built in commit 5 -->
-    <div class="wrap stage"><p class="sub">[building — post-booking]</p></div>
+    <div class="wrap stage">
+      <span class="eyebrow">You're booked</span>
+      <!-- PLACEHOLDER: booking-confirmed headline -->
+      <h2 class="h1">[PLACEHOLDER — booking confirmed headline]</h2>
+      <!-- PLACEHOLDER: booking-confirmed subline -->
+      <p class="sub">[PLACEHOLDER — booking confirmed subline]</p>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);margin:var(--space-8) auto 0;max-width:520px;">
+        <!-- PLACEHOLDER: they'll be speaking with Claudio personally -->
+        <p class="sub">[PLACEHOLDER — "You'll be speaking with Claudio personally."]</p>
+        <!-- PLACEHOLDER: missed calls will be forfeited -->
+        <p class="sub">[PLACEHOLDER — "Missed calls will be forfeited."]</p>
+      </div>
+
+      <!-- Reschedule — hidden until CALENDLY_RESCHEDULE_URL is pasted at top of file -->
+      <a id="rescheduleLink" class="ld-btn ld-btn-ghost" href="#" target="_blank" rel="noopener noreferrer" style="display:none;margin-top:var(--space-8);">Reschedule</a>
+    </div>
   </section>
 
   <!-- ===================== "WHAT IS AOC" (end states) ====================== -->
@@ -440,6 +455,12 @@ textForm.addEventListener('submit', async function (e) {
     btn.disabled = false; btn.textContent = orig;
   }
 });
+
+/* ---- STATE 4: reschedule link (shown only once the constant is pasted) ---- */
+(function () {
+  const r = document.getElementById('rescheduleLink');
+  if (CALENDLY_RESCHEDULE_URL) { r.href = CALENDLY_RESCHEDULE_URL; r.style.display = 'inline-flex'; }
+})();
 
 /* ---- init ----------------------------------------------------------------- */
 renderQuestion();
