@@ -218,9 +218,33 @@ body[data-state="postbook"] #whatis { display: block; }
   </section>
 
   <!-- ========================== STATE 3 — TEXTING ========================== -->
+  <!-- Helpful qualification path — NOT a rejection. Everyone here still gets a human follow-up. -->
   <section id="s-texting">
-    <!-- built in commit 3 -->
-    <div class="wrap stage"><p class="sub">[building — texting capture]</p></div>
+    <div class="wrap stage">
+      <div id="textIntro">
+        <span class="eyebrow">Agent On Camera</span>
+        <!-- PLACEHOLDER: texting headline (helpful framing, e.g. "Let's get you started the right way") -->
+        <h2 class="h1">[PLACEHOLDER — texting headline]</h2>
+        <!-- PLACEHOLDER: texting body (e.g. "Our team will text you shortly to help you take the next step.") -->
+        <p class="sub">[PLACEHOLDER — texting body]</p>
+
+        <form class="ld-form" id="textForm" novalidate>
+          <input type="text" name="fullName" id="tfName" placeholder="Full name" autocomplete="name" required>
+          <input type="tel" name="phone" id="tfPhone" placeholder="Phone number" autocomplete="tel" inputmode="tel" required>
+          <!-- honeypot (hidden; bots fill it) -->
+          <input class="ld-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="ld-error" id="tfError" role="alert"></p>
+          <!-- PLACEHOLDER label: neutral submit text, swap freely -->
+          <button type="submit" class="ld-btn" id="tfSubmit">Submit</button>
+        </form>
+      </div>
+
+      <div id="textDone" style="display:none;">
+        <span class="eyebrow">You're all set</span>
+        <!-- PLACEHOLDER: confirmation (e.g. "You're all set — our team will reach out by text shortly.") -->
+        <p class="sub" style="margin-top:var(--space-4);">[PLACEHOLDER — texting confirmation]</p>
+      </div>
+    </div>
   </section>
 
   <!-- ======================= STATE 4 — POST-BOOKING ======================== -->
@@ -369,6 +393,53 @@ function onBooked() {
   // Backend POST wired in commit 7. For now, just advance.
   setState('postbook');
 }
+
+/* ---- Shared backend POST (used by texting submit + booked completion) ----- */
+async function postFunnel(payload) {
+  const res = await fetch('/api/aoc/livedemo', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let msg = 'Something went wrong. Please try again.';
+    try { const j = await res.json(); if (j && j.error) msg = j.error; } catch (e) {}
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+/* ---- STATE 3: texting capture --------------------------------------------- */
+function normalizePhone(v) { return (v || '').replace(/[^\d]/g, ''); }
+function validPhone(v) { const d = normalizePhone(v); return d.length >= 10 && d.length <= 15; }
+
+const textForm = document.getElementById('textForm');
+textForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const name = document.getElementById('tfName').value.trim();
+  const phone = document.getElementById('tfPhone').value.trim();
+  const website = textForm.querySelector('[name="website"]').value;
+  const err = document.getElementById('tfError');
+  err.textContent = '';
+  if (!name) { err.textContent = 'Please enter your full name.'; return; }
+  if (!validPhone(phone)) { err.textContent = 'Please enter a valid phone number.'; return; }
+
+  const btn = document.getElementById('tfSubmit');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    await postFunnel({
+      type: 'texting',
+      q1: answers.q1, q2: answers.q2, q3: answers.q3, q4: answers.q4,
+      fullName: name, phone: phone, website: website,
+    });
+    document.getElementById('textIntro').style.display = 'none';
+    document.getElementById('textDone').style.display = 'block';
+  } catch (ex) {
+    err.textContent = ex.message || 'Something went wrong. Please try again.';
+    btn.disabled = false; btn.textContent = orig;
+  }
+});
 
 /* ---- init ----------------------------------------------------------------- */
 renderQuestion();
