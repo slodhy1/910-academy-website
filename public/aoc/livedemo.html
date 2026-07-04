@@ -118,6 +118,11 @@ body[data-state="postbook"] #whatis { display: block; }
 .eyebrow { font-size: clamp(0.7rem, 2vw, 0.8rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
 .h1 { font-size: clamp(1.6rem, 6vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; }
 .sub { color: var(--fg-muted); font-size: clamp(0.95rem, 2.4vw, 1.15rem); line-height: 1.5; max-width: 46ch; margin: 0 auto; }
+/* Small AOC logo atop every state */
+.stage-logo { height: 40px; width: auto; margin: 0 auto var(--space-5); opacity: 0.95; }
+/* "Ready to get started?" CTA at the very bottom (end of the AOC info, end states only) */
+.ready-cta { text-align: center; padding: var(--space-20) var(--space-6) var(--space-12); }
+.ready-cta-title { font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: var(--space-8); }
 
 /* ===== SHARED CTA BUTTON (accent, glowing) ===== */
 .ld-btn {
@@ -204,6 +209,8 @@ body[data-state="postbook"] #whatis { display: block; }
   .ld-form { margin-top: var(--space-6); }
   .ld-btn { width: 100%; }
   .quiz-back { top: 12px; left: 12px; }
+  .stage-logo { height: 34px; margin-bottom: var(--space-4); }
+  .ready-cta { padding: var(--space-16) 18px var(--space-10); }
 }
 </style>
 <style>
@@ -777,6 +784,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   <!-- ============================ STATE 1 — QUIZ ============================ -->
   <section id="s-quiz">
     <div class="wrap stage">
+      <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
       <div class="quiz-head">
         <span class="quiz-count" id="quizCount">1 / 4</span>
         <h1 class="h1">Book Your Demo</h1>
@@ -788,6 +796,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   <!-- ========================== STATE 2 — BOOKING ========================== -->
   <section id="s-booking">
     <div class="wrap stage">
+      <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
       <span class="eyebrow">Agent On Camera</span>
       <h2 class="h1">Book Your Agent on Camera Demo</h2>
       <div id="calendlyMount" style="width:100%"><!-- Calendly embed or placeholder injected by JS --></div>
@@ -800,6 +809,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   <!-- Helpful qualification path — NOT a rejection. Everyone here still gets a human follow-up. -->
   <section id="s-texting">
     <div class="wrap stage">
+      <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
       <div id="textIntro">
         <span class="eyebrow">Agent On Camera</span>
         <h2 class="h1">We'll be in touch shortly</h2>
@@ -825,6 +835,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   <!-- ======================= STATE 4 — POST-BOOKING ======================== -->
   <section id="s-postbook">
     <div class="wrap stage">
+      <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
       <span class="eyebrow">You're booked</span>
       <h2 class="h1">You're booked.</h2>
 
@@ -1606,6 +1617,11 @@ END SOFT-DELETE -->
   </div>
 </section>
 -->
+  <!-- Ready to get started CTA (end of the AOC info; shows on end states with #whatis) -->
+  <section class="ready-cta">
+    <h2 class="ready-cta-title">Ready to get started?</h2>
+    <a href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer" class="ld-btn">Join Now</a>
+  </section>
   </div>
 </main>
 
