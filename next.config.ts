@@ -74,6 +74,8 @@ const nextConfig: NextConfig = {
       { source: "/aoc/free-training", destination: "/aoc/free-training.html" },
       // Affiliate duplicate of the AOC landing page (Skool CTAs carry the affiliate ref)
       { source: "/aoc/join-ai", destination: "/aoc/join-ai.html" },
+      // Demo-booking qualification funnel (prod serves via cleanUrls)
+      { source: "/aoc/livedemo", destination: "/aoc/livedemo.html" },
       // Free live-event (/levels) confirmation page (nested static page)
       { source: "/levels/thanks", destination: "/levels/thanks.html" },
     ];

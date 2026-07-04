@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Demo | 910 Academy</title>
+<!-- Qualification funnel (direct/paid traffic); keep out of organic index. -->
+<meta name="robots" content="noindex,follow">
+<link rel="icon" href="/logo-white.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/logo-white.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.910academy.com/aoc/livedemo">
+<meta property="og:site_name" content="910 Academy">
+<meta property="og:title" content="Book Your Agent on Camera Demo">
+<meta property="og:description" content="See if Agent on Camera is a fit and book your demo.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Book Your Agent on Camera Demo">
+<meta name="description" content="See if Agent on Camera is a fit and book your demo.">
+
+<!-- =========================================================================
+     EDIT AFTER BUILD — paste the real Calendly links here. Leave "" until then.
+     ========================================================================= -->
+<script>
+  // STATE 2 (booking) inline embed, e.g. "https://calendly.com/…/agent-on-camera-demo"
+  const CALENDLY_URL = "";
+  // STATE 4 (post-booking) reschedule link
+  const CALENDLY_RESCHEDULE_URL = "";
+</script>
+
+<link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 300; font-display: swap; src: url('/fonts/montserrat-300.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 400; font-display: swap; src: url('/fonts/montserrat-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 500; font-display: swap; src: url('/fonts/montserrat-500.woff2') format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 700; font-display: swap; src: url('/fonts/montserrat-700.woff2') format('woff2'); }
+</style>
+
+<style>
+/* ===== DESIGN TOKENS (ported verbatim from /aoc/join) ===== */
+:root {
+  --bg-deep: #050506;
+  --bg-base: #0a0a0a;
+  --bg-elevated: #0f0f10;
+  --bg-surface: rgba(255, 255, 255, 0.05);
+  --bg-surface-hover: rgba(255, 255, 255, 0.08);
+  --accent: #38B6FF;
+  --accent-hover: #5ac4ff;
+  --accent-glow: rgba(56, 182, 255, 0.15);
+  --accent-subtle: rgba(56, 182, 255, 0.04);
+  --accent-muted: rgba(56, 182, 255, 0.2);
+  --accent-border: rgba(56, 182, 255, 0.4);
+  --accent-border-subtle: rgba(56, 182, 255, 0.12);
+  --accent-border-badge: rgba(56, 182, 255, 0.15);
+  --fg: #FFFFFF;
+  --fg-muted: rgba(255, 255, 255, 0.7);
+  --fg-dim: rgba(255, 255, 255, 0.4);
+  --fg-ghost: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(30px);
+  --glass-saturate: saturate(180%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+  --space-12: 48px;--space-16: 64px;--space-20: 80px;--space-24: 96px;--space-32: 128px;
+  --radius-sm: 8px; --radius-md: 16px; --radius-lg: 20px; --radius-xl: 24px; --radius-pill: 100px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Montserrat', sans-serif;
+  --leading-tight: 1.1em;
+  --leading-normal: 1.4em;
+  --tracking-tight: -0.05px;
+}
+
+/* ===== RESET & BASE (ported from /aoc/join) ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  /* Ambient accent glow via gradients — NO blur filter (mobile-GPU safe; the join.html
+     blurred .bg-orbs blank some phones, so we use the same gradient technique as /aoc/demo). */
+  background:
+    radial-gradient(60vw 60vw at 4% -12%, rgba(56,182,255,0.10), transparent 55%),
+    radial-gradient(58vw 58vw at 100% 112%, rgba(56,182,255,0.07), transparent 55%),
+    var(--bg-base);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ===== STATE VISIBILITY — the whole page is one state machine ===== */
+#s-quiz, #s-booking, #s-texting, #s-postbook, #whatis { display: none; }
+body[data-state="quiz"]     #s-quiz     { display: block; }
+body[data-state="booking"]  #s-booking  { display: block; }
+body[data-state="texting"]  #s-texting  { display: block; }
+body[data-state="postbook"] #s-postbook { display: block; }
+/* "What is AOC" appears on the end states only, never during the quiz. */
+body[data-state="booking"]  #whatis,
+body[data-state="texting"]  #whatis,
+body[data-state="postbook"] #whatis { display: block; }
+
+/* ===== SHARED LAYOUT ===== */
+.wrap { position: relative; z-index: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 0 var(--space-6); }
+.stage { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-16) 0 var(--space-20); text-align: center; }
+.eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+.h1 { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.06; }
+.sub { color: var(--fg-muted); font-size: clamp(1rem, 2.4vw, 1.15rem); line-height: 1.5; max-width: 46ch; margin: 0 auto; }
+
+/* ===== SHARED CTA BUTTON (accent, glowing) ===== */
+.ld-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 18px 40px; font-size: 1rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #000; background: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius-pill);
+  box-shadow: 0 10px 40px rgba(56,182,255,0.28); transition: transform .25s var(--ease-smooth), background .25s var(--ease-smooth);
+}
+.ld-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.ld-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.ld-btn-ghost { background: transparent; color: var(--fg-muted); border: 1px solid var(--border-hover); box-shadow: none; font-weight: 600; text-transform: none; letter-spacing: normal; }
+.ld-btn-ghost:hover { color: var(--fg); border-color: var(--accent-border); background: var(--accent-subtle); }
+
+/* ===== STATE 1 — QUIZ ===== */
+.quiz-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: 6px; background: rgba(255,255,255,0.08); }
+.quiz-progress-fill { height: 100%; width: 0%; background: var(--accent); box-shadow: 0 0 12px rgba(56,182,255,0.6); transition: width .45s var(--ease-out); }
+.quiz-head { margin-bottom: var(--space-10); display: flex; flex-direction: column; gap: var(--space-3); }
+.quiz-count { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.q-card { width: 100%; }
+.q-text { font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 700; line-height: 1.22; margin-bottom: var(--space-8); }
+.q-opts { display: flex; flex-direction: column; gap: var(--space-3); }
+.q-opt {
+  width: 100%; text-align: left; padding: 18px 22px; min-height: 56px;
+  font-size: 1.02rem; font-weight: 600; color: var(--fg);
+  background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  transition: border-color .2s var(--ease-smooth), background .2s var(--ease-smooth), transform .15s var(--ease-smooth);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.q-opt:hover { border-color: var(--accent-border); background: var(--bg-surface-hover); }
+.q-opt::after { content: ""; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--fg-ghost); flex-shrink: 0; transition: all .2s var(--ease-smooth); }
+.q-opt.is-selected { border-color: var(--accent); background: var(--accent-subtle); }
+.q-opt.is-selected::after { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-subtle); }
+
+/* one-question-at-a-time transition */
+.q-card.leaving { opacity: 0; transform: translateX(-18px); }
+.q-card.entering { opacity: 0; transform: translateX(18px); }
+.q-card { opacity: 1; transform: translateX(0); transition: opacity .28s var(--ease-out), transform .28s var(--ease-out); }
+@media (prefers-reduced-motion: reduce) {
+  .q-card, .q-card.leaving, .q-card.entering { transition: none !important; transform: none !important; opacity: 1 !important; }
+  .quiz-progress-fill { transition: none !important; }
+}
+
+/* ===== STATE 3 — texting form ===== */
+.ld-form { display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 420px; margin: var(--space-8) auto 0; text-align: left; }
+.ld-form input { width: 100%; padding: 15px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--fg); font-family: var(--font); font-size: 1rem; }
+.ld-form input:focus { outline: none; border-color: var(--accent); }
+.ld-form input::placeholder { color: var(--fg-dim); }
+.ld-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; } /* honeypot */
+.ld-error { color: #ff7676; font-size: 0.85rem; min-height: 1.1em; margin-top: 2px; }
+.ld-form .ld-btn { width: 100%; margin-top: var(--space-2); }
+
+/* ===== STATE 2 — booking / Calendly ===== */
+.calendly-inline-widget { width: 100%; min-height: 720px; }
+.booking-placeholder { width: 100%; max-width: 560px; margin: var(--space-8) auto 0; padding: var(--space-16) var(--space-6); border: 1px dashed var(--accent-border); border-radius: var(--radius-lg); background: var(--accent-subtle); color: var(--fg-muted); }
+
+/* ===== FOOTER (matches /aoc/join family) ===== */
+.footer { position: relative; z-index: 1; text-align: center; padding: var(--space-16) var(--space-6) var(--space-12); border-top: 1px solid var(--border); }
+.footer-logo img { height: 34px; width: auto; margin: 0 auto var(--space-5); opacity: 0.9; }
+.footer-socials { display: flex; gap: var(--space-6); justify-content: center; margin-bottom: var(--space-4); }
+.footer-socials a { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: var(--fg-dim); transition: color .3s var(--ease-smooth); }
+.footer-socials a:hover { color: var(--accent); }
+.footer-copy { font-size: 13px; color: var(--fg-ghost); letter-spacing: 0.04em; }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 var(--space-5); }
+  .stage { padding: var(--space-12) 0 var(--space-16); }
+  .ld-btn { width: 100%; }
+}
+</style>
+</head>
+<body data-state="quiz">
+
+<!-- Progress bar (STATE 1 only; hidden by CSS in other states via inline check below) -->
+<div class="quiz-progress" id="quizProgress" aria-hidden="true"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+
+<main>
+  <!-- ============================ STATE 1 — QUIZ ============================ -->
+  <section id="s-quiz">
+    <div class="wrap stage">
+      <div class="quiz-head">
+        <span class="quiz-count" id="quizCount">1 / 4</span>
+        <h1 class="h1">Book Your Demo</h1>
+        <!-- PLACEHOLDER: quiz subline (1 short line under the headline) -->
+        <p class="sub" id="quizSub">[PLACEHOLDER — quiz subline]</p>
+      </div>
+      <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
+    </div>
+  </section>
+
+  <!-- ========================== STATE 2 — BOOKING ========================== -->
+  <section id="s-booking">
+    <div class="wrap stage">
+      <span class="eyebrow">Agent On Camera</span>
+      <h2 class="h1">Book Your Agent on Camera Demo</h2>
+      <!-- PLACEHOLDER (optional): booking subline -->
+      <div id="calendlyMount" style="width:100%"><!-- Calendly embed or placeholder injected by JS --></div>
+      <!-- Fallback so a completed booking is never a dead end if the in-iframe event is blocked -->
+      <button type="button" class="ld-btn-ghost ld-btn" style="margin-top:var(--space-6);" id="bookedFallback">Already booked? Continue →</button>
+    </div>
+  </section>
+
+  <!-- ========================== STATE 3 — TEXTING ========================== -->
+  <section id="s-texting">
+    <!-- built in commit 3 -->
+    <div class="wrap stage"><p class="sub">[building — texting capture]</p></div>
+  </section>
+
+  <!-- ======================= STATE 4 — POST-BOOKING ======================== -->
+  <section id="s-postbook">
+    <!-- built in commit 5 -->
+    <div class="wrap stage"><p class="sub">[building — post-booking]</p></div>
+  </section>
+
+  <!-- ===================== "WHAT IS AOC" (end states) ====================== -->
+  <div id="whatis">
+    <!-- reused from /aoc/join in commit 6 (CTAs stripped) -->
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-logo"><img src="/logo-white.svg" alt="910 Academy" width="34" height="34" decoding="async"></div>
+  <div class="footer-socials">
+    <a href="https://www.youtube.com/@910Academy" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a href="https://www.instagram.com/claudiorivera.910/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="https://www.facebook.com/groups/415895414544196/" target="_blank" rel="noopener noreferrer">Facebook</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 910 Academy. All rights reserved.</p>
+</footer>
+
+<script>
+/* ============================================================================
+   /aoc/livedemo — full-page qualification funnel (state machine)
+   ============================================================================ */
+
+/* ---- State machine -------------------------------------------------------- */
+function setState(name) {
+  document.body.dataset.state = name;
+  // progress bar belongs to the quiz only
+  document.getElementById('quizProgress').style.display = (name === 'quiz') ? 'block' : 'none';
+  window.scrollTo(0, 0);
+  if (name === 'booking') mountCalendly();
+}
+
+/* ---- STATE 1: quiz -------------------------------------------------------- */
+const QUESTIONS = [
+  { key: 'q1', q: "How long have you had a real estate media business?",
+    opts: ["Haven't started yet", "0-1 years", "1-3 years", "3+ years"] },
+  { key: 'q2', q: "How much are you earning per month in your real estate media business currently?",
+    opts: ["$0-$1,000", "$1,000-$3,000", "$3,000-$5,000", "$5,000-$10,000", "$10,000+"] },
+  { key: 'q3', q: "What's most important for you to improve on to take your business from where it is now to where you want it to be?",
+    opts: ["Shooting", "Editing", "Sales", "Team Building", "All of the above"] },
+  { key: 'q4', q: "If Agent on Camera is a fit and can truly support you in growing your real estate media business, are you willing to invest in yourself?",
+    opts: ["Yes", "No"] },
+];
+
+// STRICT routing — must match the server predicate exactly.
+const HIGH_EARNINGS = new Set(["$5,000-$10,000", "$10,000+"]);
+function isQualified(a) { return HIGH_EARNINGS.has(a.q2) && a.q4 === "Yes"; }
+
+const answers = {};
+let qIdx = 0;
+let locked = false; // guards double-taps during the advance animation
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function renderQuestion() {
+  const card = document.getElementById('qCard');
+  const item = QUESTIONS[qIdx];
+  document.getElementById('quizCount').textContent = (qIdx + 1) + ' / ' + QUESTIONS.length;
+  document.getElementById('quizProgressFill').style.width = (((qIdx + 1) / QUESTIONS.length) * 100) + '%';
+
+  const opts = item.opts.map(function (opt) {
+    return '<button type="button" class="q-opt" data-opt="' + opt.replace(/"/g, '&quot;') + '">' +
+             '<span>' + opt + '</span></button>';
+  }).join('');
+  card.innerHTML = '<p class="q-text">' + item.q + '</p><div class="q-opts">' + opts + '</div>';
+
+  card.querySelectorAll('.q-opt').forEach(function (btn) {
+    btn.addEventListener('click', function () { selectOption(btn); });
+  });
+}
+
+function selectOption(btn) {
+  if (locked) return;
+  locked = true;
+  const opt = btn.getAttribute('data-opt');
+  answers[QUESTIONS[qIdx].key] = opt;
+  btn.classList.add('is-selected');
+  const delay = reduceMotion ? 0 : 260;
+  setTimeout(advance, delay);
+}
+
+function advance() {
+  const card = document.getElementById('qCard');
+  const isLast = qIdx >= QUESTIONS.length - 1;
+
+  function swap() {
+    if (isLast) { finishQuiz(); return; }
+    qIdx++;
+    renderQuestion();
+    if (!reduceMotion) {
+      card.classList.remove('leaving');
+      card.classList.add('entering');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { card.classList.remove('entering'); locked = false; });
+      });
+    } else { locked = false; }
+  }
+
+  if (reduceMotion) { swap(); return; }
+  card.classList.add('leaving');
+  setTimeout(swap, 280);
+}
+
+function finishQuiz() {
+  setState(isQualified(answers) ? 'booking' : 'texting');
+  locked = false;
+}
+
+/* ---- STATE 2: Calendly (mounted on demand) -------------------------------- */
+let calendlyMounted = false;
+function mountCalendly() {
+  if (calendlyMounted) return;
+  calendlyMounted = true;
+  const mount = document.getElementById('calendlyMount');
+  if (CALENDLY_URL) {
+    const widget = document.createElement('div');
+    widget.className = 'calendly-inline-widget';
+    widget.setAttribute('data-url', CALENDLY_URL);
+    mount.appendChild(widget);
+    const s = document.createElement('script');
+    s.src = 'https://assets.calendly.com/assets/external/widget.js';
+    s.async = true;
+    document.body.appendChild(s);
+  } else {
+    // No link pasted yet — show a labeled placeholder, never an empty iframe.
+    mount.innerHTML = '<div class="booking-placeholder">Booking calendar coming — the Calendly link will be added here.</div>';
+  }
+}
+
+// Calendly fires a postMessage when a booking completes → advance to STATE 4.
+window.addEventListener('message', function (e) {
+  if (e && e.data && e.data.event === 'calendly.event_scheduled') { onBooked(); }
+});
+document.getElementById('bookedFallback').addEventListener('click', onBooked);
+
+let bookedSubmitted = false;
+function onBooked() {
+  if (bookedSubmitted) { setState('postbook'); return; }
+  bookedSubmitted = true;
+  // Backend POST wired in commit 7. For now, just advance.
+  setState('postbook');
+}
+
+/* ---- init ----------------------------------------------------------------- */
+renderQuestion();
+setState('quiz');
+</script>
+</body>
+</html>
