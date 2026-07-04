@@ -55,7 +55,14 @@
 html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body {
   min-height: 100vh;
-  background: var(--bg-base);
+  /* Ambient accent glow drawn with gradients — no blur filter.
+     A large filter: blur() on big elements crashes/blanks many mobile GPUs;
+     gradients give the same look at zero GPU cost. */
+  background:
+    radial-gradient(65vw 65vw at 3% -18%, rgba(56, 182, 255, 0.12), transparent 55%),
+    radial-gradient(60vw 60vw at 100% 118%, rgba(56, 182, 255, 0.08), transparent 55%),
+    var(--bg-base);
+  background-repeat: no-repeat;
   color: var(--fg);
   font-family: var(--font);
   font-weight: 400;
@@ -65,19 +72,6 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
-
-/* Ambient accent glows */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(120px);
-  z-index: 0;
-  pointer-events: none;
-}
-body::before { top: -20%; left: -10%; width: 55vw; height: 55vw; background: rgba(56, 182, 255, 0.10); }
-body::after  { bottom: -25%; right: -10%; width: 55vw; height: 55vw; background: rgba(56, 182, 255, 0.06); }
 
 .wrap {
   position: relative;
@@ -94,7 +88,7 @@ body::after  { bottom: -25%; right: -10%; width: 55vw; height: 55vw; background:
 
 /* Brand mark */
 .brand {
-  height: 34px;
+  height: 58px;
   width: auto;
   opacity: 0;
   animation: fadeUp 0.8s var(--ease-out) 0.05s forwards;
@@ -219,6 +213,7 @@ body::after  { bottom: -25%; right: -10%; width: 55vw; height: 55vw; background:
 
 @media (max-width: 640px) {
   .wrap { gap: 32px; padding: 48px 20px 64px; }
+  .brand { height: 46px; }
   .join-btn { width: 100%; padding: 20px 32px; }
   .timer .deal-label { font-size: 0.74rem; letter-spacing: 0.18em; }
 }
@@ -231,7 +226,7 @@ body::after  { bottom: -25%; right: -10%; width: 55vw; height: 55vw; background:
 </head>
 <body>
   <main class="wrap">
-    <img class="brand" src="/logo-white.svg" alt="910 Academy">
+    <img class="brand" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="110" height="58">
 
     <h1 class="headline">Agent On Camera Demo</h1>
 
