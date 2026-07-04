@@ -212,6 +212,15 @@ body[data-state="postbook"] #whatis { display: block; }
   .stage-logo { height: 34px; margin-bottom: var(--space-4); }
   .ready-cta { padding: var(--space-16) 18px var(--space-10); }
 }
+
+@media (min-width: 641px) {
+  /* Desktop: the end-state heroes were cramped (eyebrow/headline/embed flush).
+     Open up the vertical rhythm; mobile keeps its tighter dvh-locked spacing. */
+  .stage-logo { margin-bottom: var(--space-8); }   /* 32px logo -> kicker */
+  .eyebrow { margin-bottom: var(--space-4); }        /* 16px kicker -> headline */
+  #calendlyMount { margin-top: var(--space-12); }     /* 48px headline -> calendar */
+  #textIntro .sub { margin-top: var(--space-6); }     /* 24px headline -> body */
+}
 </style>
 <style>
 /* =====================================================================
