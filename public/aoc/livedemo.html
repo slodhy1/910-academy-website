@@ -22,7 +22,7 @@
      ========================================================================= -->
 <script>
   // STATE 2 (booking) inline embed, e.g. "https://calendly.com/…/agent-on-camera-demo"
-  const CALENDLY_URL = "";
+  const CALENDLY_URL = "https://calendly.com/910academy/demo";
   // STATE 4 (post-booking) reschedule link
   const CALENDLY_RESCHEDULE_URL = "";
 </script>
@@ -185,6 +185,563 @@ body[data-state="postbook"] #whatis { display: block; }
   .ld-btn { width: 100%; }
 }
 </style>
+<style>
+/* =====================================================================
+   AGENT ON CAMERA — component CSS ported from /aoc/join for the #whatis
+   block. Tokens / reset / body background / fonts already live in
+   livedemo's head block, so they are NOT duplicated here. join's
+   .bg-orbs, hero, glass-nav, promo, sale and footer rules are excluded.
+   ===================================================================== */
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ========== SECTIONS ========== */
+.section {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-20) var(--space-10);
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+.section-heading {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-4);
+}
+.section-sub {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  max-width: 560px;
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-12);
+}
+
+/* ========== SECTION DIVIDER ========== */
+.section-divider {
+  border: none;
+  height: 1px;
+  width: 80%;
+  margin: 0 auto;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent 100%
+  );
+  position: relative;
+  z-index: 2;
+}
+
+/* ========== CURRICULUM GRID ========== */
+.curriculum-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+.curriculum-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-8);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out);
+}
+.curriculum-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.curriculum-number {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+.curriculum-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--fg);
+}
+
+/* ========== COMMUNITY (Meet Your Allies) ========== */
+.community-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+.community-text .section-sub {
+  margin-bottom: var(--space-8);
+}
+.community-cta {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #000;
+  background: #FFF;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.community-cta:hover {
+  background: var(--accent);
+  color: #FFF;
+  transform: translateY(-2px);
+}
+.community-image {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.community-image img {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+@media (max-width: 1024px) {
+  .community-layout { grid-template-columns: 1fr; gap: var(--space-10); }
+}
+
+@media (max-width: 480px) {
+  .section-heading { font-size: 1.8rem; }
+  .school-heading { font-size: 1.8rem; }
+  .nav-logo img { height: 28px; }
+  .curriculum-number { font-size: 2.5rem; }
+}
+
+/* ========== COURSE GRID (What's Inside) ========== */
+.course-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+}
+.course-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: transform 0.3s var(--ease-smooth);
+  cursor: default;
+  width: calc((100% - var(--space-8) * 2) / 3);
+  min-width: 0;
+}
+.course-card:hover {
+  transform: translateY(-4px);
+}
+.course-card:hover .course-box {
+  box-shadow: 0 20px 60px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.08);
+  border-color: var(--accent-border);
+}
+.course-box {
+  position: relative;
+  aspect-ratio: 1460 / 752;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(56, 182, 255, 0.12) 0%, transparent 55%),
+    linear-gradient(145deg, #141418 0%, #0a0a0c 60%, #050507 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  overflow: hidden;
+  transition: all 0.35s var(--ease-smooth);
+}
+.course-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.course-box img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+}
+.course-box-title {
+  position: relative;
+  color: var(--fg);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  text-align: center;
+  line-height: 1.25;
+  text-transform: uppercase;
+  z-index: 1;
+}
+.course-card-title {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.3;
+  margin-top: var(--space-2);
+}
+.course-card-desc {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+@media (max-width: 1024px) {
+  .course-grid { gap: var(--space-6); }
+  .course-card { width: calc((100% - var(--space-6)) / 2); }
+}
+@media (max-width: 640px) {
+  .course-grid { gap: var(--space-8); }
+  .course-card { width: 100%; }
+}
+
+/* ========== CURRICULUM ACCORDION ========== */
+.accordion {
+  margin-top: var(--space-12);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.accordion-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease-smooth), background 0.3s var(--ease-smooth);
+}
+.accordion-item.open {
+  border-color: var(--accent-border-subtle);
+  background: var(--accent-subtle);
+}
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-6) var(--space-8);
+  cursor: pointer;
+  user-select: none;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  text-transform: uppercase;
+  transition: color 0.2s var(--ease-smooth);
+}
+.accordion-header:hover {
+  color: var(--accent);
+}
+.accordion-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--fg-muted);
+  transition: transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
+  flex-shrink: 0;
+}
+.accordion-item.open .accordion-icon {
+  transform: rotate(45deg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s var(--ease-smooth);
+}
+.accordion-body-inner {
+  padding: 0 var(--space-8) var(--space-6);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-6);
+}
+.accordion-item.open .accordion-body-inner {
+  margin-top: 0;
+}
+.accordion-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0;
+}
+.accordion-list li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.accordion-list li::before {
+  content: attr(data-num);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  min-width: 32px;
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .accordion-header { padding: var(--space-5) var(--space-5); font-size: 0.95rem; }
+  .accordion-body-inner { padding: var(--space-5) var(--space-5); }
+}
+
+/* ========== BONUS PERKS ========== */
+.perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+.perk-card {
+  padding: var(--space-10) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s var(--ease-smooth);
+}
+.perk-card:hover {
+  border-color: var(--accent-border-subtle);
+  background: var(--accent-subtle);
+  transform: translateY(-3px);
+}
+.perk-icon {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border-subtle);
+  margin-bottom: var(--space-5);
+  color: var(--accent);
+  transition: all 0.3s var(--ease-smooth);
+}
+.perk-card:hover .perk-icon {
+  background: var(--accent-muted);
+  border-color: var(--accent-border);
+}
+.perk-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.perk-title {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: var(--space-2);
+  line-height: 1.3;
+}
+.perk-desc {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--fg-muted);
+  line-height: 1.55;
+}
+@media (max-width: 1024px) {
+  .perks-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .perks-grid { grid-template-columns: 1fr; }
+  .perk-card { padding: var(--space-8) var(--space-6); }
+}
+
+/* ========== REAL RESULTS / VIDEO STACK ========== */
+.video-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  margin-top: var(--space-12);
+  align-items: center;
+}
+.video-wrap {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #000;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(56, 182, 255, 0.04);
+}
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--fg);
+  line-height: 1.25;
+  margin-top: var(--space-3);
+}
+.video-desc {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  .video-stack { gap: var(--space-12); }
+  .video-title { font-size: 1.2rem; }
+}
+
+/* ========== AUDIENCE GRID (Who It's For, restyled) ========== */
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+.audience-card {
+  padding: var(--space-10) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s var(--ease-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.audience-card:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-subtle);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px var(--accent-glow);
+}
+.audience-number {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.audience-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+  line-height: 1.3;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  margin-top: var(--space-2);
+}
+.audience-desc {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 0.92rem;
+  color: var(--fg-muted);
+  line-height: 1.55;
+}
+@media (max-width: 1024px) {
+  .audience-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .audience-grid { grid-template-columns: 1fr; }
+  .audience-card { padding: var(--space-8) var(--space-6); }
+}
+
+/* ========== RESPONSIVE (ported/trimmed from /aoc/join universal pass) ========== */
+img, video, iframe { max-width: 100%; height: auto; }
+@media (max-width: 768px) {
+  section.section, .section { padding: 60px 20px !important; }
+  .section-heading { font-size: clamp(1.5rem, 6vw, 2.3rem) !important; line-height: 1.2 !important; }
+  .section-label { font-size: 0.7rem !important; letter-spacing: 0.2em !important; }
+  .section-sub { font-size: 0.95rem !important; }
+  .course-grid { flex-direction: column !important; align-items: stretch !important; gap: 32px !important; }
+  .course-card { width: 100% !important; }
+  .perks-grid, .audience-grid, .community-layout, .curriculum-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .video-embed { width: 100% !important; }
+  .video-stack { gap: 48px !important; }
+}
+@media (max-width: 480px) {
+  section.section, .section { padding: 48px 16px !important; }
+  .section-heading { font-size: 1.5rem !important; }
+}
+</style>
 </head>
 <body data-state="quiz">
 
@@ -270,7 +827,772 @@ body[data-state="postbook"] #whatis { display: block; }
 
   <!-- ===================== "WHAT IS AOC" (end states) ====================== -->
   <div id="whatis">
-    <!-- reused from /aoc/join in commit 6 (CTAs stripped) -->
+<style>
+  /* ===== Agent on Camera — 3D coverflow ===== */
+  .aoc-cf{ position:relative; width:100%; height:320px; margin-top:var(--space-10); perspective:1600px; overflow:hidden; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
+  .aoc-cf-stage{ position:absolute; inset:0; transform-style:preserve-3d; }
+  .aoc-cf .aoc-mod{ position:absolute; top:50%; left:50%; width:510px; margin:0; cursor:pointer; opacity:0;
+    transform:translate(-50%,-50%); transform-origin:center center;
+    transition:transform .6s cubic-bezier(.22,.61,.36,1), opacity .6s ease, filter .6s ease;
+    will-change:transform,opacity,filter; }
+  .aoc-cf .aoc-mod-thumb{ aspect-ratio:16/9; border-radius:16px; overflow:hidden; background:#0f0f0f;
+    border:1px solid rgba(255,255,255,.10); box-shadow:0 34px 70px -24px rgba(0,0,0,.85);
+    transition:border-color .3s ease, box-shadow .3s ease, filter .3s ease, transform .3s ease; }
+  .aoc-cf .aoc-mod.is-active .aoc-mod-thumb{ box-shadow:0 0 44px -6px rgba(56,182,255,.4), 0 34px 70px -24px rgba(0,0,0,.85); border-color:rgba(56,182,255,.45); }
+  .aoc-cf .aoc-mod:hover .aoc-mod-thumb{ border-color:rgba(56,182,255,.9); box-shadow:0 0 0 2px rgba(56,182,255,.55), 0 40px 80px -22px rgba(0,0,0,.9); filter:brightness(1.12); transform:scale(1.03); }
+  .aoc-cf .aoc-mod-thumb img{ width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+  .aoc-mod-num{ color:#38B6FF; margin-right:8px; }
+  .aoc-cf-caption{ text-align:center; margin-top:8px; min-height:1.3em; font-family:Montserrat,sans-serif;
+    font-size:15px; font-weight:600; letter-spacing:.03em; color:var(--fg); }
+  .aoc-cf-nav{ position:absolute; top:50%; transform:translateY(-50%); z-index:300;
+    width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.45); color:#fff; font-size:24px; line-height:1; cursor:pointer; padding:0;
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, border-color .2s ease; }
+  .aoc-cf-nav:hover{ background:rgba(0,0,0,.72); border-color:rgba(255,255,255,.4); }
+  .aoc-cf-nav.prev{ left:max(16px, calc(50% - 620px)); }
+  .aoc-cf-nav.next{ right:max(16px, calc(50% - 620px)); }
+  @media (max-width:768px){
+    .aoc-cf{ height:230px; perspective:1100px; }
+    .aoc-cf .aoc-mod{ width:330px; }
+    .aoc-cf-nav{ width:40px; height:40px; font-size:20px; }
+    .aoc-cf-nav.prev{ left:8px; } .aoc-cf-nav.next{ right:8px; }
+  }
+  @media (prefers-reduced-motion:reduce){ .aoc-cf .aoc-mod{ transition:opacity .3s ease; } }
+</style>
+
+<section class="section" id="aoc-whats-inside">
+  <div class="reveal-left">
+    <p class="section-label">THE COURSE</p>
+    <h2 class="section-heading">16 Powerful Modules</h2>
+    <p class="section-sub">100+ training videos. The complete system for shooting agents on camera.</p>
+  </div>
+  <div class="aoc-cf" id="aocCoverflow">
+    <button class="aoc-cf-nav prev" type="button" aria-label="Previous module">&lsaquo;</button>
+    <div class="aoc-cf-stage">
+      <div class="aoc-mod" data-num="01" data-name="Intro">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/intro.webp" alt="Intro module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="02" data-name="Hooks">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/hooks.webp" alt="Hooks module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="03" data-name="Middle Context">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/middle-context.webp" alt="Middle Context module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="04" data-name="Call To Action">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/call-to-action.webp" alt="Call To Action module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="05" data-name="Scripting Tips">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/scripting-tips.webp" alt="Scripting Tips module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="06" data-name="Music Selection">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/music-selection.webp" alt="Music Selection module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="07" data-name="Lenses &amp; Camera Settings">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/lenses-and-camera-settings.webp" alt="Lenses &amp; Camera Settings module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="08" data-name="Lighting">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/lighting.webp" alt="Lighting module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="09" data-name="Composition">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/composition.webp" alt="Composition module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="10" data-name="Shooting The Agent">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/shooting-the-agent.webp" alt="Shooting The Agent module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="11" data-name="Shooting Environment">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/shooting-environment.webp" alt="Shooting Environment module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="12" data-name="Body Language &amp; Tonality">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/body-language-and-tonality.webp" alt="Body Language &amp; Tonality module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="13" data-name="Directing The Agent">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/directing-the-agent.webp" alt="Directing The Agent module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="14" data-name="Working With Agents">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/working-with-agents.webp" alt="Working With Agents module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="15" data-name="Collaborating With Agents">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/collaborating-with-agents.webp" alt="Collaborating With Agents module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+      <div class="aoc-mod" data-num="16" data-name="Audio">
+        <div class="aoc-mod-thumb"><img src="/aoc/thumbnails/audio.webp" alt="Audio module" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=this.src.replace('.webp','.png')"></div>
+      </div>
+    </div>
+    <button class="aoc-cf-nav next" type="button" aria-label="Next module">&rsaquo;</button>
+  </div>
+  <p class="aoc-cf-caption" id="aocCaption"></p>
+</section>
+<script>
+(function(){
+  var root = document.getElementById('aocCoverflow');
+  if (!root) return;
+  var stage = root.querySelector('.aoc-cf-stage');
+  var cards = Array.prototype.slice.call(stage.querySelectorAll('.aoc-mod'));
+  var caption = document.getElementById('aocCaption');
+  var n = cards.length;
+  if (!n) return;
+  var active = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function params(){
+    if (window.innerWidth < 768) return { spacing:150, rot:38, depth:180, scaleStep:0.16, win:3 };
+    return { spacing:258, rot:44, depth:250, scaleStep:0.12, win:4 };
+  }
+  function circDiff(i){
+    var d = i - active;
+    if (d >  n/2) d -= n;
+    if (d < -n/2) d += n;
+    return d;
+  }
+  function render(){
+    var p = params();
+    cards.forEach(function(card, i){
+      var d = circDiff(i);
+      var ad = Math.abs(d);
+      if (ad > p.win){
+        card.style.opacity = '0';
+        card.style.pointerEvents = 'none';
+        card.style.zIndex = '0';
+        card.style.transform = 'translate(-50%,-50%) translateX(' + ((d>0?1:-1) * p.spacing*(p.win+1)) + 'px) scale(0.55)';
+        card.classList.remove('is-active');
+        return;
+      }
+      var sign = d === 0 ? 0 : (d > 0 ? 1 : -1);
+      var x = d * p.spacing;
+      var z = -ad * p.depth;
+      var rot = -sign * p.rot;
+      var scale = Math.max(0.6, 1 - ad * p.scaleStep);
+      var blur = (ad === 0 || window.innerWidth <= 768) ? 0 : Math.min(6, 1.4 + ad * 1.3);
+      card.style.opacity = ad === 0 ? '1' : (ad === 1 ? '0.92' : (ad === 2 ? '0.78' : '0.6'));
+      card.style.pointerEvents = 'auto';
+      card.style.zIndex = String(100 - ad);
+      card.style.filter = blur ? ('blur(' + blur + 'px) brightness(' + (1 - ad*0.1) + ')') : (ad ? 'brightness(' + (1 - ad*0.12) + ')' : 'none');
+      card.style.transform =
+        'translate(-50%,-50%) translateX(' + x + 'px) rotateY(' + rot + 'deg) translateZ(' + z + 'px) scale(' + scale + ')';
+      card.classList.toggle('is-active', ad === 0);
+    });
+    if (caption){
+      var a = cards[active];
+      caption.textContent = 'Module ';
+      var ns = document.createElement('span');
+      ns.style.color = '#38B6FF';
+      ns.textContent = a.getAttribute('data-num');
+      caption.appendChild(ns);
+    }
+  }
+
+  function go(dir){ active = (active + dir + n) % n; render(); }
+  function goTo(i){ active = ((i % n) + n) % n; render(); }
+
+  var prev = root.querySelector('.aoc-cf-nav.prev');
+  var next = root.querySelector('.aoc-cf-nav.next');
+  if (prev) prev.addEventListener('click', function(){ go(-1); bump(); });
+  if (next) next.addEventListener('click', function(){ go(1); bump(); });
+
+  cards.forEach(function(card, i){
+    card.addEventListener('click', function(){ if (i !== active){ goTo(i); bump(); } });
+  });
+
+  // drag / swipe
+  var dragging=false, startX=0, moved=false;
+  root.addEventListener('pointerdown', function(e){ dragging=true; moved=false; startX=e.clientX; stopAuto(); });
+  window.addEventListener('pointermove', function(e){ if(dragging && Math.abs(e.clientX-startX) > 8) moved=true; });
+  window.addEventListener('pointerup', function(e){
+    if(!dragging) return; dragging=false;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 45) go(dx < 0 ? 1 : -1);
+    bump();
+  });
+  // swallow the click that follows a drag so it doesn't also re-center
+  root.addEventListener('click', function(e){ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } }, true);
+
+  // autoplay loop
+  var timer=null;
+  function startAuto(){ if (reduce) return; stopAuto(); timer = setInterval(function(){ go(1); }, 2800); }
+  function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+  function bump(){ stopAuto(); if(!reduce) setTimeout(startAuto, 4500); }
+  root.addEventListener('mouseenter', stopAuto);
+  root.addEventListener('mouseleave', startAuto);
+
+  render();
+  startAuto();
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(es){ es.forEach(function(e){ e.isIntersecting ? startAuto() : stopAuto(); }); }, { threshold: 0.15 }).observe(root);
+  }
+  window.addEventListener('resize', render);
+  window.addEventListener('load', render);
+})();
+</script>
+
+<hr class="section-divider">
+
+<!-- ============================================================
+     DEVICE-SWITCHER SHOWCASE  (2-col: controls/tabs LEFT, device preview RIGHT)
+     Mobile|Desktop toggle + 3 tabs (Agent On Camera / 910 Academy Skool Course / World Class Networking).
+     Each (device,tab) has a compressed preview video in /aoc/showcase/:
+       desktop-{aoc,skool,networking}.mp4  |  mobile-{aoc,skool,networking}.mp4  (+ .jpg posters)
+     Videos load on demand and only play while the section is in view.
+     ============================================================ -->
+<style>
+  .aoc-device .aoc-dv-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-16); align-items:center; }
+  .aoc-device .aoc-dv-left{ text-align:left; }
+  .aoc-device .aoc-dv-left .section-sub{ margin-left:0; margin-bottom:var(--space-6); }
+  .aoc-dv-toggle{ display:inline-flex; gap:4px; padding:4px; margin:0 0 var(--space-8);
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:999px; }
+  .aoc-dv-toggle button{ font-family:'Montserrat',sans-serif; font-size:12px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--fg-muted); padding:8px 22px; border-radius:999px; transition:background .2s ease,color .2s ease; }
+  .aoc-dv-toggle button.active{ background:#fff; color:#000; }
+  .aoc-dv-tabs{ display:flex; flex-direction:column; gap:10px; align-items:stretch; }
+  .aoc-dv-tabs button{ font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600; letter-spacing:.02em; color:var(--fg-muted);
+    text-align:left; padding:14px 18px; border:1px solid rgba(255,255,255,.12); border-radius:12px;
+    transition:background .2s ease,color .2s ease,border-color .2s ease; }
+  .aoc-dv-tabs button:hover{ color:#fff; border-color:rgba(255,255,255,.25); }
+  .aoc-dv-tabs button.active{ color:#fff; border-color:var(--accent-border); background:var(--accent-subtle); box-shadow:inset 3px 0 0 var(--accent); }
+  .aoc-dv-stage{ min-height:380px; display:flex; align-items:center; justify-content:center; }
+  .aoc-device[data-device="desktop"] .aoc-dv-phone{ display:none; }
+  .aoc-device[data-device="mobile"] .aoc-dv-laptop{ display:none; }
+  .aoc-dv-laptop{ width:100%; max-width:640px; margin:0 auto; }
+  .aoc-dv-mac{ position:relative; width:100%; }
+  .aoc-dv-macimg{ position:relative; width:100%; display:block; z-index:2; pointer-events:none; }
+  .aoc-dv-mac .aoc-dv-screen{ position:absolute; z-index:1; left:10.21%; top:13.22%; width:79.56%; height:75.77%; }
+  .aoc-dv-phone{ width:min(240px,70%); margin:0 auto; }
+  .aoc-dv-phone .aoc-dv-bezel{ position:relative; background:#151517; border:2px solid rgba(255,255,255,.14);
+    border-radius:40px; padding:10px; box-shadow:0 40px 90px -30px rgba(0,0,0,.85); }
+  .aoc-dv-phone .aoc-dv-notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:110px; height:20px; background:#000; border-radius:0 0 16px 16px; z-index:3; }
+  .aoc-dv-phone .aoc-dv-screen{ aspect-ratio:9/19; border-radius:30px; }
+  .aoc-dv-screen{ background:#000; overflow:hidden; position:relative; }
+  .aoc-dv-video{ width:100%; height:100%; object-fit:cover; display:block; }
+  @media (max-width:860px){
+    .aoc-device .aoc-dv-wrap{ grid-template-columns:1fr; gap:var(--space-10); }
+    .aoc-dv-stage{ min-height:340px; }
+  }
+</style>
+<section class="section aoc-device" id="device-showcase" data-device="desktop" data-tab="aoc">
+  <div class="aoc-dv-wrap">
+    <div class="aoc-dv-left reveal-left">
+      <p class="section-label">INSIDE AGENT ON CAMERA</p>
+      <h2 class="section-heading">The Complete Course</h2>
+      <p class="section-sub">You won't find a course this detailed anywhere else. It's designed that way.</p>
+      <div class="aoc-dv-toggle" role="group" aria-label="Device">
+        <button type="button" data-device-opt="mobile">Mobile</button>
+        <button type="button" data-device-opt="desktop" class="active">Desktop</button>
+      </div>
+      <div class="aoc-dv-tabs" role="group" aria-label="Showcase content">
+        <button type="button" data-tab-opt="aoc" class="active">Agent On Camera</button>
+        <button type="button" data-tab-opt="skool">910 Academy Skool Course</button>
+        <button type="button" data-tab-opt="networking">World Class Networking</button>
+      </div>
+    </div>
+    <div class="aoc-dv-right reveal">
+      <div class="aoc-dv-stage">
+        <!-- LAPTOP frame — MacBook PNG; video shows through the transparent screen cutout -->
+        <div class="aoc-dv-laptop">
+          <div class="aoc-dv-mac">
+            <div class="aoc-dv-screen">
+              <video class="aoc-dv-video" id="dvVidDesktop" muted loop playsinline webkit-playsinline preload="none" poster="/aoc/showcase/desktop-aoc.jpg"></video>
+            </div>
+            <img class="aoc-dv-macimg" src="/aoc/showcase/macbook.png" alt="" decoding="async" loading="lazy">
+          </div>
+        </div>
+        <!-- PHONE frame (CSS) -->
+        <div class="aoc-dv-phone">
+          <div class="aoc-dv-bezel">
+            <div class="aoc-dv-notch"></div>
+            <div class="aoc-dv-screen">
+              <video class="aoc-dv-video" id="dvVidPhone" muted loop playsinline webkit-playsinline preload="none" poster="/aoc/showcase/mobile-aoc.jpg"></video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var root = document.getElementById('device-showcase');
+  if(!root) return;
+  var device='desktop', tab='aoc', inView=false;
+  var devBtns = root.querySelectorAll('[data-device-opt]');
+  var tabBtns = root.querySelectorAll('[data-tab-opt]');
+  var vidD = document.getElementById('dvVidDesktop');
+  var vidP = document.getElementById('dvVidPhone');
+  function cur(){ return device==='desktop' ? vidD : vidP; }
+  function syncVideo(){
+    var v = cur(); if(!v) return;
+    var base = '/aoc/showcase/' + (device==='desktop'?'desktop':'mobile') + '-' + tab;
+    if (v.getAttribute('data-key') !== base){
+      v.setAttribute('data-key', base);
+      v.setAttribute('poster', base + '.jpg');
+      v.setAttribute('src', base + '.mp4');
+      v.load();
+    }
+    var other = device==='desktop' ? vidP : vidD;
+    if (other) other.pause();
+    if (inView){ var p=v.play(); if(p && p.catch) p.catch(function(){}); }
+  }
+  function apply(){
+    root.setAttribute('data-device', device);
+    root.setAttribute('data-tab', tab);
+    devBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-device-opt')===device); });
+    tabBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab-opt')===tab); });
+    syncVideo();
+  }
+  devBtns.forEach(function(b){ b.addEventListener('click', function(){ device=b.getAttribute('data-device-opt'); apply(); }); });
+  tabBtns.forEach(function(b){ b.addEventListener('click', function(){ tab=b.getAttribute('data-tab-opt'); apply(); }); });
+  apply();
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ es.forEach(function(e){ inView = e.isIntersecting; if(inView){ syncVideo(); } else { if(vidD)vidD.pause(); if(vidP)vidP.pause(); } }); }, { threshold: 0.25 }).observe(root);
+  } else { inView = true; syncVideo(); }
+})();
+</script>
+
+<hr class="section-divider">
+
+<!-- ============================================================
+     WHY THIS WORKS  (centered; thesis headline + problem/you/outcome flow)
+     Icons replace numbers: X (problem) / play (you) / cash (outcome), transparent gray.
+     ============================================================ -->
+<style>
+  .aoc-why{ text-align:center; }
+  .aoc-why .section-label{ text-align:center; }
+  .aoc-why-headline{ font-family:'Montserrat',sans-serif; font-weight:400; text-transform:none; text-align:center;
+    font-size:clamp(1.7rem,3.6vw,2.8rem); line-height:1.3; letter-spacing:-.01em; color:var(--fg); max-width:840px; margin:0 auto var(--space-12); }
+  .aoc-why-headline em{ font-style:italic; }
+  .aoc-why-headline strong{ font-weight:700; }
+  .aoc-why-flow{ display:flex; align-items:stretch; justify-content:center; gap:var(--space-4); }
+  .aoc-why-step{ flex:1; text-align:center; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    border-radius:var(--radius-lg); padding:var(--space-8); }
+  .aoc-why-step--key{ border-color:var(--accent-border); background:var(--accent-subtle); box-shadow:0 0 44px -12px var(--accent-glow); }
+  .aoc-why-step-icon{ width:46px; height:46px; margin:0 auto var(--space-4); color:var(--accent); }
+  .aoc-why-step-icon svg{ width:100%; height:100%; display:block; }
+  .aoc-why-step-title{ font-size:1.15rem; font-weight:700; color:var(--fg); margin-bottom:var(--space-3); }
+  .aoc-why-step-desc{ font-size:.95rem; color:var(--fg-muted); line-height:var(--leading-normal); }
+  .aoc-why-arrow{ display:flex; align-items:center; color:var(--accent); font-size:1.8rem; font-weight:300; }
+  @media (max-width:860px){
+    .aoc-why-flow{ flex-direction:column; }
+    .aoc-why-arrow{ justify-content:center; transform:rotate(90deg); padding:var(--space-2) 0; }
+  }
+</style>
+<section class="section aoc-why" id="why-this-works">
+  <p class="section-label reveal">WHY THIS WORKS</p>
+  <h2 class="aoc-why-headline reveal">Agents all over the world are looking for more ways to sell houses <em>easier</em> <strong>every single day</strong>.</h2>
+  <div class="aoc-why-flow">
+    <div class="aoc-why-step reveal">
+      <div class="aoc-why-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div>
+      <h3 class="aoc-why-step-title">The Problem</h3>
+      <p class="aoc-why-step-desc">An agent has a property they can earn a serious commission on, but their reach is limited to their own network.</p>
+    </div>
+    <div class="aoc-why-arrow" aria-hidden="true">&rarr;</div>
+    <div class="aoc-why-step aoc-why-step--key reveal" style="transition-delay:.1s;">
+      <div class="aoc-why-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M10.5 8.5l5 3.5-5 3.5z" fill="currentColor" stroke="none"/></svg></div>
+      <h3 class="aoc-why-step-title">Where You Come In</h3>
+      <p class="aoc-why-step-desc">Your media pushes that listing in front of hundreds of thousands, even millions, of the right people.</p>
+    </div>
+    <div class="aoc-why-arrow" aria-hidden="true">&rarr;</div>
+    <div class="aoc-why-step reveal" style="transition-delay:.2s;">
+      <div class="aoc-why-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg></div>
+      <h3 class="aoc-why-step-title">The Outcome</h3>
+      <p class="aoc-why-step-desc">The property sells, the realtor gets a commission, and comes right back to you for more business.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SOFT-DELETED (kept for revert): "You Will Also Get" collection grid.
+     Courses now live in the Agent On Camera showcase/video. To restore, delete
+     this opening line and the closing line below.
+<section class="section" id="whats-inside">
+  <div class="reveal-left">
+    <p class="section-label">THE COLLECTION</p>
+    <h2 class="section-heading">YOU WILL ALSO GET</h2>
+    <p class="section-sub">Everything inside of 910 Academy Skool.</p>
+  </div>
+  <div class="course-grid">
+    <div class="course-card reveal">
+      <div class="course-box"><img src="/whats-inside/ai-editing.webp" alt="AI Editing" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">AI Editing</h3>
+      <p class="course-card-desc">Create Viral Hooks with AI</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.05s;">
+      <div class="course-box"><img src="/whats-inside/shooting-training.webp" alt="Shooting Training" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">Shooting Training</h3>
+      <p class="course-card-desc">Learn to Shoot Like a Pro</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.1s;">
+      <div class="course-box"><img src="/whats-inside/910-sales-system.webp" alt="910 Sales System" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">910 Sales System</h3>
+      <p class="course-card-desc">Sales Masterclass</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.15s;">
+      <div class="course-box"><img src="/whats-inside/four-horsemen-takeover.webp" alt="Four Horsemen Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">Four Horsemen Takeover</h3>
+      <p class="course-card-desc">How to Brand, Edit, and Scale</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.2s;">
+      <div class="course-box"><img src="/whats-inside/jt-visuals-takeover.webp" alt="The JT Visuals Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">The JT Visuals Takeover</h3>
+      <p class="course-card-desc">Shooting, Editing, Sound Design and More</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.25s;">
+      <div class="course-box"><img src="/whats-inside/lucid-horizon-takeover.webp" alt="The Lucid Horizon Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">The Lucid Horizon Takeover</h3>
+      <p class="course-card-desc">Never Seen Before L.U.C.I.D. Method</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.3s;">
+      <div class="course-box"><img src="/whats-inside/known-productions-takeover.webp" alt="The Known Productions Takeover" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">The Known Productions Takeover</h3>
+      <p class="course-card-desc">How to Hack Attention and Go Viral</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.35s;">
+      <div class="course-box"><img src="/whats-inside/live-replay-vault.webp" alt="LIVE Replay Vault" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">LIVE Replay Vault</h3>
+      <p class="course-card-desc">Live Academy Replays</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.4s;">
+      <div class="course-box"><img src="/whats-inside/910-admin-assistant.webp" alt="910 Admin Assistant" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">910 Admin Assistant</h3>
+      <p class="course-card-desc">Designed for Admin Intelligence</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.45s;">
+      <div class="course-box"><img src="/whats-inside/viral-editing-masterclass-2025.webp" alt="Viral Editing Masterclass (2025)" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">Viral Editing Masterclass (2025)</h3>
+      <p class="course-card-desc">Learn How to Edit Videos in 2025</p>
+    </div>
+    <div class="course-card reveal" style="transition-delay:0.5s;">
+      <div class="course-box"><img src="/whats-inside/viral-editing-masterclass-2024.webp" alt="Viral Editing Masterclass (2024)" width="1460" height="752" loading="lazy" decoding="async"></div>
+      <h3 class="course-card-title">Viral Editing Masterclass (2024)</h3>
+      <p class="course-card-desc">3-Part Editing Masterclass</p>
+    </div>
+  </div>
+</section>
+END SOFT-DELETE -->
+
+<!-- 910 Academy is for you if... -->
+<section class="section" id="who">
+  <div class="reveal-left">
+    <p class="section-label">WHO IS THIS FOR</p>
+    <h2 class="section-heading"><span style="color:#38B6FF">AOC</span> IS FOR YOU IF…</h2>
+  </div>
+  <div class="audience-grid">
+    <div class="audience-card reveal">
+      <div class="audience-number">01</div>
+      <h3 class="audience-title">Complete Beginners</h3>
+      <p class="audience-desc">You are a complete beginner who wants to create and build a real estate media business.</p>
+    </div>
+    <div class="audience-card reveal" style="transition-delay:0.1s;">
+      <div class="audience-number">02</div>
+      <h3 class="audience-title">Aspiring Videographers</h3>
+      <p class="audience-desc">You are a videographer who wants to break into real estate media.</p>
+    </div>
+    <div class="audience-card reveal" style="transition-delay:0.2s;">
+      <div class="audience-number">03</div>
+      <h3 class="audience-title">Established Owners</h3>
+      <p class="audience-desc">You are a current real estate media business owner who wants to sharpen and refine your skills, and train your team.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SOFT-DELETED (kept for revert): The Full 910 Academy Curriculum section.
+     To restore, delete this opening line and the closing line below.
+<section class="section" id="curriculum">
+  <div class="reveal-left">
+    <p class="section-label">ALSO INCLUDED</p>
+    <h2 class="section-heading">The Full 910 Academy<br>Curriculum</h2>
+    <p class="section-sub">Agent On Camera is included in your 910 Academy Skool membership, which also includes all of the following trainings.</p>
+  </div>
+  <div class="accordion" id="curriculumAccordion">
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Mindset</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>Unstoppable Mindset</li>
+            <li>Push Your Luck</li>
+            <li>Moral Authority</li>
+            <li>The Unfair Edge</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Shooting</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>Shoot to Edit</li>
+            <li>Shooting Success</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Editing</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>The Viral Loop</li>
+            <li>The $60,000,000 Secrets</li>
+            <li>JT Visuals Takeover</li>
+            <li>3D Made Easy</li>
+            <li>Editing For Virality</li>
+            <li>Day to Night - FA FA FA Edition</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Business</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>Business Breakthrough</li>
+            <li>7 Figure Blueprint</li>
+            <li>The 7 Figure Funnel</li>
+            <li>7 Secrets I Wish I Knew</li>
+            <li>Crush Your Competition</li>
+            <li>Sales Made Simple</li>
+            <li>Flat Tires and Road Bumps</li>
+            <li>The 25 For 2025</li>
+            <li>Coast to Coast Creator</li>
+            <li>Going Pro</li>
+            <li>How To Work With The Top 1%</li>
+            <li>The Golden Client</li>
+            <li>Territory Taker</li>
+            <li>Mastering Client Experience</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Branding</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>10 Laws of Branding</li>
+            <li>The Agent Magnet</li>
+            <li>The Agent Magnet PT 2</li>
+            <li>The Ultimate Collab</li>
+            <li>Break Into Luxury</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Scripting</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>Scripting Success</li>
+            <li>The Anatomy of the Script</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Systems</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>Scaling with Systems</li>
+            <li>The $500,000 Secret</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Social Media</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>The Viral Mistake</li>
+            <li>The Perfect Reel</li>
+            <li>Social Climbing</li>
+            <li>DMs Into Dollars (Instagram 2025 Method)</li>
+            <li>Instagram Masterclass</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <span>Sermons</span>
+        <span class="accordion-icon">+</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-body-inner">
+          <ol class="accordion-list">
+            <li>Vision in the Valley</li>
+            <li>7 Truths</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+END SOFT-DELETE -->
+
+<!-- Bonus Perks / Everything You Get -->
+<section class="section" id="perks">
+  <div class="reveal-left">
+    <p class="section-label">THAT’S NOT IT</p>
+    <h2 class="section-heading">You Will Also Get</h2>
+    <p class="section-sub">Membership includes more than just training.</p>
+  </div>
+  <div class="perks-grid">
+    <div class="perk-card reveal">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      </div>
+      <h3 class="perk-title">Private Instagram Group Chat</h3>
+      <p class="perk-desc">Direct access to Claudio and the inner circle.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.05s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <h3 class="perk-title">Free Resources</h3>
+      <p class="perk-desc">Sound effects, LUTs, presets, and premium assets.</p>
+    </div>
+    <div class="perk-card reveal" style="transition-delay:0.1s;">
+      <div class="perk-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 12a4 4 0 1 1-4-4 11 11 0 0 1 4 4 4 4 0 1 0-4 4 11 11 0 0 1 4-4Z"/></svg>
+      </div>
+      <h3 class="perk-title">Future Content Access</h3>
+      <p class="perk-desc">Every new course and update included forever.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- Real Results / Video Testimonials -->
+<section class="section" id="results">
+  <div class="reveal-left">
+    <p class="section-label">PROOF</p>
+    <h2 class="section-heading">REAL STUDENTS. REAL RESULTS.</h2>
+    <p class="section-sub">Watch the full breakdown of how our students built their real estate media businesses.</p>
+  </div>
+  <div class="video-stack">
+    <div class="video-wrap reveal">
+      <div class="video-embed">
+        <iframe src="https://www.youtube-nocookie.com/embed/kY_cZKMM6TY" title="This Student Makes $10,000/Month Filming Real Estate" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <h3 class="video-title">This Student Makes $10,000/Month Filming Real Estate</h3>
+      <p class="video-desc">Six months ago, Mikolaj was working a regular job. Today, he's one of our fastest-growing students, shooting the biggest mansions in West Palm Beach and hitting $10,000 in his first month. Watch the full breakdown of how one viral video kickstarted his entire business and how he used 910 Academy to scale faster than he thought possible.</p>
+    </div>
+    <div class="video-wrap reveal">
+      <div class="video-embed">
+        <iframe src="https://www.youtube-nocookie.com/embed/AC-u8pAWdEY" title="How This 20-Year-Old Makes $20K/Month Filming Real Estate" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <h3 class="video-title">How This 20-Year-Old Makes $20K/Month Filming Real Estate</h3>
+      <p class="video-desc">Justin was making $18 an hour as a customer service rep while grinding through college full-time just six months ago. Today, he's making over $20,000 a month filming real estate. We flew him out to Sedona, Arizona to shoot a property he calls his favorite house of all time. Cooking at sunrise on a luxury estate, off-roading through red rock country, and jumping out of helicopters. This is the exact mindset and skill shift that separates people stuck at $18 an hour from people who build real freedom with a camera.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================
+     MEET CLAUDIO RIVERA  (founder / instructor — placed just before the offer)
+     Reuses the native .community-layout / .community-image glass pattern.
+     Headshot is real; bio copy is [PLACEHOLDER].
+     ============================================================ -->
+<style>
+  .aoc-claudio .community-image{ max-width:440px; margin:0 auto; }
+  .aoc-claudio .community-image img{ aspect-ratio:4/5; object-fit:cover; object-position:center top; }
+  .aoc-claudio .claudio-bio{ font-size:1.05rem; color:var(--fg-muted); line-height:var(--leading-normal); max-width:560px; }
+  .aoc-claudio .claudio-bio + .claudio-bio{ margin-top:var(--space-4); }
+</style>
+<section class="section aoc-claudio" id="meet-claudio">
+  <div class="community-layout">
+    <div class="community-image reveal">
+      <img src="/images/claudio-pfp.webp" alt="Claudio Rivera" width="800" height="1000" loading="lazy" decoding="async">
+    </div>
+    <div class="community-text reveal-left">
+      <p class="section-label">THE FOUNDER</p>
+      <h2 class="section-heading">Meet Claudio Rivera</h2>
+      <p class="claudio-bio">Claudio started out with videography skills and a string of jobs he couldn't stand, washing dishes and waiting tables. Then he saw a possibility: if agents wanted to sell more houses, he could use his videography and social media to help them do it.</p>
+      <p class="claudio-bio">He founded Studio 910 out of a small studio apartment, starting with everyday agents and growing to work with some of the biggest names in the industry, including Ryan Serhant, Shawn Elliott, and Rob Thomson. His videos have since helped sell over a billion dollars in real estate.</p>
+      <p class="claudio-bio">In 2024 he developed a passion for teaching, and has since taught thousands of videographers around the world the secrets to building a real estate media business. He has distilled his greatest teachings into Agent On Camera, so he can help millions more do the same.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SAVED: WHAT YOU'LL LEARN SECTION
+<section class="section" id="curriculum-learn">
+  <div class="reveal-left">
+    <p class="section-label">THE CURRICULUM</p>
+    <h2 class="section-heading">What You'll Learn</h2>
+  </div>
+  <div class="curriculum-grid">
+    <div class="curriculum-card reveal">
+      <div class="curriculum-number">01</div>
+      <h3>How to Shoot Real Estate like the Legends</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.1s;">
+      <div class="curriculum-number">02</div>
+      <h3>How to Scale Your Team with Top Tier Talent</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.2s;">
+      <div class="curriculum-number">03</div>
+      <h3>How to Edit With Cutting-Edge Viral Styles Using AI</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.3s;">
+      <div class="curriculum-number">04</div>
+      <h3>How to Break Into Luxury and Shoot the Homes of the 1%</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.4s;">
+      <div class="curriculum-number">05</div>
+      <h3>How to Build Your Personal Brand to Attract Luxury Agents</h3>
+    </div>
+    <div class="curriculum-card reveal" style="transition-delay:0.5s;">
+      <div class="curriculum-number">06</div>
+      <h3>910 Sales System: Sales Secrets of a 7-Figure Media Company</h3>
+    </div>
+  </div>
+</section>
+-->
   </div>
 </main>
 
@@ -403,10 +1725,14 @@ document.getElementById('bookedFallback').addEventListener('click', onBooked);
 
 let bookedSubmitted = false;
 function onBooked() {
-  if (bookedSubmitted) { setState('postbook'); return; }
-  bookedSubmitted = true;
-  // Backend POST wired in commit 7. For now, just advance.
+  // Advance immediately — the booking already completed in Calendly; never make them wait.
   setState('postbook');
+  if (bookedSubmitted) return;
+  bookedSubmitted = true;
+  // Record the qualified→booked completion (fire-and-forget). Emails academy@ with the
+  // answer set so the closer walks in informed; the Supabase row is the durable record.
+  postFunnel({ type: 'booked', q1: answers.q1, q2: answers.q2, q3: answers.q3, q4: answers.q4 })
+    .catch(function (e) { console.warn('[livedemo] booked POST failed:', e && e.message); });
 }
 
 /* ---- Shared backend POST (used by texting submit + booked completion) ----- */
@@ -465,6 +1791,59 @@ textForm.addEventListener('submit', async function (e) {
 /* ---- init ----------------------------------------------------------------- */
 renderQuestion();
 setState('quiz');
+</script>
+<script>
+/* ===== Reused-section scripts (scroll reveal + accordion) ported from /aoc/join ===== */
+
+// ---- SCROLL REVEAL (IntersectionObserver) with safety net ----
+// The observer animates elements in as they scroll into view. Because #whatis
+// starts display:none (shown only in end states) we also add a safety net so
+// .reveal elements are NEVER left stuck at opacity:0 if the observer never runs.
+(function () {
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('.reveal, .reveal-left'));
+  if (!nodes.length) return;
+  function show(el) { el.classList.add('visible'); }
+  if (!('IntersectionObserver' in window)) { nodes.forEach(show); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  nodes.forEach(function (el) { io.observe(el); });
+  // Safety net: force-show anything already in the viewport that the observer
+  // hasn't caught (e.g. right after #whatis is revealed on an end state).
+  function sweep() {
+    nodes.forEach(function (el) {
+      if (el.classList.contains('visible')) return;
+      var r = el.getBoundingClientRect();
+      if (r.top < (window.innerHeight || 0) && r.bottom > 0) show(el);
+    });
+  }
+  window.addEventListener('scroll', sweep, { passive: true });
+  window.addEventListener('resize', sweep);
+  window.addEventListener('load', sweep);
+  if ('MutationObserver' in window) {
+    new MutationObserver(sweep).observe(document.body, { attributes: true, attributeFilter: ['data-state'] });
+  }
+  // Absolute last resort: never leave content invisible.
+  setTimeout(function () { nodes.forEach(show); }, 8000);
+})();
+
+// ---- CURRICULUM ACCORDION ----
+(function () {
+  var headers = document.querySelectorAll('#curriculumAccordion .accordion-header');
+  headers.forEach(function (h) {
+    h.addEventListener('click', function () {
+      var item = h.parentElement;
+      var body = h.nextElementSibling;
+      var isOpen = item.classList.toggle('open');
+      body.style.maxHeight = isOpen ? (body.scrollHeight + 'px') : '0';
+    });
+  });
+  window.addEventListener('resize', function () {
+    document.querySelectorAll('#curriculumAccordion .accordion-item.open .accordion-body').forEach(function (b) {
+      b.style.maxHeight = b.scrollHeight + 'px';
+    });
+  });
+})();
 </script>
 </body>
 </html>
