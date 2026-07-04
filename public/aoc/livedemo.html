@@ -112,10 +112,12 @@ body[data-state="postbook"] #whatis { display: block; }
 
 /* ===== SHARED LAYOUT ===== */
 .wrap { position: relative; z-index: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 0 var(--space-6); }
-.stage { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-16) 0 var(--space-20); text-align: center; }
-.eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
-.h1 { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.06; }
-.sub { color: var(--fg-muted); font-size: clamp(1rem, 2.4vw, 1.15rem); line-height: 1.5; max-width: 46ch; margin: 0 auto; }
+/* NB: .stage & .wrap share one element (class="wrap stage"); .stage's padding wins,
+   so the horizontal gutter must live HERE (not only on .wrap) or content goes edge-to-edge. */
+.stage { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--space-16) var(--space-6) var(--space-20); text-align: center; }
+.eyebrow { font-size: clamp(0.7rem, 2vw, 0.8rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+.h1 { font-size: clamp(1.6rem, 6vw, 3.4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; }
+.sub { color: var(--fg-muted); font-size: clamp(0.95rem, 2.4vw, 1.15rem); line-height: 1.5; max-width: 46ch; margin: 0 auto; }
 
 /* ===== SHARED CTA BUTTON (accent, glowing) ===== */
 .ld-btn {
@@ -132,10 +134,12 @@ body[data-state="postbook"] #whatis { display: block; }
 /* ===== STATE 1 — QUIZ ===== */
 .quiz-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: 6px; background: rgba(255,255,255,0.08); }
 .quiz-progress-fill { height: 100%; width: 0%; background: var(--accent); box-shadow: 0 0 12px rgba(56,182,255,0.6); transition: width .45s var(--ease-out); }
+.quiz-back { position: fixed; top: 14px; left: 14px; z-index: 30; width: 44px; height: 44px; border-radius: 50%; align-items: center; justify-content: center; color: var(--fg-muted); background: rgba(255,255,255,0.05); border: 1px solid var(--border); transition: color .2s var(--ease-smooth), border-color .2s var(--ease-smooth), background .2s var(--ease-smooth); }
+.quiz-back:hover { color: var(--fg); border-color: var(--accent-border); background: var(--accent-subtle); }
 .quiz-head { margin-bottom: var(--space-10); display: flex; flex-direction: column; gap: var(--space-3); }
 .quiz-count { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
 .q-card { width: 100%; }
-.q-text { font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 700; line-height: 1.22; margin-bottom: var(--space-8); }
+.q-text { font-size: clamp(1.2rem, 4.4vw, 2rem); font-weight: 700; line-height: 1.24; margin-bottom: var(--space-8); }
 .q-opts { display: flex; flex-direction: column; gap: var(--space-3); }
 .q-opt {
   width: 100%; text-align: left; padding: 18px 22px; min-height: 56px;
@@ -152,9 +156,11 @@ body[data-state="postbook"] #whatis { display: block; }
 /* one-question-at-a-time transition */
 .q-card.leaving { opacity: 0; transform: translateX(-18px); }
 .q-card.entering { opacity: 0; transform: translateX(18px); }
+.q-card.leaving-back { opacity: 0; transform: translateX(18px); }
+.q-card.entering-back { opacity: 0; transform: translateX(-18px); }
 .q-card { opacity: 1; transform: translateX(0); transition: opacity .28s var(--ease-out), transform .28s var(--ease-out); }
 @media (prefers-reduced-motion: reduce) {
-  .q-card, .q-card.leaving, .q-card.entering { transition: none !important; transform: none !important; opacity: 1 !important; }
+  .q-card, .q-card.leaving, .q-card.entering, .q-card.leaving-back, .q-card.entering-back { transition: none !important; transform: none !important; opacity: 1 !important; }
   .quiz-progress-fill { transition: none !important; }
 }
 
@@ -180,9 +186,17 @@ body[data-state="postbook"] #whatis { display: block; }
 .footer-copy { font-size: 13px; color: var(--fg-ghost); letter-spacing: 0.04em; }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 var(--space-5); }
-  .stage { padding: var(--space-12) 0 var(--space-16); }
+  .wrap { padding: 0 18px; }
+  /* Lock each quiz question + end-state action to one viewport (dvh so browser
+     chrome doesn't cause scroll/jump); the #whatis explainer below still scrolls. */
+  .stage { min-height: 100dvh; padding: 74px 18px 28px; justify-content: center; }
+  .quiz-head { margin-bottom: var(--space-6); }
+  .q-text { margin-bottom: var(--space-5); }
+  .q-opts { gap: 10px; }
+  .q-opt { padding: 15px 18px; min-height: 52px; font-size: 0.98rem; }
+  .ld-form { margin-top: var(--space-6); }
   .ld-btn { width: 100%; }
+  .quiz-back { top: 12px; left: 12px; }
 }
 </style>
 <style>
@@ -747,6 +761,10 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 <!-- Progress bar (STATE 1 only; hidden by CSS in other states via inline check below) -->
 <div class="quiz-progress" id="quizProgress" aria-hidden="true"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+<!-- Back to previous question (tap-to-advance forward stays; Back is the only nav control). Hidden on Q1. -->
+<button type="button" class="quiz-back" id="quizBack" aria-label="Back to previous question" style="display:none;">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
 
 <main>
   <!-- ============================ STATE 1 — QUIZ ============================ -->
@@ -1614,8 +1632,9 @@ END SOFT-DELETE -->
 /* ---- State machine -------------------------------------------------------- */
 function setState(name) {
   document.body.dataset.state = name;
-  // progress bar belongs to the quiz only
+  // progress bar + back button belong to the quiz only
   document.getElementById('quizProgress').style.display = (name === 'quiz') ? 'block' : 'none';
+  updateBackBtn();
   window.scrollTo(0, 0);
   if (name === 'booking') mountCalendly();
 }
@@ -1642,6 +1661,12 @@ let locked = false; // guards double-taps during the advance animation
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Back button shows only on the quiz, past question 1.
+function updateBackBtn() {
+  const b = document.getElementById('quizBack');
+  if (b) b.style.display = (document.body.dataset.state === 'quiz' && qIdx > 0) ? 'flex' : 'none';
+}
+
 function renderQuestion() {
   const card = document.getElementById('qCard');
   const item = QUESTIONS[qIdx];
@@ -1654,41 +1679,59 @@ function renderQuestion() {
   }).join('');
   card.innerHTML = '<p class="q-text">' + item.q + '</p><div class="q-opts">' + opts + '</div>';
 
+  // Re-mark a previously chosen answer (so going Back preserves the selection).
+  const prev = answers[item.key];
   card.querySelectorAll('.q-opt').forEach(function (btn) {
+    if (prev && btn.getAttribute('data-opt') === prev) btn.classList.add('is-selected');
     btn.addEventListener('click', function () { selectOption(btn); });
   });
+  updateBackBtn();
 }
 
 function selectOption(btn) {
   if (locked) return;
   locked = true;
-  const opt = btn.getAttribute('data-opt');
-  answers[QUESTIONS[qIdx].key] = opt;
+  answers[QUESTIONS[qIdx].key] = btn.getAttribute('data-opt');
   btn.classList.add('is-selected');
   const delay = reduceMotion ? 0 : 260;
   setTimeout(advance, delay);
 }
 
-function advance() {
+// Animate the card out, swap to newIdx, animate in. dir: 'fwd' | 'back'.
+function changeQuestion(newIdx, dir) {
   const card = document.getElementById('qCard');
-  const isLast = qIdx >= QUESTIONS.length - 1;
-
+  const outCls = dir === 'back' ? 'leaving-back' : 'leaving';
+  const inCls = dir === 'back' ? 'entering-back' : 'entering';
   function swap() {
-    if (isLast) { finishQuiz(); return; }
-    qIdx++;
+    qIdx = newIdx;
     renderQuestion();
     if (!reduceMotion) {
-      card.classList.remove('leaving');
-      card.classList.add('entering');
+      card.classList.remove(outCls);
+      card.classList.add(inCls);
       requestAnimationFrame(function () {
-        requestAnimationFrame(function () { card.classList.remove('entering'); locked = false; });
+        requestAnimationFrame(function () { card.classList.remove(inCls); locked = false; });
       });
     } else { locked = false; }
   }
-
   if (reduceMotion) { swap(); return; }
-  card.classList.add('leaving');
+  card.classList.add(outCls);
   setTimeout(swap, 280);
+}
+
+function advance() {
+  if (qIdx >= QUESTIONS.length - 1) {
+    if (reduceMotion) { finishQuiz(); return; }
+    document.getElementById('qCard').classList.add('leaving');
+    setTimeout(finishQuiz, 280);
+    return;
+  }
+  changeQuestion(qIdx + 1, 'fwd');
+}
+
+function goBack() {
+  if (locked || qIdx === 0) return;
+  locked = true;
+  changeQuestion(qIdx - 1, 'back');
 }
 
 function finishQuiz() {
@@ -1789,6 +1832,7 @@ textForm.addEventListener('submit', async function (e) {
 })();
 
 /* ---- init ----------------------------------------------------------------- */
+document.getElementById('quizBack').addEventListener('click', goBack);
 renderQuestion();
 setState('quiz');
 </script>
