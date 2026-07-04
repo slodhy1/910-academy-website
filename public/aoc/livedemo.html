@@ -773,8 +773,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="quiz-head">
         <span class="quiz-count" id="quizCount">1 / 4</span>
         <h1 class="h1">Book Your Demo</h1>
-        <!-- PLACEHOLDER: quiz subline (1 short line under the headline) -->
-        <p class="sub" id="quizSub">[PLACEHOLDER — quiz subline]</p>
+        <p class="sub" id="quizSub">Answer 4 quick questions to see if you're a fit.</p>
       </div>
       <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
     </div>
@@ -785,7 +784,6 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="wrap stage">
       <span class="eyebrow">Agent On Camera</span>
       <h2 class="h1">Book Your Agent on Camera Demo</h2>
-      <!-- PLACEHOLDER (optional): booking subline -->
       <div id="calendlyMount" style="width:100%"><!-- Calendly embed or placeholder injected by JS --></div>
       <!-- Fallback so a completed booking is never a dead end if the in-iframe event is blocked -->
       <button type="button" class="ld-btn-ghost ld-btn" style="margin-top:var(--space-6);" id="bookedFallback">Already booked? Continue →</button>
@@ -798,10 +796,8 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="wrap stage">
       <div id="textIntro">
         <span class="eyebrow">Agent On Camera</span>
-        <!-- PLACEHOLDER: texting headline (helpful framing, e.g. "Let's get you started the right way") -->
-        <h2 class="h1">[PLACEHOLDER — texting headline]</h2>
-        <!-- PLACEHOLDER: texting body (e.g. "Our team will text you shortly to help you take the next step.") -->
-        <p class="sub">[PLACEHOLDER — texting body]</p>
+        <h2 class="h1">We'll be in touch shortly</h2>
+        <p class="sub">Drop your name and number and our team will text you personally to see how we can help you grow.</p>
 
         <form class="ld-form" id="textForm" novalidate>
           <input type="text" name="fullName" id="tfName" placeholder="Full name" autocomplete="name" required>
@@ -809,15 +805,13 @@ img, video, iframe { max-width: 100%; height: auto; }
           <!-- honeypot (hidden; bots fill it) -->
           <input class="ld-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
           <p class="ld-error" id="tfError" role="alert"></p>
-          <!-- PLACEHOLDER label: neutral submit text, swap freely -->
           <button type="submit" class="ld-btn" id="tfSubmit">Submit</button>
         </form>
       </div>
 
       <div id="textDone" style="display:none;">
         <span class="eyebrow">You're all set</span>
-        <!-- PLACEHOLDER: confirmation (e.g. "You're all set — our team will reach out by text shortly.") -->
-        <p class="sub" style="margin-top:var(--space-4);">[PLACEHOLDER — texting confirmation]</p>
+        <p class="sub" style="margin-top:var(--space-4);">You're all set. Our team will text you shortly — keep an eye on your phone.</p>
       </div>
     </div>
   </section>
@@ -826,16 +820,11 @@ img, video, iframe { max-width: 100%; height: auto; }
   <section id="s-postbook">
     <div class="wrap stage">
       <span class="eyebrow">You're booked</span>
-      <!-- PLACEHOLDER: booking-confirmed headline -->
-      <h2 class="h1">[PLACEHOLDER — booking confirmed headline]</h2>
-      <!-- PLACEHOLDER: booking-confirmed subline -->
-      <p class="sub">[PLACEHOLDER — booking confirmed subline]</p>
+      <h2 class="h1">You're booked.</h2>
 
       <div style="display:flex;flex-direction:column;gap:var(--space-4);margin:var(--space-8) auto 0;max-width:520px;">
-        <!-- PLACEHOLDER: they'll be speaking with Claudio personally -->
-        <p class="sub">[PLACEHOLDER — "You'll be speaking with Claudio personally."]</p>
-        <!-- PLACEHOLDER: missed calls will be forfeited -->
-        <p class="sub">[PLACEHOLDER — "Missed calls will be forfeited."]</p>
+        <p class="sub">You'll be speaking with Claudio Rivera personally on this call.</p>
+        <p class="sub">Please make sure you can attend — missed calls are forfeited and won't be rescheduled.</p>
       </div>
 
       <!-- Reschedule — hidden until CALENDLY_RESCHEDULE_URL is pasted at top of file -->
@@ -1552,7 +1541,7 @@ END SOFT-DELETE -->
 <!-- ============================================================
      MEET CLAUDIO RIVERA  (founder / instructor — placed just before the offer)
      Reuses the native .community-layout / .community-image glass pattern.
-     Headshot is real; bio copy is [PLACEHOLDER].
+     Headshot and bio copy are the real content ported from /aoc/join.
      ============================================================ -->
 <style>
   .aoc-claudio .community-image{ max-width:440px; margin:0 auto; }
