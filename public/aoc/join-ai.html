@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent On Camera</title>
 <meta name="robots" content="noindex,follow">
-<!-- ===== TIMER END: at this time the "Deal ends in" countdown just disappears.
-     The $200-off sale STAYS ($710, badges, promo bar all remain). EDIT THIS ONE LINE. ===== -->
+<!-- ===== SALE END: at this instant the launch sale ends automatically.
+     The countdown, "Sale Extended"/"One Last Day" badges and the $200-off
+     promo bar all hide, and the price reverts from $710 back to $910.
+     EDIT THE SALE_END LINE BELOW. ===== -->
 <script>
-  var SALE_END = "2026-07-03T01:00:00-04:00"; // 1:00 AM Eastern (EDT = UTC-4)
+  var SALE_END = "2026-07-04T00:00:00-04:00"; // tonight, midnight Eastern (EDT = UTC-4)
   window.__SALE_END__ = Date.parse(SALE_END);
   (function(){
     function over(){ document.documentElement.classList.add('sale-over'); }
@@ -17,8 +19,15 @@
   })();
 </script>
 <style>
-  /* At SALE_END the "Deal ends in" countdown disappears. The $200-off sale stays. */
-  html.sale-over .hero-timer { display: none !important; }
+  /* At SALE_END the launch sale fully retires: countdown, sale badges and
+     promo bar hide; the final price switches from $710 back to $910. */
+  html.sale-over .hero-timer,
+  html.sale-over .sale-extended,
+  html.sale-over .aoc-today-only,
+  html.sale-over .aoc-promo { display: none !important; }
+  .reg-only { display: none; }
+  html.sale-over .sale-only { display: none !important; }
+  html.sale-over .reg-only { display: inline !important; }
 </style>
 <link rel="preload" as="image" href="/images/hero-bg.webp">
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
@@ -3130,7 +3139,7 @@ END SOFT-DELETE -->
 
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
-      <p class="value-final-price"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</p>
+      <p class="value-final-price"><span class="sale-only"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</span><span class="reg-only">$910</span></p>
       <p class="value-final-sub">910 Academy is a yearly membership, your membership will automatically renew unless you cancel.</p>
     </div>
 

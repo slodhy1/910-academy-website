@@ -13,7 +13,13 @@
 <script>
   var DEAL_END = "2026-07-04T00:00:00-04:00"; // tonight, midnight Eastern
   window.__DEAL_END__ = Date.parse(DEAL_END);
+  (function(){
+    function over(){ document.documentElement.classList.add('deal-over'); }
+    if (Date.now() >= window.__DEAL_END__) return over();
+    var si = setInterval(function(){ if (Date.now() >= window.__DEAL_END__){ over(); clearInterval(si); } }, 1000);
+  })();
 </script>
+<style> html.deal-over .timer { display: none !important; } </style>
 
 <link rel="icon" href="/logo-white.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/logo-white.svg">

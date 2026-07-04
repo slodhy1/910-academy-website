@@ -37,6 +37,24 @@
   if (Date.now() >= window.__FT_TARGET__) document.documentElement.classList.add('is-expired');
 </script>
 
+<!-- ===== LAUNCH SALE END (separate from the training expiry above).
+     At this instant the $710 launch price reverts to $910 and all sale
+     labels/badges hide. EDIT THIS ONE LINE. ===== -->
+<script>
+  var SALE_END = "2026-07-04T00:00:00-04:00"; // tonight, midnight Eastern (EDT = UTC-4)
+  window.__SALE_END__ = Date.parse(SALE_END);
+  (function(){
+    function over(){ document.documentElement.classList.add('sale-over'); }
+    if (Date.now() >= window.__SALE_END__) return over();
+    var si = setInterval(function(){ if (Date.now() >= window.__SALE_END__){ over(); clearInterval(si); } }, 1000);
+  })();
+</script>
+<style>
+  .reg-only { display: none; }
+  html.sale-over .sale-only { display: none !important; }
+  html.sale-over .reg-only { display: inline !important; }
+</style>
+
 <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -406,13 +424,14 @@ html.is-expired .bonus-expired-el { display: block; }
 
   <!-- ============ AGENT ON CAMERA PROMO (page end) ============ -->
   <section class="wrap band-accent">
-    <p class="section-label accent">Sale Extended</p>
+    <p class="section-label accent sale-only">Sale Extended</p>
     <h2 class="aoc-promo-title">Agent On Camera<br>x 910 Academy Skool</h2>
     <div class="aoc-price">
-      <span class="aoc-price-old">$910</span>
-      <span class="aoc-price-now">$710</span>
+      <span class="aoc-price-old sale-only">$910</span>
+      <span class="aoc-price-now sale-only">$710</span>
+      <span class="aoc-price-now reg-only">$910</span>
     </div>
-    <span class="aoc-badge">$710 one last day</span>
+    <span class="aoc-badge sale-only">$710 one last day</span>
     <div class="ft-cta-wrap">
       <a class="ft-cta" href="/aoc/join-ai">Join Now</a>
     </div>
@@ -462,9 +481,10 @@ html.is-expired .bonus-expired-el { display: block; }
     <img class="modal-img" src="/aoc/aoc-popup.jpeg" alt="What's inside Agent On Camera" width="1600" height="900" decoding="async">
     <p class="promo-live"><span class="live-dot"></span>Agent On Camera is now live</p>
     <div class="promo-price">
-      <span class="promo-price-old">$910</span>
-      <span class="promo-price-now">$710</span>
-      <span class="promo-price-tag">One last day</span>
+      <span class="promo-price-old sale-only">$910</span>
+      <span class="promo-price-now sale-only">$710</span>
+      <span class="promo-price-now reg-only">$910</span>
+      <span class="promo-price-tag sale-only">One last day</span>
     </div>
     <a class="ft-cta modal-cta" href="/aoc/join-ai" data-close>Get Agent on Camera</a>
   </div>
