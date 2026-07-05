@@ -211,6 +211,9 @@ body[data-state="postbook"] #whatis { display: block; }
 .q-opt-multi::after { border-radius: 6px; }
 .q-opt-multi.is-selected::after { content: "\2713"; color: #000; font-size: 13px; font-weight: 800; line-height: 20px; text-align: center; }
 .q-next { width: 100%; margin-top: var(--space-5); }
+/* Stable quiz footprint: JS pins #qCard's min-height to the tallest question so the
+   box, progress bar, and logo never shift between Q1–Q4. Content stays top-aligned
+   (question directly under the subhead); the reserved height reads as breathing room. */
 @media (max-width: 640px) {
   .survey-body { padding: var(--space-5) var(--space-5) var(--space-6); }
   .survey-head { padding: var(--space-4) var(--space-5) 0; }
@@ -1755,6 +1758,20 @@ function updateBackBtn() {
   if (b) b.style.visibility = (document.body.dataset.state === 'quiz') ? 'visible' : 'hidden';
 }
 
+// Build one option's markup (shared by renderQuestion + the height probe so they never drift).
+function optionHTML(item, opt, isSel) {
+  return '<button type="button" class="q-opt' + (item.multi ? ' q-opt-multi' : '') + (isSel ? ' is-selected' : '') +
+           '" data-opt="' + opt.replace(/"/g, '&quot;') + '"><span>' + opt + '</span></button>';
+}
+function questionHTML(item, sel) {
+  const opts = item.opts.map(function (opt) {
+    const isSel = item.multi ? (sel.indexOf(opt) !== -1) : (sel === opt);
+    return optionHTML(item, opt, isSel);
+  }).join('');
+  const nextBtn = item.multi ? '<button type="button" class="ld-btn q-next" id="qNext">Next</button>' : '';
+  return '<p class="q-text">' + item.q + '</p><div class="q-opts">' + opts + '</div>' + nextBtn;
+}
+
 function renderQuestion() {
   const card = document.getElementById('qCard');
   const item = QUESTIONS[qIdx];
@@ -1762,13 +1779,7 @@ function renderQuestion() {
   document.getElementById('quizProgressFill').style.width = (((qIdx + 1) / QUESTIONS.length) * 100) + '%';
 
   const sel = item.multi ? (answers[item.key] || []) : answers[item.key];
-  const opts = item.opts.map(function (opt) {
-    const isSel = item.multi ? (sel.indexOf(opt) !== -1) : (sel === opt);
-    return '<button type="button" class="q-opt' + (item.multi ? ' q-opt-multi' : '') + (isSel ? ' is-selected' : '') +
-             '" data-opt="' + opt.replace(/"/g, '&quot;') + '"><span>' + opt + '</span></button>';
-  }).join('');
-  const nextBtn = item.multi ? '<button type="button" class="ld-btn q-next" id="qNext">Next</button>' : '';
-  card.innerHTML = '<p class="q-text">' + item.q + '</p><div class="q-opts">' + opts + '</div>' + nextBtn;
+  card.innerHTML = questionHTML(item, sel);
 
   card.querySelectorAll('.q-opt').forEach(function (btn) {
     btn.addEventListener('click', function () { item.multi ? toggleOption(btn) : selectOption(btn); });
@@ -1957,9 +1968,37 @@ function onBooked() {
   if (CALENDLY_RESCHEDULE_URL) { r.href = CALENDLY_RESCHEDULE_URL; r.style.display = 'inline-flex'; }
 })();
 
+/* ---- Stable footprint: pin #qCard to the tallest question ----------------- */
+/* Measures every question off-screen at the real viewport width and locks
+   #qCard's min-height to the max, so the box top / progress bar / logo never
+   shift between Q1–Q4. Presentational only; re-runs after fonts load + on resize. */
+function measureQCard() {
+  const qc = document.getElementById('qCard');
+  const body = document.querySelector('.survey-body');
+  if (!qc || !body) return;
+  const cs = getComputedStyle(body);
+  const w = body.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  if (!(w > 0)) return;
+  const probe = document.createElement('div');
+  probe.className = 'q-card';
+  probe.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;display:block;min-height:0;width:' + w + 'px';
+  body.appendChild(probe);
+  let max = 0;
+  QUESTIONS.forEach(function (item) {
+    probe.innerHTML = questionHTML(item, item.multi ? [] : undefined);
+    max = Math.max(max, probe.getBoundingClientRect().height);
+  });
+  body.removeChild(probe);
+  qc.style.minHeight = Math.ceil(max) + 'px';
+}
+
 /* ---- init ----------------------------------------------------------------- */
 document.getElementById('quizBack').addEventListener('click', goBack);
 setState('contact');
+measureQCard();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureQCard);
+let _measureT;
+window.addEventListener('resize', function () { clearTimeout(_measureT); _measureT = setTimeout(measureQCard, 150); });
 </script>
 <script>
 /* ===== Reused-section scripts (scroll reveal + accordion) ported from /aoc/join ===== */
