@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent On Camera</title>
 <meta name="robots" content="noindex,follow">
-<!-- ===== SALE END: at this instant the launch sale ends automatically.
-     The countdown, "Sale Extended"/"One Last Day" badges and the $200-off
-     promo bar all hide, and the price reverts from $710 back to $910.
+<!-- ===== SALE END: at this instant the 4th of July sale ends automatically.
+     The countdown, "4th of July Sale"/"$100 Off" badges and the promo bar all
+     hide, and the price reverts from $810 back to $910.
      EDIT THE SALE_END LINE BELOW. ===== -->
 <script>
-  var SALE_END = "2026-07-04T00:00:00-04:00"; // tonight, midnight Eastern (EDT = UTC-4)
+  var SALE_END = "2026-07-07T00:00:00-04:00"; // 4th of July sale ends 12:00am ET Tue Jul 7 (EDT = UTC-4)
   window.__SALE_END__ = Date.parse(SALE_END);
   (function(){
     function over(){ document.documentElement.classList.add('sale-over'); }
@@ -19,8 +19,8 @@
   })();
 </script>
 <style>
-  /* At SALE_END the launch sale fully retires: countdown, sale badges and
-     promo bar hide; the final price switches from $710 back to $910. */
+  /* At SALE_END the 4th of July sale fully retires: countdown, sale badges and
+     promo bar hide; the final price switches from $810 back to $910. */
   html.sale-over .hero-timer,
   html.sale-over .sale-extended,
   html.sale-over .aoc-today-only,
@@ -3134,12 +3134,12 @@ END SOFT-DELETE -->
       @keyframes aocTodayPulse{ 0%,100%{ box-shadow:0 0 8px 1px rgba(56,182,255,.35); } 50%{ box-shadow:0 0 22px 6px rgba(56,182,255,.7); } }
       @media (prefers-reduced-motion:reduce){ .aoc-today-only{ animation:none; box-shadow:0 0 14px 3px rgba(56,182,255,.5); } }
     </style>
-    <p class="sale-extended">Sale Extended</p>
-    <div class="aoc-today-only">One Last Day</div>
+    <p class="sale-extended">4th of July Sale</p>
+    <div class="aoc-today-only">$100 Off</div>
 
     <div class="value-final">
       <p class="value-final-label">Your Investment Today</p>
-      <p class="value-final-price"><span class="sale-only"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $710</span><span class="reg-only">$910</span></p>
+      <p class="value-final-price"><span class="sale-only"><s style="font-size:.5em;opacity:.5;font-weight:400;margin-right:.28em;">$910</s> $810</span><span class="reg-only">$910</span></p>
       <p class="value-final-sub">910 Academy is a yearly membership, your membership will automatically renew unless you cancel.</p>
     </div>
 
@@ -3159,7 +3159,7 @@ END SOFT-DELETE -->
 <!-- ============================================================
      LAUNCH DAY SPECIAL — floating liquid-glass promo
      Appears (slides up) once you scroll past the hero, then stays.
-     Offer: $200 off -> $710 USD (was $910). CTA -> Skool. Values hardcoded.
+     Offer: $100 off -> $810 USD (was $910). CTA -> Skool. Values hardcoded.
      ============================================================ -->
 <style>
   .aoc-promo{ position:fixed; left:50%; bottom:20px; transform:translate(-50%,180%); z-index:1000;
@@ -3198,14 +3198,14 @@ END SOFT-DELETE -->
     .aoc-promo-cta{ font-size:clamp(.55rem,2.1vw,.68rem); letter-spacing:.04em; padding:clamp(8px,2.4vw,11px) clamp(10px,3vw,16px); white-space:nowrap; }
   }
 </style>
-<div class="aoc-promo" id="aocPromo" role="region" aria-label="Launch Day Special offer">
+<div class="aoc-promo" id="aocPromo" role="region" aria-label="4th of July Sale offer">
   <div class="aoc-promo-price">
     <span class="aoc-promo-was">$910</span>
-    <span class="aoc-promo-nowrow"><span class="aoc-promo-now">$710</span><span class="aoc-promo-cur">USD</span></span>
+    <span class="aoc-promo-nowrow"><span class="aoc-promo-now">$810</span><span class="aoc-promo-cur">USD</span></span>
   </div>
   <div class="aoc-promo-mid">
-    <span class="aoc-promo-title">Launch Day Special</span>
-    <span class="aoc-promo-badge">$200 OFF ONE LAST DAY</span>
+    <span class="aoc-promo-title">4th of July Sale</span>
+    <span class="aoc-promo-badge">$100 OFF</span>
   </div>
   <a href="https://www.skool.com/910-academy/about?ref=301e640acfa44e85b6a6a11761baaf6d" target="_blank" rel="noopener noreferrer" class="aoc-promo-cta">Sign Up Now</a>
 </div>
