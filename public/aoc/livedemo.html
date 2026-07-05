@@ -21,9 +21,11 @@
      EDIT AFTER BUILD — paste the real Calendly links here. Leave "" until then.
      ========================================================================= -->
 <script>
-  // STATE 2 (booking) inline embed, e.g. "https://calendly.com/…/agent-on-camera-demo"
-  const CALENDLY_URL = "https://calendly.com/910academy/demo";
-  // STATE 4 (post-booking) reschedule link
+  // HIGH bucket ($5k+) qualified leads book here (Claudio).
+  const CALENDLY_EXISTING_URL = "https://calendly.com/910academy/demo";
+  // MID bucket ($1k to $5k) leads book a team-member demo here.
+  const CALENDLY_TEAM_URL = "https://calendly.com/910academy/aoc-live-demo";
+  // Post-booking reschedule link (optional).
   const CALENDLY_RESCHEDULE_URL = "";
 </script>
 
@@ -100,14 +102,25 @@ img { max-width: 100%; display: block; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
 /* ===== STATE VISIBILITY — the whole page is one state machine ===== */
-#s-quiz, #s-booking, #s-texting, #s-postbook, #whatis { display: none; }
-body[data-state="quiz"]     #s-quiz     { display: block; }
+#s-survey, #s-phone, #s-booking, #s-postbook, #whatis { display: none; }
+/* The enclosed survey box holds the contact step AND the four questions. */
+body[data-state="contact"] #s-survey,
+body[data-state="quiz"]    #s-survey    { display: block; }
+body[data-state="phone"]    #s-phone    { display: block; }
 body[data-state="booking"]  #s-booking  { display: block; }
-body[data-state="texting"]  #s-texting  { display: block; }
 body[data-state="postbook"] #s-postbook { display: block; }
-/* "What is AOC" appears on the end states only, never during the quiz. */
+/* Within the survey box, swap contact panel vs quiz panel. */
+#step-contact, #step-quiz { display: none; }
+body[data-state="contact"] #step-contact { display: block; }
+body[data-state="quiz"]    #step-quiz    { display: block; }
+/* Progress bar + header (back + count) belong to the quiz sub-state only.
+   visibility (not display) keeps the box top from shifting between steps. */
+.survey-topbar, .survey-head { visibility: hidden; }
+body[data-state="quiz"] .survey-topbar,
+body[data-state="quiz"] .survey-head { visibility: visible; }
+/* "What is AOC" appears on the end states only, never during the survey. */
+body[data-state="phone"]    #whatis,
 body[data-state="booking"]  #whatis,
-body[data-state="texting"]  #whatis,
 body[data-state="postbook"] #whatis { display: block; }
 
 /* ===== SHARED LAYOUT ===== */
@@ -168,6 +181,41 @@ body[data-state="postbook"] #whatis { display: block; }
   .q-card, .q-card.leaving, .q-card.entering, .q-card.leaving-back, .q-card.entering-back { transition: none !important; transform: none !important; opacity: 1 !important; }
   .quiz-progress-fill { transition: none !important; }
 }
+
+/* ===== ENCLOSED SURVEY BOX (contact + quiz) ===== */
+.survey-box {
+  position: relative; width: 100%; max-width: 600px; margin: 0 auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03));
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(56,182,255,0.05), inset 0 1px 0 rgba(255,255,255,0.06);
+  overflow: hidden; text-align: left;
+  animation: surveyIn .6s var(--ease-out) both;
+}
+@keyframes surveyIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+/* Accent hairline glow along the very top edge of the box. */
+.survey-topbar { position: relative; height: 5px; width: 100%; background: rgba(255,255,255,0.08); }
+.survey-topbar-fill { height: 100%; width: 0%; background: var(--accent); box-shadow: 0 0 12px rgba(56,182,255,0.6); transition: width .45s var(--ease-out); }
+.survey-head { display: flex; align-items: center; gap: 12px; padding: var(--space-5) var(--space-6) 0; }
+.survey-back { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--fg-muted); background: rgba(255,255,255,0.05); border: 1px solid var(--border); transition: color .2s var(--ease-smooth), border-color .2s var(--ease-smooth), background .2s var(--ease-smooth); }
+.survey-back:hover { color: var(--fg); border-color: var(--accent-border); background: var(--accent-subtle); }
+.survey-count { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.survey-body { padding: var(--space-6) var(--space-6) var(--space-8); }
+.survey-sub { color: var(--fg-dim); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: var(--space-5); }
+.contact-title { font-size: clamp(1.3rem, 4.6vw, 1.9rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-3); }
+.contact-sub { color: var(--fg-muted); font-size: 0.98rem; line-height: 1.5; margin-bottom: var(--space-6); }
+/* Contact form reuses .ld-form inputs but is full-width inside the box. */
+.survey-body .ld-form { margin: 0; max-width: none; }
+.survey-body .ld-form input:focus { box-shadow: 0 0 0 3px var(--accent-subtle); }
+/* Multi-select Q3: square-ish check instead of the radio dot; Next button. */
+.q-opt-multi::after { border-radius: 6px; }
+.q-opt-multi.is-selected::after { content: "\2713"; color: #000; font-size: 13px; font-weight: 800; line-height: 20px; text-align: center; }
+.q-next { width: 100%; margin-top: var(--space-5); }
+@media (max-width: 640px) {
+  .survey-body { padding: var(--space-5) var(--space-5) var(--space-6); }
+  .survey-head { padding: var(--space-4) var(--space-5) 0; }
+}
+@media (prefers-reduced-motion: reduce) { .survey-box { animation: none; } }
 
 /* ===== STATE 3 — texting form ===== */
 .ld-form { display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 420px; margin: var(--space-8) auto 0; text-align: left; }
@@ -782,23 +830,40 @@ img, video, iframe { max-width: 100%; height: auto; }
 </head>
 <body data-state="quiz">
 
-<!-- Progress bar (STATE 1 only; hidden by CSS in other states via inline check below) -->
-<div class="quiz-progress" id="quizProgress" aria-hidden="true"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
-<!-- Back to previous question (tap-to-advance forward stays; Back is the only nav control). Hidden on Q1. -->
-<button type="button" class="quiz-back" id="quizBack" aria-label="Back to previous question" style="display:none;">
-  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-</button>
-
 <main>
-  <!-- ============================ STATE 1 — QUIZ ============================ -->
-  <section id="s-quiz">
+  <!-- ===================== SURVEY (contact + 4 questions) ==================== -->
+  <section id="s-survey">
     <div class="wrap stage">
       <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
-      <div class="quiz-head">
-        <span class="quiz-count" id="quizCount">1 / 4</span>
-        <h1 class="h1">Book Your Demo</h1>
+      <div class="survey-box">
+        <div class="survey-topbar" aria-hidden="true"><div class="survey-topbar-fill" id="quizProgressFill"></div></div>
+        <div class="survey-head">
+          <button type="button" class="survey-back" id="quizBack" aria-label="Back">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <span class="survey-count" id="quizCount">1 / 4</span>
+        </div>
+        <div class="survey-body">
+          <!-- Step 0: contact -->
+          <div id="step-contact">
+            <h1 class="contact-title">Book Your Demo</h1>
+            <p class="contact-sub">Be first to book your demo. Just enter your name, email, and phone number to get started.</p>
+            <form class="ld-form" id="contactForm" novalidate>
+              <input type="text" name="fullName" id="cfName" placeholder="Full name" autocomplete="name" required>
+              <input type="email" name="email" id="cfEmail" placeholder="Email address" autocomplete="email" inputmode="email" required>
+              <input type="tel" name="phone" id="cfPhone" placeholder="Phone number" autocomplete="tel" inputmode="tel" required>
+              <input class="ld-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+              <p class="ld-error" id="cfError" role="alert"></p>
+              <button type="submit" class="ld-btn" id="cfSubmit">Continue</button>
+            </form>
+          </div>
+          <!-- Steps 1 to 4: questions -->
+          <div id="step-quiz">
+            <p class="survey-sub">Before your demo, make sure you answer these 4 questions.</p>
+            <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
+          </div>
+        </div>
       </div>
-      <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
     </div>
   </section>
 
@@ -814,30 +879,13 @@ img, video, iframe { max-width: 100%; height: auto; }
     </div>
   </section>
 
-  <!-- ========================== STATE 3 — TEXTING ========================== -->
-  <!-- Helpful qualification path — NOT a rejection. Everyone here still gets a human follow-up. -->
-  <section id="s-texting">
+  <!-- ===================== PHONE CONFIRMATION (call list) =================== -->
+  <section id="s-phone">
     <div class="wrap stage">
       <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
-      <div id="textIntro">
-        <span class="eyebrow">Agent On Camera</span>
-        <h2 class="h1">We'll be in touch shortly</h2>
-        <p class="sub">Drop your name and number and our team will text you personally to see how we can help you grow.</p>
-
-        <form class="ld-form" id="textForm" novalidate>
-          <input type="text" name="fullName" id="tfName" placeholder="Full name" autocomplete="name" required>
-          <input type="tel" name="phone" id="tfPhone" placeholder="Phone number" autocomplete="tel" inputmode="tel" required>
-          <!-- honeypot (hidden; bots fill it) -->
-          <input class="ld-hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <p class="ld-error" id="tfError" role="alert"></p>
-          <button type="submit" class="ld-btn" id="tfSubmit">Submit</button>
-        </form>
-      </div>
-
-      <div id="textDone" style="display:none;">
-        <span class="eyebrow">You're all set</span>
-        <p class="sub" style="margin-top:var(--space-4);">You're all set. Our team will text you shortly. Keep an eye on your phone.</p>
-      </div>
+      <span class="eyebrow">You're all set</span>
+      <h2 class="h1">We'll be in touch shortly</h2>
+      <p class="sub" style="margin-top:var(--space-4);">Our team will reach out to you shortly. Keep an eye on your phone.</p>
     </div>
   </section>
 
@@ -849,7 +897,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       <h2 class="h1">You're booked.</h2>
 
       <div style="display:flex;flex-direction:column;gap:var(--space-4);margin:var(--space-8) auto 0;max-width:520px;">
-        <p class="sub">You'll be speaking with Claudio Rivera personally on this call.</p>
+        <p class="sub" id="postbookWho">You'll be speaking with Claudio Rivera personally on this call.</p>
         <p class="sub">Please make sure you can attend. Missed calls are forfeited and won't be rescheduled.</p>
       </div>
 
@@ -1646,45 +1694,65 @@ END SOFT-DELETE -->
 
 <script>
 /* ============================================================================
-   /aoc/livedemo — full-page qualification funnel (state machine)
+   /aoc/livedemo — enclosed survey funnel (state machine)
+   States: contact -> quiz -> (phone | booking -> postbook)
    ============================================================================ */
+
+function uuid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0, v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+const submissionId = uuid();
+const contact = { fullName: '', email: '', phone: '' };
+let calendlyVariant = 'existing'; // 'team' | 'existing'
 
 /* ---- State machine -------------------------------------------------------- */
 function setState(name) {
   document.body.dataset.state = name;
-  // progress bar + back button belong to the quiz only
-  document.getElementById('quizProgress').style.display = (name === 'quiz') ? 'block' : 'none';
   updateBackBtn();
   window.scrollTo(0, 0);
   if (name === 'booking') mountCalendly();
 }
 
-/* ---- STATE 1: quiz -------------------------------------------------------- */
+/* ---- Questions ------------------------------------------------------------ */
 const QUESTIONS = [
   { key: 'q1', q: "How long have you had a real estate media business?",
     opts: ["Haven't started yet", "0-1 years", "1-3 years", "3+ years"] },
   { key: 'q2', q: "How much are you earning per month in your real estate media business currently?",
     opts: ["$0-$1,000", "$1,000-$3,000", "$3,000-$5,000", "$5,000-$10,000", "$10,000+"] },
-  { key: 'q3', q: "What's most important for you to improve on to take your business from where it is now to where you want it to be?",
-    opts: ["Shooting", "Editing", "Sales", "Team Building", "All of the above"] },
+  { key: 'q3', q: "What's most important for you to improve on to take your business from where it is now to where you want it to be? (select all that apply)",
+    opts: ["Shooting", "Editing", "Sales", "Team Building"], multi: true },
   { key: 'q4', q: "If Agent on Camera is a fit and can truly support you in growing your real estate media business, are you willing to invest in yourself?",
     opts: ["Yes", "No"] },
 ];
 
-// STRICT routing — must match the server predicate exactly.
-const HIGH_EARNINGS = new Set(["$5,000-$10,000", "$10,000+"]);
-function isQualified(a) { return HIGH_EARNINGS.has(a.q2) && a.q4 === "Yes"; }
+// Routing — MUST mirror the server (src/app/api/aoc/livedemo/route.ts).
+function earningsBucket(q2) {
+  if (q2 === "$0-$1,000") return "LOW";
+  if (q2 === "$1,000-$3,000" || q2 === "$3,000-$5,000") return "MID";
+  return "HIGH"; // $5,000-$10,000 | $10,000+
+}
+function destinationFor(a) {
+  if (a.q4 === "No") return "phone";
+  var b = earningsBucket(a.q2);
+  if (b === "LOW") return "phone";
+  if (b === "MID") return "team";
+  return "existing";
+}
 
-const answers = {};
+const answers = {}; // q1,q2,q4 = string; q3 = array
 let qIdx = 0;
 let locked = false; // guards double-taps during the advance animation
-
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Back button shows only on the quiz, past question 1.
 function updateBackBtn() {
   const b = document.getElementById('quizBack');
-  if (b) b.style.display = (document.body.dataset.state === 'quiz' && qIdx > 0) ? 'flex' : 'none';
+  // Back is visible on every quiz question (Q1's Back returns to the contact step).
+  if (b) b.style.visibility = (document.body.dataset.state === 'quiz') ? 'visible' : 'hidden';
 }
 
 function renderQuestion() {
@@ -1693,18 +1761,28 @@ function renderQuestion() {
   document.getElementById('quizCount').textContent = (qIdx + 1) + ' / ' + QUESTIONS.length;
   document.getElementById('quizProgressFill').style.width = (((qIdx + 1) / QUESTIONS.length) * 100) + '%';
 
+  const sel = item.multi ? (answers[item.key] || []) : answers[item.key];
   const opts = item.opts.map(function (opt) {
-    return '<button type="button" class="q-opt" data-opt="' + opt.replace(/"/g, '&quot;') + '">' +
-             '<span>' + opt + '</span></button>';
+    const isSel = item.multi ? (sel.indexOf(opt) !== -1) : (sel === opt);
+    return '<button type="button" class="q-opt' + (item.multi ? ' q-opt-multi' : '') + (isSel ? ' is-selected' : '') +
+             '" data-opt="' + opt.replace(/"/g, '&quot;') + '"><span>' + opt + '</span></button>';
   }).join('');
-  card.innerHTML = '<p class="q-text">' + item.q + '</p><div class="q-opts">' + opts + '</div>';
+  const nextBtn = item.multi ? '<button type="button" class="ld-btn q-next" id="qNext">Next</button>' : '';
+  card.innerHTML = '<p class="q-text">' + item.q + '</p><div class="q-opts">' + opts + '</div>' + nextBtn;
 
-  // Re-mark a previously chosen answer (so going Back preserves the selection).
-  const prev = answers[item.key];
   card.querySelectorAll('.q-opt').forEach(function (btn) {
-    if (prev && btn.getAttribute('data-opt') === prev) btn.classList.add('is-selected');
-    btn.addEventListener('click', function () { selectOption(btn); });
+    btn.addEventListener('click', function () { item.multi ? toggleOption(btn) : selectOption(btn); });
   });
+  if (item.multi) {
+    const nb = document.getElementById('qNext');
+    const upd = function () { nb.disabled = (answers[item.key] || []).length === 0; };
+    upd();
+    card._updNext = upd;
+    nb.addEventListener('click', function () {
+      if (locked || (answers[item.key] || []).length === 0) return;
+      locked = true; advance();
+    });
+  }
   updateBackBtn();
 }
 
@@ -1713,8 +1791,18 @@ function selectOption(btn) {
   locked = true;
   answers[QUESTIONS[qIdx].key] = btn.getAttribute('data-opt');
   btn.classList.add('is-selected');
-  const delay = reduceMotion ? 0 : 260;
-  setTimeout(advance, delay);
+  setTimeout(advance, reduceMotion ? 0 : 260);
+}
+
+function toggleOption(btn) {
+  const item = QUESTIONS[qIdx];
+  const opt = btn.getAttribute('data-opt');
+  const arr = answers[item.key] || (answers[item.key] = []);
+  const i = arr.indexOf(opt);
+  if (i === -1) { arr.push(opt); btn.classList.add('is-selected'); }
+  else { arr.splice(i, 1); btn.classList.remove('is-selected'); }
+  const card = document.getElementById('qCard');
+  if (card._updNext) card._updNext();
 }
 
 // Animate the card out, swap to newIdx, animate in. dir: 'fwd' | 'back'.
@@ -1749,56 +1837,47 @@ function advance() {
 }
 
 function goBack() {
-  if (locked || qIdx === 0) return;
+  if (locked) return;
+  if (qIdx === 0) { setState('contact'); return; } // Q1 back -> contact step
   locked = true;
   changeQuestion(qIdx - 1, 'back');
 }
 
 function finishQuiz() {
-  setState(isQualified(answers) ? 'booking' : 'texting');
+  const dest = destinationFor(answers);
+  submitLead(); // fire-and-forget POST #1
+  if (dest === 'phone') {
+    setState('phone');
+  } else {
+    calendlyVariant = dest; // 'team' | 'existing'
+    setState('booking');
+  }
   locked = false;
 }
 
-/* ---- STATE 2: Calendly (mounted on demand) -------------------------------- */
-let calendlyMounted = false;
-function mountCalendly() {
-  if (calendlyMounted) return;
-  calendlyMounted = true;
-  const mount = document.getElementById('calendlyMount');
-  if (CALENDLY_URL) {
-    const widget = document.createElement('div');
-    widget.className = 'calendly-inline-widget';
-    widget.setAttribute('data-url', CALENDLY_URL);
-    mount.appendChild(widget);
-    const s = document.createElement('script');
-    s.src = 'https://assets.calendly.com/assets/external/widget.js';
-    s.async = true;
-    document.body.appendChild(s);
-  } else {
-    // No link pasted yet — show a labeled placeholder, never an empty iframe.
-    mount.innerHTML = '<div class="booking-placeholder">Booking calendar coming. The Calendly link will be added here.</div>';
-  }
-}
+/* ---- Contact step --------------------------------------------------------- */
+function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function normalizePhone(v) { return (v || '').replace(/[^\d]/g, ''); }
+function validPhone(v) { const d = normalizePhone(v); return d.length >= 10 && d.length <= 15; }
 
-// Calendly fires a postMessage when a booking completes → advance to STATE 4.
-window.addEventListener('message', function (e) {
-  if (e && e.data && e.data.event === 'calendly.event_scheduled') { onBooked(); }
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const name = document.getElementById('cfName').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const phone = document.getElementById('cfPhone').value.trim();
+  const err = document.getElementById('cfError');
+  err.textContent = '';
+  if (!name) { err.textContent = 'Please enter your full name.'; return; }
+  if (!validEmail(email)) { err.textContent = 'Please enter a valid email address.'; return; }
+  if (!validPhone(phone)) { err.textContent = 'Please enter a valid phone number.'; return; }
+  contact.fullName = name; contact.email = email; contact.phone = phone;
+  qIdx = 0;
+  setState('quiz');
+  renderQuestion();
 });
-document.getElementById('bookedFallback').addEventListener('click', onBooked);
 
-let bookedSubmitted = false;
-function onBooked() {
-  // Advance immediately — the booking already completed in Calendly; never make them wait.
-  setState('postbook');
-  if (bookedSubmitted) return;
-  bookedSubmitted = true;
-  // Record the qualified→booked completion (fire-and-forget). Emails academy@ with the
-  // answer set so the closer walks in informed; the Supabase row is the durable record.
-  postFunnel({ type: 'booked', q1: answers.q1, q2: answers.q2, q3: answers.q3, q4: answers.q4 })
-    .catch(function (e) { console.warn('[livedemo] booked POST failed:', e && e.message); });
-}
-
-/* ---- Shared backend POST (used by texting submit + booked completion) ----- */
+/* ---- Backend POST --------------------------------------------------------- */
 async function postFunnel(payload) {
   const res = await fetch('/api/aoc/livedemo', {
     method: 'POST',
@@ -1813,39 +1892,66 @@ async function postFunnel(payload) {
   return res.json();
 }
 
-/* ---- STATE 3: texting capture --------------------------------------------- */
-function normalizePhone(v) { return (v || '').replace(/[^\d]/g, ''); }
-function validPhone(v) { const d = normalizePhone(v); return d.length >= 10 && d.length <= 15; }
+function submitLead() {
+  const website = contactForm.querySelector('[name="website"]').value;
+  postFunnel({
+    type: 'submit',
+    submissionId: submissionId,
+    fullName: contact.fullName, email: contact.email, phone: contact.phone,
+    q1: answers.q1, q2: answers.q2, q3: answers.q3 || [], q4: answers.q4,
+    website: website,
+  }).catch(function (e) { console.warn('[livedemo] submit POST failed:', e && e.message); });
+}
 
-const textForm = document.getElementById('textForm');
-textForm.addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const name = document.getElementById('tfName').value.trim();
-  const phone = document.getElementById('tfPhone').value.trim();
-  const website = textForm.querySelector('[name="website"]').value;
-  const err = document.getElementById('tfError');
-  err.textContent = '';
-  if (!name) { err.textContent = 'Please enter your full name.'; return; }
-  if (!validPhone(phone)) { err.textContent = 'Please enter a valid phone number.'; return; }
-
-  const btn = document.getElementById('tfSubmit');
-  const orig = btn.textContent;
-  btn.disabled = true; btn.textContent = 'Sending…';
-  try {
-    await postFunnel({
-      type: 'texting',
-      q1: answers.q1, q2: answers.q2, q3: answers.q3, q4: answers.q4,
-      fullName: name, phone: phone, website: website,
-    });
-    document.getElementById('textIntro').style.display = 'none';
-    document.getElementById('textDone').style.display = 'block';
-  } catch (ex) {
-    err.textContent = ex.message || 'Something went wrong. Please try again.';
-    btn.disabled = false; btn.textContent = orig;
+/* ---- Calendly (mounted on demand, prefilled) ------------------------------ */
+let calendlyMounted = false;
+function calendlyUrl() {
+  const base = calendlyVariant === 'team' ? CALENDLY_TEAM_URL : CALENDLY_EXISTING_URL;
+  if (!base) return '';
+  return base + '?name=' + encodeURIComponent(contact.fullName) + '&email=' + encodeURIComponent(contact.email);
+}
+function mountCalendly() {
+  if (calendlyMounted) return;
+  calendlyMounted = true;
+  const mount = document.getElementById('calendlyMount');
+  const url = calendlyUrl();
+  if (url) {
+    const widget = document.createElement('div');
+    widget.className = 'calendly-inline-widget';
+    widget.setAttribute('data-url', url);
+    mount.appendChild(widget);
+    const s = document.createElement('script');
+    s.src = 'https://assets.calendly.com/assets/external/widget.js';
+    s.async = true;
+    document.body.appendChild(s);
+  } else {
+    // No link set yet — show a labeled placeholder, never an empty iframe.
+    mount.innerHTML = '<div class="booking-placeholder">Booking calendar coming. The Calendly link will be added here.</div>';
   }
-});
+}
 
-/* ---- STATE 4: reschedule link (shown only once the constant is pasted) ---- */
+// Calendly fires a postMessage when a booking completes → advance to postbook.
+window.addEventListener('message', function (e) {
+  if (e && e.data && e.data.event === 'calendly.event_scheduled') { onBooked(); }
+});
+document.getElementById('bookedFallback').addEventListener('click', onBooked);
+
+let bookedSubmitted = false;
+function onBooked() {
+  const who = calendlyVariant === 'team'
+    ? "You'll be speaking with a member of our team on this call."
+    : "You'll be speaking with Claudio Rivera personally on this call.";
+  const el = document.getElementById('postbookWho');
+  if (el) el.textContent = who;
+  // Advance immediately — the booking already completed in Calendly; never make them wait.
+  setState('postbook');
+  if (bookedSubmitted) return;
+  bookedSubmitted = true;
+  postFunnel({ type: 'booked_confirmed', submissionId: submissionId })
+    .catch(function (e) { console.warn('[livedemo] booked_confirmed POST failed:', e && e.message); });
+}
+
+/* ---- Reschedule link (shown only if the constant is set) ------------------ */
 (function () {
   const r = document.getElementById('rescheduleLink');
   if (CALENDLY_RESCHEDULE_URL) { r.href = CALENDLY_RESCHEDULE_URL; r.style.display = 'inline-flex'; }
@@ -1853,8 +1959,7 @@ textForm.addEventListener('submit', async function (e) {
 
 /* ---- init ----------------------------------------------------------------- */
 document.getElementById('quizBack').addEventListener('click', goBack);
-renderQuestion();
-setState('quiz');
+setState('contact');
 </script>
 <script>
 /* ===== Reused-section scripts (scroll reveal + accordion) ported from /aoc/join ===== */
