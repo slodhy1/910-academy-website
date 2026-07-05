@@ -2,43 +2,62 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendAocLivedemoNotify } from "@/lib/email/aoc-livedemo-notify";
+import { syncLivedemoSheet } from "@/lib/aoc/livedemo-sheets";
 
 export const runtime = "nodejs";
 
-// The four quiz answers — these literals MUST stay in sync with the options in
-// public/aoc/livedemo.html (they are the same strings the client renders).
+// The quiz answer literals MUST stay in sync with public/aoc/livedemo.html.
 const Q1 = z.enum(["Haven't started yet", "0-1 years", "1-3 years", "3+ years"]);
 const Q2 = z.enum(["$0-$1,000", "$1,000-$3,000", "$3,000-$5,000", "$5,000-$10,000", "$10,000+"]);
-const Q3 = z.enum(["Shooting", "Editing", "Sales", "Team Building", "All of the above"]);
+const Q3Item = z.enum(["Shooting", "Editing", "Sales", "Team Building"]);
 const Q4 = z.enum(["Yes", "No"]);
 
-const answers = { q1: Q1, q2: Q2, q3: Q3, q4: Q4 };
+const phone = z
+  .string()
+  .trim()
+  .min(1, "Phone number is required")
+  .max(40)
+  .refine(
+    (v) => {
+      const d = v.replace(/\D/g, "");
+      return d.length >= 10 && d.length <= 15;
+    },
+    { message: "Valid phone number required" }
+  );
 
-// Two completion shapes: a qualified lead that booked in Calendly, or an
-// unqualified/not-yet lead captured for texting (name + phone required).
 const BodySchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("booked"), ...answers }),
   z.object({
-    type: z.literal("texting"),
-    ...answers,
+    type: z.literal("submit"),
+    submissionId: z.string().uuid(),
     fullName: z.string().trim().min(1, "Full name is required").max(200),
-    phone: z
-      .string()
-      .trim()
-      .min(1, "Phone number is required")
-      .max(40)
-      .refine(
-        (v) => {
-          const d = v.replace(/\D/g, "");
-          return d.length >= 10 && d.length <= 15;
-        },
-        { message: "Valid phone number required" }
-      ),
+    email: z.string().trim().email("Valid email required").max(200),
+    phone,
+    q1: Q1,
+    q2: Q2,
+    q3: z.array(Q3Item).min(1, "Pick at least one focus area"),
+    q4: Q4,
+  }),
+  z.object({
+    type: z.literal("booked_confirmed"),
+    submissionId: z.string().uuid(),
   }),
 ]);
 
-// STRICT qualification — must match the client predicate in livedemo.html exactly.
-const HIGH_EARNINGS = new Set(["$5,000-$10,000", "$10,000+"]);
+type Bucket = "LOW" | "MID" | "HIGH";
+function earningsBucket(q2: z.infer<typeof Q2>): Bucket {
+  if (q2 === "$0-$1,000") return "LOW";
+  if (q2 === "$1,000-$3,000" || q2 === "$3,000-$5,000") return "MID";
+  return "HIGH"; // $5,000-$10,000 | $10,000+
+}
+
+type Destination = "phone" | "team" | "existing";
+function routeDestination(q2: z.infer<typeof Q2>, q4: z.infer<typeof Q4>): Destination {
+  if (q4 === "No") return "phone";
+  const b = earningsBucket(q2);
+  if (b === "LOW") return "phone";
+  if (b === "MID") return "team";
+  return "existing";
+}
 
 // Only accept state-changing requests from our own origins (same pattern as the
 // aoc/waitlist + claudio-application routes). Blocks naive cross-origin/bot POSTs.
@@ -47,7 +66,6 @@ const ALLOWED_HOSTS = new Set([
   "910academy.com",
   "localhost:3000",
   "localhost:3001",
-  // loopback for local dev (Next dev + HSTS on :3000 forces 127.0.0.1); reachable only locally
   "127.0.0.1:3000",
   "127.0.0.1:3001",
 ]);
@@ -92,49 +110,82 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 
-  const d = parsed.data;
-  // Server is the source of truth for qualification (never trust a client flag).
-  const qualified = HIGH_EARNINGS.has(d.q2) && d.q4 === "Yes";
-  const fullName = d.type === "texting" ? d.fullName : null;
-  const phone = d.type === "texting" ? d.phone : null;
-
   const sb = createAdminClient();
-  const { data, error } = await sb
-    .from("aoc_livedemo_submissions")
-    .insert({
+
+  // --- Second POST: a Calendly booking completed. Stamp the existing row. ---
+  if (parsed.data.type === "booked_confirmed") {
+    const bookedAt = new Date().toISOString();
+    const { error } = await sb
+      .from("aoc_livedemo_submissions")
+      .update({ booked_at: bookedAt, status: "Booked" })
+      .eq("submission_id", parsed.data.submissionId);
+    if (error) console.error("[aoc/livedemo] booked_confirmed update failed:", error);
+    await syncLivedemoSheet({ action: "update", submissionId: parsed.data.submissionId, status: "Booked", bookedAt });
+    return NextResponse.json({ ok: true });
+  }
+
+  // --- First POST: routing decided. Upsert the lead + fan out. ---
+  const d = parsed.data;
+  const bucket = earningsBucket(d.q2);
+  const destination = routeDestination(d.q2, d.q4);
+  const outcome = destination === "phone" ? "phone" : "booked";
+  const calendly = destination === "phone" ? null : destination; // 'team' | 'existing'
+  const q3Joined = d.q3.join(", ");
+
+  const { error } = await sb.from("aoc_livedemo_submissions").upsert(
+    {
+      submission_id: d.submissionId,
       q1_experience: d.q1,
       q2_earnings: d.q2,
-      q3_focus: d.q3,
+      q3_focus: q3Joined,
       q4_invest: d.q4,
-      qualified,
-      outcome: d.type,
-      full_name: fullName,
-      phone,
-    })
-    .select("id")
-    .single();
+      qualified: destination === "existing", // top-tier lead (HIGH bucket + Yes)
+      outcome,
+      full_name: d.fullName,
+      email: d.email,
+      phone: d.phone,
+      calendly,
+      status: outcome === "booked" ? "Routed" : null,
+    },
+    { onConflict: "submission_id" }
+  );
 
-  if (error || !data) {
+  if (error) {
     // The Supabase row is the durable record — if this fails we have nothing.
-    console.error("[aoc/livedemo] insert failed:", error);
+    console.error("[aoc/livedemo] upsert failed:", error);
     return NextResponse.json({ error: "Could not save. Please try again." }, { status: 500 });
   }
 
-  // Email academy@studio910pb.com on every completion. Log-but-don't-block: an
-  // email failure must never turn a saved submission into an error for the user.
+  // Email + Sheets are best-effort; a failure never blocks the saved lead.
   const notify = await sendAocLivedemoNotify({
-    type: d.type,
     q1: d.q1,
     q2: d.q2,
-    q3: d.q3,
+    q3: q3Joined,
     q4: d.q4,
-    qualified,
-    fullName,
-    phone,
+    fullName: d.fullName,
+    email: d.email,
+    phone: d.phone,
+    bucket,
+    destination,
+    outcome,
   });
-  if (!notify.success) {
-    console.error("[aoc/livedemo] notify failed:", notify.error);
-  }
+  if (!notify.success) console.error("[aoc/livedemo] notify failed:", notify.error);
 
-  return NextResponse.json({ ok: true, id: data.id });
+  await syncLivedemoSheet({
+    action: "append",
+    submissionId: d.submissionId,
+    fullName: d.fullName,
+    email: d.email,
+    phone: d.phone,
+    q1: d.q1,
+    q2: d.q2,
+    q3: q3Joined,
+    q4: d.q4,
+    bucket,
+    destination,
+    outcome,
+    status: outcome === "booked" ? "Routed" : "",
+  });
+
+  return NextResponse.json({ ok: true, destination });
 }
