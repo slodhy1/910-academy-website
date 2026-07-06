@@ -269,11 +269,13 @@ body[data-state="postbook"] #whatis { display: block; }
 .q-opt-multi::after { border-radius: 6px; }
 .q-opt-multi.is-selected::after { content: "\2713"; color: #000; font-size: 13px; font-weight: 800; line-height: 20px; text-align: center; }
 .q-next { width: 100%; margin-top: var(--space-5); }
-/* Stable quiz footprint: JS pins #step-quiz's min-height to the tallest question so the
-   box, progress bar, and logo never shift between Q1–Q4. The subhead + question + options
-   are vertically centred within that locked height, so short questions (e.g. Q4) sit
-   centred instead of top-aligned with a void below. */
-body[data-state="quiz"] #step-quiz { display: flex; flex-direction: column; justify-content: center; }
+/* Stable quiz footprint: JS pins .quiz-main's min-height to the tallest question's
+   content so the card's outer height never changes between Q1–Q4 (no jump). The subhead
+   stays pinned near the top, the question + options centre within .quiz-main, and
+   .quiz-trust anchors the bottom so the card visually closes instead of trailing empty. */
+.quiz-main { display: flex; flex-direction: column; justify-content: center; }
+.quiz-trust { display: flex; align-items: center; gap: 7px; margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border); color: var(--fg-dim); font-size: 0.76rem; font-weight: 500; }
+.quiz-trust svg { width: 13px; height: 13px; flex-shrink: 0; }
 @media (max-width: 640px) {
   .survey-body { padding: var(--space-5) var(--space-5) var(--space-6); }
   .survey-head { padding: var(--space-4) var(--space-5) 0; }
@@ -925,7 +927,10 @@ img, video, iframe { max-width: 100%; height: auto; }
           <!-- Steps 1 to 4: questions -->
           <div id="step-quiz">
             <p class="survey-sub">Before your demo, make sure you answer these 4 questions.</p>
-            <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
+            <div class="quiz-main">
+              <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
+            </div>
+            <p class="quiz-trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Your details are kept private.</p>
           </div>
         </div>
       </div>
@@ -2049,30 +2054,29 @@ function onBooked() {
   if (CALENDLY_RESCHEDULE_URL) { r.href = CALENDLY_RESCHEDULE_URL; r.style.display = 'inline-flex'; }
 })();
 
-/* ---- Stable footprint: pin #qCard to the tallest question ----------------- */
-/* Measures every question's full step (subhead + question + options) off-screen at
-   the real viewport width and locks #step-quiz's min-height to the max, so the box
-   top / progress bar / logo never shift between Q1–Q4 and the content can centre
-   within a stable height. Presentational only; re-runs after fonts load + on resize. */
+/* ---- Stable footprint: pin .quiz-main to the tallest question's content ----- */
+/* Measures every question's question+options block off-screen at the real viewport
+   width and locks .quiz-main's min-height to the max. The subhead (above) and trust
+   line (below) are fixed, so the card's outer height never changes between Q1–Q4
+   (no jump); shorter questions centre within .quiz-main. Presentational only. */
 function measureQCard() {
-  const step = document.getElementById('step-quiz');
-  const sub = step ? step.querySelector('.survey-sub') : null;
+  const main = document.querySelector('.quiz-main');
   const body = document.querySelector('.survey-body');
-  if (!step || !body) return;
+  if (!main || !body) return;
   const cs = getComputedStyle(body);
   const w = body.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   if (!(w > 0)) return;
-  const subHTML = sub ? sub.outerHTML : '';
   const probe = document.createElement('div');
+  probe.className = 'q-card';
   probe.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;display:block;min-height:0;width:' + w + 'px';
   body.appendChild(probe);
   let max = 0;
   QUESTIONS.forEach(function (item) {
-    probe.innerHTML = subHTML + '<div class="q-card">' + questionHTML(item, item.multi ? [] : undefined) + '</div>';
+    probe.innerHTML = questionHTML(item, item.multi ? [] : undefined);
     max = Math.max(max, probe.getBoundingClientRect().height);
   });
   body.removeChild(probe);
-  step.style.minHeight = Math.ceil(max) + 'px';
+  main.style.minHeight = Math.ceil(max) + 'px';
 }
 
 /* ---- Scroll cue: smooth-scroll to the AOC explainer (robust to the body being
