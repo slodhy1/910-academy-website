@@ -168,11 +168,12 @@ body[data-state="postbook"] #whatis { display: block; }
 
 /* ===== SCROLL-DOWN CUE into #whatis (end-state heroes) ===== */
 .scroll-cue { position: absolute; bottom: var(--space-6); left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 2;
-  color: var(--fg-dim); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2;
+  color: var(--fg); font-size: 1rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
   transition: color .25s var(--ease-smooth); }
 .scroll-cue:hover { color: var(--accent); }
 .scroll-cue-chev { display: inline-flex; animation: scrollBob 1.8s var(--ease-smooth) infinite; }
+.scroll-cue-chev svg { width: 30px; height: 30px; }
 @keyframes scrollBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 @media (prefers-reduced-motion: reduce) { .scroll-cue-chev { animation: none; } }
 
@@ -254,13 +255,10 @@ body[data-state="postbook"] #whatis { display: block; }
 .survey-count { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
 .survey-body { padding: var(--space-5) var(--space-6) var(--space-6); }
 .survey-sub { color: var(--fg-dim); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: var(--space-3); }
-.contact-title { font-size: clamp(1.3rem, 4.6vw, 1.9rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-3); }
-.contact-sub { color: var(--fg-muted); font-size: 0.98rem; line-height: 1.5; margin-bottom: var(--space-6); }
-/* Persistent reassurance pill in the header row (top-right, contact + quiz). */
-.survey-reassure { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: var(--radius-pill); background: var(--accent-subtle); border: 1px solid var(--accent-border-subtle); color: var(--accent); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
-.survey-reassure svg { width: 13px; height: 13px; }
-/* Subtle privacy reassurance under the contact form. */
-.contact-trust { display: flex; align-items: center; gap: 7px; margin-top: var(--space-5); color: var(--fg-dim); font-size: 0.78rem; font-weight: 500; }
+.contact-title { font-size: clamp(1.3rem, 4.6vw, 1.9rem); font-weight: 700; line-height: 1.2; margin-bottom: var(--space-3); text-align: center; }
+.contact-sub { color: var(--fg-muted); font-size: 0.98rem; line-height: 1.5; margin-bottom: var(--space-6); text-align: center; }
+/* Subtle privacy reassurance under the contact form (centred). */
+.contact-trust { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: var(--space-5); color: var(--fg-dim); font-size: 0.78rem; font-weight: 500; }
 .contact-trust svg { width: 14px; height: 14px; flex-shrink: 0; }
 /* Contact form reuses .ld-form inputs but is full-width inside the box. */
 .survey-body .ld-form { margin: 0; max-width: none; }
@@ -394,6 +392,8 @@ body[data-state="postbook"] #whatis { display: block; }
   line-height: var(--leading-normal);
   margin-bottom: var(--space-12);
 }
+/* Centered "Sign Up Now" (Skool) CTA under a section. */
+.section-cta { text-align: center; margin-top: var(--space-12); }
 
 /* ========== SECTION DIVIDER ========== */
 .section-divider {
@@ -907,13 +907,12 @@ img, video, iframe { max-width: 100%; height: auto; }
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
           </button>
           <span class="survey-count" id="quizCount">1 / 4</span>
-          <div class="survey-reassure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5V12l3 2"></path></svg>Takes 30 seconds</div>
         </div>
         <div class="survey-body">
           <!-- Step 0: contact -->
           <div id="step-contact">
             <h1 class="contact-title">Book Your Demo</h1>
-            <p class="contact-sub">Be first to book your demo. Just enter your name, email, and phone number to get started.</p>
+            <p class="contact-sub">Enter your name, email, and phone number to get started.</p>
             <form class="ld-form" id="contactForm" novalidate>
               <input type="text" name="fullName" id="cfName" placeholder="Full name" autocomplete="name" required>
               <input type="email" name="email" id="cfEmail" placeholder="Email address" autocomplete="email" inputmode="email" required>
@@ -926,7 +925,7 @@ img, video, iframe { max-width: 100%; height: auto; }
           </div>
           <!-- Steps 1 to 4: questions -->
           <div id="step-quiz">
-            <p class="survey-sub">Before your demo, make sure you answer these 4 questions.</p>
+            <p class="survey-sub">Please answer these 4 quick questions before you book your demo</p>
             <div class="quiz-main">
               <div class="q-card" id="qCard"><!-- questions render here (JS) --></div>
             </div>
@@ -1086,6 +1085,9 @@ img, video, iframe { max-width: 100%; height: auto; }
     <button class="aoc-cf-nav next" type="button" aria-label="Next module">&rsaquo;</button>
   </div>
   <p class="aoc-cf-caption" id="aocCaption"></p>
+  <div class="section-cta">
+    <a class="ld-btn" href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer">Sign Up Now</a>
+  </div>
 </section>
 <script>
 (function(){
@@ -1271,6 +1273,9 @@ img, video, iframe { max-width: 100%; height: auto; }
         </div>
       </div>
     </div>
+  </div>
+  <div class="section-cta">
+    <a class="ld-btn" href="https://www.skool.com/910-academy/about" target="_blank" rel="noopener noreferrer">Sign Up Now</a>
   </div>
 </section>
 <script>
@@ -1863,6 +1868,9 @@ function renderQuestion() {
   const item = QUESTIONS[qIdx];
   document.getElementById('quizCount').textContent = (qIdx + 1) + ' / ' + QUESTIONS.length;
   document.getElementById('quizProgressFill').style.width = (((qIdx + 1) / QUESTIONS.length) * 100) + '%';
+  // Intro subhead shows on Q1 only; visibility (not display) keeps the box height stable.
+  const introSub = document.querySelector('#step-quiz .survey-sub');
+  if (introSub) introSub.style.visibility = (qIdx === 0) ? 'visible' : 'hidden';
 
   const sel = item.multi ? (answers[item.key] || []) : answers[item.key];
   card.innerHTML = questionHTML(item, sel);
