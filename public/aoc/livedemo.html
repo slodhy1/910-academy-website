@@ -24,7 +24,7 @@
   // HIGH bucket ($5k+) qualified leads book here (Claudio).
   const CALENDLY_EXISTING_URL = "https://calendly.com/910academy/demo";
   // MID bucket ($1k to $5k) leads book a team-member demo here.
-  const CALENDLY_TEAM_URL = "https://calendly.com/910academy/aoc-live-demo";
+  const CALENDLY_TEAM_URL = "https://calendly.com/academy-studio910pb/aoc-demo";
   // Post-booking reschedule link (optional).
   const CALENDLY_RESCHEDULE_URL = "";
 </script>
@@ -976,6 +976,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
       <div style="display:flex;flex-direction:column;gap:var(--space-4);margin:var(--space-8) auto 0;max-width:520px;">
         <p class="sub" id="postbookWho">You'll be speaking with Claudio Rivera personally on this call.</p>
+        <p class="sub" id="postbookZoom" style="display:none;">Zoom password is <strong style="color:var(--fg);font-weight:700;">910</strong>.</p>
         <p class="sub">Please make sure you can attend. Missed calls are forfeited and won't be rescheduled.</p>
       </div>
 
@@ -2048,6 +2049,9 @@ function onBooked() {
     : "You'll be speaking with Claudio Rivera personally on this call.";
   const el = document.getElementById('postbookWho');
   if (el) el.textContent = who;
+  // Zoom password line shows on Claudio (existing) bookings only.
+  const zoom = document.getElementById('postbookZoom');
+  if (zoom) zoom.style.display = (calendlyVariant === 'existing') ? '' : 'none';
   // Advance immediately — the booking already completed in Calendly; never make them wait.
   setState('postbook');
   if (bookedSubmitted) return;
