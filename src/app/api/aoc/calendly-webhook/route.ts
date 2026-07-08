@@ -6,9 +6,11 @@ import { syncLivedemoSheet } from "@/lib/aoc/livedemo-sheets";
 export const runtime = "nodejs";
 
 // Calendly signs with HMAC-SHA256 over `${t}.${rawBody}`; the header value is
-// `t=<unix_ts>,v1=<hex_signature>` (same shape as Stripe's). We verify against the
-// webhook signing key before trusting anything in the payload.
-function verifyCalendlySignature(rawBody: string, header: string | null, key: string): boolean {
+// `t=<unix_ts>,v1=<hex_signature>` (same shape as Stripe's). Each Calendly webhook
+// subscription has its OWN signing key, so CALENDLY_WEBHOOK_SIGNING_KEY may be a
+// comma-separated list (e.g. Claudio's key + the team's key); a request is valid if
+// it verifies against ANY of them.
+function verifyCalendlySignature(rawBody: string, header: string | null, keys: string[]): boolean {
   if (!header) return false;
   const parts: Record<string, string> = {};
   for (const kv of header.split(",")) {
@@ -19,27 +21,32 @@ function verifyCalendlySignature(rawBody: string, header: string | null, key: st
   const v1 = parts["v1"];
   if (!t || !v1) return false;
 
-  const expected = crypto.createHmac("sha256", key).update(`${t}.${rawBody}`).digest("hex");
-  let a: Buffer, b: Buffer;
+  // Replay guard: reject signatures older than 5 minutes.
+  const ageSec = Math.abs(Date.now() / 1000 - Number(t));
+  if (!Number.isFinite(ageSec) || ageSec >= 300) return false;
+
+  let given: Buffer;
   try {
-    a = Buffer.from(expected, "hex");
-    b = Buffer.from(v1, "hex");
+    given = Buffer.from(v1, "hex");
   } catch {
     return false;
   }
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return false;
-
-  // Replay guard: reject signatures older than 5 minutes.
-  const ageSec = Math.abs(Date.now() / 1000 - Number(t));
-  return Number.isFinite(ageSec) && ageSec < 300;
+  return keys.some((key) => {
+    const expected = crypto.createHmac("sha256", key).update(`${t}.${rawBody}`).digest("hex");
+    const exp = Buffer.from(expected, "hex");
+    return exp.length === given.length && crypto.timingSafeEqual(exp, given);
+  });
 }
 
 export async function POST(req: Request) {
-  const key = process.env.CALENDLY_WEBHOOK_SIGNING_KEY;
-  if (!key) return NextResponse.json({ error: "Webhook not configured" }, { status: 500 });
+  const keys = (process.env.CALENDLY_WEBHOOK_SIGNING_KEY ?? "")
+    .split(",")
+    .map((k) => k.trim())
+    .filter(Boolean);
+  if (keys.length === 0) return NextResponse.json({ error: "Webhook not configured" }, { status: 500 });
 
   const raw = await req.text();
-  if (!verifyCalendlySignature(raw, req.headers.get("calendly-webhook-signature"), key)) {
+  if (!verifyCalendlySignature(raw, req.headers.get("calendly-webhook-signature"), keys)) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 
