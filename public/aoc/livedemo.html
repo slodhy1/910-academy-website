@@ -939,7 +939,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="wrap stage">
       <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
       <span class="eyebrow">Agent On Camera</span>
-      <h2 class="h1">Last step: choose your time</h2>
+      <h2 class="h1" id="bookingHead">Last step: choose your time</h2>
       <p class="sub" id="bookingWho" style="margin-top:var(--space-4);">Pick your time with Claudio Rivera.</p>
       <a id="bookingCTA" class="ld-btn" href="#" style="margin-top:var(--space-10);">Choose Your Time</a>
     </div>
@@ -1796,6 +1796,23 @@ const submissionId = uuid();
 const contact = { fullName: '', email: '', phone: '' };
 let calendlyVariant = 'existing'; // 'team' | 'existing'
 
+/* ---- A/B test: sticky 50/50 assignment (persist once, never flip) ---------- */
+const AB_KEY = 'aoc_ld_ab';
+function assignAbVariant() {
+  try {
+    let v = localStorage.getItem(AB_KEY);
+    if (v !== 'A' && v !== 'B') {
+      v = Math.random() < 0.5 ? 'A' : 'B';
+      localStorage.setItem(AB_KEY, v);
+    }
+    return v;
+  } catch (e) {
+    // Storage blocked (private mode / cookies off): still assign, just not sticky.
+    return Math.random() < 0.5 ? 'A' : 'B';
+  }
+}
+const abVariant = assignAbVariant();
+
 /* ---- State machine -------------------------------------------------------- */
 function setState(name) {
   document.body.dataset.state = name;
@@ -1947,13 +1964,36 @@ function goBack() {
 }
 
 function finishQuiz() {
-  const dest = destinationFor(answers);
-  submitLead(); // fire-and-forget POST #1
+  const dest = destinationFor(answers);   // routing untouched
+  const payload = completionPayload();
+
+  // PHONE path unchanged — no navigation, plain fire-and-forget POST.
   if (dest === 'phone') {
+    postFunnel(payload).catch(function (e) { console.warn('[livedemo] submit POST failed:', e && e.message); });
     setState('phone');
+    locked = false;
+    return;
+  }
+
+  // Calendly-bound (team = MID, existing = HIGH). Stamp the calendar + build the URL.
+  calendlyVariant = dest;               // 'team' | 'existing' (which calendar; NOT the A/B arm)
+  const url = calendlyUrl();            // hosted URL + name/email prefill (existing logic)
+
+  if (abVariant === 'A') {
+    // VARIANT A — interstitial. Send completion reliably, then show the booking page.
+    if (!sendCompletionBeacon(payload)) { sendCompletionKeepalive(payload).catch(function () {}); }
+    setState('booking');                // prepareBooking() sets the CTA href to `url`
+    locked = false;
+    return;
+  }
+
+  // VARIANT B — direct redirect. Render the fallback (behind the redirect), then navigate.
+  setState('booking');                  // prepareBooking() renders the Variant B fallback copy
+  if (sendCompletionBeacon(payload)) {
+    window.location.href = url;
   } else {
-    calendlyVariant = dest; // 'team' | 'existing'
-    setState('booking');
+    // No sendBeacon: awaited keepalive fetch, then redirect.
+    sendCompletionKeepalive(payload).finally(function () { window.location.href = url; });
   }
   locked = false;
 }
@@ -1975,6 +2015,10 @@ contactForm.addEventListener('submit', function (e) {
   if (!validEmail(email)) { err.textContent = 'Please enter a valid email address.'; return; }
   if (!validPhone(phone)) { err.textContent = 'Please enter a valid phone number.'; return; }
   contact.fullName = name; contact.email = email; contact.phone = phone;
+  // survey_started — top of funnel. No navigation follows, so a plain POST is fine.
+  postFunnel({ type: 'started', submissionId: submissionId, abVariant: abVariant,
+    fullName: contact.fullName, email: contact.email, phone: contact.phone })
+    .catch(function (e) { console.warn('[livedemo] started POST failed:', e && e.message); });
   qIdx = 0;
   setState('quiz');
   renderQuestion();
@@ -1995,15 +2039,33 @@ async function postFunnel(payload) {
   return res.json();
 }
 
-function submitLead() {
+/* ---- Redirect-safe completion send (survives navigation to Calendly) ------- */
+function completionPayload() {
   const website = contactForm.querySelector('[name="website"]').value;
-  postFunnel({
-    type: 'submit',
-    submissionId: submissionId,
+  return {
+    type: 'submit', submissionId: submissionId, abVariant: abVariant,
     fullName: contact.fullName, email: contact.email, phone: contact.phone,
     q1: answers.q1, q2: answers.q2, q3: answers.q3 || [], q4: answers.q4,
     website: website,
-  }).catch(function (e) { console.warn('[livedemo] submit POST failed:', e && e.message); });
+  };
+}
+// sendBeacon queues synchronously and the browser guarantees delivery even across
+// an immediate navigation. Returns true if queued.
+function sendCompletionBeacon(payload) {
+  try {
+    if (navigator.sendBeacon) {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      return navigator.sendBeacon('/api/aoc/livedemo', blob);
+    }
+  } catch (e) {}
+  return false;
+}
+// Fallback keepalive fetch (used only if sendBeacon is unavailable).
+function sendCompletionKeepalive(payload) {
+  return fetch('/api/aoc/livedemo', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload), keepalive: true,
+  });
 }
 
 /* ---- Direct-to-Calendly interstitial (bucket-aware, prefilled) -------------- */
@@ -2015,14 +2077,24 @@ function calendlyUrl() {
 }
 // Point the single CTA at the right hosted Calendly page + set the "who" subline.
 // Same-tab navigation; Calendly's own confirmation handles the booked state.
+// Renders #s-booking per the A/B arm. Variant A = the interstitial (the action the
+// user takes). Variant B = the redirect fallback, only ever seen if the auto-redirect
+// is blocked/delayed. Called by setState('booking') for both.
 function prepareBooking() {
-  const who = calendlyVariant === 'team'
-    ? "Pick your time with our team."
-    : "Pick your time with Claudio Rivera.";
+  const url = calendlyUrl() || '#';
+  const head = document.getElementById('bookingHead');
   const whoEl = document.getElementById('bookingWho');
-  if (whoEl) whoEl.textContent = who;
   const cta = document.getElementById('bookingCTA');
-  if (cta) cta.setAttribute('href', calendlyUrl() || '#');
+  if (abVariant === 'B') {
+    if (head) head.textContent = 'Taking you to your booking';
+    if (whoEl) whoEl.textContent = 'One moment. If this screen stays, tap the button below.';
+    if (cta) { cta.textContent = 'Continue to your booking'; cta.setAttribute('href', url); }
+    return;
+  }
+  if (head) head.textContent = 'Last step: choose your time';
+  if (whoEl) whoEl.textContent = calendlyVariant === 'team'
+    ? 'Pick your time with our team.' : 'Pick your time with Claudio Rivera.';
+  if (cta) { cta.textContent = 'Choose Your Time'; cta.setAttribute('href', url); }
 }
 
 /* ---- Reschedule link (shown only if the constant is set) ------------------ */

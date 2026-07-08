@@ -11,6 +11,7 @@ const Q1 = z.enum(["Haven't started yet", "0-1 years", "1-3 years", "3+ years"])
 const Q2 = z.enum(["$0-$1,000", "$1,000-$3,000", "$3,000-$5,000", "$5,000-$10,000", "$10,000+"]);
 const Q3Item = z.enum(["Shooting", "Editing", "Sales", "Team Building"]);
 const Q4 = z.enum(["Yes", "No"]);
+const AbVariant = z.enum(["A", "B"]);
 
 const phone = z
   .string()
@@ -36,6 +37,15 @@ const BodySchema = z.discriminatedUnion("type", [
     q2: Q2,
     q3: z.array(Q3Item).min(1, "Pick at least one focus area"),
     q4: Q4,
+    abVariant: AbVariant.optional(),
+  }),
+  z.object({
+    type: z.literal("started"),
+    submissionId: z.string().uuid(),
+    fullName: z.string().trim().min(1, "Full name is required").max(200),
+    email: z.string().trim().email("Valid email required").max(200),
+    phone,
+    abVariant: AbVariant,
   }),
   z.object({
     type: z.literal("booked_confirmed"),
@@ -112,6 +122,27 @@ export async function POST(req: Request) {
 
   const sb = createAdminClient();
 
+  // --- survey_started: create the lead row early so we can measure survey drop-off. ---
+  if (parsed.data.type === "started") {
+    const d = parsed.data;
+    const startedAt = new Date().toISOString();
+    const { error } = await sb.from("aoc_livedemo_submissions").upsert(
+      {
+        submission_id: d.submissionId,
+        full_name: d.fullName,
+        email: d.email,
+        phone: d.phone,
+        ab_variant: d.abVariant,
+        started_at: startedAt,
+        // No `status` here — status is owned by completion/booking so a late
+        // survey_started can never downgrade a Routed/Booked row.
+      },
+      { onConflict: "submission_id" }
+    );
+    if (error) console.error("[aoc/livedemo] started upsert failed:", error);
+    return NextResponse.json({ ok: true });
+  }
+
   // --- Second POST: a Calendly booking completed. Stamp the existing row. ---
   if (parsed.data.type === "booked_confirmed") {
     const bookedAt = new Date().toISOString();
@@ -146,6 +177,7 @@ export async function POST(req: Request) {
       phone: d.phone,
       calendly,
       status: outcome === "booked" ? "Routed" : null,
+      ab_variant: d.abVariant ?? null,
     },
     { onConflict: "submission_id" }
   );
