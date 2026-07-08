@@ -27,7 +27,32 @@ export type SheetUpdate = {
   bookedAt: string; // ISO
 };
 
-export async function syncLivedemoSheet(payload: SheetAppend | SheetUpdate): Promise<void> {
+// Upserts one row (keyed by submissionId) in the analytics "Funnel" tab, setting only
+// the fields present. Called at survey_started, survey_completed, and booked.
+export type SheetFunnel = {
+  action: "funnel";
+  submissionId: string;
+  abVariant?: string; // 'A' | 'B'
+  bucket?: string; // HIGH | MID | LOW (set at completion)
+  destination?: string; // phone | team | existing
+  startedAt?: string; // ISO
+  completedAt?: string; // ISO
+  bookedAt?: string; // ISO
+  status?: string; // 'Booked'
+};
+
+// A Calendly booking whose email did not match any lead: kept visible, never dropped.
+export type SheetFunnelUnmatched = {
+  action: "funnel_unmatched";
+  email: string;
+  name?: string;
+  bookedAt: string; // ISO
+  source?: string; // calendly event type / calendar, best-effort
+};
+
+export async function syncLivedemoSheet(
+  payload: SheetAppend | SheetUpdate | SheetFunnel | SheetFunnelUnmatched
+): Promise<void> {
   const url = process.env.AOC_LIVEDEMO_SHEETS_WEBHOOK_URL;
   const secret = process.env.AOC_LIVEDEMO_SHEETS_SECRET;
   if (!url || !secret) return; // sheets sync disabled

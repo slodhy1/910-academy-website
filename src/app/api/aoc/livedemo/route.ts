@@ -140,6 +140,7 @@ export async function POST(req: Request) {
       { onConflict: "submission_id" }
     );
     if (error) console.error("[aoc/livedemo] started upsert failed:", error);
+    await syncLivedemoSheet({ action: "funnel", submissionId: d.submissionId, abVariant: d.abVariant, startedAt });
     return NextResponse.json({ ok: true });
   }
 
@@ -217,6 +218,16 @@ export async function POST(req: Request) {
     destination,
     outcome,
     status: outcome === "booked" ? "Routed" : "",
+  });
+
+  // survey_completed → fill the analytics Funnel row (completion timestamp + bucket + variant).
+  await syncLivedemoSheet({
+    action: "funnel",
+    submissionId: d.submissionId,
+    abVariant: d.abVariant ?? undefined,
+    bucket,
+    destination,
+    completedAt: new Date().toISOString(),
   });
 
   return NextResponse.json({ ok: true, destination });
