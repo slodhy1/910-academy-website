@@ -289,16 +289,11 @@ body[data-state="postbook"] #whatis { display: block; }
 .ld-error { color: #ff7676; font-size: 0.85rem; min-height: 1.1em; margin-top: 2px; }
 .ld-form .ld-btn { width: 100%; margin-top: var(--space-2); }
 
-/* ===== STATE 2 — booking / Calendly ===== */
-/* Calendly's injected iframe is height:100%, but that % won't resolve here (it collapses
-   to Calendly's ~150px default) even against an explicit-height parent, so force an
-   explicit height on the iframe itself. Taller on mobile where date+time stack. */
-.calendly-inline-widget { width: 100%; height: 700px; }
-.calendly-inline-widget iframe { width: 100%; height: 700px !important; border: 0; }
-@media (max-width: 640px) {
-  .calendly-inline-widget, .calendly-inline-widget iframe { height: 1000px !important; }
-}
-.booking-placeholder { width: 100%; max-width: 560px; margin: var(--space-8) auto 0; padding: var(--space-16) var(--space-6); border: 1px dashed var(--accent-border); border-radius: var(--radius-lg); background: var(--accent-subtle); color: var(--fg-muted); }
+/* ===== STATE 2 — booking (direct-to-Calendly interstitial) ===== */
+/* No embed anymore — a single CTA opens Calendly's hosted page. The .stage flex
+   layout centres logo + eyebrow + headline + subline + button; only the CTA
+   needs a touch more breathing room above it than a default .ld-btn. */
+#s-booking .ld-btn { min-width: 260px; }
 
 /* ===== FOOTER (matches /aoc/join family) ===== */
 .footer { position: relative; z-index: 1; text-align: center; padding: var(--space-16) var(--space-6) var(--space-12); border-top: 1px solid var(--border); }
@@ -329,7 +324,6 @@ body[data-state="postbook"] #whatis { display: block; }
      Open up the vertical rhythm; mobile keeps its tighter dvh-locked spacing. */
   .stage-logo { margin-bottom: var(--space-8); }   /* 32px logo -> kicker */
   .eyebrow { margin-bottom: var(--space-4); }        /* 16px kicker -> headline */
-  #calendlyMount { margin-top: var(--space-12); }     /* 48px headline -> calendar */
   #textIntro .sub { margin-top: var(--space-6); }     /* 24px headline -> body */
 }
 </style>
@@ -937,14 +931,17 @@ img, video, iframe { max-width: 100%; height: auto; }
   </section>
 
   <!-- ========================== STATE 2 — BOOKING ========================== -->
+  <!-- Direct-to-Calendly interstitial. One action: open Calendly's HOSTED page in
+       the same tab (bucket-aware URL, name/email prefilled). No embed — the embed's
+       slow load + blank box were killing bookings. Calendly's own page handles the
+       booked confirmation from here. -->
   <section id="s-booking">
     <div class="wrap stage">
       <img class="stage-logo" src="/aoc/brand/aoc-white.svg" alt="Agent On Camera" width="76" height="40">
       <span class="eyebrow">Agent On Camera</span>
-      <h2 class="h1">Book Your Agent on Camera Demo</h2>
-      <div id="calendlyMount" style="width:100%"><!-- Calendly embed or placeholder injected by JS --></div>
-      <!-- Fallback so a completed booking is never a dead end if the in-iframe event is blocked -->
-      <button type="button" class="ld-btn-ghost ld-btn" style="margin-top:var(--space-6);" id="bookedFallback">Already booked? Continue →</button>
+      <h2 class="h1">Last step: choose your time</h2>
+      <p class="sub" id="bookingWho" style="margin-top:var(--space-4);">Pick your time with Claudio Rivera.</p>
+      <a id="bookingCTA" class="ld-btn" href="#" style="margin-top:var(--space-10);">Choose Your Time</a>
     </div>
   </section>
 
@@ -1804,7 +1801,7 @@ function setState(name) {
   document.body.dataset.state = name;
   updateBackBtn();
   window.scrollTo(0, 0);
-  if (name === 'booking') mountCalendly();
+  if (name === 'booking') prepareBooking();
 }
 
 /* ---- Questions ------------------------------------------------------------ */
@@ -2009,55 +2006,23 @@ function submitLead() {
   }).catch(function (e) { console.warn('[livedemo] submit POST failed:', e && e.message); });
 }
 
-/* ---- Calendly (mounted on demand, prefilled) ------------------------------ */
-let calendlyMounted = false;
+/* ---- Direct-to-Calendly interstitial (bucket-aware, prefilled) -------------- */
+// Builds the HOSTED Calendly URL for the current bucket with name/email prefilled.
 function calendlyUrl() {
   const base = calendlyVariant === 'team' ? CALENDLY_TEAM_URL : CALENDLY_EXISTING_URL;
   if (!base) return '';
   return base + '?name=' + encodeURIComponent(contact.fullName) + '&email=' + encodeURIComponent(contact.email);
 }
-function mountCalendly() {
-  if (calendlyMounted) return;
-  calendlyMounted = true;
-  const mount = document.getElementById('calendlyMount');
-  const url = calendlyUrl();
-  if (url) {
-    const widget = document.createElement('div');
-    widget.className = 'calendly-inline-widget';
-    widget.setAttribute('data-url', url);
-    mount.appendChild(widget);
-    const s = document.createElement('script');
-    s.src = 'https://assets.calendly.com/assets/external/widget.js';
-    s.async = true;
-    document.body.appendChild(s);
-  } else {
-    // No link set yet — show a labeled placeholder, never an empty iframe.
-    mount.innerHTML = '<div class="booking-placeholder">Booking calendar coming. The Calendly link will be added here.</div>';
-  }
-}
-
-// Calendly fires a postMessage when a booking completes → advance to postbook.
-window.addEventListener('message', function (e) {
-  if (e && e.data && e.data.event === 'calendly.event_scheduled') { onBooked(); }
-});
-document.getElementById('bookedFallback').addEventListener('click', onBooked);
-
-let bookedSubmitted = false;
-function onBooked() {
+// Point the single CTA at the right hosted Calendly page + set the "who" subline.
+// Same-tab navigation; Calendly's own confirmation handles the booked state.
+function prepareBooking() {
   const who = calendlyVariant === 'team'
-    ? "You'll be speaking with a member of our team on this call."
-    : "You'll be speaking with Claudio Rivera personally on this call.";
-  const el = document.getElementById('postbookWho');
-  if (el) el.textContent = who;
-  // Zoom password line shows on Claudio (existing) bookings only.
-  const zoom = document.getElementById('postbookZoom');
-  if (zoom) zoom.style.display = (calendlyVariant === 'existing') ? '' : 'none';
-  // Advance immediately — the booking already completed in Calendly; never make them wait.
-  setState('postbook');
-  if (bookedSubmitted) return;
-  bookedSubmitted = true;
-  postFunnel({ type: 'booked_confirmed', submissionId: submissionId })
-    .catch(function (e) { console.warn('[livedemo] booked_confirmed POST failed:', e && e.message); });
+    ? "Pick your time with our team."
+    : "Pick your time with Claudio Rivera.";
+  const whoEl = document.getElementById('bookingWho');
+  if (whoEl) whoEl.textContent = who;
+  const cta = document.getElementById('bookingCTA');
+  if (cta) cta.setAttribute('href', calendlyUrl() || '#');
 }
 
 /* ---- Reschedule link (shown only if the constant is set) ------------------ */
